@@ -1,6 +1,9 @@
 import 'package:buecherteam_2023_desktop/Theme/color_scheme.dart';
 import 'package:buecherteam_2023_desktop/Theme/text_theme.dart';
+import 'package:buecherteam_2023_desktop/UI/student_card.dart';
 import 'package:flutter/material.dart';
+
+import 'Data/student.dart';
 
 void main() {
   runApp(const MyApp());
@@ -61,6 +64,7 @@ class _MyHomePageState extends State<MyHomePage> {
               '$_counter',
               style: Theme.of(context).textTheme.bodyLarge,
             ),
+            StudentCard(Student("ID", firstName: "Dibbo-Mrinmoy", lastName: "Saha", classLevel: 11, classChar: "Q", books: [], trainingDirections: ["ETH-LAT-11", "BASIC-10"]), false, key: Key("Student"), setClickedStudent: (student) => {}, notifyDetailPage: (student) => {}, openDeleteDialog: (student) => {}, openEditDialog: (student) => {})
           ],
         ),
       ),
