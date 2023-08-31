@@ -1,6 +1,9 @@
 
 import 'package:buecherteam_2023_desktop/Data/student.dart';
+import 'package:buecherteam_2023_desktop/Theme/color_scheme.dart';
+import 'package:buecherteam_2023_desktop/Theme/text_theme.dart';
 import 'package:buecherteam_2023_desktop/UI/student_card.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -23,11 +26,16 @@ void main() {
       mockFunctions = MockFunctions();
     });
 
-    Widget createWidgetUnderTest () {
+    Widget createWidgetUnderTest ({bool isClicked = false}) {
       return MaterialApp(
+        theme: ThemeData(
+            colorScheme: lightColorScheme,
+            useMaterial3: true,
+            fontFamily: 'Helvetica Neue',
+            textTheme: textTheme),
         home: StudentCard(
           student,
-          false,
+          isClicked,
           key: Key(student.id),
           setClickedStudent: mockFunctions.setClickedStudent,
           notifyDetailPage: mockFunctions.notifyDetailPage,
@@ -51,8 +59,92 @@ void main() {
       }
     });
 
+    testWidgets("Icon sizes increase on hover", (tester) async{
+      await tester.pumpWidget(createWidgetUnderTest());
+      // Ensure the icons are not visible initially
+      final editFinder = find.widgetWithIcon(IconButton, Icons.edit);
+      final closeFinder = find.widgetWithIcon(IconButton, Icons.close);
 
+      expect(tester.widget<IconButton>(editFinder).style!.iconSize!.resolve({}), 0.0);
+      expect(tester.widget<IconButton>(closeFinder).style!.iconSize!.resolve({}), 0.0);
 
+      // Trigger a hover event
+      final gesture = await tester.createGesture(kind: PointerDeviceKind.mouse);
+      await gesture.addPointer(location: Offset.zero);
+      addTearDown(gesture.removePointer);
+      await tester.pump();
+      await gesture.moveTo(tester.getCenter(find.byType(StudentCard)));
+
+      // Check if the icons are visible now
+      expect(tester.widget<IconButton>(editFinder).style!.iconSize!.resolve({}), 16.0);
+      expect(tester.widget<IconButton>(closeFinder).style!.iconSize!.resolve({}), 16.0);
+
+    });
+
+    testWidgets("Test if icons sizes decrease after hover", (tester) async{
+
+      await tester.pumpWidget(createWidgetUnderTest());
+      final editFinder = find.widgetWithIcon(IconButton, Icons.edit);
+      final closeFinder = find.widgetWithIcon(IconButton, Icons.close);
+      // Trigger a hover event
+      final gesture = await tester.createGesture(kind: PointerDeviceKind.mouse);
+      await gesture.addPointer(location: Offset.zero);
+      addTearDown(gesture.removePointer);
+      await tester.pump();
+      await gesture.moveTo(tester.getCenter(find.byType(StudentCard)));
+      await tester.pumpAndSettle();
+      // Check if the icons are visible now
+      expect(tester.widget<IconButton>(editFinder).style!.iconSize!.resolve({}), 16.0);
+      expect(tester.widget<IconButton>(closeFinder).style!.iconSize!.resolve({}), 16.0);
+      await gesture.moveBy(const Offset(0, -500));
+      await tester.pumpAndSettle();
+      // Check if the icons are hidden now
+      expect(tester.widget<IconButton>(editFinder).style!.iconSize!.resolve({}), 0.0);
+      expect(tester.widget<IconButton>(closeFinder).style!.iconSize!.resolve({}), 0.0);
+    });
+
+    testWidgets("Test edit button click", (tester)  async{
+      await tester.pumpWidget(createWidgetUnderTest());
+
+      await tester.tap(find.widgetWithIcon(IconButton, Icons.edit));
+
+      verify(() => mockFunctions.openEditDialog(student)).called(1);
+    });
+
+    testWidgets("Test close button click", (tester)  async{
+      await tester.pumpWidget(createWidgetUnderTest());
+
+      await tester.tap(find.widgetWithIcon(IconButton, Icons.close));
+
+      verify(() => mockFunctions.openDeleteDialog(student)).called(1);
+    });
+
+    testWidgets("Test student card click actions", (tester)  async{
+      await tester.pumpWidget(createWidgetUnderTest());
+
+      await tester.tap(find.byType(StudentCard));
+
+      verify(() => mockFunctions.setClickedStudent(student.id)).called(1);
+      verify(() => mockFunctions.notifyDetailPage(student)).called(1);
+    });
+
+    testWidgets("Test StudentCard styling", (tester) async {
+      await tester.pumpWidget(createWidgetUnderTest(isClicked: true));
+
+      // Test background color when isClicked is true
+      final textbutton = find.byType(TextButton);
+
+      expect(
+          (tester.widget<TextButton>(textbutton).style!.backgroundColor!.resolve({}))!,
+          tester.widget<MaterialApp>(find.byType(MaterialApp)).theme!.colorScheme.tertiaryContainer
+      );
+      // Test border radius of the TextButton
+      final border = tester.widget<TextButton>(textbutton).style!.shape!.resolve({});
+      expect(
+          (border as RoundedRectangleBorder).borderRadius,
+          BorderRadius.circular(20)
+      );
+    });
 
   });
 }
