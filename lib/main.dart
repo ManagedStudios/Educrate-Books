@@ -1,11 +1,17 @@
+import 'package:buecherteam_2023_desktop/Data/db.dart';
 import 'package:buecherteam_2023_desktop/Theme/color_scheme.dart';
 import 'package:buecherteam_2023_desktop/Theme/text_theme.dart';
 import 'package:buecherteam_2023_desktop/UI/student_card.dart';
+import 'package:cbl_flutter/cbl_flutter.dart';
 import 'package:flutter/material.dart';
 
 import 'Data/student.dart';
 
-void main() {
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await CouchbaseLiteFlutter.init();
+  await DB().initializeDatabase();
+  await DB().startReplication();
   runApp(const MyApp());
 }
 
@@ -61,8 +67,7 @@ class _MyHomePageState extends State<MyHomePage> {
               style: Theme.of(context).textTheme.labelSmall,
             ),
             Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.bodyLarge,
+              "$_counter"
             ),
             StudentCard(Student("ID", firstName: "Dibbo-Mrinmoy", lastName: "Saha", classLevel: 11, classChar: "Q", books: [], trainingDirections: ["ETH-LAT-11", "BASIC-10"]), false, key: Key("Student"), setClickedStudent: (student) => {}, notifyDetailPage: (student) => {}, openDeleteDialog: (student) => {}, openEditDialog: (student) => {})
           ],
