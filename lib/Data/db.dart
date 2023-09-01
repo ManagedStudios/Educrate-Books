@@ -64,32 +64,34 @@ class DB {
     return _database.document(docId);
   }
 
-}
 
-/*
-toEntity is a method that can parse JSON to real objects based on a fromJson method
-that is implemented within in the class
- */
-extension on DictionaryInterface {
-  T toEntity<T>(T Function(Map<String, Object?> json) fromJson) {
-    final json = toPlainMap();
-    if (this case Document(:final id)) {
-      json['id'] = id;
+  Future<void> startReplication () async{
+    final replicator = await Replicator.create(ReplicatorConfiguration(database: _database,
+        target: UrlEndpoint(Uri.parse('ws://localhost:4984/buecherteam')),
+        continuous: true,
+        replicatorType: ReplicatorType.pushAndPull,
+        authenticator: BasicAuthenticator(username: "dibbo", password: "dibboMrinmoy"),
+    ));
+
+    await replicator.start();
+  }
+
+  void updateDocFromEntity(Object entity, MutableDictionaryInterface document) {
+    final json = (entity as dynamic).toJson() as Map<String, Object?>;
+    if (document is MutableDocument) {
+      json.remove(TextRes.studentIdJson);
+    }
+    document.setData(json);
+  }
+
+
+  T toEntity<T>(T Function(Map<String, Object?> json) fromJson, DictionaryInterface result) {
+    final json = result.toPlainMap();
+    if (result case Document(:final id)) {
+      json[TextRes.studentIdJson] = id;
     }
     return fromJson(json);
   }
+
 }
 
-/*
-updateFromEntity updates db documents based on a object and its toJson method
-updateFromEntity works for empty documents and non empty ones
- */
-extension on MutableDictionaryInterface {
-  void updateFromEntity(Object entity) {
-    final json = (entity as dynamic).toJson() as Map<String, Object?>;
-    if (this is MutableDocument) {
-      json.remove('id');
-    }
-    setData(json);
-  }
-}
