@@ -1,6 +1,7 @@
 
 import 'package:buecherteam_2023_desktop/Data/bookLite.dart';
 import 'package:buecherteam_2023_desktop/Data/student.dart';
+import 'package:buecherteam_2023_desktop/Resources/text.dart';
 import 'package:buecherteam_2023_desktop/Util/comparison.dart';
 import 'package:cbl_dart/cbl_dart.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -43,75 +44,75 @@ void main () {
         books: []);
 
     validJson1 = {
-      'id': student1.id,
-      'firstName': student1.firstName,
-      'lastName': student1.lastName,
-      'classLevel': student1.classLevel,
-      'classChar': student1.classChar,
-      'trainingDirections': student1.trainingDirections,
-      'books': [
+      TextRes.studentIdJson: student1.id,
+      TextRes.studentFirstNameJson: student1.firstName,
+      TextRes.studentLastNameJson: student1.lastName,
+      TextRes.studentClassLevelJson: student1.classLevel,
+      TextRes.studentClassCharJson: student1.classChar,
+      TextRes.studentTrainingDirectionsJson: student1.trainingDirections,
+      TextRes.studentBooksJson: [
         student1.books[0].toJson(),
         student1.books[1].toJson()
       ]
     };
     validJson2 = {
-      'id': student2.id,
-      'firstName': student2.firstName,
-      'lastName': student2.lastName,
-      'classLevel': student2.classLevel,
-      'classChar': student2.classChar,
-      'trainingDirections': student2.trainingDirections,
-      'books': [
+      TextRes.studentIdJson: student2.id,
+      TextRes.studentFirstNameJson: student2.firstName,
+      TextRes.studentLastNameJson: student2.lastName,
+      TextRes.studentClassLevelJson: student2.classLevel,
+      TextRes.studentClassCharJson: student2.classChar,
+      TextRes.studentTrainingDirectionsJson: student2.trainingDirections,
+      TextRes.studentBooksJson: [
         student2.books[0].toJson()
       ]
     };
 
     classLevelStringJson = {
-      'id': student1.id,
-      'firstName': student1.firstName,
-      'lastName': student1.lastName,
-      'classLevel': "${student1.classLevel}",
-      'classChar': student1.classChar,
-      'trainingDirections': student1.trainingDirections,
-      'books': [
+      TextRes.studentIdJson: student1.id,
+      TextRes.studentFirstNameJson: student1.firstName,
+      TextRes.studentLastNameJson: student1.lastName,
+      TextRes.studentClassLevelJson: "${student1.classLevel}",
+      TextRes.studentClassCharJson: student1.classChar,
+      TextRes.studentTrainingDirectionsJson: student1.trainingDirections,
+      TextRes.studentBooksJson: [
         student1.books[0].toJson(),
         student1.books[1].toJson()
       ]
     };
 
     noBooksJson = {
-      'id': studentWithoutBooks.id,
-      'firstName': studentWithoutBooks.firstName,
-      'lastName': studentWithoutBooks.lastName,
-      'classLevel': studentWithoutBooks.classLevel,
-      'classChar': studentWithoutBooks.classChar,
-      'trainingDirections': studentWithoutBooks.trainingDirections,
-      'books': []
+      TextRes.studentIdJson: studentWithoutBooks.id,
+      TextRes.studentFirstNameJson: studentWithoutBooks.firstName,
+      TextRes.studentLastNameJson: studentWithoutBooks.lastName,
+      TextRes.studentClassLevelJson: studentWithoutBooks.classLevel,
+      TextRes.studentClassCharJson: studentWithoutBooks.classChar,
+      TextRes.studentTrainingDirectionsJson: studentWithoutBooks.trainingDirections,
+      TextRes.studentBooksJson: []
     };
 
     wrongBooksJson = {
-      'id': student2.id,
-      'firstName': student2.firstName,
-      'lastName': student2.lastName,
-      'classLevel': student2.classLevel,
-      'classChar': student2.classChar,
-      'trainingDirections': student2.trainingDirections,
-      'books': [
+      TextRes.studentIdJson: student2.id,
+      TextRes.studentFirstNameJson: student2.firstName,
+      TextRes.studentLastNameJson: student2.lastName,
+      TextRes.studentClassLevelJson: student2.classLevel,
+      TextRes.studentClassCharJson: student2.classChar,
+      TextRes.studentTrainingDirectionsJson: student2.trainingDirections,
+      TextRes.studentBooksJson: [
         {
-          'id': '321',
-          'name': 'Green Line New 4'
+          TextRes.studentIdJson: '321',
+          TextRes.bookNameJson: 'Green Line New 4'
         }
       ]
     };
 
     trainingDirectionsEmpty = {
-      'id': studentWithoutTraining.id,
-      'firstName': studentWithoutTraining.firstName,
-      'lastName': studentWithoutTraining.lastName,
-      'classLevel': studentWithoutTraining.classLevel,
-      'classChar': studentWithoutTraining.classChar,
-      'trainingDirections': studentWithoutTraining.trainingDirections,
-      'books': [
+      TextRes.studentIdJson: studentWithoutTraining.id,
+      TextRes.studentFirstNameJson: studentWithoutTraining.firstName,
+      TextRes.studentLastNameJson: studentWithoutTraining.lastName,
+      TextRes.studentClassLevelJson: studentWithoutTraining.classLevel,
+      TextRes.studentClassCharJson: studentWithoutTraining.classChar,
+      TextRes.studentTrainingDirectionsJson: studentWithoutTraining.trainingDirections,
+      TextRes.studentBooksJson: [
         studentWithoutTraining.books[0].toJson()
       ]
     };
@@ -119,12 +120,12 @@ void main () {
     emptyJson = {};
 
     missingFields = {
-      'firstName': studentWithoutTraining.firstName,
-      'lastName': studentWithoutTraining.lastName,
-      'classLevel': studentWithoutTraining.classLevel,
-      'classChar': studentWithoutTraining.classChar,
-      'trainingDirections': studentWithoutTraining.trainingDirections,
-      'books': [
+      TextRes.studentFirstNameJson: studentWithoutTraining.firstName,
+      TextRes.studentLastNameJson: studentWithoutTraining.lastName,
+      TextRes.studentClassLevelJson: studentWithoutTraining.classLevel,
+      TextRes.studentClassCharJson: studentWithoutTraining.classChar,
+      TextRes.studentTrainingDirectionsJson: studentWithoutTraining.trainingDirections,
+      TextRes.studentBooksJson: [
         studentWithoutTraining.books[0].toJson()
       ]
     };

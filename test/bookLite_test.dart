@@ -1,5 +1,6 @@
 
 import 'package:buecherteam_2023_desktop/Data/bookLite.dart';
+import 'package:buecherteam_2023_desktop/Resources/text.dart';
 import 'package:buecherteam_2023_desktop/Util/comparison.dart';
 import 'package:cbl_dart/cbl_dart.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -27,14 +28,14 @@ void main () {
   setUp(() async{
       book1 = BookLite("1234-bookLite", "Green Line New 5", "Englisch", 10);
       book2 = BookLite("-H7oR-QBBOkFWAmRhvZUbYZ", "Lambacher Schweizer", "Mathe", 9);
-      validJson1 = {'bookId': book1.bookId, 'name': book1.name, 'subject': book1.subject, 'classLevel': book1.classLevel};
-      missingIdJson = {'name': book1.name, 'subject': book1.subject, 'classLevel': book1.classLevel};
+      validJson1 = {TextRes.bookIdJson: book1.bookId, TextRes.bookNameJson: book1.name, TextRes.bookSubjectJson: book1.subject, TextRes.studentClassLevelJson: book1.classLevel};
+      missingIdJson = {TextRes.bookNameJson: book1.name, TextRes.bookSubjectJson: book1.subject, TextRes.studentClassLevelJson: book1.classLevel};
       emptyJson = {};
-      missingNameJson = {'bookId': book1.bookId, 'subject': book1.subject, 'classLevel': book1.classLevel};
-      missingIdNameJson = {'subject': book1.subject, 'classLevel': book1.classLevel};
-      wrongTypeName = {'bookId': book1.bookId, 'name': 22, 'subject': book1.subject, 'classLevel': book1.classLevel};
-      StringClassLevelType = {'bookId': book1.bookId, 'name': book1.name, 'subject': book1.subject, 'classLevel': "${book1.classLevel}"};
-      validJson2 = {'bookId': book2.bookId, 'subject': book2.subject, 'name': book2.name, 'classLevel': book2.classLevel};
+      missingNameJson = {TextRes.bookIdJson: book1.bookId, TextRes.bookSubjectJson: book1.subject, TextRes.studentClassLevelJson: book1.classLevel};
+      missingIdNameJson = {TextRes.bookSubjectJson: book1.subject, TextRes.studentClassLevelJson: book1.classLevel};
+      wrongTypeName = {TextRes.bookIdJson: book1.bookId, TextRes.bookNameJson: 22, TextRes.bookSubjectJson: book1.subject, TextRes.studentClassLevelJson: book1.classLevel};
+      StringClassLevelType = {TextRes.bookIdJson: book1.bookId, TextRes.bookNameJson: book1.name, TextRes.bookSubjectJson: book1.subject, TextRes.studentClassLevelJson: "${book1.classLevel}"};
+      validJson2 = {TextRes.bookIdJson: book2.bookId, TextRes.bookSubjectJson: book2.subject, TextRes.bookNameJson: book2.name, TextRes.studentClassLevelJson: book2.classLevel};
   });
 
   group("Test the JSON serialization", () {

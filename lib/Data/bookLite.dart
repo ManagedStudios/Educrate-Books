@@ -8,6 +8,8 @@ Books are stored in a dictionary of the student and can then be easily transform
 
 
 
+import '../Resources/text.dart';
+
 class BookLite implements Comparable<BookLite>{
 
   BookLite(this._bookId, this.name, this.subject, this.classLevel);
@@ -23,16 +25,16 @@ class BookLite implements Comparable<BookLite>{
     var data = json as dynamic;
     late BookLite result;
     //handle missing fields
-    if(data['bookId'] == null || data['name'] == null ||
-    data['subject'] == null || data['classLevel'] == null) {
+    if(data[TextRes.bookIdJson] == null || data[TextRes.bookNameJson] == null ||
+    data[TextRes.bookSubjectJson] == null || data[TextRes.studentClassLevelJson] == null) {
       throw Exception("Incomplete JSON");
     }
 
     try {
-       result = BookLite(data['bookId'] as String, data['name'] as String,
-          data['subject'] as String, data['classLevel'] is int
-               ? data['classLevel'] as int
-               : int.parse(data['classLevel'])); //handle stringified ints
+       result = BookLite(data[TextRes.bookIdJson] as String, data[TextRes.bookNameJson] as String,
+          data[TextRes.bookSubjectJson] as String, data[TextRes.studentClassLevelJson] is int
+               ? data[TextRes.studentClassLevelJson] as int
+               : int.parse(data[TextRes.studentClassLevelJson])); //handle stringified ints
     } on TypeError catch(e) {
       throw Exception(e.toString()); //handle wrong types
     }
@@ -41,10 +43,10 @@ class BookLite implements Comparable<BookLite>{
 
   Map<String, Object?> toJson() {
     final data = {
-      'bookId': bookId,
-      'name': name,
-      'subject': subject,
-      'classLevel': classLevel
+      TextRes.bookIdJson: bookId,
+      TextRes.bookNameJson: name,
+      TextRes.bookSubjectJson: subject,
+      TextRes.studentClassLevelJson: classLevel
     };
     return data;
   }

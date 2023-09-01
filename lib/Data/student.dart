@@ -4,6 +4,7 @@
 import 'package:buecherteam_2023_desktop/Util/comparison.dart';
 import 'package:flutter/foundation.dart';
 
+import '../Resources/text.dart';
 import 'bookLite.dart';
 
 class Student {
@@ -20,34 +21,34 @@ class Student {
   String get id => _id;
 
   factory Student.fromJson(Map<String, Object?> json) {
-    if(json['id'] == null||
-    json['firstName'] == null||
-    json['lastName'] == null||
-   json['classLevel'] == null||
-    json['classChar'] == null||
-    json['trainingDirections'] == null||
-    json['books'] == null) {
+    if(json[TextRes.studentIdJson] == null||
+    json[TextRes.studentFirstNameJson] == null||
+    json[TextRes.studentLastNameJson] == null||
+   json[TextRes.studentClassLevelJson] == null||
+    json[TextRes.studentClassCharJson] == null||
+    json[TextRes.studentTrainingDirectionsJson] == null||
+    json[TextRes.studentBooksJson] == null) {
       throw Exception("Incomplete JSON");
     }
     return Student(
-      json['id'] as String,
-      firstName: json['firstName'] as String,
-      lastName: json['lastName'] as String,
-      classLevel: json['classLevel'] is int ? json['classLevel'] as int : int.parse(json['classLevel'] as String),
-      classChar: json['classChar'] as String,
-      trainingDirections: List.from(json['trainingDirections'] as dynamic),
-      books: List.from(json['books'] as dynamic).map((bookData) => BookLite.fromJson(bookData)).toList()
+      json[TextRes.studentIdJson] as String,
+      firstName: json[TextRes.studentFirstNameJson] as String,
+      lastName: json[TextRes.studentLastNameJson] as String,
+      classLevel: json[TextRes.studentClassLevelJson] is int ? json[TextRes.studentClassLevelJson] as int : int.parse(json[TextRes.studentClassLevelJson] as String),
+      classChar: json[TextRes.studentClassCharJson] as String,
+      trainingDirections: List.from(json[TextRes.studentTrainingDirectionsJson] as dynamic),
+      books: List.from(json[TextRes.studentBooksJson] as dynamic).map((bookData) => BookLite.fromJson(bookData)).toList()
     );
   }
 
   Map<String, Object?> toJson() {
-    final data = {'id': id,
-      'firstName': firstName,
-      'lastName': lastName,
-      'classLevel': classLevel,
-      'classChar': classChar,
-      'trainingDirections': trainingDirections,
-      'books': books.isEmpty ? [] : books.map((book) => book.toJson())
+    final data = {TextRes.studentIdJson: id,
+      TextRes.studentFirstNameJson: firstName,
+      TextRes.studentLastNameJson: lastName,
+      TextRes.studentClassLevelJson: classLevel,
+      TextRes.studentClassCharJson: classChar,
+      TextRes.studentTrainingDirectionsJson: trainingDirections,
+      TextRes.studentBooksJson: books.isEmpty ? [] : books.map((book) => book.toJson())
     };
     return data;
 }
