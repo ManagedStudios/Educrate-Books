@@ -24,7 +24,7 @@ class Student {
     if(json[TextRes.studentIdJson] == null||
     json[TextRes.studentFirstNameJson] == null||
     json[TextRes.studentLastNameJson] == null||
-   json[TextRes.studentClassLevelJson] == null||
+    json[TextRes.studentClassLevelJson] == null||
     json[TextRes.studentClassCharJson] == null||
     json[TextRes.studentTrainingDirectionsJson] == null||
     json[TextRes.studentBooksJson] == null) {
@@ -48,7 +48,8 @@ class Student {
       TextRes.studentClassLevelJson: classLevel,
       TextRes.studentClassCharJson: classChar,
       TextRes.studentTrainingDirectionsJson: trainingDirections,
-      TextRes.studentBooksJson: books.isEmpty ? [] : books.map((book) => book.toJson())
+      TextRes.studentBooksJson: books.isEmpty ? [] : books.map((book) => book.toJson()),
+      TextRes.typeJson:TextRes.studentTypeJson
     };
     return data;
 }

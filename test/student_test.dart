@@ -181,24 +181,29 @@ void main () {
 
     test("Test student 1 to Json", () {
       final Map<String, Object?> json = student1.toJson();
+      json.remove(TextRes.typeJson);
       final expectedJson = validJson1;
-      expect(areMapsEqualForStudents(json, expectedJson), true);
+      final res = areMapsEqualForStudents(json, expectedJson);
+      expect(res, true);
     });
 
     test("Test student 2 to Json", () {
       final Map<String, Object?> json = student2.toJson();
+      json.remove(TextRes.typeJson);
       final expectedJson = validJson2;
       expect(areMapsEqualForStudents(json, expectedJson), true);
     });
 
     test("Test student withoutBooks to Json", () {
       final Map<String, Object?> json = studentWithoutBooks.toJson();
+      json.remove(TextRes.typeJson);
       final expectedJson = noBooksJson;
       expect(areMapsEqualForStudents(json, expectedJson), true);
     });
 
     test("Test student withoutTraining to Json", () {
       final Map<String, Object?> json = studentWithoutTraining.toJson();
+      json.remove(TextRes.typeJson);
       final expectedJson = trainingDirectionsEmpty;
       expect(areMapsEqualForStudents(json, expectedJson), true);
     });

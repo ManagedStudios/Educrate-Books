@@ -8,6 +8,8 @@
 
   static const String unexpectedDbError = "Ein unerwarteter Fehler bei der Datenbankinteraktion: ";
 
+  static const String typeJson = 'type';
+
   static const String studentIdJson = 'id';
   static const String studentFirstNameJson = 'firstName';
   static const String studentLastNameJson = 'lastName';
@@ -15,6 +17,7 @@
   static const String studentClassCharJson = 'classChar';
   static const String studentTrainingDirectionsJson = 'trainingDirections';
   static const String studentBooksJson = 'books';
+  static const String studentTypeJson = 'student';
   
   static const String bookIdJson = 'bookId';
   static const String bookNameJson = 'name';

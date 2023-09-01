@@ -54,9 +54,11 @@ bool areMapsEqualForStudents (Map<String, Object?> map1, Map<String, Object?> ma
   if (map1.length != map2.length) {
     return false;
   }
+
   for (final key in map1.keys) {
 
     if (!map2.containsKey(key) || map1[key] != map2[key]) {
+
       if (key==TextRes.studentTrainingDirectionsJson && areListsEqualIgnoringOrder(List.from(map1[key] as dynamic), List.from(map2[key] as dynamic))) {
         continue;
       }
