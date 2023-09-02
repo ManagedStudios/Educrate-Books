@@ -19,6 +19,9 @@ class DB {
 
   Future<void> initializeDatabase() async {
     _database = await Database.openAsync(TextRes.dbName);
+    final typeIndex = ValueIndexConfiguration(['type']);
+    _database.createIndex("Types", typeIndex);
+
   }
 
   Future<void> saveDocument(MutableDocument document) async{
@@ -81,6 +84,12 @@ class DB {
     await replicator.start();
   }
 
+  /*
+  updateDocFromEntity updates a MutableDocument sothat its data matches the provided object
+  the provided object needs to provide a toJson method in order to utilize updateDocFromEntity
+  updateDocFromEntity can be used for completely blank docs or for filled document that need to be updated.
+  Updates are basically just overwrites by the object.
+   */
   void updateDocFromEntity(Object entity, MutableDictionaryInterface document) {
     final json = (entity as dynamic).toJson() as Map<String, Object?>;
     if (document is MutableDocument) {
@@ -89,6 +98,11 @@ class DB {
     document.setData(json);
   }
 
+  /*
+  to Entity can transform database results in form of documents or results to real objects.
+  The class the desired object belongs to needs to provide a fromJson method that serializes
+  the json data.
+   */
 
   T toEntity<T>(T Function(Map<String, Object?> json) fromJson, DictionaryInterface result) {
     final json = result.toPlainMap();
