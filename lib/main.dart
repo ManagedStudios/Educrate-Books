@@ -1,83 +1,63 @@
 import 'package:buecherteam_2023_desktop/Data/db.dart';
+import 'package:buecherteam_2023_desktop/Models/studentListState.dart';
 import 'package:buecherteam_2023_desktop/Theme/color_scheme.dart';
 import 'package:buecherteam_2023_desktop/Theme/text_theme.dart';
-import 'package:buecherteam_2023_desktop/UI/student_card.dart';
+import 'package:buecherteam_2023_desktop/UI/student_view.dart';
 import 'package:cbl_flutter/cbl_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
-import 'Data/student.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await CouchbaseLiteFlutter.init();
   await DB().initializeDatabase();
   await DB().startReplication();
-  runApp(const MyApp());
+  runApp(MultiProvider(providers: [ //initialize the Viewmodels
+    ChangeNotifierProvider(create: (context) => StudentListState(DB()))
+  ],
+    child: const MyApp(),
+  ));
 }
+
+final _router = GoRouter(
+    initialLocation: StudentView.routeName,
+    routes: [
+  ShellRoute(builder: (BuildContext context, GoRouterState state, Widget child) {
+    return Homepage(child: child);
+  },routes: [
+    GoRoute(path: StudentView.routeName,
+      builder: (context, state) => const StudentView()
+    )
+  ])
+]);
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-          colorScheme: lightColorScheme,
-          useMaterial3: true,
-          fontFamily: 'Helvetica Neue',
-          textTheme: textTheme),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
+    return  MaterialApp.router(
+        title: 'Buecherteam',
+        theme: ThemeData(
+            colorScheme: lightColorScheme,
+            useMaterial3: true,
+            fontFamily: 'Helvetica Neue',
+            textTheme: textTheme),
+        routerConfig: _router,
+      );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
+class Homepage extends StatelessWidget {
+  const Homepage({super.key, required this.child});
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'Wieland Siegward',
-              style: Theme.of(context).textTheme.labelSmall,
-            ),
-            Text(
-              "$_counter"
-            ),
-            StudentCard(Student("ID", firstName: "Dibbo-Mrinmoy", lastName: "Saha", classLevel: 11, classChar: "Q", books: [], trainingDirections: ["ETH-LAT-11", "BASIC-10"]), false, key: Key("Student"), setClickedStudent: (student) => {}, notifyDetailPage: (student) => {}, openDeleteDialog: (student) => {}, openEditDialog: (student) => {})
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      body: child
     );
   }
 }
