@@ -1,6 +1,7 @@
 
 import 'dart:async';
 
+
 import 'package:buecherteam_2023_desktop/Resources/text.dart';
 import 'package:cbl/cbl.dart';
 
@@ -31,10 +32,10 @@ class DB {
   IMPORTANT: security risk when using dynamic arguments or user inputs for the query argument,
    as every query is executed. Always provide hardcoded queries to this method!
    */
-  Stream<ResultSet> streamLiveDocs(String query) async*{
+  Stream<QueryChange<ResultSet>> streamLiveDocs(String query) async*{
     try {
       final queryRes = await Query.fromN1ql(_database, query); //build query
-      yield* queryRes.changes().asyncMap((queryChange) => queryChange.results); //pass the generic stream of the build query
+      yield* queryRes.changes(); //pass the generic stream of the build query
       /*
       handle db specific errors in order to prevent duplicate error handling
        */
@@ -44,6 +45,7 @@ class DB {
       throw Exception("${TextRes.timeOutException} ${e.message}");
     }
   }
+
 
   /*
     Method to get a standalone queryResult
@@ -64,6 +66,9 @@ class DB {
     return _database.document(docId);
   }
 
+  Future<void> deleteDoc(Document document) async {
+    _database.deleteDocument(document);
+  }
 
   Future<void> startReplication () async{
     final replicator = await Replicator.create(ReplicatorConfiguration(database: _database,
