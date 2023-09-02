@@ -18,11 +18,18 @@
   static const String studentTrainingDirectionsJson = 'trainingDirections';
   static const String studentBooksJson = 'books';
   static const String studentTypeJson = 'student';
+  static const String amountOfBooksJson = 'amountOfBooks';
   
   static const String bookIdJson = 'bookId';
   static const String bookNameJson = 'name';
   static const String bookSubjectJson = 'subject';
   static const String bookClassLevelJson = 'classLevel';
+
+  static const String studentSearchHint = 'Suche nach Schülernamen, Klassen und Ausbildungen';
+
+  static const String student = "Schüler";
+
+
   
 
  }
