@@ -8,5 +8,10 @@ const textTheme = TextTheme(
     bodyMedium: TextStyle(
         fontSize: 18, fontWeight: FontWeight.w500, letterSpacing: -0.1),
     labelMedium:
-        TextStyle(fontSize: 18, fontWeight: FontWeight.w300, letterSpacing: 0));
+        TextStyle(fontSize: 18, fontWeight: FontWeight.w300, letterSpacing: 0),
+    displaySmall:
+    TextStyle(fontSize: 12, fontWeight: FontWeight.w700, letterSpacing: -0.1));
+
+
+
 // 
