@@ -19,6 +19,9 @@ class StudentListState extends ChangeNotifier {
 
   HashSet<String> selectedStudentIds = HashSet();
 
+  String? ftsQuery;
+  Filter? filterOptions;
+
   /*
   saveStudent saves completely new Students
    */
@@ -37,7 +40,7 @@ class StudentListState extends ChangeNotifier {
     final document = MutableDocument(); //create empty MutableDocument to retrieve students id
     final student = Student(document.id, firstName: firstName, lastName: lastName,
         classLevel: classLevel, classChar: classChar,
-        trainingDirections: trainingDirections, books: []);
+        trainingDirections: trainingDirections, books: [], amountOfBooks: 0);
     database.updateDocFromEntity(student, document);
     return document;
   }
@@ -57,6 +60,16 @@ class StudentListState extends ChangeNotifier {
   Future<void> deleteStudent (Student student) async{
     final doc = await database.getDoc(student.id);
     if (doc != null) database.deleteDoc(doc);
+  }
+
+  void setFtsQuery (String query) {
+    ftsQuery = query;
+    streamStudents(ftsQuery, filterOptions);
+  }
+
+  void setFilterOptions (Filter filter) {
+    filterOptions = filter;
+    streamStudents(ftsQuery, filterOptions);
   }
 
 
