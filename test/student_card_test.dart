@@ -22,7 +22,7 @@ void main() {
     late Student student;
     late MockFunctions mockFunctions;
     setUp(() {
-      student = Student("Dibbo", firstName: "Dibbo-Mrinmoy", lastName: "Saha Von XY", classLevel: 10, classChar: "K", trainingDirections: ["ETH-LAT-10", "BASIC-10"], books: []);
+      student = Student("Dibbo", firstName: "Dibbo-Mrinmoy", lastName: "Saha Von XY", classLevel: 10, classChar: "K", trainingDirections: ["ETH-LAT-10", "BASIC-10"], books: [], amountOfBooks: 0);
       mockFunctions = MockFunctions();
     });
 
