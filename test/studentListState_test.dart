@@ -1,6 +1,8 @@
 
 
 
+import 'dart:collection';
+
 import 'package:buecherteam_2023_desktop/Data/db.dart';
 import 'package:buecherteam_2023_desktop/Data/student.dart';
 import 'package:buecherteam_2023_desktop/Models/studentListState.dart';
@@ -26,6 +28,13 @@ void main (){
   setUp(() {
     mockDB = MockDB();
     sut = StudentListState(mockDB);
+  });
+
+  test("initial values right", () {
+    expect(sut.filterOptions, null);
+    expect(sut.ftsQuery, null);
+    expect(sut.database, mockDB);
+    expect(sut.selectedStudentIds, HashSet());
   });
 
   group("test the createNewStudentDoc function", () {
