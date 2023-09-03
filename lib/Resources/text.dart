@@ -28,6 +28,8 @@
   static const String studentSearchHint = 'Suche nach Schülernamen, Klassen und Ausbildungen';
 
   static const String student = "Schüler";
+  static const String book = "Bücher";
+
 
 
   
