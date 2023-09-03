@@ -6,8 +6,6 @@ Books are stored in a dictionary of the student and can then be easily transform
  */
 
 
-
-
 import '../Resources/text.dart';
 
 class BookLite implements Comparable<BookLite>{

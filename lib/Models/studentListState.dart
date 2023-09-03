@@ -45,16 +45,23 @@ class StudentListState extends ChangeNotifier {
     return document;
   }
 
+  /*
+  streamStudents creates a stream with all the students that should be retrieved based
+  on the searchbar text (ftsQuery) and the applied Filters(filterOptions). The stream
+  yields live data - so when on an other device a student is created the student will
+  immediately appear in the stream, if the student is included by ftsQuery and filterOptions
+   */
   Stream<List<Student>> streamStudents (String? ftsQuery, Filter? filterOptions) async* {
       String query = BuildQuery.buildStudentListQuery(ftsQuery, filterOptions);
 
-      yield* database.streamLiveDocs(query).asyncMap((change) {
+      yield* database.streamLiveDocs(query).asyncMap((change) { //asyncMap required as the data is asynchronously fetched from the Web
         return change.results
             .asStream()
-            .map((result) => database.toEntity(Student.fromJson, result))
+            .map((result) => database.toEntity(Student.fromJson, result)) //build Student objects from JSON
             .toList();
       });
   }
+
 
 
   Future<void> deleteStudent (Student student) async{

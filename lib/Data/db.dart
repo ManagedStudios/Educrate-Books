@@ -29,8 +29,9 @@ class DB {
   }
 
   /*
-  generic method to retrieve a stream of a resultSet from the database which is
+  generic method to retrieve a stream of generic db results from the database which is
   based on a query provided as argument. Used when query changes have to be tracked.
+  Everytime data changes the stream yields a new QueryChange containing the results as resultSet
 
   IMPORTANT: security risk when using dynamic arguments or user inputs for the query argument,
    as every query is executed. Always provide hardcoded queries to this method!
@@ -40,7 +41,7 @@ class DB {
       final queryRes = await Query.fromN1ql(_database, query); //build query
       yield* queryRes.changes(); //pass the generic stream of the build query
       /*
-      handle db specific errors in order to prevent duplicate error handling
+      handle db specific errors in order to prevent duplicate error handling further down the line
        */
     } on DatabaseException catch(e) {
       throw Exception("${TextRes.dbAccesError} ${e.message}");
@@ -69,13 +70,21 @@ class DB {
     return _database.document(docId);
   }
 
+  /*
+  Delete a single document that is provided
+   */
   Future<void> deleteDoc(Document document) async {
     _database.deleteDocument(document);
   }
 
+  /*
+  startReplication is responsible for handling the sync between local couchbase lite
+  db and couchbase server
+   */
+
   Future<void> startReplication () async{
     final replicator = await Replicator.create(ReplicatorConfiguration(database: _database,
-        target: UrlEndpoint(Uri.parse('ws://localhost:4984/buecherteam')),
+        target: UrlEndpoint(Uri.parse('ws://localhost:4984/buecherteam')), //The URI your reverse proxy server or your sync gateway is located - ws is websocket
         continuous: true,
         replicatorType: ReplicatorType.pushAndPull,
         authenticator: BasicAuthenticator(username: "dibbo", password: "dibboMrinmoy"),
