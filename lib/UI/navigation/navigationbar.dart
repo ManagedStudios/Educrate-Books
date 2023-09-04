@@ -1,6 +1,6 @@
 
 import 'package:buecherteam_2023_desktop/Resources/text.dart';
-import 'package:buecherteam_2023_desktop/UI/navigation_button.dart';
+import 'package:buecherteam_2023_desktop/UI/navigation/navigation_button.dart';
 import 'package:flutter/material.dart';
 
 class LfgNavigationBar extends StatefulWidget {
@@ -32,10 +32,12 @@ class _LfgNavigationBarState extends State<LfgNavigationBar> {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        NavigationButton(isClicked: isStudentViewClicked,
+        NavigationButton(key: const Key(TextRes.student),
+            isClicked: isStudentViewClicked,
             onClickAction: onStudentViewClicked,
             text: TextRes.student),
-        NavigationButton(isClicked: isBookViewClicked,
+        NavigationButton(key: const Key(TextRes.book),
+            isClicked: isBookViewClicked,
             onClickAction: onBookViewClicked,
             text: TextRes.book)
       ],

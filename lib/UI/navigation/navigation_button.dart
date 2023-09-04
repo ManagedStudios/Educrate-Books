@@ -13,12 +13,15 @@ class NavigationButton extends StatefulWidget {
   State<NavigationButton> createState() => _NavigationButtonState();
 }
 
-class _NavigationButtonState extends State<NavigationButton> with SingleTickerProviderStateMixin {
+class _NavigationButtonState extends State<NavigationButton> with SingleTickerProviderStateMixin { //SingleTickerProviderStateMixin handles animations
   late AnimationController _controller;
   late Animation _widthAnimation;
   late Animation _backgroundAnimation;
   late Animation _textAnimation;
 
+  /*
+  initialize the animation controller and the animations
+   */
   @override
   void initState() {
     super.initState();
@@ -26,18 +29,17 @@ class _NavigationButtonState extends State<NavigationButton> with SingleTickerPr
     _widthAnimation = Tween<double>(begin: 128, end:224).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOutBack));
     _backgroundAnimation = ColorTween(begin: Colors.transparent, end: lightColorScheme.primary).animate(_controller);
     _textAnimation = ColorTween(begin: lightColorScheme.onBackground, end:lightColorScheme.onPrimary).animate(_controller);
-    _controller.addListener(() {
+    _controller.addListener(() { //updates the UI appropriately with the listener
       setState(() {});
     });
-    if(widget.isClicked) _controller.forward();
+    if(widget.isClicked) _controller.forward(); //start the animation on start if button is clicked
   }
 
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
+  /*
+  Use didUpdateWidget to detect configuration/argument changes (e.g. isClicked).
+  Process the changes to start the animation if button turned from not clicked to clicked
+  or reverse the animation if the way around applies.
+   */
   @override
   void didUpdateWidget(NavigationButton oldWidget) {
     super.didUpdateWidget(oldWidget);
@@ -48,6 +50,12 @@ class _NavigationButtonState extends State<NavigationButton> with SingleTickerPr
         _controller.reverse();
       }
     }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
 
