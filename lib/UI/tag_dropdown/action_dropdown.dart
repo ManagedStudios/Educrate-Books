@@ -1,0 +1,92 @@
+
+
+import 'package:buecherteam_2023_desktop/Data/lfg_chip.dart';
+import 'package:buecherteam_2023_desktop/UI/tag_dropdown/action_dropdown_available_container.dart';
+import 'package:buecherteam_2023_desktop/UI/tag_dropdown/action_dropdown_selected_wrap.dart';
+
+import 'package:flutter/material.dart';
+
+/*
+the overlay widget which makes selecting and deleting options possible
+
+in ActionDropdown only the filtering State is managed, all other state is managed
+by Dropdown
+ */
+class ActionDropdown extends StatefulWidget {
+  const ActionDropdown({super.key, required this.width,
+    required this.selectedChips, required this.onDeleteChip,
+    required this.availableChips, required this.onAddChip, this.hintText});
+
+  final double width;
+  final List<LfgChip> selectedChips;
+  final Function(LfgChip chip) onDeleteChip;
+
+  final List<LfgChip> availableChips;
+  final Function(LfgChip chip) onAddChip;
+  final String? hintText;
+
+  @override
+  State<ActionDropdown> createState() => _ActionDropdownState();
+}
+
+class _ActionDropdownState extends State<ActionDropdown> {
+
+  late List<LfgChip> filteredAvailableChips;
+
+  /*
+  filterList filters for numbers in elements and additionally for text matches
+  ensures filtering just after class_level
+   */
+  List<LfgChip> filterList (List<LfgChip> fullList, String filterText) {
+    final filterNum = RegExp(r'\d+').firstMatch(filterText)?.group(0) ?? '';
+
+    return fullList.where((item) {
+      // If filterNum is not empty, check if item contains it.
+      if (filterNum.isNotEmpty && !item.getLabelText().toUpperCase().contains(filterNum)) {
+        return false;
+      }
+      // Filter based on the non-numeric part of filterText.
+      final filterTextWithoutNum = filterText.replaceAll(filterNum, '');
+      if (filterTextWithoutNum.isNotEmpty && !item.getLabelText().toUpperCase().contains(filterTextWithoutNum)) {
+        return false;
+      }
+      return true;
+    }).toList();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    filteredAvailableChips = widget.availableChips; //set initialState for the filteredChips
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: widget.width,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ActionDropdownSelectedWrap(width: widget.width,
+              selectedChips: widget.selectedChips,
+              onDeleteChip: widget.onDeleteChip,
+            onFilterTextChange: (text) {
+            setState(() {//update the available chips based on the filter
+              String filterText = text.toUpperCase();
+              filteredAvailableChips = filterList(widget.availableChips, filterText);
+            });
+            },
+              ),
+          ActionDropdownAvailableContainer(availableChips: filteredAvailableChips,
+              onAddChip: widget.onAddChip, width: widget.width, hintText: widget.hintText,)
+        ],
+      ),
+    );
+
+  }
+}
+
+
+
+
