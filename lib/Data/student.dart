@@ -21,6 +21,7 @@ class Student {
   final int amountOfBooks;
   String get id => _id;
 
+
   factory Student.fromJson(Map<String, Object?> json) {
     if(json[TextRes.studentIdJson] == null||
     json[TextRes.studentFirstNameJson] == null||
