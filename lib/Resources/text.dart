@@ -30,6 +30,12 @@
   static const String student = "Schüler";
   static const String book = "Bücher";
 
+  static const String addChipsHint = "Klicken zum Hinzufügen";
+
+  static const String search = "Suche";
+
+  static const String selectChipHelper = "Option auswählen";
+
 
 
   
