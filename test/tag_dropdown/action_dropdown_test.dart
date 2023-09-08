@@ -21,8 +21,8 @@ void main () {
     mockFunctions = MockFunctions();
     String strA = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod ETH-0";
     String strS = "Stet clita kasd gubergren";
-    availableChips = strA.split(" ").map((e) => TrainingDirectionsData(e, 0)).toList();
-    selectedChips = strS.split(" ").map((e) => TrainingDirectionsData(e, 0)).toList();
+    availableChips = strA.split(" ").map((e) => TrainingDirectionsData(e)).toList();
+    selectedChips = strS.split(" ").map((e) => TrainingDirectionsData(e)).toList();
   });
 
   Widget createWidgetUnderTest (List<LfgChip> availableChipList,

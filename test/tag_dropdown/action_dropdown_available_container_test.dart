@@ -22,7 +22,7 @@ void main () {
   setUp(() {
     mockFunction = MockFunction();
     String str = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod";
-    availableChips = str.split(" ").map((e) => TrainingDirectionsData(e, 0)).toList();
+    availableChips = str.split(" ").map((e) => TrainingDirectionsData(e)).toList();
 
   });
 

@@ -27,8 +27,8 @@ void main () {
     mockFunctions = MockFunctions();
     String strA = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod ETH-0";
     String strS = "Stet clita kasd gubergren";
-    availableChips = strA.split(" ").map((e) => TrainingDirectionsData(e, 0)).toList();
-    selectedChips = strS.split(" ").map((e) => TrainingDirectionsData(e, 0)).toList();
+    availableChips = strA.split(" ").map((e) => TrainingDirectionsData(e)).toList();
+    selectedChips = strS.split(" ").map((e) => TrainingDirectionsData(e)).toList();
   });
 
   Widget createWidgetUnderTest (List<LfgChip> availableChipList,
@@ -246,6 +246,30 @@ void main () {
     expect(availableChips.contains(chipToDelete), isTrue);
   });
 
+  testWidgets("deselecting all selected chips should return empty list", (tester) async{
+    // Load the main widget
+    await tester.pumpWidget(createWidgetUnderTest(availableChips, selectedChips));
+
+    //open the overlay
+    final chipWrap = find.byType(ChipWrap);
+    await tester.tap(chipWrap);
+    await tester.pump();
+
+    //deselect all selectedChips
+    for (LfgChip selectedChip in selectedChips) {
+      final chipTag = find.byKey(Key(selectedChip.getLabelText()));
+      final deleteIcon = find.descendant(of: chipTag, matching: find.byType(IconButton));
+      await tester.tap(deleteIcon);
+      await tester.pump();
+    }
+
+    //close overlay
+    await tester.tapAt(Offset(0, 0));
+    await tester.pump();
+
+    verify(() => mockFunctions.onCloseOverlay([])).called(1);
+
+  });
 
 
 

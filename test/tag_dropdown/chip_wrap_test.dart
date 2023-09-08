@@ -1,8 +1,5 @@
 
 
-
-import 'dart:ui';
-
 import 'package:buecherteam_2023_desktop/Data/lfg_chip.dart';
 import 'package:buecherteam_2023_desktop/Data/training_directions_data.dart';
 
@@ -33,7 +30,7 @@ void main () {
     labels = lorem.split(" ");
     chips = [];
     for (int i = 0; i<labels.length; i++){
-      chips.add(TrainingDirectionsData(labels[i], i));
+      chips.add(TrainingDirectionsData(labels[i]));
     }
 
     mockFunction = MockFunction();
