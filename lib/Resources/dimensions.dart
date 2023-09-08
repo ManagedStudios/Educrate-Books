@@ -31,4 +31,10 @@ class Dimensions {
 
   static const double overlayWidth = 512;
 
+  static const double spaceLarge = 40;
+
+  static const double tightTextHeight = 0.6;
+
+  static const double spaceMedium = 16;
+
 }
