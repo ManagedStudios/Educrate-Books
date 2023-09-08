@@ -36,6 +36,22 @@
 
   static const String selectChipHelper = "Option auswählen";
 
+  static const String cancel = "Abbrechen";
+
+  static const String firstNameError = "Bitte Vornamen eingeben!";
+
+  static const String lastNameError = "Bitte Nachnamen eingeben!";
+
+  static const String classError = "Bitte Klasse auswählen!";
+
+  static const String firstNameHint = "Vorname";
+
+  static const String lastNameHint = "Nachname";
+
+  static const String classDataDropdownDescription = "Klasse auswählen";
+
+  static String trainingDirectionsDataDropdownDescription = "Ausbildung(en) auswählen";
+
 
 
   
