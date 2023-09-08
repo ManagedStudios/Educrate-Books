@@ -36,11 +36,10 @@ class ChipWrap extends StatelessWidget {
           children: [
             if(chips.isEmpty) ...[ //when no chips show helper text
                const Row(
-                mainAxisSize: MainAxisSize.min,
                 children: [
                   Icon(Icons.add),
                   SizedBox(width: Dimensions.spaceSmall,),
-                  Text(TextRes.addChipsHint)
+                  Expanded(child: Text(TextRes.addChipsHint, overflow: TextOverflow.ellipsis,))
                 ],
               )
             ],
