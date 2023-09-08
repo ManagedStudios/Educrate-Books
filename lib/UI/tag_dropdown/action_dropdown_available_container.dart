@@ -63,7 +63,7 @@ class ActionDropdownAvailableContainer extends StatelessWidget {
               use ChipWrap with fixed width to use as optionButtons
                */
               for (int chipIndex = 0; chipIndex<availableChips.length; chipIndex++)
-                ChipWrap(chips: [availableChips[chipIndex]],
+                ChipWrap(key: Key(availableChips[chipIndex].getLabelText()), chips: [availableChips[chipIndex]],
                   onClickChipRow: (chip) {
                     onAddChip(chip[0]);
                   },
