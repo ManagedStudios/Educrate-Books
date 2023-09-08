@@ -3,10 +3,9 @@ import 'package:buecherteam_2023_desktop/Data/lfg_chip.dart';
 
 class TrainingDirectionsData implements LfgChip {
 
-  const TrainingDirectionsData(this.label, this.classLevel);
+  const TrainingDirectionsData(this.label);
 
   final String label;
-  final int classLevel;
 
   @override
   String getLabelText() {
