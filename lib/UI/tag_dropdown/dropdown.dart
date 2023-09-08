@@ -46,8 +46,8 @@ class _DropdownState<T extends LfgChip> extends State<Dropdown<T>> {
   void initState() {
     super.initState();
     wrapChipsField = GlobalKey(); //globalKey used to get the position of the selection view
-    selectedChips = widget.selectedChips; //initial state that is updated internally
-    availableChips = widget.availableChips;
+    selectedChips = widget.selectedChips.toList(); //initial state that is updated internally
+    availableChips = widget.availableChips.toList();
   }
 
   @override
@@ -66,7 +66,6 @@ class _DropdownState<T extends LfgChip> extends State<Dropdown<T>> {
       child: ChipWrap(key: wrapChipsField, chips: selectedChips,
             onClickChipRow: (_) {
               showOverlay();
-              widget.onCloseOverlay(selectedChips);
             },
             width: widget.width),
     );
@@ -76,7 +75,7 @@ class _DropdownState<T extends LfgChip> extends State<Dropdown<T>> {
   void showOverlay() {
     final overlay = Overlay.of(context);
     RenderBox renderBox = wrapChipsField.currentContext?.findRenderObject() as RenderBox;
-    final offset = renderBox.localToGlobal(const Offset(0, -32)); //retrieve position of textField
+    final offset = renderBox.localToGlobal(const Offset(0, 0)); //retrieve position of textField
     overlayEntry??{ //if overlayEntry is not initialized create a new one (case when you open the overlay)
       createOverlayEntry(offset),
       overlay.insert(overlayEntry!)
@@ -93,7 +92,10 @@ class _DropdownState<T extends LfgChip> extends State<Dropdown<T>> {
         left: offset.dx,
         top: offset.dy,
         child: TapRegion(
-          onTapOutside: (_) => closeOverlay(),
+          onTapOutside: (_) {
+            closeOverlay();
+            widget.onCloseOverlay(selectedChips);
+          },
           child: ActionDropdown(width: widget.width, selectedChips: selectedChips,
               hintText: widget.hintText,
               onDeleteChip: (chip) {
