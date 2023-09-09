@@ -67,33 +67,46 @@ class _StudentCardState extends State<StudentCard> {
               crossAxisAlignment: CrossAxisAlignment.start, //crossAxis.start ensures that all the text is positioned the same way at the very top
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row( //2 Row
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Column( //1 Column
-                        children: [
-                          Text("${widget.student.classLevel}${widget.student.classChar} — ",
-                          style: Theme.of(context).textTheme.bodyLarge,)
-                        ],
-                      ),
-                      Column( //2 Column
-                        crossAxisAlignment: CrossAxisAlignment.start, //ensure that text is aligned left
-                        children: [
-                          Text("${widget.student.firstName} ${widget.student.lastName}", //Text 1
-                              style: Theme.of(context).textTheme.bodyLarge,
-                              overflow: TextOverflow.ellipsis,),
-                          Row( //3 Row
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row( //2 Row
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Column( //1 Column
+                          children: [
+                            Text("${widget.student.classLevel}${widget.student.classChar} — ",
+                            style: Theme.of(context).textTheme.bodyLarge,)
+                          ],
+                        ),
+                        Expanded(
+                          child: Column( //2 Column
+                            crossAxisAlignment: CrossAxisAlignment.start, //ensure that text is aligned left
                             children: [
-                              for (var trainingDirection in widget.student.trainingDirections)
-                                Text("$trainingDirection  ",
-                                  style: Theme.of(context).textTheme.labelSmall,)
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Text("${widget.student.firstName} ${widget.student.lastName}", //Text 1
+                                        style: Theme.of(context).textTheme.bodyLarge,
+                                        overflow: TextOverflow.ellipsis,),
+                                  ),
+                                ],
+                              ),
+                              Row( //3 Row
+                                children: [
+                                  for (var trainingDirection in widget.student.trainingDirections)
+                                    Expanded(
+                                      child: Text("$trainingDirection  ",
+                                        style: Theme.of(context).textTheme.labelSmall,
+                                        overflow: TextOverflow.ellipsis,),
+                                    )
+                                ],
+                              )
                             ],
-                          )
-                        ],
-                      ),
-                    ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 Padding(
