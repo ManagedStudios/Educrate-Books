@@ -3,6 +3,8 @@ import 'package:buecherteam_2023_desktop/Resources/text.dart';
 import 'package:buecherteam_2023_desktop/UI/navigation/navigation_button.dart';
 import 'package:flutter/material.dart';
 
+import '../../Resources/dimensions.dart';
+
 class LfgNavigationBar extends StatefulWidget {
   const LfgNavigationBar({super.key});
 
@@ -30,17 +32,22 @@ class _LfgNavigationBarState extends State<LfgNavigationBar> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        NavigationButton(key: const Key(TextRes.student),
-            isClicked: isStudentViewClicked,
-            onClickAction: onStudentViewClicked,
-            text: TextRes.student),
-        NavigationButton(key: const Key(TextRes.book),
-            isClicked: isBookViewClicked,
-            onClickAction: onBookViewClicked,
-            text: TextRes.book)
-      ],
+    return Padding(
+      padding: const EdgeInsets.only(top: Dimensions.spaceMedium),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          NavigationButton(key: const Key(TextRes.student),
+              isClicked: isStudentViewClicked,
+              onClickAction: onStudentViewClicked,
+              text: TextRes.student),
+          SizedBox(width: Dimensions.spaceMedium,),
+          NavigationButton(key: const Key(TextRes.book),
+              isClicked: isBookViewClicked,
+              onClickAction: onBookViewClicked,
+              text: TextRes.book)
+        ],
+      ),
     );
   }
 }
