@@ -18,7 +18,7 @@
   static const String studentTrainingDirectionsJson = 'trainingDirections';
   static const String studentBooksJson = 'books';
   static const String studentTypeJson = 'student';
-  static const String amountOfBooksJson = 'amountOfBooks';
+  static const String studentAmountOfBooksJson = 'amountOfBooks';
   
   static const String bookIdJson = 'bookId';
   static const String bookNameJson = 'name';
