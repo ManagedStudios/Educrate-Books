@@ -4,9 +4,11 @@ import 'dart:collection';
 
 
 import 'package:buecherteam_2023_desktop/Data/buildQuery.dart';
+import 'package:buecherteam_2023_desktop/Data/class_data.dart';
 import 'package:buecherteam_2023_desktop/Data/db.dart';
 import 'package:buecherteam_2023_desktop/Data/filter.dart';
 import 'package:buecherteam_2023_desktop/Data/student.dart';
+import 'package:buecherteam_2023_desktop/Data/training_directions_data.dart';
 import 'package:cbl/cbl.dart';
 import 'package:flutter/material.dart';
 
@@ -60,6 +62,14 @@ class StudentListState extends ChangeNotifier {
             .map((result) => database.toEntity(Student.fromJson, result)) //build Student objects from JSON
             .toList();
       });
+  }
+
+  Future<List<ClassData>> getAllClasses () async{
+    return [];
+  }
+
+  Future<List<TrainingDirectionsData>> getAllTrainingDirections () async{
+    return [];
   }
 
 
