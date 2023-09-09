@@ -1,35 +1,31 @@
 
-import 'package:buecherteam_2023_desktop/Data/student.dart';
-import 'package:buecherteam_2023_desktop/Models/studentListState.dart';
-import 'package:buecherteam_2023_desktop/UI/student_card.dart';
+import 'package:buecherteam_2023_desktop/Data/class_data.dart';
+import 'package:buecherteam_2023_desktop/UI/all_students_column.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+
+
+import '../Resources/dimensions.dart';
+
 
 class StudentView extends StatelessWidget {
   static String routeName = '/studentView';
 
   const StudentView({super.key});
 
+
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          FilledButton(onPressed: () => Provider.of<StudentListState>(context, listen: false).saveStudent("Tom", "Arbogast", 11, "Q", ["ETH-LAT-11, BASIC-11"]),
-              child: Text("Add Student")),
-          StreamBuilder(stream: Provider.of<StudentListState>(context, listen: false).streamStudents(null, null),
-              builder: (context, change) {
-                return Expanded(child: ListView(
-                  children: [
-                    for (Student student in change.data??[])
-                      StudentCard(student, false, key: Key(student.id), setClickedStudent: (student)=>{}, notifyDetailPage: (student) => {},
-                          openDeleteDialog: (student) => Provider.of<StudentListState>(context, listen: false).deleteStudent(student),
-                          openEditDialog: (student) => {})
-                  ],
-                )
-                );
-              })
+    final double marginWidth =
+    MediaQuery.of(context).size.width*0.15>Dimensions.minMarginStudentView?MediaQuery.of(context).size.width*0.15:Dimensions.minMarginStudentView;
+    return Padding(
+      padding: const EdgeInsets.only(top: Dimensions.paddingVeryBig),
+      child: Row(
+        children: [
+          SizedBox(width: marginWidth,),
+          Expanded(child: AllStudentsColumn()),
+          SizedBox(width: Dimensions.spaceMedium,),
+          Expanded(child: Container()), //studentDetail
+          SizedBox(width: marginWidth,)
         ],
       ),
     );
