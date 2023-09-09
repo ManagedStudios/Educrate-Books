@@ -50,7 +50,11 @@
 
   static const String classDataDropdownDescription = "Klasse auswählen";
 
-  static String trainingDirectionsDataDropdownDescription = "Ausbildung(en) auswählen";
+  static const String trainingDirectionsDataDropdownDescription = "Ausbildung(en) auswählen";
+
+  static const String addStudentTitle = "Schüler hinzufügen";
+
+  static const String saveActionText = "Speichern";
 
 
 

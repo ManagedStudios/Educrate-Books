@@ -37,4 +37,12 @@ class Dimensions {
 
   static const double spaceMedium = 16;
 
+  static const double minMarginStudentView = 64;
+
+  static const double paddingVeryBig = 48;
+
+  static const double iconSizeVeryBig = 40;
+
+  static const double paddingMedium = 16;
+
 }
