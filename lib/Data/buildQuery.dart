@@ -8,7 +8,7 @@ class BuildQuery {
     String query = """SELECT META().id, ${TextRes.studentFirstNameJson}, 
       ${TextRes.studentLastNameJson}, ${TextRes.studentClassLevelJson}, 
       ${TextRes.studentClassCharJson}, ${TextRes.studentTrainingDirectionsJson},
-      ${TextRes.studentBooksJson} FROM _ 
+      ${TextRes.studentBooksJson}, ${TextRes.studentAmountOfBooksJson} FROM _ 
       WHERE ${TextRes.typeJson}='${TextRes.studentTypeJson}' """;
 
     return query;
