@@ -12,9 +12,14 @@ import 'package:provider/provider.dart';
 import '../Resources/dimensions.dart';
 import '../Resources/text.dart';
 
-class AllStudentsColumn extends StatelessWidget {
+class AllStudentsColumn extends StatefulWidget {
   const AllStudentsColumn({super.key});
 
+  @override
+  State<AllStudentsColumn> createState() => _AllStudentsColumnState();
+}
+
+class _AllStudentsColumnState extends State<AllStudentsColumn> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -29,7 +34,8 @@ class AllStudentsColumn extends StatelessWidget {
                 addStudent(context);
               }, icon: const Icon(
                 Icons.person_add_alt,
-                size: Dimensions.iconSizeVeryBig,)
+                size: Dimensions.iconSizeVeryBig,),
+                tooltip: TextRes.addStudentTitle,
               ),
             )
           ],
@@ -61,18 +67,40 @@ class AllStudentsColumn extends StatelessWidget {
         builder: (context) {
       return FutureBuilder(
         future: Future.wait([studentListState.getAllClasses(), studentListState.getAllTrainingDirections()]),
+        initialData: const [[], []],
         builder: (context, snapshot) {
-          List<ClassData> classList = snapshot.hasData
-              ?snapshot.data![0] as List<ClassData>
-              :[];
-          List<TrainingDirectionsData> trainingDirectionsList = snapshot.hasData
-              ?snapshot.data![1] as List<TrainingDirectionsData>
-              :[];
-         return StudentDialog(title: TextRes.addStudentTitle,
-              classes: classList, actionText: TextRes.saveActionText,
-              trainingDirections: trainingDirectionsList);
-        }
+
+          if(snapshot.connectionState == ConnectionState.done) {
+            List<dynamic> rawClassList = snapshot.data![0];
+            List<ClassData> classList =
+            rawClassList.map((e) => e as ClassData).toList();
+
+            List<dynamic> rawTrainingDirectionsList = snapshot.data![1];
+            List<TrainingDirectionsData> trainingDirectionsList =
+            rawTrainingDirectionsList.map((e) => e as TrainingDirectionsData).toList();
+
+            return StudentDialog(title: TextRes.addStudentTitle,
+                classes: classList, actionText: TextRes.saveActionText,
+                trainingDirections: trainingDirectionsList, loading: false,);
+            } else {
+            return const StudentDialog(title: TextRes.addStudentTitle,
+              classes: [], actionText: TextRes.saveActionText,
+              trainingDirections: [], loading: true,);
+            }
+          }
+
       );
+    }).then((List<Object?>? value) async{
+        if (value == null) return;
+
+        final String firstName = value[0] as String;
+        final String lastName = value[1] as String;
+        final int classLevel = value[2] as int;
+        final String classChar = value[3] as String;
+        final List<String> trainingDirections = value[4] as List<String>;
+
+        await studentListState.saveStudent(firstName, lastName, classLevel,
+            classChar, trainingDirections);
     });
   }
 }
