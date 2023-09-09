@@ -5,6 +5,7 @@ import 'package:buecherteam_2023_desktop/UI/tag_dropdown/chip_wrap.dart';
 import 'package:flutter/material.dart';
 
 
+
 /*
 Dropdown is the entry point for Dropdowns.
 The dropdown consists of a selection view that opens on click a actionDropdown Overlay
@@ -48,6 +49,14 @@ class _DropdownState<T extends LfgChip> extends State<Dropdown<T>> {
     wrapChipsField = GlobalKey(); //globalKey used to get the position of the selection view
     selectedChips = widget.selectedChips.toList(); //initial state that is updated internally
     availableChips = widget.availableChips.toList();
+  }
+
+  @override
+  void didUpdateWidget(oldWidget){
+    super.didUpdateWidget(oldWidget);
+    if(oldWidget.availableChips != widget.availableChips && oldWidget.availableChips.isEmpty) {
+      availableChips = widget.availableChips.toList();
+    }
   }
 
   @override

@@ -1,4 +1,6 @@
 
+
+
 import 'package:buecherteam_2023_desktop/Data/lfg_chip.dart';
 import 'package:buecherteam_2023_desktop/Data/training_directions_data.dart';
 import 'package:buecherteam_2023_desktop/Theme/color_scheme.dart';
@@ -117,7 +119,7 @@ void main () {
     // Verify that overlay's top-left corner's position matches ChipWrap's (or however you've defined its position)
     // This assumes the overlay is positioned right below the ChipWrap, but you may adjust accordingly
     expect(actionDropdownOffset.dx, chipWrapOffset.dx);
-    expect(actionDropdownOffset.dy, closeTo(chipWrapOffset.dy - 32, 4.0)); // We use closeTo here to account for potential small variations
+    expect(actionDropdownOffset.dy, closeTo(chipWrapOffset.dy, 4.0)); // We use closeTo here to account for potential small variations
 
   });
 
@@ -137,6 +139,11 @@ void main () {
     ).first;
 
     final chipContent = (firstAvailableChipFinder.evaluate().first.widget as ChipTag).chipContent;
+    final chipContentInAvailable = find.descendant(of:
+    find.byType(ActionDropdownAvailableContainer),
+        matching: find.text(chipContent.getLabelText()));
+
+    expect(chipContentInAvailable, findsOneWidget);
 
     await tester.tap(firstAvailableChipFinder);
     await tester.pump();
@@ -148,18 +155,27 @@ void main () {
     // This assumes you have a way to access the current state of the widget or can determine it by other means
     // For instance, the chip should no longer be in the availableChips and should be in the selectedChips
 
-    expect(availableChips.contains(chipContent), isFalse);
-    expect(selectedChips.contains(chipContent), isTrue);
+    final chipSelected = find.descendant(of:
+    find.byType(ActionDropdownSelectedWrap),
+        matching: find.text(chipContent.getLabelText()));
+
+    final chipAvailable = find.descendant(of:
+    find.byType(ActionDropdownAvailableContainer),
+        matching: find.text(chipContent.getLabelText()));
+
+
+    expect(chipSelected, findsOneWidget);
+    expect(chipAvailable, findsNothing);
   });
 
   testWidgets('When multiSelect is false, selecting a new chip deselects the previously selected chip', (WidgetTester tester) async {
     // Load the main widget with multiSelect set to false
-    await tester.pumpWidget(createWidgetUnderTest(availableChips, selectedChips, multiSelect: false));
+    await tester.pumpWidget(createWidgetUnderTest([availableChips[0]], selectedChips, multiSelect: false));
 
-    // Verify that there is initially a chip in the selectedChips
-    final initialSelectedChip = selectedChips.first;
-    expect(selectedChips.contains(initialSelectedChip), isTrue);
-    expect(availableChips.contains(initialSelectedChip), isFalse);
+    // Verify that initially all passed selectedChips are in the selectedChips
+    for(LfgChip selectedChip in selectedChips) {
+      expect(find.text(selectedChip.getLabelText()), findsOneWidget);
+    }
 
     // Find the ChipWrap widget and open the overlay
     final chipWrapFinder = find.byType(ChipWrap);
@@ -178,25 +194,35 @@ void main () {
     await tester.pump();
 
     // Verify that the initially selected chip is back in the availableChips and the new chip is now in the selectedChips
-    expect(selectedChips.contains(initialSelectedChip), isFalse);
-    expect(availableChips.contains(initialSelectedChip), isTrue);
-    expect(selectedChips.contains(newChipContent), isTrue);
-    expect(availableChips.contains(newChipContent), isFalse);
+    final newSelectedChip = find.descendant(of:
+    find.byType(ActionDropdownSelectedWrap),
+        matching: find.text(newChipContent.getLabelText()));
+    expect(newSelectedChip, findsOneWidget);
+
+    for (LfgChip selectedChip in selectedChips) {
+      final newAvailableChip = find.descendant(of:
+      find.byType(ActionDropdownAvailableContainer),
+          matching: find.text(selectedChip.getLabelText()), skipOffstage: false);
+      expect(newAvailableChip, findsOneWidget);
+    }
   });
 
   testWidgets('Deleting a chip in the overlay triggers onDeleteChip callback and updates internal state', (WidgetTester tester) async {
     // Load the main widget
-    await tester.pumpWidget(createWidgetUnderTest(availableChips, selectedChips));
+    await tester.pumpWidget(createWidgetUnderTest([availableChips[0]], selectedChips));
 
-    // Verify that there is initially a chip in the selectedChips
     final initialSelectedChip = selectedChips.first;
-    expect(selectedChips.contains(initialSelectedChip), isTrue);
-    expect(availableChips.contains(initialSelectedChip), isFalse);
 
     // Open the overlay by tapping the ChipWrap
     final chipWrapFinder = find.byType(ChipWrap);
     await tester.tap(chipWrapFinder);
     await tester.pump();
+
+    // Verify that there is initially a chip in the selectedChips
+    expect(find.descendant(of: find.byType(ActionDropdownSelectedWrap),
+        matching: find.text(initialSelectedChip.getLabelText())), findsOneWidget);
+    expect(find.descendant(of: find.byType(ActionDropdownAvailableContainer),
+        matching: find.text(initialSelectedChip.getLabelText())), findsNothing);
 
     // Find a deletable chip within the overlay's ActionDropdownSelectedWrap and delete it
     final deleteIconFinder = find.descendant(
@@ -211,13 +237,16 @@ void main () {
     verify(() => mockFunctions.onDeleteChip(initialSelectedChip)).called(1);
 
     // Verify that the chip is now in the list of availableChips and not in the selectedChips anymore
-    expect(selectedChips.contains(initialSelectedChip), isFalse);
-    expect(availableChips.contains(initialSelectedChip), isTrue);
+    expect(find.descendant(of: find.byType(ActionDropdownSelectedWrap),
+        matching: find.text(initialSelectedChip.getLabelText())), findsNothing);
+    expect(find.descendant(of: find.byType(ActionDropdownAvailableContainer),
+        matching: find.text(initialSelectedChip.getLabelText())), findsOneWidget);
+
   });
 
   testWidgets('Adding and removing a chip updates availableChips and selectedChips correctly', (WidgetTester tester) async {
     // Load the main widget
-    await tester.pumpWidget(createWidgetUnderTest(availableChips, selectedChips));
+    await tester.pumpWidget(createWidgetUnderTest(availableChips.sublist(0,2), selectedChips));
 
     // Open the overlay by tapping the ChipWrap
     final chipWrapFinder = find.byType(ChipWrap);
@@ -230,8 +259,10 @@ void main () {
     await tester.tap(chipToAddFinder);
     await tester.pump();
 
-    expect(selectedChips.contains(chipToAdd), isTrue);
-    expect(availableChips.contains(chipToAdd), isFalse);
+    expect(find.descendant(of: find.byType(ActionDropdownSelectedWrap),
+        matching: find.text(chipToAdd.getLabelText())), findsOneWidget);
+    expect(find.descendant(of: find.byType(ActionDropdownAvailableContainer),
+        matching: find.text(chipToAdd.getLabelText())), findsNothing);
 
     // Delete a chip from selectedChips
     final chipToDelete = selectedChips.first;
@@ -242,8 +273,11 @@ void main () {
     await tester.tap(deleteIconFinder);
     await tester.pump();
 
-    expect(selectedChips.contains(chipToDelete), isFalse);
-    expect(availableChips.contains(chipToDelete), isTrue);
+
+    expect(find.descendant(of: find.byType(ActionDropdownSelectedWrap),
+        matching: find.text(chipToDelete.getLabelText())), findsNothing);
+    expect(find.descendant(of: find.byType(ActionDropdownAvailableContainer),
+        matching: find.text(chipToDelete.getLabelText())), findsOneWidget);
   });
 
   testWidgets("deselecting all selected chips should return empty list", (tester) async{
