@@ -12,10 +12,7 @@ class LfgSearchbar extends StatelessWidget {
   final TextEditingController textEditingController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded( //searchBars width depends on margins and other widget - same as studentCard
-          child: SearchBar(
+    return SearchBar(
             controller: textEditingController,
             hintText: TextRes.studentSearchHint,
             elevation: const MaterialStatePropertyAll(Dimensions.elevationMedium),
@@ -29,15 +26,13 @@ class LfgSearchbar extends StatelessWidget {
             trailing: [Padding( //trailing displays the amount of students
               padding: const EdgeInsets.all(Dimensions.paddingSmall),
               child: Text("$amountOfFilteredStudents ${TextRes.student}",
-                style: Theme.of(context).textTheme.labelMedium?.copyWith(color: Theme.of(context).colorScheme.surfaceTint)),
+                style: Theme.of(context).textTheme.labelMedium?.copyWith(color: Theme.of(context).colorScheme.surfaceTint),
+                overflow: TextOverflow.ellipsis,),
             )],
             surfaceTintColor: MaterialStatePropertyAll(Theme.of(context).colorScheme.surface),
             overlayColor: MaterialStatePropertyAll(Theme.of(context).colorScheme.surfaceVariant),
             onSubmitted: (text) => textEditingController.clear(), //on enter searchbar should be cleared
             onChanged: onChangeText, //search while typing
-          ),
-        ),
-      ],
-    );
+          );
   }
 }
