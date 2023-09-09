@@ -11,13 +11,16 @@ import '../../Resources/text.dart';
 
 class StudentDialog extends StatefulWidget {
   const StudentDialog({super.key, required this.title, required this.classes,
-    required this.actionText, required this.trainingDirections, this.student});
+    required this.actionText, required this.trainingDirections, this.student,
+    required this.loading});
 
   final Student? student;
 
   final String title;
   final List<ClassData> classes;
   final String actionText;
+
+  final bool loading;
 
 
   final List<TrainingDirectionsData> trainingDirections;
@@ -65,7 +68,7 @@ class _StudentDialogState extends State<StudentDialog> {
         lastNameError: lastNameError,
         onLastNameChanged: onLastNameChanged,
         classError: classError,
-        student: widget.student,
+        student: widget.student, loading: widget.loading,
       ),
       actions: [
         FilledButton.tonal(onPressed:(){

@@ -54,7 +54,7 @@ void main () {
         student1.books[0].toJson(),
         student1.books[1].toJson()
       ],
-      TextRes.amountOfBooksJson:student1.amountOfBooks
+      TextRes.studentAmountOfBooksJson:student1.amountOfBooks
     };
     validJson2 = {
       TextRes.studentIdJson: student2.id,
@@ -66,7 +66,7 @@ void main () {
       TextRes.studentBooksJson: [
         student2.books[0].toJson()
       ],
-      TextRes.amountOfBooksJson:student1.amountOfBooks
+      TextRes.studentAmountOfBooksJson:student1.amountOfBooks
     };
 
     classLevelStringJson = {
@@ -80,7 +80,7 @@ void main () {
         student1.books[0].toJson(),
         student1.books[1].toJson()
       ],
-      TextRes.amountOfBooksJson:student1.amountOfBooks
+      TextRes.studentAmountOfBooksJson:student1.amountOfBooks
     };
 
     noBooksJson = {
@@ -91,7 +91,7 @@ void main () {
       TextRes.studentClassCharJson: studentWithoutBooks.classChar,
       TextRes.studentTrainingDirectionsJson: studentWithoutBooks.trainingDirections,
       TextRes.studentBooksJson: [],
-      TextRes.amountOfBooksJson:student1.amountOfBooks
+      TextRes.studentAmountOfBooksJson:student1.amountOfBooks
     };
 
     wrongBooksJson = {
@@ -107,7 +107,7 @@ void main () {
           TextRes.bookNameJson: 'Green Line New 4'
         }
       ],
-      TextRes.amountOfBooksJson:student1.amountOfBooks
+      TextRes.studentAmountOfBooksJson:student1.amountOfBooks
     };
 
     trainingDirectionsEmpty = {
@@ -120,7 +120,7 @@ void main () {
       TextRes.studentBooksJson: [
         studentWithoutTraining.books[0].toJson()
       ],
-      TextRes.amountOfBooksJson:student1.amountOfBooks
+      TextRes.studentAmountOfBooksJson:student1.amountOfBooks
     };
 
     emptyJson = {};
@@ -134,7 +134,7 @@ void main () {
       TextRes.studentBooksJson: [
         studentWithoutTraining.books[0].toJson()
       ],
-      TextRes.amountOfBooksJson:student1.amountOfBooks
+      TextRes.studentAmountOfBooksJson:student1.amountOfBooks
     };
   });
 

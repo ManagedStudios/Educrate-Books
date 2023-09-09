@@ -1,4 +1,6 @@
 
+
+
 import 'package:buecherteam_2023_desktop/Data/bookLite.dart';
 import 'package:buecherteam_2023_desktop/Data/class_data.dart';
 import 'package:buecherteam_2023_desktop/Data/student.dart';
@@ -8,6 +10,7 @@ import 'package:buecherteam_2023_desktop/Resources/text.dart';
 import 'package:buecherteam_2023_desktop/Theme/color_scheme.dart';
 import 'package:buecherteam_2023_desktop/Theme/text_theme.dart';
 import 'package:buecherteam_2023_desktop/UI/student_dialog/student_dialog_content.dart';
+import 'package:buecherteam_2023_desktop/UI/tag_dropdown/chip_wrap.dart';
 import 'package:buecherteam_2023_desktop/UI/tag_dropdown/dropdown.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -69,7 +72,7 @@ void main () {
 
   Widget createWidgetUnderTest({Student? studentParam, required List<ClassData> classesList,
     required List<TrainingDirectionsData> trainingDirectionsList, String? firstNameErrorParam,
-   String? lastNameErrorParam, String? classErrorParam, }) {
+   String? lastNameErrorParam, String? classErrorParam, bool loading = false}) {
     return MaterialApp(
         theme: ThemeData(
             colorScheme: lightColorScheme,
@@ -87,7 +90,7 @@ void main () {
                 onLastNameChanged: mockFunctions.onLastNameChanged,
                 firstNameError: firstNameErrorParam,
                 lastNameError: lastNameErrorParam,
-                classError: classErrorParam,),
+                classError: classErrorParam,loading: loading,),
 
         )
     );
@@ -345,6 +348,21 @@ void main () {
     for (var direction in student.trainingDirections) {
       expect(find.text(direction), findsOneWidget);
     }
+  });
+
+  testWidgets("Changing loading state", (tester) async{
+    await tester.pumpWidget(createWidgetUnderTest(classesList: [],
+        trainingDirectionsList: [], loading: true));
+
+    expect(find.byType(LinearProgressIndicator), findsOneWidget);
+
+    await tester.pumpWidget(createWidgetUnderTest(classesList: classes,
+        trainingDirectionsList: trainingDirections, loading: false));
+
+    expect(find.byType(LinearProgressIndicator), findsNothing);
+    await tester.tap(find.byType(ChipWrap).first);
+    await tester.pumpAndSettle();
+    expect(find.byKey(Key(classes[0].getLabelText())), findsOneWidget);
   });
 
 

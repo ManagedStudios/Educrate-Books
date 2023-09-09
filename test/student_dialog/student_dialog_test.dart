@@ -71,7 +71,7 @@ void main () {
             classes: classes,
             actionText: actionText,
             trainingDirections: trainingDirections,
-          student: studentParam,)
+          student: studentParam,loading: false,)
     );
   }
 

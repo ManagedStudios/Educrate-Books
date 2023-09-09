@@ -19,7 +19,8 @@ class StudentDialogContent extends StatefulWidget {
     required this.trainingDirections,
     required this.onStudentTrainingDirectionsUpdated,
     this.firstNameError, this.lastNameError, this.classError,
-    required this.onFirstNameChanged, required this.onLastNameChanged});
+    required this.onFirstNameChanged, required this.onLastNameChanged,
+    required this.loading});
 
   final Student? student; //update => existing student passed
 
@@ -36,6 +37,8 @@ class StudentDialogContent extends StatefulWidget {
   final String? firstNameError;
   final String? lastNameError;
   final String? classError;
+
+  final bool loading;
 
   @override
   State<StudentDialogContent> createState() => _StudentDialogContentState();
@@ -72,6 +75,10 @@ class _StudentDialogContentState extends State<StudentDialogContent> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
+                if(widget.loading) ...[const Padding(
+                  padding: EdgeInsets.all(Dimensions.paddingSmall),
+                  child: LinearProgressIndicator(),
+                )],
                 /*
                 first segment are the two textfields for first name and last name
                  */
@@ -168,7 +175,8 @@ class _StudentDialogContentState extends State<StudentDialogContent> {
                         onAddChip: (_){}, onDeleteChip: (_){},
                       multiSelect: true, width: dialogWidth*0.8,
                       onCloseOverlay: (trainingDirections) =>
-                          widget.onStudentTrainingDirectionsUpdated(trainingDirections as List<TrainingDirectionsData>)
+                          widget.onStudentTrainingDirectionsUpdated(
+                              trainingDirections.map((e) => e as TrainingDirectionsData).toList())
                   ),
                 ),
 
