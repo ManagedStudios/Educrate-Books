@@ -30,7 +30,7 @@ class Student {
     json[TextRes.studentClassCharJson] == null||
     json[TextRes.studentTrainingDirectionsJson] == null||
     json[TextRes.studentBooksJson] == null ||
-    json[TextRes.amountOfBooksJson] == null) {
+    json[TextRes.studentAmountOfBooksJson] == null) {
       throw Exception("Incomplete JSON");
     }
     return Student(
@@ -41,7 +41,7 @@ class Student {
       classChar: json[TextRes.studentClassCharJson] as String,
       trainingDirections: List.from(json[TextRes.studentTrainingDirectionsJson] as dynamic),
       books: List.from(json[TextRes.studentBooksJson] as dynamic).map((bookData) => BookLite.fromJson(bookData)).toList(),
-      amountOfBooks: json[TextRes.amountOfBooksJson] is int ? json[TextRes.amountOfBooksJson] as int : int.parse(json[TextRes.amountOfBooksJson] as String)
+      amountOfBooks: json[TextRes.studentAmountOfBooksJson] is int ? json[TextRes.studentAmountOfBooksJson] as int : int.parse(json[TextRes.studentAmountOfBooksJson] as String)
     );
   }
 
@@ -53,7 +53,7 @@ class Student {
       TextRes.studentClassCharJson: classChar,
       TextRes.studentTrainingDirectionsJson: trainingDirections,
       TextRes.studentBooksJson: books.isEmpty ? [] : books.map((book) => book.toJson()),
-      TextRes.amountOfBooksJson: amountOfBooks,
+      TextRes.studentAmountOfBooksJson: amountOfBooks,
       TextRes.typeJson:TextRes.studentTypeJson
     };
     return data;
