@@ -29,7 +29,6 @@ class StudentListState extends ChangeNotifier {
    */
   Future<void> saveStudent(String firstName, String lastName, int classLevel,
       String classChar, List<String> trainingDirections) async {
-    print("hello");
     final document = createNewStudentDoc(firstName, lastName, classLevel, classChar, trainingDirections);
     await database.saveDocument(document);
   }
