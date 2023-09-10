@@ -3,13 +3,26 @@ import 'package:buecherteam_2023_desktop/Resources/dimensions.dart';
 import 'package:buecherteam_2023_desktop/Resources/text.dart';
 import 'package:flutter/material.dart';
 
-class LfgSearchbar extends StatelessWidget {
-  LfgSearchbar({super.key, required this.onChangeText, required this.amountOfFilteredStudents});
+class LfgSearchbar extends StatefulWidget {
+  const LfgSearchbar({super.key, required this.onChangeText, required this.amountOfFilteredStudents});
 
   final Function(String search) onChangeText;
   final int amountOfFilteredStudents; //amount of students that are retrieved after applying filters
+  @override
+  State<LfgSearchbar> createState() => _LfgSearchbarState();
+}
 
-  final TextEditingController textEditingController = TextEditingController();
+class _LfgSearchbarState extends State<LfgSearchbar> {
+
+  late TextEditingController textEditingController;
+
+  @override
+  void initState() {
+    super.initState();
+     textEditingController = TextEditingController();
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return SearchBar(
@@ -25,14 +38,14 @@ class LfgSearchbar extends StatelessWidget {
             ),
             trailing: [Padding( //trailing displays the amount of students
               padding: const EdgeInsets.all(Dimensions.paddingSmall),
-              child: Text("$amountOfFilteredStudents ${TextRes.student}",
+              child: Text("${widget.amountOfFilteredStudents} ${TextRes.student}",
                 style: Theme.of(context).textTheme.labelMedium?.copyWith(color: Theme.of(context).colorScheme.surfaceTint),
                 overflow: TextOverflow.ellipsis,),
             )],
             surfaceTintColor: MaterialStatePropertyAll(Theme.of(context).colorScheme.surface),
             overlayColor: MaterialStatePropertyAll(Theme.of(context).colorScheme.surfaceVariant),
             onSubmitted: (text) => textEditingController.clear(), //on enter searchbar should be cleared
-            onChanged: onChangeText, //search while typing
+            onChanged: widget.onChangeText, //search while typing
           );
   }
 }

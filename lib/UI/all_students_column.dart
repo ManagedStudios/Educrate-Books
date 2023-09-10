@@ -7,6 +7,7 @@ import 'package:buecherteam_2023_desktop/UI/searchbar.dart';
 import 'package:buecherteam_2023_desktop/UI/student_card.dart';
 import 'package:buecherteam_2023_desktop/UI/student_dialog/student_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 
 import '../Resources/dimensions.dart';
@@ -20,6 +21,9 @@ class AllStudentsColumn extends StatefulWidget {
 }
 
 class _AllStudentsColumnState extends State<AllStudentsColumn> {
+
+  ValueNotifier<int> amountOfFilteredStudents = ValueNotifier(0);
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -27,7 +31,14 @@ class _AllStudentsColumnState extends State<AllStudentsColumn> {
       children: [
         Row(
           children: [
-            Expanded(child: LfgSearchbar(onChangeText: (_){}, amountOfFilteredStudents: 12)),
+            Expanded(child: ValueListenableBuilder(
+              valueListenable: amountOfFilteredStudents,
+                builder:(context, value, _) =>
+                    LfgSearchbar(onChangeText: (_){},
+                        amountOfFilteredStudents: amountOfFilteredStudents.value
+                    )
+              )
+            ),
             Padding(
               padding: const EdgeInsets.all(Dimensions.paddingSmall),
               child: IconButton(onPressed: (){
@@ -47,6 +58,11 @@ class _AllStudentsColumnState extends State<AllStudentsColumn> {
 
         StreamBuilder(stream: Provider.of<StudentListState>(context, listen: false).streamStudents(null, null),
             builder: (context, change) {
+            if(change.hasData && change.data!.length != amountOfFilteredStudents.value) {
+              SchedulerBinding.instance.addPostFrameCallback((_) {
+                amountOfFilteredStudents.value = change.data!.length;
+              });
+            }
               return Expanded(child: ListView(
                 children: [
                   for (Student student in change.data??[])
