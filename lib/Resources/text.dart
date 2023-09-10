@@ -56,9 +56,22 @@
 
   static const String saveActionText = "Speichern";
 
-  static const String trainingDirectionsJson = "label";
+  static const String trainingDirectionsJson = 'label';
 
-  static const String trainingDirectionsTypeJson = "training_directions";
+  static const String trainingDirectionsTypeJson = 'training_directions';
+
+  static const String bookTrainingDirectionJson = 'trainingDirection';
+
+  static const bookExpectedAmountNeededJson = 'expectedAmountNeeded';
+
+  static const bookNowAvailableJson = 'nowAvailable';
+
+  static const bookTotalAvailableJson = 'totalAvailable';
+
+  static const bookTypeJson = 'book';
+
+  static const String bookNegativeIntError = "Negative value for on or more of this variables: "
+      "classLevel, expectedAmountNeeded, nowAvailable, totalAvailable";
 
 
 
