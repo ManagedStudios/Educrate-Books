@@ -56,6 +56,10 @@
 
   static const String saveActionText = "Speichern";
 
+  static const String trainingDirectionsJson = "label";
+
+  static const String trainingDirectionsTypeJson = "training_directions";
+
 
 
   
