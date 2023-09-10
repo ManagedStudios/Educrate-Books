@@ -8,12 +8,14 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import 'UI/navigation/navigationbar.dart';
+
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await CouchbaseLiteFlutter.init();
   await DB().initializeDatabase();
-  await DB().startReplication();
+  //await DB().startReplication();
   runApp(MultiProvider(providers: [ //initialize the Viewmodels
     ChangeNotifierProvider(create: (context) => StudentListState(DB()))
   ],
@@ -44,7 +46,8 @@ class MyApp extends StatelessWidget {
             colorScheme: lightColorScheme,
             useMaterial3: true,
             fontFamily: 'Helvetica Neue',
-            textTheme: textTheme),
+            textTheme: textTheme,
+        ),
         routerConfig: _router,
       );
   }
@@ -57,6 +60,10 @@ class Homepage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar:   const PreferredSize(
+        preferredSize: Size(364, 48),
+        child: LfgNavigationBar(),
+      ),
       body: child
     );
   }
