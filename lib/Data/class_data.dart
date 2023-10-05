@@ -30,7 +30,7 @@ class ClassData implements LfgChip{
     ClassData otherData = other as ClassData;
     if(otherData.classLevel<classLevel) return 1;
     if(otherData.classLevel==classLevel) {
-      return classChar.compareTo(otherData.classChar);
+      return classChar.toUpperCase().compareTo(otherData.classChar.toUpperCase());
     }
     return -1;
   }

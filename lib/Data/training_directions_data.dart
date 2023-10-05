@@ -29,7 +29,7 @@ class TrainingDirectionsData implements LfgChip {
   @override
   int compareTo(other) {
     LfgChip chip = other as LfgChip;
-    return getLabelText().compareTo(chip.getLabelText());
+    return getLabelText().toUpperCase().compareTo(chip.getLabelText().toUpperCase());
   }
 
 
