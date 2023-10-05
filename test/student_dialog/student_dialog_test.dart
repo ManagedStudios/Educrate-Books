@@ -270,7 +270,7 @@ void main () {
 
     await tester.tap(find.byType(ChipWrap).first);
     await tester.pump();
-    await tester.tap(find.byKey(Key(classes[0].getLabelText())));
+    await tester.tap(find.text(classes[0].getLabelText()));
     await tester.pumpAndSettle();
 
     await tester.tap(find.text(actionText));

@@ -69,8 +69,11 @@ class _StudentDialogContentState extends State<StudentDialogContent> {
   Widget build(BuildContext context) {
     double dialogWidth =
     MediaQuery.of(context).size.width*0.5>500?MediaQuery.of(context).size.width*0.5:500;
+    double dialogHeight =
+        MediaQuery.of(context).size.height*0.7;
     return SizedBox(
             width: dialogWidth,
+            height: dialogHeight,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,

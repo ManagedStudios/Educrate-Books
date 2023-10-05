@@ -45,16 +45,17 @@ class _StudentDialogState extends State<StudentDialog> {
   @override
   void initState() {
     super.initState();
-      studentId = widget.student?.id;
-      studentFirstName = widget.student?.firstName ?? "";
-      studentLastName = widget.student?.lastName ?? "";
-      studentClassLevel = widget.student?.classLevel;
-      studentClassChar = widget.student?.classChar;
-      studentTrainingDirections = widget.student?.trainingDirections;
+    studentId = widget.student?.id;
+    studentFirstName = widget.student?.firstName ?? "";
+    studentLastName = widget.student?.lastName ?? "";
+    studentClassLevel = widget.student?.classLevel;
+    studentClassChar = widget.student?.classChar;
+    studentTrainingDirections = widget.student?.trainingDirections;
   }
 
   @override
   Widget build(BuildContext context) {
+
     return AlertDialog(
       title: Text(widget.title,
       style: Theme.of(context).textTheme.labelMedium,

@@ -9,14 +9,14 @@ class StudentCard extends StatefulWidget {
       {required super.key,
     required this.setClickedStudent,
     required this.notifyDetailPage,
-    required this.openDeleteDialog,
+    required this.onDeleteStudent,
     required this.openEditDialog});
 
 
   final Function(String id) setClickedStudent;
   final Function(Student currStudent) notifyDetailPage;
   final Function(Student currStudent) openEditDialog;
-  final Function(Student currStudent) openDeleteDialog;
+  final Function(Student currStudent) onDeleteStudent;
 
   final Student student;
   final bool isClicked;
@@ -30,6 +30,8 @@ class _StudentCardState extends State<StudentCard> {
 
   @override
   Widget build(BuildContext context) {
+    String classRaw = widget.student.classLevel.toString();
+    String classLevel = classRaw.length==1?"  $classRaw" : classRaw;
     return MouseRegion( //enable tracking hover states
       onEnter: (_) => setState(() {
         _hovering = true;
@@ -75,7 +77,7 @@ class _StudentCardState extends State<StudentCard> {
                       children: [
                         Column( //1 Column
                           children: [
-                            Text("${widget.student.classLevel}${widget.student.classChar} — ",
+                            Text("$classLevel${widget.student.classChar} — ",
                             style: Theme.of(context).textTheme.bodyLarge,)
                           ],
                         ),
@@ -95,11 +97,12 @@ class _StudentCardState extends State<StudentCard> {
                               Row( //3 Row
                                 children: [
                                   for (var trainingDirection in widget.student.trainingDirections)
-                                    Expanded(
+                                    Flexible(
+                                      fit: FlexFit.loose,
                                       child: Text("$trainingDirection  ",
-                                        style: Theme.of(context).textTheme.labelSmall,
-                                        overflow: TextOverflow.ellipsis,),
-                                    )
+                                          style: Theme.of(context).textTheme.labelSmall,
+                                          overflow: TextOverflow.ellipsis,),
+                                    ),
                                 ],
                               )
                             ],
@@ -122,7 +125,7 @@ class _StudentCardState extends State<StudentCard> {
 
                             ),
                           ),
-                          IconButton(onPressed: () => widget.openDeleteDialog(widget.student), icon: const Icon(Icons.close),
+                          IconButton(onPressed: () => widget.onDeleteStudent(widget.student), icon: const Icon(Icons.close),
                             style: ButtonStyle(
                               iconSize: _hovering ? const MaterialStatePropertyAll(16) : const MaterialStatePropertyAll(0),
                               shape: MaterialStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),

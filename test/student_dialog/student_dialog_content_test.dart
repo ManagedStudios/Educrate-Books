@@ -248,7 +248,7 @@ void main () {
     await tester.pumpAndSettle();
 
     // Simulate a tap on the first class in the dropdown
-    final classItem = find.byKey(Key(classes.first.getLabelText()));
+    final classItem = find.text(classes.first.getLabelText());
     await tester.tap(classItem);
     await tester.pumpAndSettle();
 
@@ -290,7 +290,7 @@ void main () {
     await tester.pumpAndSettle();
 
     // Assume there's a way to select a training direction (e.g., by tapping on it). Here we tap on the first direction.
-    await tester.tap(find.byKey(Key(trainingDirections[0].getLabelText())));
+    await tester.tap(find.text(trainingDirections.first.getLabelText()));
     await tester.pumpAndSettle();
 
     //close the overlay
@@ -362,7 +362,7 @@ void main () {
     expect(find.byType(LinearProgressIndicator), findsNothing);
     await tester.tap(find.byType(ChipWrap).first);
     await tester.pumpAndSettle();
-    expect(find.byKey(Key(classes[0].getLabelText())), findsOneWidget);
+    expect(find.text(classes[0].getLabelText()), findsOneWidget);
   });
 
 

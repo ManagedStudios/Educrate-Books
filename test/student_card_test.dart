@@ -40,7 +40,7 @@ void main() {
           setClickedStudent: mockFunctions.setClickedStudent,
           notifyDetailPage: mockFunctions.notifyDetailPage,
           openEditDialog: mockFunctions.openEditDialog,
-          openDeleteDialog: mockFunctions.openDeleteDialog,
+          onDeleteStudent: mockFunctions.openDeleteDialog,
         )
       );
     }
