@@ -12,6 +12,8 @@ import 'package:buecherteam_2023_desktop/Data/training_directions_data.dart';
 import 'package:cbl/cbl.dart';
 import 'package:flutter/material.dart';
 
+import '../Data/bookLite.dart';
+
 
 class StudentListState extends ChangeNotifier {
 
@@ -28,8 +30,8 @@ class StudentListState extends ChangeNotifier {
   saveStudent saves completely new Students
    */
   Future<void> saveStudent(String firstName, String lastName, int classLevel,
-      String classChar, List<String> trainingDirections) async {
-    final document = createNewStudentDoc(firstName, lastName, classLevel, classChar, trainingDirections);
+      String classChar, List<String> trainingDirections, {List<BookLite>? books}) async {
+    final document = createNewStudentDoc(firstName, lastName, classLevel, classChar, trainingDirections, books: books);
     await database.saveDocument(document);
   }
 
@@ -38,11 +40,11 @@ class StudentListState extends ChangeNotifier {
   the arguments are validated in the Stateful form widget
    */
   MutableDocument createNewStudentDoc (String firstName, String lastName, int classLevel,
-      String classChar, List<String> trainingDirections) {
+      String classChar, List<String> trainingDirections, {List<BookLite>? books}) {
     final document = MutableDocument(); //create empty MutableDocument to retrieve students id
     final student = Student(document.id, firstName: firstName, lastName: lastName,
         classLevel: classLevel, classChar: classChar,
-        trainingDirections: trainingDirections, books: [], amountOfBooks: 0);
+        trainingDirections: trainingDirections, books: books??[], amountOfBooks: books?.length??0);
     database.updateDocFromEntity(student, document);
     return document;
   }
@@ -64,12 +66,29 @@ class StudentListState extends ChangeNotifier {
       });
   }
 
+  Future<void> updateStudent(Student newStudent) async{
+    final doc = (await database.getDoc(newStudent.id))!.toMutable();
+    database.updateDocFromEntity(newStudent, doc);
+    database.saveDocument(doc);
+  }
+
   Future<List<ClassData>> getAllClasses () async{
-    return [ClassData(10, "K")];
+
+    String query = BuildQuery.getAllClassesQuery();
+    final res = await database.getDocs(query);
+    return res
+    .asStream()
+    .map((result) => database.toEntity(ClassData.fromJson, result))
+    .toList();
   }
 
   Future<List<TrainingDirectionsData>> getAllTrainingDirections () async{
-    return [];
+    String query = BuildQuery.getAllTrainingDirections();
+    final res = await database.getDocs(query);
+    return res
+        .asStream()
+        .map((result) => database.toEntity(TrainingDirectionsData.fromJson, result))
+        .toList();
   }
 
 

@@ -23,6 +23,7 @@ class AllStudentsColumn extends StatefulWidget {
 class _AllStudentsColumnState extends State<AllStudentsColumn> {
 
   ValueNotifier<int> amountOfFilteredStudents = ValueNotifier(0);
+  String? ftsQuery;
 
   @override
   Widget build(BuildContext context) {
@@ -32,16 +33,18 @@ class _AllStudentsColumnState extends State<AllStudentsColumn> {
         Row(
           children: [
             Expanded(child: ValueListenableBuilder(
-              valueListenable: amountOfFilteredStudents,
-                builder:(context, value, _) =>
-                    LfgSearchbar(onChangeText: (_){},
+                valueListenable: amountOfFilteredStudents,
+                builder: (context, value, _) =>
+                    LfgSearchbar(onChangeText: (text) {
+                      searchForStudents(text);
+                    },
                         amountOfFilteredStudents: amountOfFilteredStudents.value
                     )
-              )
+            )
             ),
             Padding(
               padding: const EdgeInsets.all(Dimensions.paddingSmall),
-              child: IconButton(onPressed: (){
+              child: IconButton(onPressed: () {
                 addStudent(context);
               }, icon: const Icon(
                 Icons.person_add_alt,
@@ -56,67 +59,176 @@ class _AllStudentsColumnState extends State<AllStudentsColumn> {
         FILTER ROW INSERT HERE
          */
 
-        StreamBuilder(stream: Provider.of<StudentListState>(context, listen: false).streamStudents(null, null),
+        StreamBuilder(
+            stream: Provider.of<StudentListState>(context, listen: false)
+                .streamStudents(ftsQuery, null),
             builder: (context, change) {
-            if(change.hasData && change.data!.length != amountOfFilteredStudents.value) {
-              SchedulerBinding.instance.addPostFrameCallback((_) {
-                amountOfFilteredStudents.value = change.data!.length;
-              });
-            }
+              if (change.hasData &&
+                  change.data!.length != amountOfFilteredStudents.value) {
+                SchedulerBinding.instance.addPostFrameCallback((_) {
+                  amountOfFilteredStudents.value = change.data!.length;
+                });
+              }
               return Expanded(child: ListView(
                 children: [
-                  for (Student student in change.data??[])
-                    StudentCard(student, false, key: Key(student.id), setClickedStudent: (student)=>{}, notifyDetailPage: (student) => {},
-                        openDeleteDialog: (student) => Provider.of<StudentListState>(context, listen: false).deleteStudent(student),
-                        openEditDialog: (student) => {})
+                  for (Student student in change.data ?? [])
+                    StudentCard(student, false, key: Key(student.id),
+                        setClickedStudent: (student) => {},
+                        notifyDetailPage: (student) => {},
+                        onDeleteStudent: (student) {
+                          Provider.of<StudentListState>(context, listen: false)
+                              .deleteStudent(student);
+                          showSnackBar(student);
+                        },
+                        openEditDialog: (student) {
+                          updateStudent(student);
+                        })
                 ],
               )
               );
             })
       ],
     );
-  }
+  } //END OF WIDGET
+
+  /*
+  show Dialog to add Students
+   */
 
   void addStudent(BuildContext context) {
-    final studentListState = Provider.of<StudentListState>(context, listen: false);
+    final studentListState = Provider.of<StudentListState>(
+        context, listen: false);
     showDialog<List<Object?>>(context: context, barrierDismissible: false,
         builder: (context) {
-      return FutureBuilder(
-        future: Future.wait([studentListState.getAllClasses(), studentListState.getAllTrainingDirections()]),
-        initialData: const [[], []],
-        builder: (context, snapshot) {
-
-          if(snapshot.connectionState == ConnectionState.done) {
-            List<dynamic> rawClassList = snapshot.data![0];
-            List<ClassData> classList =
-            rawClassList.map((e) => e as ClassData).toList();
-
-            List<dynamic> rawTrainingDirectionsList = snapshot.data![1];
-            List<TrainingDirectionsData> trainingDirectionsList =
-            rawTrainingDirectionsList.map((e) => e as TrainingDirectionsData).toList();
-
-            return StudentDialog(title: TextRes.addStudentTitle,
-                classes: classList, actionText: TextRes.saveActionText,
-                trainingDirections: trainingDirectionsList, loading: false,);
-            } else {
-            return const StudentDialog(title: TextRes.addStudentTitle,
-              classes: [], actionText: TextRes.saveActionText,
-              trainingDirections: [], loading: true,);
-            }
-          }
-
-      );
-    }).then((List<Object?>? value) async{
+          return studentDialogFutureBuilder(
+              studentListState: studentListState,
+              title: TextRes.addStudentTitle,
+              actionText: TextRes.saveActionText);
+        }).then((List<Object?>? value) async {
         if (value == null) return;
+      //parse all student details passed from the altertDialog
+      final String firstName = value[0] as String;
+      final String lastName = value[1] as String;
+      final int classLevel = value[2] as int;
+      final String classChar = value[3] as String;
+      final List<String> trainingDirections = value[4] as List<String>;
 
-        final String firstName = value[0] as String;
-        final String lastName = value[1] as String;
-        final int classLevel = value[2] as int;
-        final String classChar = value[3] as String;
-        final List<String> trainingDirections = value[4] as List<String>;
-
-        await studentListState.saveStudent(firstName, lastName, classLevel,
-            classChar, trainingDirections);
+      //save the student to db
+      await studentListState.saveStudent(firstName, lastName, classLevel,
+          classChar, trainingDirections);
     });
   }
+
+
+  void searchForStudents(String text) {
+    if (text == "") {
+      setState(() {
+        ftsQuery = null;
+      });
+    } else {
+      List<String> parts = text
+          .replaceAll("*",
+          "") //"*" can lead to crashes of couchbase lite since it is a command
+          .trim() //delete all whitespace to avoid "word AND  *" queries leading to crashes
+          .split(RegExp(
+          r'(?<=[0-9])(?=[A-Za-z])|\s+')); //use a regex to split up words and classLevel from classChar
+      final query = '${parts.join(' AND ')}*';
+      setState(() {
+        ftsQuery = query;
+      });
+    }
+  }
+
+  /*
+  showSnackbar is used to undo a delete of a student
+   */
+
+  void showSnackBar(Student student) {
+    ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(
+            "${student.firstName} ${student.lastName} ${TextRes.wasDeleted}"),
+          action: SnackBarAction(label: TextRes.undo,
+              onPressed: () => //save the student passed from the deletion process
+              Provider.of<StudentListState>(context, listen: false)
+                  .saveStudent(
+                  student.firstName, student.lastName, student.classLevel,
+                  student.classChar, student.trainingDirections,
+                  books: student.books)),
+          margin: const EdgeInsets.only(left: Dimensions.largeMargin,
+              right: Dimensions.largeMargin,
+              bottom: Dimensions.minMarginStudentView
+          ),
+          behavior: SnackBarBehavior.floating,
+          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(
+              Radius.circular(Dimensions.cornerRadiusSmall))),
+          padding: const EdgeInsets.all(Dimensions.paddingMedium),
+        )
+    );
+  }
+
+  void updateStudent(Student student) {
+    final studentListState = Provider.of<StudentListState>(
+        context, listen: false);
+    showDialog<Student?>(context: context, barrierDismissible: false,
+        builder: (context) {
+          return studentDialogFutureBuilder(
+              studentListState: studentListState,
+              title: "${student.firstName} ${student.lastName} ${TextRes.updateTitle}",
+              actionText: TextRes.updateActionText,
+              student: student);
+        }
+    ).then((value) {
+      if(value == null) return;
+      studentListState.updateStudent(value);
+    });
+  }
+
+  Widget studentDialogFutureBuilder({
+    required StudentListState studentListState,
+    required String title,
+    required String actionText,
+    Student? student,
+  }) {
+    return FutureBuilder(
+      future: Future.wait([
+        studentListState.getAllClasses(),
+        studentListState.getAllTrainingDirections()
+      ]),
+      initialData: const [[], []],
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done &&
+            snapshot.hasData) {
+          List<dynamic> rawClassList = snapshot.data?[0] ?? [];
+          List<ClassData> classList = rawClassList.map((e) => e as ClassData)
+              .toList();
+
+          List<dynamic> rawTrainingDirectionsList = snapshot.data?[1] ?? [];
+          List<TrainingDirectionsData> trainingDirectionsList =
+          rawTrainingDirectionsList.map((e) => e as TrainingDirectionsData)
+              .toList();
+
+          return StudentDialog(
+            key: UniqueKey(),
+            title: title,
+            classes: classList,
+            actionText: actionText,
+            trainingDirections: trainingDirectionsList,
+            loading: false,
+            student: student,
+          );
+        } else {
+          return StudentDialog(
+            key: UniqueKey(),
+            title: title,
+            classes: const [],
+            actionText: actionText,
+            trainingDirections: const [],
+            loading: true,
+          );
+        }
+      },
+    );
+  }
+
+
 }
