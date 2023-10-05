@@ -73,6 +73,25 @@
   static const String bookNegativeIntError = "Negative value for on or more of this variables: "
       "classLevel, expectedAmountNeeded, nowAvailable, totalAvailable";
 
+  static const String idJson = 'id';
+
+  static const String classDataClassLevelJson = "classLevel";
+
+  static const String classDataClassCharJson = "classChar";
+
+  static const String classDataTypeJson = "classData";
+
+  static const String ftsStudent = "fts_student";
+
+  static const String wasDeleted = "wurde gelöscht";
+
+  static const String undo = "rückgängig";
+
+  static const String updateActionText = "Entleiher aktualisieren";
+
+  static const String updateTitle = "aktualisieren";
+
+
 
 
   

@@ -1,0 +1,52 @@
+[
+  {
+    "classLevel": 5,
+    "classChar": "A",
+    "type": "classData"
+  },
+  {
+    "classLevel": 5,
+    "classChar": "B",
+    "type": "classData"
+  },
+  {
+    "classLevel": 5,
+    "classChar": "C",
+    "type": "classData"
+  },
+  {
+    "classLevel": 6,
+    "classChar": "A",
+    "type": "classData"
+  },
+  {
+    "classLevel": 6,
+    "classChar": "B",
+    "type": "classData"
+  },
+  {
+    "classLevel": 7,
+    "classChar": "A",
+    "type": "classData"
+  },
+  {
+    "classLevel": 7,
+    "classChar": "B",
+    "type": "classData"
+  },
+  {
+    "classLevel": 8,
+    "classChar": "A",
+    "type": "classData"
+  },
+  {
+    "classLevel": 9,
+    "classChar": "K",
+    "type": "classData"
+  },
+  {
+    "classLevel": 10,
+    "classChar": "K",
+    "type": "classData"
+  }
+]

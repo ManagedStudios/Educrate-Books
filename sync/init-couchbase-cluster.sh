@@ -80,7 +80,10 @@ curl -vX PUT "http://localhost:4985/$DATABASE_NAME/_user/$USERNAME" \
 -H "Content-Type: application/json" \
 -d '{"name": "dibbo", "admin_channels": ["*"]}'
 
+
 curl -vX PUT "http://localhost:4985/$DATABASE_NAME/_config" \
 -H "accept: application/json" \
 -H "Content-Type: application/json" \
 -d '{"guest":{"disabled": true}}'
+
+

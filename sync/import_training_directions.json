@@ -1,0 +1,39 @@
+[
+  {
+    "label":"BASIC-5",
+    "type": "training_directions"
+  },
+  {
+    "label":"BASIC-6",
+    "type": "training_directions"
+  },
+  {
+    "label":"BASIC-7",
+    "type": "training_directions"
+  },
+  {
+    "label":"BASIC-8",
+    "type": "training_directions"
+  },
+  {
+    "label":"BASIC-9",
+    "type": "training_directions"
+  },
+  {
+    "label":"BASIC-10",
+    "type": "training_directions"
+  },
+  {
+    "label":"LATEIN-10",
+    "type": "training_directions"
+  },
+  {
+    "label":"Französisch-10",
+    "type": "training_directions"
+  },
+  {
+    "label":"Religion-10",
+    "type": "training_directions"
+  }
+
+]

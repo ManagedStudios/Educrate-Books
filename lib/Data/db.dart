@@ -20,7 +20,14 @@ class DB {
   Future<void> initializeDatabase() async {
     _database = await Database.openAsync(TextRes.dbName);
     final typeIndex = ValueIndexConfiguration(['type']);
-    _database.createIndex("Types", typeIndex);
+    final ftsIndex = IndexBuilder.fullTextIndex([
+      FullTextIndexItem.property(TextRes.studentFirstNameJson),
+      FullTextIndexItem.property(TextRes.studentLastNameJson),
+      FullTextIndexItem.property(TextRes.studentClassLevelJson),
+      FullTextIndexItem.property(TextRes.studentClassCharJson)
+    ]);
+    await _database.createIndex("Types", typeIndex);
+    await _database.createIndex("fts_student", ftsIndex);
 
   }
 
