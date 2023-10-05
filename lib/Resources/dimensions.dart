@@ -45,4 +45,6 @@ class Dimensions {
 
   static const double paddingMedium = 16;
 
+  static const double largeMargin = 128;
+
 }
