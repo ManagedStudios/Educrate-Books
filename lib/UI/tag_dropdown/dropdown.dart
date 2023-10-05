@@ -49,6 +49,10 @@ class _DropdownState<T extends LfgChip> extends State<Dropdown<T>> {
     wrapChipsField = GlobalKey(); //globalKey used to get the position of the selection view
     selectedChips = widget.selectedChips.toList(); //initial state that is updated internally
     availableChips = widget.availableChips.toList();
+    selectedChips.forEach((selected)
+    {
+      availableChips.removeWhere((it) => it.getLabelText()==selected.getLabelText());
+    });
   }
 
   @override
@@ -56,6 +60,10 @@ class _DropdownState<T extends LfgChip> extends State<Dropdown<T>> {
     super.didUpdateWidget(oldWidget);
     if(oldWidget.availableChips != widget.availableChips && oldWidget.availableChips.isEmpty) {
       availableChips = widget.availableChips.toList();
+      selectedChips.forEach((selected)
+      {
+        availableChips.removeWhere((it) => it.getLabelText()==selected.getLabelText());
+      });
     }
   }
 
@@ -149,7 +157,7 @@ class _DropdownState<T extends LfgChip> extends State<Dropdown<T>> {
         selectedChips.add(chip);
         availableChips.removeWhere((element) => element.getLabelText()==chip.getLabelText());
       });
-    } else {
+    } else { //single select
       setState(() {
         /*
         first move all chips (usually should be 0 or 1 element) to availableChips and then delete

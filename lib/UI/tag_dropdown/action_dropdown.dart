@@ -25,6 +25,30 @@ class ActionDropdown extends StatefulWidget {
   final Function(LfgChip chip) onAddChip;
   final String? hintText;
 
+  /*
+  filterList filters for numbers in elements and additionally for text matches
+  ensures filtering just after class_level
+   */
+  List<LfgChip> filterList(List<LfgChip> fullList, String filterText) {
+    // Get numeric value from filterText.
+    final filterNum = RegExp(r'\d+').firstMatch(filterText)?.group(0) ?? '';
+
+    return fullList.where((item) {
+      // If filterNum is not empty, check if item contains it.
+      if (filterNum.isNotEmpty && !item.getLabelText().contains(filterNum)) {
+        return false;
+      }
+
+      // Filter based on the non-numeric part of filterText.
+      final filterTextWithoutNum = filterText.replaceAll(filterNum, '').toUpperCase();
+      if (filterTextWithoutNum.isNotEmpty && !item.getLabelText().toUpperCase().contains(filterTextWithoutNum)) {
+        return false;
+      }
+
+      return true;
+    }).toList();
+  }
+
   @override
   State<ActionDropdown> createState() => _ActionDropdownState();
 }
@@ -32,27 +56,6 @@ class ActionDropdown extends StatefulWidget {
 class _ActionDropdownState extends State<ActionDropdown> {
 
   late List<LfgChip> filteredAvailableChips;
-
-  /*
-  filterList filters for numbers in elements and additionally for text matches
-  ensures filtering just after class_level
-   */
-  List<LfgChip> filterList (List<LfgChip> fullList, String filterText) {
-    final filterNum = RegExp(r'\d+').firstMatch(filterText)?.group(0) ?? '';
-
-    return fullList.where((item) {
-      // If filterNum is not empty, check if item contains it.
-      if (filterNum.isNotEmpty && !item.getLabelText().toUpperCase().contains(filterNum)) {
-        return false;
-      }
-      // Filter based on the non-numeric part of filterText.
-      final filterTextWithoutNum = filterText.replaceAll(filterNum, '');
-      if (filterTextWithoutNum.isNotEmpty && !item.getLabelText().toUpperCase().contains(filterTextWithoutNum)) {
-        return false;
-      }
-      return true;
-    }).toList();
-  }
 
   @override
   void initState() {
@@ -74,7 +77,7 @@ class _ActionDropdownState extends State<ActionDropdown> {
             onFilterTextChange: (text) {
             setState(() {//update the available chips based on the filter
               String filterText = text.toUpperCase();
-              filteredAvailableChips = filterList(widget.availableChips, filterText);
+              filteredAvailableChips = widget.filterList(widget.availableChips, filterText);
             });
             },
               ),

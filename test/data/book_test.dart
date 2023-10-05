@@ -8,6 +8,7 @@ void main() {
   late Map<String, Object?> validBookJson;
   late Map<String, Object?> missingFieldsBookJson;
   late Map<String, Object?> classLevelStringJson;
+  late Map<String, Object?> bookStringJson;
   late Map<String, Object?> emptyJson;
   late Book validBook;
 
@@ -17,13 +18,13 @@ void main() {
         name: "Green Line New 5",
         subject: "Englisch",
         classLevel: 11,
-        trainingDirection: "BASIC-11",
+        trainingDirection: ["BASIC-11"],
         expectedAmountNeeded: 50,
         nowAvailable: 10,
         totalAvailable: 60);
 
     validBookJson = {
-      TextRes.bookIdJson: validBook.bookId,
+      TextRes.idJson: validBook.id,
       TextRes.bookNameJson: validBook.name,
       TextRes.bookSubjectJson: validBook.subject,
       TextRes.bookClassLevelJson: validBook.classLevel,
@@ -38,6 +39,8 @@ void main() {
 
     missingFieldsBookJson = {...validBookJson};
     missingFieldsBookJson.remove(TextRes.bookNameJson);  // remove one field for this test
+
+    bookStringJson = {...validBookJson, TextRes.bookTrainingDirectionJson: "BASIC-11"};
 
     emptyJson = {};
   });
@@ -79,7 +82,7 @@ void main() {
 
 
     test("Invalid type for bookId throws exception", () {
-      final invalidJson = {...validBookJson, TextRes.bookIdJson: 12345};  // passing an integer instead of a string
+      final invalidJson = {...validBookJson, TextRes.idJson: 12345};  // passing an integer instead of a string
       expect(() => Book.fromJson(invalidJson), throwsA(isA<TypeError>())); // This should throw a type error when trying to cast
     });
 
@@ -87,6 +90,11 @@ void main() {
     test("Invalid JSON structure for nested JSON throws exception", () {
       final invalidJson = {...validBookJson, TextRes.bookTotalAvailableJson: "invalidValue"};
       expect(() => Book.fromJson(invalidJson), throwsA(isA<FormatException>()));
+    });
+
+    test("Only a String not a List was passed for TrainingDirections", () {
+      final bookFromJson = Book.fromJson(bookStringJson);
+      expect(bookFromJson, validBook);
     });
 
   });
@@ -103,7 +111,7 @@ void main() {
     // Test for each field
     test("Check bookId in JSON", () {
       final json = validBook.toJson();
-      expect(json[TextRes.bookIdJson], validBook.bookId);
+      expect(json[TextRes.idJson], validBook.id);
     });
 
     test("Check name in JSON", () {

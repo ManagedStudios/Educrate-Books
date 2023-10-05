@@ -6,11 +6,10 @@ import 'package:buecherteam_2023_desktop/Resources/text.dart';
 import 'package:buecherteam_2023_desktop/UI/tag_dropdown/chip_wrap.dart';
 import 'package:flutter/material.dart';
 
-
 /*
 ActionDropdownAvailableContainer shows the options you can select in a dropdownAction
-
  */
+
 class ActionDropdownAvailableContainer extends StatelessWidget {
   const ActionDropdownAvailableContainer({super.key, required this.availableChips,
     required this.onAddChip, required this.width, this.hintText});
@@ -22,6 +21,7 @@ class ActionDropdownAvailableContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    availableChips.sort();
     return Card( //base container providing color and shape
       key: Key(Keys.ActionDropdownAvailableCardKey),
       surfaceTintColor: Theme.of(context).colorScheme.surface,
@@ -38,6 +38,9 @@ class ActionDropdownAvailableContainer extends StatelessWidget {
           padding: const EdgeInsets.all(Dimensions.paddingSmall),
           child: ListView( //Scrollable List of options
             children: [
+              /*
+              Explaining Text for selecting options
+               */
               Padding(
                 padding: const EdgeInsets.all(Dimensions.paddingBetweenVerySmallAndSmall),
                 child: Column(
@@ -59,11 +62,12 @@ class ActionDropdownAvailableContainer extends StatelessWidget {
                   ],
                 ),
               ),
+
               /*
               use ChipWrap with fixed width to use as optionButtons
                */
               for (int chipIndex = 0; chipIndex<availableChips.length; chipIndex++)
-                ChipWrap(key: Key(availableChips[chipIndex].getLabelText()), chips: [availableChips[chipIndex]],
+                ChipWrap(chips: [availableChips[chipIndex]],
                   onClickChipRow: (chip) {
                     onAddChip(chip[0]);
                   },
@@ -75,4 +79,5 @@ class ActionDropdownAvailableContainer extends StatelessWidget {
       ),
     );
   }
+
 }
