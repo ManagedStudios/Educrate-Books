@@ -6,7 +6,7 @@ class StudentCard extends StatefulWidget {
 
   const StudentCard(this.student,
       this.isClicked,
-      {required super.key,
+      {super.key,
     required this.setClickedStudent,
     required this.notifyDetailPage,
     required this.onDeleteStudent,

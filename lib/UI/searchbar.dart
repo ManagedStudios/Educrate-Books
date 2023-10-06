@@ -16,10 +16,12 @@ class _LfgSearchbarState extends State<LfgSearchbar> {
 
   late TextEditingController textEditingController;
 
+
   @override
   void initState() {
     super.initState();
      textEditingController = TextEditingController();
+
   }
 
 

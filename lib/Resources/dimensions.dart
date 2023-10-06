@@ -37,7 +37,7 @@ class Dimensions {
 
   static const double spaceMedium = 16;
 
-  static const double minMarginStudentView = 64;
+  static const double minMarginStudentView = 28;
 
   static const double paddingVeryBig = 48;
 
@@ -46,5 +46,9 @@ class Dimensions {
   static const double paddingMedium = 16;
 
   static const double largeMargin = 128;
+
+  static const double lineWidth = 1;
+
+  static const double smallBreakPoint = 900;
 
 }

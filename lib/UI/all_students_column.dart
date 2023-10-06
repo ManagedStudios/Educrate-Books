@@ -1,8 +1,11 @@
 
+
+
 import 'package:buecherteam_2023_desktop/Data/class_data.dart';
 import 'package:buecherteam_2023_desktop/Data/student.dart';
 import 'package:buecherteam_2023_desktop/Data/training_directions_data.dart';
 import 'package:buecherteam_2023_desktop/Models/studentListState.dart';
+import 'package:buecherteam_2023_desktop/UI/keyboard_listener/keyboard_listener.dart';
 import 'package:buecherteam_2023_desktop/UI/searchbar.dart';
 import 'package:buecherteam_2023_desktop/UI/student_card.dart';
 import 'package:buecherteam_2023_desktop/UI/student_dialog/student_dialog.dart';
@@ -24,70 +27,116 @@ class _AllStudentsColumnState extends State<AllStudentsColumn> {
 
   ValueNotifier<int> amountOfFilteredStudents = ValueNotifier(0);
   String? ftsQuery;
+  Keyboard pressedKey = Keyboard.nothing;
+  bool lfgKeyboardFocused = true;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
+    return LFGKeyboard(
+      changePress: (Keyboard pressed) {
+        pressedKey = pressed;
+      },
+      child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(child: ValueListenableBuilder(
-                valueListenable: amountOfFilteredStudents,
-                builder: (context, value, _) =>
-                    LfgSearchbar(onChangeText: (text) {
-                      searchForStudents(text);
-                    },
-                        amountOfFilteredStudents: amountOfFilteredStudents.value
-                    )
-            )
+            Row(
+              children: [
+                Expanded(child: ValueListenableBuilder(
+                    valueListenable: amountOfFilteredStudents,
+                    builder: (context, value, _) =>
+                        LfgSearchbar(onChangeText: (text) {
+                          Provider.of<StudentListState>(context, listen: false)
+                              .clearSelectedStudents();
+                          searchForStudents(text);
+                        },
+                            amountOfFilteredStudents: amountOfFilteredStudents.value
+                        )
+                )
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(Dimensions.paddingSmall),
+                  child: IconButton(onPressed: () {
+                    addStudent(context);
+                  }, icon: const Icon(
+                    Icons.person_add_alt,
+                    size: Dimensions.iconSizeVeryBig,),
+                    tooltip: TextRes.addStudentTitle,
+                  ),
+                )
+              ],
             ),
-            Padding(
-              padding: const EdgeInsets.all(Dimensions.paddingSmall),
-              child: IconButton(onPressed: () {
-                addStudent(context);
-              }, icon: const Icon(
-                Icons.person_add_alt,
-                size: Dimensions.iconSizeVeryBig,),
-                tooltip: TextRes.addStudentTitle,
-              ),
-            )
+
+            /*
+            FILTER ROW INSERT HERE
+             */
+
+            StreamBuilder(
+                stream: Provider.of<StudentListState>(context, listen: false)
+                    .streamStudents(ftsQuery, null),
+                builder: (context, change) {
+                  if (change.hasData &&
+                      change.data!.length != amountOfFilteredStudents.value) {
+                    SchedulerBinding.instance.addPostFrameCallback((_) {
+                      amountOfFilteredStudents.value = change.data!.length;
+                    });
+                  }
+                  final int dataLength = change.data?.length ?? 0;
+                  return Expanded(child: ListView(
+                    children: [
+                      for (int index = 0; index<dataLength; index++)
+                        ...[
+                          Consumer<StudentListState>(
+                            builder: (context, state, _) {
+                              return StudentCard(change.data![index],
+                                  state.selectedStudentIds.contains(index),
+                                  setClickedStudent: (student) {
+                                    switch(pressedKey) {
+                                      case Keyboard.nothing : {
+                                        state.clearSelectedStudents();
+                                        state.addSelectedStudent(index);
+                                      }
+                                      case Keyboard.cmd : {
+                                        if(state.selectedStudentIds.contains(index)) {
+                                          state.removeSelectedStudent(index);
+                                        } else {
+                                          state.addSelectedStudent(index);
+                                        }
+                                      }
+                                      case Keyboard.shift : {
+                                        if(index>state.selectedStudentIds.last) {
+                                          for (int i = state.selectedStudentIds.last+1; i<=index; i++) {
+                                            state.addSelectedStudent(i);
+                                          }
+                                        } else {
+                                          for (int i = state.selectedStudentIds.first-1; i>=index; i--) {
+                                            state.addSelectedStudent(i);
+                                          }
+                                        }
+
+                                      }
+                                    }
+                                  },
+                                  notifyDetailPage: (student) => {},
+                                  onDeleteStudent: (student) {
+                                    Provider.of<StudentListState>(context, listen: false)
+                                        .deleteStudent(student);
+                                    showSnackBar(student);
+                                  },
+                                  openEditDialog: (student) {
+                                    updateStudent(student);
+                                  });
+                            },
+                          ),
+
+                          const SizedBox(height: Dimensions.spaceSmall,)
+                        ]
+
+                    ],
+                  )
+                  );
+                })
           ],
         ),
-
-        /*
-        FILTER ROW INSERT HERE
-         */
-
-        StreamBuilder(
-            stream: Provider.of<StudentListState>(context, listen: false)
-                .streamStudents(ftsQuery, null),
-            builder: (context, change) {
-              if (change.hasData &&
-                  change.data!.length != amountOfFilteredStudents.value) {
-                SchedulerBinding.instance.addPostFrameCallback((_) {
-                  amountOfFilteredStudents.value = change.data!.length;
-                });
-              }
-              return Expanded(child: ListView(
-                children: [
-                  for (Student student in change.data ?? [])
-                    StudentCard(student, false, key: Key(student.id),
-                        setClickedStudent: (student) => {},
-                        notifyDetailPage: (student) => {},
-                        onDeleteStudent: (student) {
-                          Provider.of<StudentListState>(context, listen: false)
-                              .deleteStudent(student);
-                          showSnackBar(student);
-                        },
-                        openEditDialog: (student) {
-                          updateStudent(student);
-                        })
-                ],
-              )
-              );
-            })
-      ],
     );
   } //END OF WIDGET
 

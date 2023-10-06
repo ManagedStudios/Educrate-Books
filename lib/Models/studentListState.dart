@@ -21,7 +21,7 @@ class StudentListState extends ChangeNotifier {
 
   final DB database;
 
-  HashSet<String> selectedStudentIds = HashSet();
+  HashSet<int> selectedStudentIds = HashSet();
 
   String? ftsQuery;
   Filter? filterOptions;
@@ -107,6 +107,23 @@ class StudentListState extends ChangeNotifier {
     filterOptions = filter;
     streamStudents(ftsQuery, filterOptions);
   }
+
+  void clearSelectedStudents () {
+    selectedStudentIds = HashSet();
+    notifyListeners();
+  }
+
+
+  void addSelectedStudent(int studentIndex) {
+    selectedStudentIds.add(studentIndex);
+    notifyListeners();
+  }
+
+  void removeSelectedStudent(int index) {
+    selectedStudentIds.remove(index);
+    notifyListeners();
+  }
+
 
 
 
