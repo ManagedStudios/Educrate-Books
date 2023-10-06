@@ -4,30 +4,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class LFGKeyboard extends StatefulWidget {
-  LFGKeyboard({super.key, required this.changePress, required this.child});
+  LFGKeyboard({super.key, required this.changePress, required this.child, required this.focus});
 
   final Function (Keyboard pressed) changePress;
   final Widget child;
+  final FocusNode focus;
 
   @override
   State<LFGKeyboard> createState() => _LFGKeyboardState();
 }
 
 class _LFGKeyboardState extends State<LFGKeyboard> {
-  late FocusNode focus;
 
-  @override
-  void initState () {
-    super.initState();
-    focus = FocusNode();
-    focus.requestFocus(); //observe the keyboard by turning on focus
-  }
+
+
+
 
   @override
   Widget build(BuildContext context) {
 
     return RawKeyboardListener(
-      focusNode: focus,
+      focusNode: widget.focus,
       onKey: (RawKeyEvent event) {
         if (event is RawKeyDownEvent) {
           //detect cmd taps on mac and windows

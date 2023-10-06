@@ -28,14 +28,22 @@ class _AllStudentsColumnState extends State<AllStudentsColumn> {
   ValueNotifier<int> amountOfFilteredStudents = ValueNotifier(0);
   String? ftsQuery;
   Keyboard pressedKey = Keyboard.nothing;
-  bool lfgKeyboardFocused = true;
 
+  late FocusNode focusLFGKeyboard;
+
+  @override
+  void initState () {
+    super.initState();
+    focusLFGKeyboard = FocusNode();
+    focusLFGKeyboard.requestFocus();
+  }
   @override
   Widget build(BuildContext context) {
     return LFGKeyboard(
       changePress: (Keyboard pressed) {
         pressedKey = pressed;
       },
+      focus: focusLFGKeyboard,
       child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -49,7 +57,12 @@ class _AllStudentsColumnState extends State<AllStudentsColumn> {
                               .clearSelectedStudents();
                           searchForStudents(text);
                         },
-                            amountOfFilteredStudents: amountOfFilteredStudents.value
+                            amountOfFilteredStudents: amountOfFilteredStudents.value,
+                          onFocusChange: (focused) {
+                          if (!focused) {
+                            focusLFGKeyboard.requestFocus();
+                            }
+                          },
                         )
                 )
                 ),
@@ -90,31 +103,7 @@ class _AllStudentsColumnState extends State<AllStudentsColumn> {
                               return StudentCard(change.data![index],
                                   state.selectedStudentIds.contains(index),
                                   setClickedStudent: (student) {
-                                    switch(pressedKey) {
-                                      case Keyboard.nothing : {
-                                        state.clearSelectedStudents();
-                                        state.addSelectedStudent(index);
-                                      }
-                                      case Keyboard.cmd : {
-                                        if(state.selectedStudentIds.contains(index)) {
-                                          state.removeSelectedStudent(index);
-                                        } else {
-                                          state.addSelectedStudent(index);
-                                        }
-                                      }
-                                      case Keyboard.shift : {
-                                        if(index>state.selectedStudentIds.last) {
-                                          for (int i = state.selectedStudentIds.last+1; i<=index; i++) {
-                                            state.addSelectedStudent(i);
-                                          }
-                                        } else {
-                                          for (int i = state.selectedStudentIds.first-1; i>=index; i--) {
-                                            state.addSelectedStudent(i);
-                                          }
-                                        }
-
-                                      }
-                                    }
+                                    selectStudents(pressedKey, state, index);
                                   },
                                   notifyDetailPage: (student) => {},
                                   onDeleteStudent: (student) {
@@ -279,5 +268,36 @@ class _AllStudentsColumnState extends State<AllStudentsColumn> {
     );
   }
 
+
+  void selectStudents (Keyboard pressedKey, StudentListState state, int index) {
+    /*
+    depending on the pressed keys cmd/shift/nothing the selection behavior differs.
+    The selection behavior is similar to Finder/Explorer.
+     */
+    switch(pressedKey) {
+      case Keyboard.nothing : { //select only one student
+        state.clearSelectedStudents();
+        state.addSelectedStudent(index);
+      }
+      case Keyboard.cmd : { //add or remove student from selection
+        if(state.selectedStudentIds.contains(index)) {
+          state.removeSelectedStudent(index);
+        } else {
+          state.addSelectedStudent(index);
+        }
+      }
+      case Keyboard.shift : { //select all intermediary options of students.
+        if(index>state.selectedStudentIds.last) {
+          for (int i = state.selectedStudentIds.last+1; i<=index; i++) {
+            state.addSelectedStudent(i);
+          }
+        } else {
+          for (int i = state.selectedStudentIds.first-1; i>=index; i--) {
+            state.addSelectedStudent(i);
+          }
+        }
+      }
+    }
+  }
 
 }
