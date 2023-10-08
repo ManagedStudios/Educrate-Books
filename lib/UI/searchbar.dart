@@ -4,10 +4,11 @@ import 'package:buecherteam_2023_desktop/Resources/text.dart';
 import 'package:flutter/material.dart';
 
 class LfgSearchbar extends StatefulWidget {
-  const LfgSearchbar({super.key, required this.onChangeText, required this.amountOfFilteredStudents, required this.onFocusChange});
+  const LfgSearchbar({super.key, required this.onChangeText, required this.amountOfFilteredStudents, required this.onFocusChange, required this.onTap});
 
   final Function(String search) onChangeText;
   final Function (bool focused) onFocusChange;
+  final Function () onTap;
   final int amountOfFilteredStudents; //amount of students that are retrieved after applying filters
   @override
   State<LfgSearchbar> createState() => _LfgSearchbarState();
@@ -38,6 +39,7 @@ class _LfgSearchbarState extends State<LfgSearchbar> {
             controller: textEditingController,
             hintText: TextRes.studentSearchHint,
             focusNode: focusNode,
+            onTap: widget.onTap,
             elevation: const MaterialStatePropertyAll(Dimensions.elevationMedium),
             textStyle: MaterialStatePropertyAll(Theme.of(context).textTheme.labelMedium),
             hintStyle: MaterialStatePropertyAll(Theme.of(context).textTheme.labelMedium

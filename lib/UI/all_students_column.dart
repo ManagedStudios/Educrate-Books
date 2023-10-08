@@ -63,6 +63,11 @@ class _AllStudentsColumnState extends State<AllStudentsColumn> {
                             focusLFGKeyboard.requestFocus();
                             }
                           },
+                          onTap: () {
+                          setState(() {
+                            ftsQuery=null;
+                          });
+                          },
                         )
                 )
                 ),
