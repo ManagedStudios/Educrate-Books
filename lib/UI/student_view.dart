@@ -3,17 +3,34 @@ import 'dart:math';
 
 
 import 'package:buecherteam_2023_desktop/UI/all_students_column.dart';
+import 'package:buecherteam_2023_desktop/UI/keyboard_listener/keyboard_listener.dart';
 import 'package:flutter/material.dart';
 
 
 import '../Resources/dimensions.dart';
 
 
-class StudentView extends StatelessWidget {
+class StudentView extends StatefulWidget {
   static String routeName = '/studentView';
 
   const StudentView({super.key});
 
+  @override
+  State<StudentView> createState() => _StudentViewState();
+}
+
+class _StudentViewState extends State<StudentView> {
+
+  late FocusNode lfgKeyboardFocus;
+  late Keyboard pressedKey;
+
+  @override
+  void initState () {
+    super.initState();
+    lfgKeyboardFocus = FocusNode();
+    lfgKeyboardFocus.requestFocus();
+    pressedKey = Keyboard.nothing;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,22 +40,38 @@ class StudentView extends StatelessWidget {
      */
     final double marginWidth = mediaQuery.width * (0.03+0.07/(1+pow(2.71, -0.005*(mediaQuery.width-1150))));
     final double space = mediaQuery.width * (0.02+0.05/(1+pow(2.71, -0.005*(mediaQuery.width-1150))));
-    return Padding(
-      padding: const EdgeInsets.only(top: Dimensions.paddingVeryBig),
-      child: Row(
-        children: [
-          SizedBox(width: marginWidth,),
-          const Expanded(child: AllStudentsColumn()),
-          SizedBox(width: space),
-          Container(
-            width: Dimensions.lineWidth,
-            height: MediaQuery.of(context).size.height*0.7,
-            color: Theme.of(context).colorScheme.outline,
-          ),
-          SizedBox(width: space),
-          Expanded(child: Container()), //studentDetail
-          SizedBox(width: marginWidth,)
-        ],
+    return LFGKeyboard(
+      focus: lfgKeyboardFocus,
+      changePress: (Keyboard pressed) {
+        setState(() {
+          pressedKey = pressed;
+        });
+      },
+      child: Padding(
+        padding: const EdgeInsets.only(top: Dimensions.paddingVeryBig),
+        child: Row(
+          children: [
+            SizedBox(width: marginWidth,),
+             Expanded(child: AllStudentsColumn(
+                    onFocusChanged: (searchFocused) {
+                      if(!searchFocused) {
+                        lfgKeyboardFocus.requestFocus();
+                      }
+                    },
+                  pressedKey: pressedKey,
+                )
+            ),
+            SizedBox(width: space),
+            Container(
+              width: Dimensions.lineWidth,
+              height: MediaQuery.of(context).size.height*0.7,
+              color: Theme.of(context).colorScheme.outline,
+            ),
+            SizedBox(width: space),
+            Expanded(child: Container()), //studentDetail
+            SizedBox(width: marginWidth,)
+          ],
+        ),
       ),
     );
   }

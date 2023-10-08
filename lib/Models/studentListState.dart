@@ -21,7 +21,7 @@ class StudentListState extends ChangeNotifier {
 
   final DB database;
 
-  HashSet<int> selectedStudentIds = HashSet();
+  SplayTreeSet<int> selectedStudentIds = SplayTreeSet();
 
   String? ftsQuery;
   Filter? filterOptions;
@@ -109,7 +109,7 @@ class StudentListState extends ChangeNotifier {
   }
 
   void clearSelectedStudents () {
-    selectedStudentIds = HashSet();
+    selectedStudentIds = SplayTreeSet();
     notifyListeners();
   }
 

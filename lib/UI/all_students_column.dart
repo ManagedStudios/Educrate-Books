@@ -17,7 +17,10 @@ import '../Resources/dimensions.dart';
 import '../Resources/text.dart';
 
 class AllStudentsColumn extends StatefulWidget {
-  const AllStudentsColumn({super.key});
+  const AllStudentsColumn({super.key, required this.onFocusChanged, required this.pressedKey});
+
+  final Function (bool searchFocused) onFocusChanged;
+  final Keyboard pressedKey;
 
   @override
   State<AllStudentsColumn> createState() => _AllStudentsColumnState();
@@ -27,24 +30,10 @@ class _AllStudentsColumnState extends State<AllStudentsColumn> {
 
   ValueNotifier<int> amountOfFilteredStudents = ValueNotifier(0);
   String? ftsQuery;
-  Keyboard pressedKey = Keyboard.nothing;
 
-  late FocusNode focusLFGKeyboard;
-
-  @override
-  void initState () {
-    super.initState();
-    focusLFGKeyboard = FocusNode();
-    focusLFGKeyboard.requestFocus();
-  }
   @override
   Widget build(BuildContext context) {
-    return LFGKeyboard(
-      changePress: (Keyboard pressed) {
-        pressedKey = pressed;
-      },
-      focus: focusLFGKeyboard,
-      child: Column(
+    return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
@@ -58,11 +47,7 @@ class _AllStudentsColumnState extends State<AllStudentsColumn> {
                           searchForStudents(text);
                         },
                             amountOfFilteredStudents: amountOfFilteredStudents.value,
-                          onFocusChange: (focused) {
-                          if (!focused) {
-                            focusLFGKeyboard.requestFocus();
-                            }
-                          },
+                          onFocusChange: widget.onFocusChanged,
                           onTap: () {
                           setState(() {
                             ftsQuery=null;
@@ -108,7 +93,7 @@ class _AllStudentsColumnState extends State<AllStudentsColumn> {
                               return StudentCard(change.data![index],
                                   state.selectedStudentIds.contains(index),
                                   setClickedStudent: (student) {
-                                    selectStudents(pressedKey, state, index);
+                                    selectStudents(widget.pressedKey, state, index);
                                   },
                                   notifyDetailPage: (student) => {},
                                   onDeleteStudent: (student) {
@@ -130,8 +115,7 @@ class _AllStudentsColumnState extends State<AllStudentsColumn> {
                   );
                 })
           ],
-        ),
-    );
+        );
   } //END OF WIDGET
 
   /*
@@ -303,8 +287,12 @@ class _AllStudentsColumnState extends State<AllStudentsColumn> {
           for (int i = state.selectedStudentIds.last+1; i<=index; i++) {
             state.addSelectedStudent(i);
           }
-        } else {
+        } else if (index<state.selectedStudentIds.first){
           for (int i = state.selectedStudentIds.first-1; i>=index; i--) {
+            state.addSelectedStudent(i);
+          }
+        } else {
+          for(int i = state.selectedStudentIds.first+1; i<=index; i++) {
             state.addSelectedStudent(i);
           }
         }
