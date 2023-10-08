@@ -287,6 +287,13 @@ class _AllStudentsColumnState extends State<AllStudentsColumn> {
         }
       }
       case Keyboard.shift : { //select all intermediary options of students.
+        if(state.selectedStudentIds.isEmpty) {
+          for(int i = 0; i<=index; i++) {
+            state.addSelectedStudent(i);
+          }
+          return;
+        }
+
         if(index>state.selectedStudentIds.last) {
           for (int i = state.selectedStudentIds.last+1; i<=index; i++) {
             state.addSelectedStudent(i);
