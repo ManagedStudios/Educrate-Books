@@ -18,19 +18,24 @@ class StudentView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context).size;
-    final double marginWidth = mediaQuery.width * (0.03+0.12/(1+pow(2.71, -0.005*(mediaQuery.width-1150))));
+    /*
+    use sigmoid function for a smooth margin/space transitioning
+     */
+    final double marginWidth = mediaQuery.width * (0.03+0.07/(1+pow(2.71, -0.005*(mediaQuery.width-1150))));
+    final double space = mediaQuery.width * (0.02+0.05/(1+pow(2.71, -0.005*(mediaQuery.width-1150))));
     return Padding(
       padding: const EdgeInsets.only(top: Dimensions.paddingVeryBig),
       child: Row(
         children: [
           SizedBox(width: marginWidth,),
           const Expanded(child: AllStudentsColumn()),
-          SizedBox(width: Dimensions.spaceMedium,), //TODO make sizedbox width dynamic
+          SizedBox(width: space),
           Container(
             width: Dimensions.lineWidth,
             height: MediaQuery.of(context).size.height*0.7,
             color: Theme.of(context).colorScheme.outline,
           ),
+          SizedBox(width: space),
           Expanded(child: Container()), //studentDetail
           SizedBox(width: marginWidth,)
         ],
