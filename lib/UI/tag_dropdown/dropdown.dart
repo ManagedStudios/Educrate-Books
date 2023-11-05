@@ -5,7 +5,6 @@ import 'package:buecherteam_2023_desktop/UI/tag_dropdown/chip_wrap.dart';
 import 'package:flutter/material.dart';
 
 
-
 /*
 Dropdown is the entry point for Dropdowns.
 The dropdown consists of a selection view that opens on click a actionDropdown Overlay

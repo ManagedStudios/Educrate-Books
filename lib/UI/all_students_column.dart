@@ -5,7 +5,10 @@ import 'package:buecherteam_2023_desktop/Data/class_data.dart';
 import 'package:buecherteam_2023_desktop/Data/student.dart';
 import 'package:buecherteam_2023_desktop/Data/training_directions_data.dart';
 import 'package:buecherteam_2023_desktop/Models/studentListState.dart';
+import 'package:buecherteam_2023_desktop/Models/student_detail_state.dart';
 import 'package:buecherteam_2023_desktop/UI/keyboard_listener/keyboard_listener.dart';
+import 'package:buecherteam_2023_desktop/UI/right_click_actions/actions_overlay.dart';
+import 'package:buecherteam_2023_desktop/UI/right_click_actions/delete_dialog.dart';
 import 'package:buecherteam_2023_desktop/UI/searchbar.dart';
 import 'package:buecherteam_2023_desktop/UI/student_card.dart';
 import 'package:buecherteam_2023_desktop/UI/student_dialog/student_dialog.dart';
@@ -30,92 +33,126 @@ class _AllStudentsColumnState extends State<AllStudentsColumn> {
 
   ValueNotifier<int> amountOfFilteredStudents = ValueNotifier(0);
   String? ftsQuery;
+  bool isOverlayOpen = false;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
+    return GestureDetector(
+      onSecondaryTapUp: (details) {
+        var state = Provider.of<StudentDetailState>(context, listen: false);
+        if (state.selectedStudents.isNotEmpty && !isOverlayOpen) {
+          setState(() {
+            isOverlayOpen = true;
+          });
+          var overlay = ActionsOverlay(
+              selectedItems: state.selectedStudents.toList(),
+              width: Dimensions.widthRightClickActionMenu,
+              actions: {
+                TextRes.delete:(actions) => openDeleteDialog(context, actions, TextRes.student)
+              },
+              onOverlayClosed: () {
+                setState(() {
+                  isOverlayOpen = false;
+                });
+              },
+              offset: details.globalPosition,
+              context: context);
+          overlay.showOverlayEntry();
+        }
+      },
+      child: IgnorePointer(
+        ignoring: isOverlayOpen,
+        child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(child: ValueListenableBuilder(
-                    valueListenable: amountOfFilteredStudents,
-                    builder: (context, value, _) =>
-                        LfgSearchbar(onChangeText: (text) {
-                          Provider.of<StudentListState>(context, listen: false)
-                              .clearSelectedStudents();
-                          searchForStudents(text);
-                        },
-                            amountOfFilteredStudents: amountOfFilteredStudents.value,
-                          onFocusChange: widget.onFocusChanged,
-                          onTap: () {
-                          setState(() {
-                            ftsQuery=null;
-                          });
-                          },
-                        )
-                )
+                Row(
+                  children: [
+                    Expanded(child: ValueListenableBuilder(
+                        valueListenable: amountOfFilteredStudents,
+                        builder: (context, value, _) =>
+                            LfgSearchbar(onChangeText: (text) {
+                              Provider.of<StudentListState>(context, listen: false)
+                                  .clearSelectedStudents();
+                              searchForStudents(text);
+                            },
+                                amountOfFilteredStudents: amountOfFilteredStudents.value,
+                              onFocusChange: widget.onFocusChanged,
+                              onTap: () {
+                              setState(() {
+                                ftsQuery=null;
+                              });
+                              },
+                            )
+                    )
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(Dimensions.paddingSmall),
+                      child: IconButton(onPressed: () {
+                        addStudent(context);
+                      }, icon: const Icon(
+                        Icons.person_add_alt,
+                        size: Dimensions.iconSizeVeryBig,),
+                        tooltip: TextRes.addStudentTitle,
+                      ),
+                    )
+                  ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(Dimensions.paddingSmall),
-                  child: IconButton(onPressed: () {
-                    addStudent(context);
-                  }, icon: const Icon(
-                    Icons.person_add_alt,
-                    size: Dimensions.iconSizeVeryBig,),
-                    tooltip: TextRes.addStudentTitle,
-                  ),
-                )
+
+                /*
+                FILTER ROW INSERT HERE
+                 */
+
+                StreamBuilder(
+                    stream: Provider.of<StudentListState>(context, listen: false)
+                        .streamStudents(ftsQuery, null),
+                    builder: (context, change) {
+                      if (change.hasData &&
+                          change.data!.length != amountOfFilteredStudents.value) {
+                        SchedulerBinding.instance.addPostFrameCallback((_) {
+                          amountOfFilteredStudents.value = change.data!.length;
+                        });
+                      }
+                      final int dataLength = change.data?.length ?? 0;
+                      return Expanded(child: ListView(
+                        children: [
+                          for (int index = 0; index<dataLength; index++)
+                            ...[
+                              Consumer<StudentListState>(
+                                builder: (context, state, _) {
+                                  return StudentCard(change.data![index],
+                                      state.selectedStudentIds.contains(index),
+                                      setClickedStudent: (student) {
+                                        selectStudents(
+                                            pressedKey: widget.pressedKey,
+                                            studentListState: state,
+                                            studentDetailState:
+                                            Provider.of<StudentDetailState>(context, listen: false),
+                                            index: index,
+                                            students: change.data!);
+                                      },
+                                      notifyDetailPage: (student) => {},
+                                      onDeleteStudent: (student) {
+                                        Provider.of<StudentListState>(context, listen: false)
+                                            .deleteStudent(student);
+                                        showSnackBar(student);
+                                      },
+                                      openEditDialog: (student) {
+                                        updateStudent(student);
+                                      });
+                                },
+                              ),
+
+                              const SizedBox(height: Dimensions.spaceSmall,)
+                            ]
+
+                        ],
+                      )
+                      );
+                    })
               ],
             ),
-
-            /*
-            FILTER ROW INSERT HERE
-             */
-
-            StreamBuilder(
-                stream: Provider.of<StudentListState>(context, listen: false)
-                    .streamStudents(ftsQuery, null),
-                builder: (context, change) {
-                  if (change.hasData &&
-                      change.data!.length != amountOfFilteredStudents.value) {
-                    SchedulerBinding.instance.addPostFrameCallback((_) {
-                      amountOfFilteredStudents.value = change.data!.length;
-                    });
-                  }
-                  final int dataLength = change.data?.length ?? 0;
-                  return Expanded(child: ListView(
-                    children: [
-                      for (int index = 0; index<dataLength; index++)
-                        ...[
-                          Consumer<StudentListState>(
-                            builder: (context, state, _) {
-                              return StudentCard(change.data![index],
-                                  state.selectedStudentIds.contains(index),
-                                  setClickedStudent: (student) {
-                                    selectStudents(widget.pressedKey, state, index);
-                                  },
-                                  notifyDetailPage: (student) => {},
-                                  onDeleteStudent: (student) {
-                                    Provider.of<StudentListState>(context, listen: false)
-                                        .deleteStudent(student);
-                                    showSnackBar(student);
-                                  },
-                                  openEditDialog: (student) {
-                                    updateStudent(student);
-                                  });
-                            },
-                          ),
-
-                          const SizedBox(height: Dimensions.spaceSmall,)
-                        ]
-
-                    ],
-                  )
-                  );
-                })
-          ],
-        );
+      ),
+    );
   } //END OF WIDGET
 
   /*
@@ -132,6 +169,7 @@ class _AllStudentsColumnState extends State<AllStudentsColumn> {
               title: TextRes.addStudentTitle,
               actionText: TextRes.saveActionText);
         }).then((List<Object?>? value) async {
+          widget.onFocusChanged(false); //turn on cmd/shift after leaving dialog
         if (value == null) return;
       //parse all student details passed from the altertDialog
       final String firstName = value[0] as String;
@@ -180,7 +218,7 @@ class _AllStudentsColumnState extends State<AllStudentsColumn> {
                   .saveStudent(
                   student.firstName, student.lastName, student.classLevel,
                   student.classChar, student.trainingDirections,
-                  books: student.books)),
+                  books: student.books, tags: student.tags)),
           margin: const EdgeInsets.only(left: Dimensions.largeMargin,
               right: Dimensions.largeMargin,
               bottom: Dimensions.minMarginStudentView
@@ -207,6 +245,7 @@ class _AllStudentsColumnState extends State<AllStudentsColumn> {
     ).then((value) {
       if(value == null) return;
       studentListState.updateStudent(value);
+      widget.onFocusChanged(false); //turn on keyboard for cmd/shift
     });
   }
 
@@ -258,42 +297,60 @@ class _AllStudentsColumnState extends State<AllStudentsColumn> {
   }
 
 
-  void selectStudents (Keyboard pressedKey, StudentListState state, int index) {
+  void selectStudents (
+      {required Keyboard pressedKey,
+      required StudentListState studentListState,
+      required StudentDetailState studentDetailState,
+      required int index,
+      required List<Student> students}
+      ) {
     /*
     depending on the pressed keys cmd/shift/nothing the selection behavior differs.
     The selection behavior is similar to Finder/Explorer.
      */
     switch(pressedKey) {
       case Keyboard.nothing : { //select only one student
-        state.clearSelectedStudents();
-        state.addSelectedStudent(index);
+          studentListState.clearSelectedStudents();
+          studentListState.addSelectedStudent(index);
+
+          studentDetailState.clearSelectedStudents();
+          studentDetailState.addSelectedStudent(students[index]);
+
       }
       case Keyboard.cmd : { //add or remove student from selection
-        if(state.selectedStudentIds.contains(index)) {
-          state.removeSelectedStudent(index);
-        } else {
-          state.addSelectedStudent(index);
-        }
+
+          if(studentListState.selectedStudentIds.contains(index)) {
+            studentListState.removeSelectedStudent(index);
+            studentDetailState.removeSelectedStudent(students[index]);
+          } else {
+            studentListState.addSelectedStudent(index);
+            studentDetailState.addSelectedStudent(students[index]);
+          }
       }
       case Keyboard.shift : { //select all intermediary options of students.
-        if(state.selectedStudentIds.isEmpty) {
+
+        if(studentListState.selectedStudentIds.isEmpty) {
           for(int i = 0; i<=index; i++) {
-            state.addSelectedStudent(i);
+            studentListState.addSelectedStudent(i);
+            studentDetailState.addSelectedStudent(students[i]);
           }
           return;
         }
 
-        if(index>state.selectedStudentIds.last) {
-          for (int i = state.selectedStudentIds.last+1; i<=index; i++) {
-            state.addSelectedStudent(i);
+        if(index>studentListState.selectedStudentIds.last) {
+          for (int i = studentListState.selectedStudentIds.last+1; i<=index; i++) {
+            studentListState.addSelectedStudent(i);
+            studentDetailState.addSelectedStudent(students[i]);
           }
-        } else if (index<state.selectedStudentIds.first){
-          for (int i = state.selectedStudentIds.first-1; i>=index; i--) {
-            state.addSelectedStudent(i);
+        } else if (index<studentListState.selectedStudentIds.first){
+          for (int i = studentListState.selectedStudentIds.first-1; i>=index; i--) {
+            studentListState.addSelectedStudent(i);
+            studentDetailState.addSelectedStudent(students[i]);
           }
         } else {
-          for(int i = state.selectedStudentIds.first+1; i<=index; i++) {
-            state.addSelectedStudent(i);
+          for(int i = studentListState.selectedStudentIds.first+1; i<=index; i++) {
+            studentListState.addSelectedStudent(i);
+            studentDetailState.addSelectedStudent(students[i]);
           }
         }
       }

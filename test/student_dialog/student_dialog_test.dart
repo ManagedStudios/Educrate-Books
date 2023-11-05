@@ -50,7 +50,7 @@ void main () {
 
     student = Student(id, firstName: firstName, lastName: lastName,
         classLevel: classLevel, classChar: classChar,
-        trainingDirections: studentTrainingDirections, books: books, amountOfBooks: amountOfBooks);
+        trainingDirections: studentTrainingDirections, books: books, amountOfBooks: amountOfBooks, tags: []);
 
     List<String> classStrings = ["A", "B", "C", "D"];
     int level = 5;

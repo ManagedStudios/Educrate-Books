@@ -86,7 +86,8 @@ class _StudentDialogState extends State<StudentDialog> {
                   classLevel: studentClassLevel!, classChar: studentClassChar!,
                   trainingDirections: studentTrainingDirections!,
                   books: widget.student!.books,
-                  amountOfBooks: widget.student!.amountOfBooks
+                  amountOfBooks: widget.student!.amountOfBooks,
+                  tags: widget.student!.tags
                 )
               );
             } else { //create new student

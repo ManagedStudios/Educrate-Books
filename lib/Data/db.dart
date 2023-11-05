@@ -85,6 +85,18 @@ class DB {
   }
 
   /*
+  delete multiple documents in a batch
+   */
+
+  Future<void> deleteDocs (List<Document> documents) async {
+    _database.inBatch(() async {
+      for(Document document in documents) {
+        await _database.deleteDocument(document);
+      }
+    });
+  }
+
+  /*
   startReplication is responsible for handling the sync between local couchbase lite
   db and couchbase server
    */

@@ -1,15 +1,14 @@
 
 
 
-import 'package:buecherteam_2023_desktop/Util/comparison.dart';
-import 'package:flutter/foundation.dart';
+import 'package:buecherteam_2023_desktop/Data/selectableItem.dart';
 
 import '../Resources/text.dart';
 import 'bookLite.dart';
 
-class Student {
+class Student implements SelectableItem {
 
-  Student(this._id, {required this.firstName, required this.lastName, required this.classLevel, required this.classChar, required this.trainingDirections, required this.books, required this.amountOfBooks});
+  Student(this._id, {required this.firstName, required this.lastName, required this.classLevel, required this.classChar, required this.trainingDirections, required this.books, required this.amountOfBooks, required this.tags});
 
   final String _id; //make id private
   final String firstName;
@@ -19,6 +18,7 @@ class Student {
   final List<String> trainingDirections;
   final List<BookLite> books;
   final int amountOfBooks;
+  final List<String> tags;
   String get id => _id;
 
 
@@ -30,7 +30,8 @@ class Student {
     json[TextRes.studentClassCharJson] == null||
     json[TextRes.studentTrainingDirectionsJson] == null||
     json[TextRes.studentBooksJson] == null ||
-    json[TextRes.studentAmountOfBooksJson] == null) {
+    json[TextRes.studentAmountOfBooksJson] == null ||
+    json[TextRes.studentTagsJson] == null) {
       throw Exception("Incomplete JSON");
     }
     return Student(
@@ -41,7 +42,8 @@ class Student {
       classChar: json[TextRes.studentClassCharJson] as String,
       trainingDirections: List.from(json[TextRes.studentTrainingDirectionsJson] as dynamic),
       books: List.from(json[TextRes.studentBooksJson] as dynamic).map((bookData) => BookLite.fromJson(bookData)).toList(),
-      amountOfBooks: json[TextRes.studentAmountOfBooksJson] is int ? json[TextRes.studentAmountOfBooksJson] as int : int.parse(json[TextRes.studentAmountOfBooksJson] as String)
+      amountOfBooks: json[TextRes.studentAmountOfBooksJson] is int ? json[TextRes.studentAmountOfBooksJson] as int : int.parse(json[TextRes.studentAmountOfBooksJson] as String),
+      tags: List.from(json[TextRes.studentTagsJson] as dynamic)
     );
   }
 
@@ -54,18 +56,57 @@ class Student {
       TextRes.studentTrainingDirectionsJson: trainingDirections,
       TextRes.studentBooksJson: books.isEmpty ? [] : books.map((book) => book.toJson()),
       TextRes.studentAmountOfBooksJson: amountOfBooks,
-      TextRes.typeJson:TextRes.studentTypeJson
+      TextRes.studentTagsJson:tags,
+      TextRes.typeJson:TextRes.studentTypeJson,
     };
     return data;
 }
 
+@override
+bool operator ==(Object other) {
+    if (identical(this, other)) return true; // If both references are the same
+
+    return other is Student && id==other.id;
+  }
+
 
 
   bool equals (Student other) {
-    return id==other.id&&firstName==other.firstName&&lastName==other.lastName
-        &&classLevel==other.classLevel&&classChar==other.classChar
-        &&listEquals(trainingDirections, other.trainingDirections)
-        &&areBooksEqual(books, other.books);
+    return id==other.id;
   }
 
+  @override
+  int get hashCode {
+    return _id.hashCode;
+  }
+
+  @override
+  List<String> getAttributes() {
+    return [
+      TextRes.studentIdJson,
+      TextRes.studentTagsJson,
+      TextRes.studentBooksJson,
+      TextRes.studentClassCharJson,
+      TextRes.studentClassLevelJson,
+      TextRes.studentLastNameJson,
+      TextRes.studentTrainingDirectionsJson,
+      TextRes.studentFirstNameJson,
+      TextRes.studentAmountOfBooksJson
+    ];
+  }
+
+  @override
+  String getDocId() {
+    return id;
+  }
+
+  @override
+  String getType() {
+    return TextRes.studentTypeJson;
+  }
+
+  @override
+  bool isDeletable() {
+    return true;
+  }
 }

@@ -1,0 +1,46 @@
+
+import 'package:buecherteam_2023_desktop/Data/selectableItem.dart';
+import 'package:buecherteam_2023_desktop/Models/right_click_state.dart';
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+
+import '../../Resources/text.dart';
+
+
+
+void openDeleteDialog (
+    BuildContext context,
+    List<SelectableItem> items,
+    String itemType
+
+) {
+  showDialog<List<SelectableItem>>(context: context,
+      builder: (context) => AlertDialog(
+        content: Text(
+          "${TextRes.sure} ${items.length} $itemType ${TextRes.toDelete}"
+        ),
+        actions: [
+          FilledButton.tonal(onPressed: () {
+            context.pop();
+          }, child: const Text(
+            TextRes.cancel
+          )
+          ),
+
+          FilledButton(onPressed: () {
+            context.pop(items);
+          }, child: const Text(
+              TextRes.delete
+            )
+          )
+        ],
+      )
+  ).then((items) {
+    var state = Provider.of<RightClickState>(context, listen: false);
+    if (items != null) {
+      final ids = items.map((item) => item.getDocId()).toList();
+      state.deleteItemsInBatch(ids);
+    }
+  });
+}

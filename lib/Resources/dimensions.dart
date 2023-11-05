@@ -51,4 +51,6 @@ class Dimensions {
 
   static const double smallBreakPoint = 900;
 
+  static const double widthRightClickActionMenu = 200;
+
 }

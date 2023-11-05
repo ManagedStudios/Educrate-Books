@@ -68,7 +68,7 @@ class _StudentViewState extends State<StudentView> {
               color: Theme.of(context).colorScheme.outline,
             ),
             SizedBox(width: space),
-            Expanded(child: Container()), //studentDetail
+            Expanded(child: Container()), //studentDetai
             SizedBox(width: marginWidth,)
           ],
         ),

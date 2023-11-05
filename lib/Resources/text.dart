@@ -91,6 +91,16 @@
 
   static const String updateTitle = "aktualisieren";
 
+  static const String studentTagsJson = "tag";
+
+  static const String sure = "Wirklich";
+
+  static const String delete = "Löschen";
+
+  static const String toDelete = "löschen?";
+
+ 
+
 
 
 

@@ -22,7 +22,7 @@ class BuildQuery {
     String query = """SELECT META().id, ${TextRes.studentFirstNameJson}, 
       ${TextRes.studentLastNameJson}, ${TextRes.studentClassLevelJson}, 
       ${TextRes.studentClassCharJson}, ${TextRes.studentTrainingDirectionsJson},
-      ${TextRes.studentBooksJson}, ${TextRes.studentAmountOfBooksJson} FROM _ 
+      ${TextRes.studentBooksJson}, ${TextRes.studentAmountOfBooksJson}, ${TextRes.studentTagsJson} FROM _ 
       WHERE ${TextRes.typeJson}='${TextRes.studentTypeJson}' """;
     query+=ftsQueryMatch;
     query+=orderClause;

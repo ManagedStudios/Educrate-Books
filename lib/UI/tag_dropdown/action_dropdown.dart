@@ -3,6 +3,7 @@
 import 'package:buecherteam_2023_desktop/Data/lfg_chip.dart';
 import 'package:buecherteam_2023_desktop/UI/tag_dropdown/action_dropdown_available_container.dart';
 import 'package:buecherteam_2023_desktop/UI/tag_dropdown/action_dropdown_selected_wrap.dart';
+import 'package:flutter/foundation.dart';
 
 import 'package:flutter/material.dart';
 
@@ -56,11 +57,26 @@ class ActionDropdown extends StatefulWidget {
 class _ActionDropdownState extends State<ActionDropdown> {
 
   late List<LfgChip> filteredAvailableChips;
+  String filterText = "";
 
   @override
   void initState() {
     super.initState();
-    filteredAvailableChips = widget.availableChips; //set initialState for the filteredChips
+    filteredAvailableChips = widget.availableChips.toList(); //set initialState for the filteredChips - make a copy of the list
+  }
+
+  /*
+  update the filteredAvailableChips accordingly to availableChips changes
+  that happen because of adding/deleting actions of the user
+   */
+  @override
+  void didUpdateWidget (oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if(listEquals(oldWidget.availableChips, widget.availableChips)) {
+      setState(() {
+        filteredAvailableChips = widget.filterList(widget.availableChips, filterText);
+      });
+    }
   }
 
   @override
@@ -76,7 +92,7 @@ class _ActionDropdownState extends State<ActionDropdown> {
               onDeleteChip: widget.onDeleteChip,
             onFilterTextChange: (text) {
             setState(() {//update the available chips based on the filter
-              String filterText = text.toUpperCase();
+              filterText = text.toUpperCase();
               filteredAvailableChips = widget.filterList(widget.availableChips, filterText);
             });
             },

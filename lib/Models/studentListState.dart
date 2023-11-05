@@ -21,7 +21,7 @@ class StudentListState extends ChangeNotifier {
 
   final DB database;
 
-  SplayTreeSet<int> selectedStudentIds = SplayTreeSet();
+  SplayTreeSet<int> selectedStudentIds = SplayTreeSet(); //always ordered hashset
 
   String? ftsQuery;
   Filter? filterOptions;
@@ -30,8 +30,8 @@ class StudentListState extends ChangeNotifier {
   saveStudent saves completely new Students
    */
   Future<void> saveStudent(String firstName, String lastName, int classLevel,
-      String classChar, List<String> trainingDirections, {List<BookLite>? books}) async {
-    final document = createNewStudentDoc(firstName, lastName, classLevel, classChar, trainingDirections, books: books);
+      String classChar, List<String> trainingDirections, {List<BookLite>? books, List<String>? tags}) async {
+    final document = createNewStudentDoc(firstName, lastName, classLevel, classChar, trainingDirections, books: books, tags: tags);
     await database.saveDocument(document);
   }
 
@@ -40,11 +40,12 @@ class StudentListState extends ChangeNotifier {
   the arguments are validated in the Stateful form widget
    */
   MutableDocument createNewStudentDoc (String firstName, String lastName, int classLevel,
-      String classChar, List<String> trainingDirections, {List<BookLite>? books}) {
+      String classChar, List<String> trainingDirections, {List<BookLite>? books, List<String>? tags}) {
     final document = MutableDocument(); //create empty MutableDocument to retrieve students id
     final student = Student(document.id, firstName: firstName, lastName: lastName,
         classLevel: classLevel, classChar: classChar,
-        trainingDirections: trainingDirections, books: books??[], amountOfBooks: books?.length??0);
+        trainingDirections: trainingDirections, books: books??[], amountOfBooks: books?.length??0,
+        tags: tags??[]);
     database.updateDocFromEntity(student, document);
     return document;
   }
@@ -123,8 +124,6 @@ class StudentListState extends ChangeNotifier {
     selectedStudentIds.remove(index);
     notifyListeners();
   }
-
-
 
 
 }

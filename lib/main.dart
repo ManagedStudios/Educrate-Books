@@ -1,5 +1,7 @@
 import 'package:buecherteam_2023_desktop/Data/db.dart';
+import 'package:buecherteam_2023_desktop/Models/right_click_state.dart';
 import 'package:buecherteam_2023_desktop/Models/studentListState.dart';
+import 'package:buecherteam_2023_desktop/Models/student_detail_state.dart';
 import 'package:buecherteam_2023_desktop/Theme/color_scheme.dart';
 import 'package:buecherteam_2023_desktop/Theme/text_theme.dart';
 import 'package:buecherteam_2023_desktop/UI/student_view.dart';
@@ -17,7 +19,9 @@ void main() async{
   await DB().initializeDatabase();
   //await DB().startReplication();
   runApp(MultiProvider(providers: [ //initialize the Viewmodels
-    ChangeNotifierProvider(create: (context) => StudentListState(DB()))
+    ChangeNotifierProvider(create: (context) => StudentListState(DB())),
+    ChangeNotifierProvider(create: (context) => RightClickState(DB())),
+    ChangeNotifierProvider(create: (context) => StudentDetailState())
   ],
     child: const MyApp(),
   ));
@@ -60,7 +64,7 @@ class Homepage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:   const PreferredSize(
+      appBar: const PreferredSize(
         preferredSize: Size(364, 48),
         child: LfgNavigationBar(),
       ),
