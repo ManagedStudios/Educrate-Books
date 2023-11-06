@@ -4,7 +4,16 @@ import 'package:flutter/material.dart';
 
 import '../../Data/selectableItem.dart';
 
+/*
+should be shown when right clicked on a list that contains selectable Items
+Controlled usually by gesture detector integrated in a widget
 
+ActionsOverlay recieves list of SelectableItems and a list of actions.
+Actions are defined as Map of String (=title) and a void function with the list of
+selectable items as parameter. The void function should open some sort of dialog.
+
+closing behavior primarily controlled by right_click_container
+ */
 
 class ActionsOverlay {
 
@@ -31,19 +40,19 @@ class ActionsOverlay {
 
   void createOverlayEntry (Offset offset) {
     overlayEntry = OverlayEntry(
-        builder: (context) => Positioned(
+        builder: (context) => Positioned( //position near to mouse click
             left: offset.dx,
-            top: offset.dy-50,
+            top: offset.dy-50, //there's an offset, hardcoded could vary a bit
             child: TapRegion(
               onTapOutside: (_) {
                 closeOverlay();
                 onOverlayClosed();
               },
-              child: RightClickActionContainer(
+              child: RightClickActionContainer( //show actions
                   width: width,
                   actions: actions,
                   selectedItems: selectedItems,
-                  onCloseOverlay: (){
+                  onCloseOverlay: (){ //close when an item has been selected - callback
                     closeOverlay();
                     onOverlayClosed();
                   }),

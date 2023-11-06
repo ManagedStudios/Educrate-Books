@@ -38,16 +38,16 @@ class _AllStudentsColumnState extends State<AllStudentsColumn> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onSecondaryTapUp: (details) {
+      onSecondaryTapUp: (details) { //right click actions
         var state = Provider.of<StudentDetailState>(context, listen: false);
-        if (state.selectedStudents.isNotEmpty && !isOverlayOpen) {
+        if (state.selectedStudents.isNotEmpty && !isOverlayOpen) { //are there any students? Dont open an overlay twice
           setState(() {
             isOverlayOpen = true;
           });
           var overlay = ActionsOverlay(
-              selectedItems: state.selectedStudents.toList(),
+              selectedItems: state.selectedStudents.toList(), //make copy of selected students to avoid side effects
               width: Dimensions.widthRightClickActionMenu,
-              actions: {
+              actions: { //inflate actions
                 TextRes.delete:(actions) => openDeleteDialog(context, actions, TextRes.student)
               },
               onOverlayClosed: () {
@@ -60,7 +60,7 @@ class _AllStudentsColumnState extends State<AllStudentsColumn> {
           overlay.showOverlayEntry();
         }
       },
-      child: IgnorePointer(
+      child: IgnorePointer( //avoid unexpected tap behavior when overlay is opened
         ignoring: isOverlayOpen,
         child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

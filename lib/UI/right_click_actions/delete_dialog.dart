@@ -8,6 +8,10 @@ import 'package:provider/provider.dart';
 import '../../Resources/text.dart';
 
 
+/*
+Dialog for right_click_actions. Receives a List of SelectableItems that can be
+manipulated.
+ */
 
 void openDeleteDialog (
     BuildContext context,
@@ -18,7 +22,7 @@ void openDeleteDialog (
   showDialog<List<SelectableItem>>(context: context,
       builder: (context) => AlertDialog(
         content: Text(
-          "${TextRes.sure} ${items.length} $itemType ${TextRes.toDelete}"
+          "${TextRes.sure} ${items.length} $itemType ${TextRes.toDelete}" //show how many items of which type will be deleted
         ),
         actions: [
           FilledButton.tonal(onPressed: () {
@@ -40,7 +44,7 @@ void openDeleteDialog (
     var state = Provider.of<RightClickState>(context, listen: false);
     if (items != null) {
       final ids = items.map((item) => item.getDocId()).toList();
-      state.deleteItemsInBatch(ids);
+      state.deleteItemsInBatch(ids); //delete items
     }
   });
 }

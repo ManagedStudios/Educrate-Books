@@ -1,6 +1,9 @@
 import 'package:buecherteam_2023_desktop/Resources/dimensions.dart';
 import 'package:flutter/material.dart';
 
+/*
+Just a styled button for right click Container
+ */
 class ActionButton extends StatelessWidget {
   const ActionButton({super.key, required this.label, required this.onClick});
 
