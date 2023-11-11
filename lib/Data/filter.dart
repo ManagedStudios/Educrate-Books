@@ -6,5 +6,4 @@ class Filter {
   List<String>? filteredTrainingDirections;
   List<String>? filteredBookIds;
 
-
 }

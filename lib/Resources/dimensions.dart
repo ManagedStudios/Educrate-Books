@@ -25,6 +25,7 @@ class Dimensions {
 
   static const double spaceSmall = 8;
 
+
   static const double elevationZero = 0;
 
   static const double overlayHeight = 256;

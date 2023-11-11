@@ -2,10 +2,13 @@
 
 
 import 'package:buecherteam_2023_desktop/Data/class_data.dart';
+
 import 'package:buecherteam_2023_desktop/Data/student.dart';
 import 'package:buecherteam_2023_desktop/Data/training_directions_data.dart';
 import 'package:buecherteam_2023_desktop/Models/studentListState.dart';
 import 'package:buecherteam_2023_desktop/Models/student_detail_state.dart';
+import 'package:buecherteam_2023_desktop/UI/filter/filter_row.dart';
+
 import 'package:buecherteam_2023_desktop/UI/keyboard_listener/keyboard_listener.dart';
 import 'package:buecherteam_2023_desktop/UI/right_click_actions/actions_overlay.dart';
 import 'package:buecherteam_2023_desktop/UI/right_click_actions/delete_dialog.dart';
@@ -101,6 +104,8 @@ class _AllStudentsColumnState extends State<AllStudentsColumn> {
                 /*
                 FILTER ROW INSERT HERE
                  */
+
+                FilterRow(),
 
                 StreamBuilder(
                     stream: Provider.of<StudentListState>(context, listen: false)

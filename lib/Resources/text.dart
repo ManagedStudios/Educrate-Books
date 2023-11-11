@@ -99,6 +99,8 @@
 
   static const String toDelete = "löschen?";
 
+  static const String addFilter = "Filter hinzufügen";
+
  
 
 
