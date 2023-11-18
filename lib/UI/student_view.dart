@@ -2,8 +2,10 @@
 import 'dart:math';
 
 
+import 'package:buecherteam_2023_desktop/Data/bookLite.dart';
 import 'package:buecherteam_2023_desktop/UI/all_students_column.dart';
 import 'package:buecherteam_2023_desktop/UI/keyboard_listener/keyboard_listener.dart';
+import 'package:buecherteam_2023_desktop/UI/student_detail_book_card.dart';
 import 'package:flutter/material.dart';
 
 
@@ -68,7 +70,7 @@ class _StudentViewState extends State<StudentView> {
               color: Theme.of(context).colorScheme.outline,
             ),
             SizedBox(width: space),
-            Expanded(child: Container()), //studentDetail
+            Expanded(child: StudentDetailBookCard(clicked: false, onClick: (){}, onDeleteBook: (book){}, bookLite: BookLite("fiowhe", "Green Line New 5", "Englisch", 9), studentOwnerNum: 5,)), //studentDetail
             SizedBox(width: marginWidth,)
           ],
         ),

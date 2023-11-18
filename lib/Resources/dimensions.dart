@@ -54,4 +54,12 @@ class Dimensions {
 
   static const double widthRightClickActionMenu = 200;
 
+  static const double iconButtonSizeMedium = 32;
+
+  static const double iconSizeSmall = 16;
+
+  static const double borderWidthMedium = 1.5;
+
+  static const double elevationVerySmall = 0.5;
+
 }
