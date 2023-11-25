@@ -43,12 +43,13 @@ class _AllStudentsColumnState extends State<AllStudentsColumn> {
     return GestureDetector(
       onSecondaryTapUp: (details) { //right click actions
         var state = Provider.of<StudentDetailState>(context, listen: false);
-        if (state.selectedStudents.isNotEmpty && !isOverlayOpen) { //are there any students? Dont open an overlay twice
+        var studentListState = Provider.of<StudentListState>(context, listen: false);
+        if (studentListState.selectedStudentIds.isNotEmpty && !isOverlayOpen) { //are there any students? Check StudentListState as StudentDetail can differ! Dont open an overlay twice
           setState(() {
             isOverlayOpen = true;
           });
           var overlay = ActionsOverlay(
-              selectedItems: state.selectedStudents.toList(), //make copy of selected students to avoid side effects
+              selectedItems: state.selectedStudentIdObjects.toList(), //make copy of selected students to avoid side effects
               width: Dimensions.widthRightClickActionMenu,
               actions: { //inflate actions
                 TextRes.delete:(actions) => openDeleteDialog(context, actions, TextRes.student)

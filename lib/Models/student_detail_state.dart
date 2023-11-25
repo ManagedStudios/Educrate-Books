@@ -7,19 +7,19 @@ import 'package:flutter/material.dart';
 
 class StudentDetailState extends ChangeNotifier {
 
-  HashSet<Student> selectedStudents = HashSet();
+  HashSet<Student> selectedStudentIdObjects = HashSet();
 
 
   void clearSelectedStudents  () {
-    selectedStudents = HashSet();
+    selectedStudentIdObjects = HashSet();
   }
 
   void addSelectedStudent(Student student) {
-    selectedStudents.add(student);
+    selectedStudentIdObjects.add(student);
   }
 
   void removeSelectedStudent(Student student) {
-    selectedStudents.remove(student);
+    selectedStudentIdObjects.remove(student);
   }
 
 }

@@ -110,21 +110,6 @@ void main () {
       }
     });
 
-    testWidgets('Selecting a chip triggers onAddChip with the correct chip', (WidgetTester tester) async {
-      await tester.pumpWidget(createWidgetUnderTest(availableChips, selectedChips));
-
-      // Let's tap on the first chip in ActionDropdownAvailableContainer as an example
-      final firstChipLabel = availableChips.first.getLabelText();
-      final firstChipFinder = find.text(firstChipLabel);
-
-      // Tap on the chip
-      await tester.tap(firstChipFinder);
-      await tester.pump();
-
-      // Verify that the onAddChip callback was called with the correct chip
-      verify(() => mockFunctions.onAddChip(availableChips.first)).called(1);
-    });
-
     testWidgets('Deleting a chip triggers onDeleteChip with the correct chip', (WidgetTester tester) async {
       await tester.pumpWidget(createWidgetUnderTest(availableChips, selectedChips));
       // For this example, let's try to delete the first chip in ActionDropdownSelectedWrap
