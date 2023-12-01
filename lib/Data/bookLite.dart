@@ -6,13 +6,15 @@ Books are stored in a dictionary of the student and can then be easily transform
  */
 
 
+
+
 import '../Resources/text.dart';
 
-class BookLite implements Comparable<BookLite>{
+class BookLite implements Comparable{
 
   BookLite(this._bookId, this.name, this.subject, this.classLevel);
 
-  final String _bookId;
+  final String _bookId; //bookId is retrieved from the book-class collection saved in db
   final String name;
   final String subject;
   final int classLevel;
@@ -55,8 +57,22 @@ class BookLite implements Comparable<BookLite>{
   }
 
   @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true; // If both references are the same
+
+    return other is BookLite && bookId==other.bookId;
+  }
+
+  @override
+  int get hashCode => bookId.hashCode;
+
+  @override
   int compareTo(other) {
     return subject.compareTo(other.subject);
   }
+
+
+
+
 
 }

@@ -1,9 +1,11 @@
 
+import 'package:buecherteam_2023_desktop/Data/bookLite.dart';
 import 'package:buecherteam_2023_desktop/Data/lfg_chip.dart';
+import 'package:buecherteam_2023_desktop/Data/selectableItem.dart';
 import 'package:buecherteam_2023_desktop/Resources/text.dart';
 import 'package:buecherteam_2023_desktop/Util/comparison.dart';
 
-class Book implements LfgChip {
+class Book implements LfgChip, BookLite, SelectableItem {
 
   Book({required String bookId,
     required this.name,
@@ -123,6 +125,40 @@ class Book implements LfgChip {
   String getLabelText() {
     String label = "$classLevel $subject";
     return label;
+  }
+
+  @override
+  String get bookId => id;
+
+  @override
+  bool equals(BookLite other) {
+    return other.subject==subject
+        && other.classLevel==classLevel
+        && other.name == name;
+  }
+
+  @override
+  List<String> getAttributes() {
+    // TODO: implement getAttributes
+    throw UnimplementedError();
+  }
+
+  @override
+  String getDocId() {
+    // TODO: implement getDocId
+    throw UnimplementedError();
+  }
+
+  @override
+  String getType() {
+    // TODO: implement getType
+    throw UnimplementedError();
+  }
+
+  @override
+  bool isDeletable() {
+    // TODO: implement isDeletable
+    throw UnimplementedError();
   }
 
 }

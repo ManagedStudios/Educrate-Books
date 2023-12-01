@@ -43,7 +43,9 @@ void openDeleteDialog (
   ).then((items) {
     var state = Provider.of<RightClickState>(context, listen: false);
     if (items != null) {
-      final ids = items.map((item) => item.getDocId()).toList();
+      final ids = items
+          .map((item) => item.getDocId()!)
+          .toList();
       state.deleteItemsInBatch(ids); //delete items
     }
   });
