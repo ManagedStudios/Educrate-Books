@@ -1,14 +1,10 @@
 
 import 'dart:math';
 
-import 'package:buecherteam_2023_desktop/Data/bookLite.dart';
-
 import 'package:buecherteam_2023_desktop/UI/all_students_column.dart';
 
-
-
-import 'package:buecherteam_2023_desktop/UI/books/student_detail_book_section.dart';
 import 'package:buecherteam_2023_desktop/UI/keyboard_listener/keyboard_listener.dart';
+import 'package:buecherteam_2023_desktop/UI/student_detail_column.dart';
 
 
 import 'package:flutter/material.dart';
@@ -75,8 +71,7 @@ class _StudentViewState extends State<StudentView> {
               color: Theme.of(context).colorScheme.outline,
             ),
             SizedBox(width: space),
-            Expanded(child: StudentDetailBookSection(pressedKey: pressedKey,
-                books: List.generate(5, (index) => BookLite("_bookId$index", "Test", "$index", 10)), studentOwnerNums: [])
+            Expanded(child: StudentDetailColumn(pressedKey: pressedKey)
             ), //studentDetail
             SizedBox(width: marginWidth,)
           ],

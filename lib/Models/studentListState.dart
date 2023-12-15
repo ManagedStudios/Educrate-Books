@@ -17,6 +17,8 @@ import '../Data/bookLite.dart';
 
 class StudentListState extends ChangeNotifier {
 
+
+
   StudentListState(this.database);
 
   final DB database;
@@ -29,10 +31,11 @@ class StudentListState extends ChangeNotifier {
   /*
   saveStudent saves completely new Students
    */
-  Future<void> saveStudent(String firstName, String lastName, int classLevel,
+  Future<String> saveStudent(String firstName, String lastName, int classLevel,
       String classChar, List<String> trainingDirections, {List<BookLite>? books, List<String>? tags}) async {
     final document = createNewStudentDoc(firstName, lastName, classLevel, classChar, trainingDirections, books: books, tags: tags);
     await database.saveDocument(document);
+    return document.id;
   }
 
   /*
@@ -67,10 +70,11 @@ class StudentListState extends ChangeNotifier {
       });
   }
 
-  Future<void> updateStudent(Student newStudent) async{
+  Future<String> updateStudent(Student newStudent) async{
     final doc = (await database.getDoc(newStudent.id))!.toMutable();
     database.updateDocFromEntity(newStudent, doc);
     database.saveDocument(doc);
+    return doc.id;
   }
 
   Future<List<ClassData>> getAllClasses () async{

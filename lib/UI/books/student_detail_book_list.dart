@@ -20,16 +20,18 @@ List for the books n students own in the detail page
 
 class StudentDetailBookList extends StatefulWidget {
   const StudentDetailBookList({super.key, required this.pressedKey,
-    required this.books, required this.studentOwnerNums, required this.onAddSelectedBook,
-    required this.onRemoveSelectedBook, required this.onClearSelectedBooks});
+    required this.books, required this.onAddSelectedBook,
+    required this.onRemoveSelectedBook, required this.onClearSelectedBooks,
+    required this.onDeleteBook});
 
   final Keyboard pressedKey; //conditional selection-process of books
-  final List<BookLite> books; //content
+  final List<BookLite> books; //content with conditional studentOwnerNum
   final Function(BookLite bookLite) onAddSelectedBook; //propagate
   final Function(BookLite bookLite) onRemoveSelectedBook; //propagate
   final Function() onClearSelectedBooks; //propagate
+  final Function(BookLite bookLite) onDeleteBook;
 
-  final List<int?> studentOwnerNums; //conditional content
+
 
   @override
   State<StudentDetailBookList> createState() => _StudentDetailBookListState();
@@ -37,7 +39,7 @@ class StudentDetailBookList extends StatefulWidget {
 
 class _StudentDetailBookListState extends State<StudentDetailBookList> {
 
-  SplayTreeSet selectedBookIndices = SplayTreeSet();
+  SplayTreeSet selectedBookIndices = SplayTreeSet(); //ordered indexed list to efficiently add and decide which books are selected
 
   /*
   clear selection when book is added or deleted to avoid memory leaks
@@ -59,16 +61,15 @@ class _StudentDetailBookListState extends State<StudentDetailBookList> {
           for (int index = 0; index<widget.books.length; index++)
             BookCard(
                 clicked: selectedBookIndices.contains(index),
-                onClick: (book) => selectBooks(
+                onClick: (book) => selectBooks( //method to select multiple books
                   books: widget.books,
                   index: index,
                   pressedKey: widget.pressedKey,
                 ),
-                onDeleteBook: (book){},
-                bookLite: widget.books[index],
+                onDeleteBook: widget.onDeleteBook,
+                bookLite: widget.books.elementAt(index),
                 isDeletable: true,
-                studentOwnerNum: widget.studentOwnerNums.length!=widget.books.length //check if length is correct -> avoid false data
-                    ? null : widget.studentOwnerNums[index],
+                studentOwnerNum: null,
                 bookAvailableAmount: null),
 
         ],

@@ -1,3 +1,5 @@
+
+
 import 'package:buecherteam_2023_desktop/Resources/text.dart';
 import 'package:buecherteam_2023_desktop/UI/books/student_detail_book_list.dart';
 import 'package:buecherteam_2023_desktop/UI/keyboard_listener/keyboard_listener.dart';
@@ -9,14 +11,17 @@ import '../../Models/student_detail_state.dart';
 import '../../Resources/dimensions.dart';
 import '../right_click_actions/actions_overlay.dart';
 
+
+/*
+This Widget completes the book list with amount indicator, an plus button to
+add books and the feature to take action on selected books with right click
+ */
 class StudentDetailBookSection extends StatefulWidget {
   const StudentDetailBookSection({super.key,
-    required this.pressedKey, required this.books,
-    required this.studentOwnerNums});
+    required this.pressedKey, required this.books});
 
-  final Keyboard pressedKey;
-  final List<BookLite> books;
-  final List<int?> studentOwnerNums;
+  final Keyboard pressedKey; //pass forward
+  final List<BookLite> books; //pass forward
 
   @override
   State<StudentDetailBookSection> createState() => _StudentDetailBookSectionState();
@@ -24,8 +29,9 @@ class StudentDetailBookSection extends StatefulWidget {
 
 class _StudentDetailBookSectionState extends State<StudentDetailBookSection> {
 
-  List<BookLite> selectedBooks = [];
+  List<BookLite> selectedBooks = []; //manage selectedBooks to take action on them
   bool isOverlayOpen = false;
+
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +55,10 @@ class _StudentDetailBookSectionState extends State<StudentDetailBookSection> {
           ),
 
         Expanded(
-          child: GestureDetector(
+          /*
+          Wrap the bookList in the RightClick Action body
+           */
+          child: GestureDetector( //used to detect right clicks
             onSecondaryTapUp: (details) {
               var studentDetailState = Provider.of<StudentDetailState>(context, listen: false);
               if(//studentDetailState.selectedStudentIdObjects.isNotEmpty
@@ -58,14 +67,14 @@ class _StudentDetailBookSectionState extends State<StudentDetailBookSection> {
                   isOverlayOpen = true;
                 });
                 var overlay = ActionsOverlay(
-                    selectedItems: studentDetailState.selectedStudentIdObjects.toList(), //make copy of selected students to avoid side effects
+                    selectedItems: studentDetailState.selectedStudentIdObjects.toList(), //actually not used since no dialog and abstraction is needed/possible
                     width: Dimensions.widthRightClickActionMenu,
                     actions: { //inflate actions
                       TextRes.delete:(students) {
-                        studentDetailState
+                        studentDetailState //instantly process action
                             .deleteBooksOfStudents(
-                            studentDetailState.selectedStudentIdObjects.toList(),
-                            selectedBooks);
+                            studentDetailState.selectedStudentIdObjects.toList(), //students passed
+                            selectedBooks); //selected books passed
                       },
                       TextRes.duplicate:(students){
                         studentDetailState
@@ -88,7 +97,6 @@ class _StudentDetailBookSectionState extends State<StudentDetailBookSection> {
               ignoring: isOverlayOpen,
               child: StudentDetailBookList(pressedKey: widget.pressedKey,
                   books: widget.books,
-                  studentOwnerNums: widget.studentOwnerNums,
                   onAddSelectedBook: (book) {
                     selectedBooks.add(book);
                   },
@@ -97,12 +105,19 @@ class _StudentDetailBookSectionState extends State<StudentDetailBookSection> {
                   },
                   onClearSelectedBooks: (){
                     selectedBooks.clear();
-                    }
+                    },
+                onDeleteBook: (BookLite bookLite) {
+                /*
+                use delete method that is also used for right click action above
+                 */
+                var state =  Provider.of<StudentDetailState>(context, listen: false);
+                  state.deleteBooksOfStudents(
+                      state.selectedStudentIdObjects.toList(), [bookLite]);
+                },
                   ),
             ),
           ),
         )
-
       ],
     );
   }

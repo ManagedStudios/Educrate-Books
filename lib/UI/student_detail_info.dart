@@ -4,11 +4,16 @@ import 'package:flutter/material.dart';
 
 import '../Data/student.dart';
 
+
+/*
+shows basic information of one or multiple students and contains the button
+to add a warning (Standard-Mahnung) to your clipboard and the selected students
+ */
 class StudentDetailInfo extends StatelessWidget {
   const StudentDetailInfo({super.key, required this.students, required this.onAddWarning});
 
-  final List<Student> students;
-  final Function(List<Student> students) onAddWarning;
+  final List<Student> students; //data
+  final Function(List<Student> students) onAddWarning; //propagate
 
   @override
   Widget build(BuildContext context) {
@@ -19,18 +24,25 @@ class StudentDetailInfo extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  /*
+                  student name or information about multiple students
+                   */
                   Text(
                     students.length==1
                         ? "${students.first.firstName} ${students.first.lastName}"
                         : TextRes.severalStudents,
                     style: Theme.of(context).textTheme.bodyLarge,
                   ),
+
+                  /*
+                  warning button
+                   */
                   TextButton(onPressed: (){
                     onAddWarning(students);
                   },
                     style: ButtonStyle(
                       shape: MaterialStatePropertyAll(RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(Dimensions.cornerRadiusSmall)
+                        borderRadius: BorderRadius.circular(Dimensions.cornerRadiusMedium)
                         )
                       )
                     ),
@@ -43,6 +55,11 @@ class StudentDetailInfo extends StatelessWidget {
                   )
                 ],
               ),
+
+               /*
+               show class and training directions if one student is selected
+               else show information how to interact with multiple students
+                */
                Wrap(
                   children: [
                     Text(

@@ -1,10 +1,6 @@
 
-
-
-import 'package:buecherteam_2023_desktop/Data/class_data.dart';
-
 import 'package:buecherteam_2023_desktop/Data/student.dart';
-import 'package:buecherteam_2023_desktop/Data/training_directions_data.dart';
+
 import 'package:buecherteam_2023_desktop/Models/studentListState.dart';
 import 'package:buecherteam_2023_desktop/Models/student_detail_state.dart';
 import 'package:buecherteam_2023_desktop/UI/filter/filter_row.dart';
@@ -14,13 +10,16 @@ import 'package:buecherteam_2023_desktop/UI/right_click_actions/actions_overlay.
 import 'package:buecherteam_2023_desktop/UI/right_click_actions/delete_dialog.dart';
 import 'package:buecherteam_2023_desktop/UI/searchbar.dart';
 import 'package:buecherteam_2023_desktop/UI/student_card.dart';
-import 'package:buecherteam_2023_desktop/UI/student_dialog/student_dialog.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 
 import '../Resources/dimensions.dart';
 import '../Resources/text.dart';
+import 'all_students_column_util/all_students_dialog_builder.dart';
+import 'all_students_column_util/revert_student_delete_snackbar.dart';
+import 'all_students_column_util/selection_process_all_students.dart';
 
 class AllStudentsColumn extends StatefulWidget {
   const AllStudentsColumn({super.key, required this.onFocusChanged, required this.pressedKey});
@@ -37,6 +36,9 @@ class _AllStudentsColumnState extends State<AllStudentsColumn> {
   ValueNotifier<int> amountOfFilteredStudents = ValueNotifier(0);
   String? ftsQuery;
   bool isOverlayOpen = false;
+  String? studentAddedId;
+  bool clearanceNeeded = false;
+
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +54,10 @@ class _AllStudentsColumnState extends State<AllStudentsColumn> {
               selectedItems: state.selectedStudentIdObjects.toList(), //make copy of selected students to avoid side effects
               width: Dimensions.widthRightClickActionMenu,
               actions: { //inflate actions
-                TextRes.delete:(actions) => openDeleteDialog(context, actions, TextRes.student)
+                TextRes.delete:(actions) {
+                  openDeleteDialog(context, actions, TextRes.student);
+                  clearanceNeeded = true;
+                }
               },
               onOverlayClosed: () {
                 setState(() {
@@ -75,8 +80,7 @@ class _AllStudentsColumnState extends State<AllStudentsColumn> {
                         valueListenable: amountOfFilteredStudents,
                         builder: (context, value, _) =>
                             LfgSearchbar(onChangeText: (text) {
-                              Provider.of<StudentListState>(context, listen: false)
-                                  .clearSelectedStudents();
+                              clearanceNeeded = true;
                               searchForStudents(text);
                             },
                                 amountOfFilteredStudents: amountOfFilteredStudents.value,
@@ -116,45 +120,64 @@ class _AllStudentsColumnState extends State<AllStudentsColumn> {
                           change.data!.length != amountOfFilteredStudents.value) {
                         SchedulerBinding.instance.addPostFrameCallback((_) {
                           amountOfFilteredStudents.value = change.data!.length;
+                          if(clearanceNeeded) {
+                            clearanceNeeded = false;
+                            studentAddedId = null;
+                            clearSelectedStudents(context);
+                          }
                         });
                       }
-                      final int dataLength = change.data?.length ?? 0;
-                      return Expanded(child: ListView(
-                        children: [
-                          for (int index = 0; index<dataLength; index++)
-                            ...[
-                              Consumer<StudentListState>(
-                                builder: (context, state, _) {
-                                  return StudentCard(change.data![index],
-                                      state.selectedStudentIds.contains(index),
-                                      setClickedStudent: (student) {
-                                        selectStudents(
-                                            pressedKey: widget.pressedKey,
-                                            studentListState: state,
-                                            studentDetailState:
-                                            Provider.of<StudentDetailState>(context, listen: false),
-                                            index: index,
-                                            students: change.data!);
-                                      },
-                                      notifyDetailPage: (student) => {},
-                                      onDeleteStudent: (student) {
-                                        Provider.of<StudentListState>(context, listen: false)
-                                            .deleteStudent(student);
-                                        showSnackBar(student);
-                                      },
-                                      openEditDialog: (student) {
-                                        updateStudent(student);
-                                      });
-                                },
-                              ),
 
-                              const SizedBox(height: Dimensions.spaceSmall,)
-                            ]
+                  final int dataLength = change.data?.length ?? 0;
 
-                        ],
+                      return Expanded(child: ListView.builder(
+                        itemCount: dataLength,
+                        itemBuilder: (context, index) {
+                          return Consumer<StudentListState>(
+                            builder: (context, state, _) {
+                              return StudentCard(change.data![index],
+                                  isSelected(
+                                      studentListState: state,
+                                      studentDetailState:
+                                      Provider.of<StudentDetailState>(
+                                          context, listen: false),
+                                      index: index,
+                                      students: change.data!,
+                                      studentId: studentAddedId
+                                  ),
+                                  setClickedStudent: (student) {
+                                    if (studentAddedId !=
+                                        null) clearStudentAddedId();
+                                    selectStudents(
+                                        pressedKey: widget.pressedKey,
+                                        studentListState: state,
+                                        studentDetailState:
+                                        Provider.of<StudentDetailState>(
+                                            context, listen: false),
+                                        index: index,
+                                        students: change.data!);
+                                  },
+                                  notifyDetailPage: (student) => {},
+                                  onDeleteStudent: (student) {
+                                    clearanceNeeded = true;
+                                    Provider.of<StudentListState>(
+                                        context, listen: false)
+                                        .deleteStudent(student);
+                                    showSnackBar(student,
+                                        Provider.of<StudentListState>(
+                                            context, listen: false),
+                                        context);
+                                  },
+                                  openEditDialog: (student) {
+                                    updateStudent(student, context);
+                                  });
+                            },
+                          );
+                        }
                       )
                       );
-                    })
+                    }),
+                      const SizedBox(height: Dimensions.spaceSmall,)
               ],
             ),
       ),
@@ -185,8 +208,9 @@ class _AllStudentsColumnState extends State<AllStudentsColumn> {
       final List<String> trainingDirections = value[4] as List<String>;
 
       //save the student to db
-      await studentListState.saveStudent(firstName, lastName, classLevel,
+      String id = await studentListState.saveStudent(firstName, lastName, classLevel,
           classChar, trainingDirections);
+      studentAddedId = id; //do not use setState to avoid race conditions betweens stream changes and setState changes
     });
   }
 
@@ -210,34 +234,8 @@ class _AllStudentsColumnState extends State<AllStudentsColumn> {
     }
   }
 
-  /*
-  showSnackbar is used to undo a delete of a student
-   */
 
-  void showSnackBar(Student student) {
-    ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(
-            "${student.firstName} ${student.lastName} ${TextRes.wasDeleted}"),
-          action: SnackBarAction(label: TextRes.undo,
-              onPressed: () => //save the student passed from the deletion process
-              Provider.of<StudentListState>(context, listen: false)
-                  .saveStudent(
-                  student.firstName, student.lastName, student.classLevel,
-                  student.classChar, student.trainingDirections,
-                  books: student.books, tags: student.tags)),
-          margin: const EdgeInsets.only(left: Dimensions.largeMargin,
-              right: Dimensions.largeMargin,
-              bottom: Dimensions.minMarginStudentView
-          ),
-          behavior: SnackBarBehavior.floating,
-          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(
-              Radius.circular(Dimensions.cornerRadiusSmall))),
-          padding: const EdgeInsets.all(Dimensions.paddingMedium),
-        )
-    );
-  }
-
-  void updateStudent(Student student) {
+  void updateStudent(Student student, BuildContext context) {
     final studentListState = Provider.of<StudentListState>(
         context, listen: false);
     showDialog<Student?>(context: context, barrierDismissible: false,
@@ -248,119 +246,45 @@ class _AllStudentsColumnState extends State<AllStudentsColumn> {
               actionText: TextRes.updateActionText,
               student: student);
         }
-    ).then((value) {
+    ).then((value) async {
       if(value == null) return;
-      studentListState.updateStudent(value);
+      String id = await studentListState.updateStudent(value);
       widget.onFocusChanged(false); //turn on keyboard for cmd/shift
+      studentAddedId = id; // do not use setState to avoid race conditions with stream changes
     });
   }
 
-  Widget studentDialogFutureBuilder({
-    required StudentListState studentListState,
-    required String title,
-    required String actionText,
-    Student? student,
-  }) {
-    return FutureBuilder(
-      future: Future.wait([
-        studentListState.getAllClasses(),
-        studentListState.getAllTrainingDirections()
-      ]),
-      initialData: const [[], []],
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done &&
-            snapshot.hasData) {
-          List<dynamic> rawClassList = snapshot.data?[0] ?? [];
-          List<ClassData> classList = rawClassList.map((e) => e as ClassData)
-              .toList();
+  bool isSelected({required StudentListState studentListState,
+    required StudentDetailState studentDetailState,
+    required int index, required List<Student> students, String? studentId}) {
 
-          List<dynamic> rawTrainingDirectionsList = snapshot.data?[1] ?? [];
-          List<TrainingDirectionsData> trainingDirectionsList =
-          rawTrainingDirectionsList.map((e) => e as TrainingDirectionsData)
-              .toList();
+    if (studentListState.selectedStudentIds.contains(index)) return true;
 
-          return StudentDialog(
-            key: UniqueKey(),
-            title: title,
-            classes: classList,
-            actionText: actionText,
-            trainingDirections: trainingDirectionsList,
-            loading: false,
-            student: student,
-          );
-        } else {
-          return StudentDialog(
-            key: UniqueKey(),
-            title: title,
-            classes: const [],
-            actionText: actionText,
-            trainingDirections: const [],
-            loading: true,
-          );
-        }
-      },
-    );
+    if(studentId != null && students[index].id == studentId) { //student recently added
+      /*
+      if new student has been added then select this student immediately
+       */
+      SchedulerBinding.instance.addPostFrameCallback((_) { //use postFrame to enable notifying
+        studentListState.clearSelectedStudents();
+        studentDetailState.clearSelectedStudents();
+        studentListState.addSelectedStudent(index);
+        studentDetailState.addSelectedStudent(students[index]);
+      });
+
+      return true;
+    }
+    return false;
   }
 
+  void clearStudentAddedId() {
+    studentAddedId = null;
+  }
 
-  void selectStudents (
-      {required Keyboard pressedKey,
-      required StudentListState studentListState,
-      required StudentDetailState studentDetailState,
-      required int index,
-      required List<Student> students}
-      ) {
-    /*
-    depending on the pressed keys cmd/shift/nothing the selection behavior differs.
-    The selection behavior is similar to Finder/Explorer.
-     */
-    switch(pressedKey) {
-      case Keyboard.nothing : { //select only one student
-          studentListState.clearSelectedStudents();
-          studentListState.addSelectedStudent(index);
-
-          studentDetailState.clearSelectedStudents();
-          studentDetailState.addSelectedStudent(students[index]);
-
-      }
-      case Keyboard.cmd : { //add or remove student from selection
-
-          if(studentListState.selectedStudentIds.contains(index)) {
-            studentListState.removeSelectedStudent(index);
-            studentDetailState.removeSelectedStudent(students[index]);
-          } else {
-            studentListState.addSelectedStudent(index);
-            studentDetailState.addSelectedStudent(students[index]);
-          }
-      }
-      case Keyboard.shift : { //select all intermediary options of students.
-
-        if(studentListState.selectedStudentIds.isEmpty) {
-          for(int i = 0; i<=index; i++) {
-            studentListState.addSelectedStudent(i);
-            studentDetailState.addSelectedStudent(students[i]);
-          }
-          return;
-        }
-
-        if(index>studentListState.selectedStudentIds.last) {
-          for (int i = studentListState.selectedStudentIds.last+1; i<=index; i++) {
-            studentListState.addSelectedStudent(i);
-            studentDetailState.addSelectedStudent(students[i]);
-          }
-        } else if (index<studentListState.selectedStudentIds.first){
-          for (int i = studentListState.selectedStudentIds.first-1; i>=index; i--) {
-            studentListState.addSelectedStudent(i);
-            studentDetailState.addSelectedStudent(students[i]);
-          }
-        } else {
-          for(int i = studentListState.selectedStudentIds.first+1; i<=index; i++) {
-            studentListState.addSelectedStudent(i);
-            studentDetailState.addSelectedStudent(students[i]);
-          }
-        }
-      }
-    }
+  void clearSelectedStudents(BuildContext context) {
+    Provider.of<StudentListState>(context, listen: false)
+        .clearSelectedStudents();
+    Provider.of<StudentDetailState>(context, listen: false)
+        .clearSelectedStudents();
   }
 
 }
