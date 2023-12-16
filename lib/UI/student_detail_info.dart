@@ -27,7 +27,7 @@ class StudentDetailInfo extends StatelessWidget {
                   /*
                   student name or information about multiple students
                    */
-                  Text(
+                  SelectableText(
                     students.length==1
                         ? "${students.first.firstName} ${students.first.lastName}"
                         : "${students.length} ${TextRes.severalStudents}",

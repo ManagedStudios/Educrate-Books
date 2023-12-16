@@ -80,11 +80,13 @@ class _AllStudentsColumnState extends State<AllStudentsColumn> {
                         valueListenable: amountOfFilteredStudents,
                         builder: (context, value, _) =>
                             LfgSearchbar(onChangeText: (text) {
-                              clearanceNeeded = true;
                               searchForStudents(text);
                             },
                                 amountOfFilteredStudents: amountOfFilteredStudents.value,
-                              onFocusChange: widget.onFocusChanged,
+                              onFocusChange: (searched) {
+                              widget.onFocusChanged(searched);
+                              clearanceNeeded = true;
+                              },
                               onTap: () {
                               setState(() {
                                 ftsQuery=null;
