@@ -21,7 +21,7 @@ void main() async{
   runApp(MultiProvider(providers: [ //initialize the Viewmodels
     ChangeNotifierProvider(create: (context) => StudentListState(DB())),
     ChangeNotifierProvider(create: (context) => RightClickState(DB())),
-    ChangeNotifierProvider(create: (context) => StudentDetailState())
+    ChangeNotifierProvider(create: (context) => StudentDetailState(DB()))
   ],
     child: const MyApp(),
   ));

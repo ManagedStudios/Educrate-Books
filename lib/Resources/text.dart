@@ -101,7 +101,7 @@
 
   static const String addFilter = "Filter hinzufügen";
 
-  static const String severalStudents = "Mehrere Schüler";
+  static const String severalStudents = "Schüler";
 
   static const String severalStudentsInfo = "Hinzufüge-Aktionen betreffen alle ausgewählten Schüler \n"
       "Löschen-Aktionen nur Diejenigen, die das Attribut auch besitzen";

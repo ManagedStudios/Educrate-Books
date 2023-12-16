@@ -4,6 +4,7 @@ import 'package:buecherteam_2023_desktop/Resources/text.dart';
 
 class BuildQuery {
 
+  static String noResultQuery = "SELECT * FROM _ WHERE 1 = 0";
   /*
   WICHTIG beim query builden: Enter werden auch als Zeichen gesehen und führen
   zu Fehlern
@@ -41,6 +42,21 @@ class BuildQuery {
   static String getAllTrainingDirections() {
     String query = """SELECT ${TextRes.trainingDirectionsJson} FROM _
     WHERE ${TextRes.typeJson}='${TextRes.trainingDirectionsTypeJson}' """;
+
+    return query;
+  }
+
+  static String buildStudentDetailQuery(List<String> studentIds) {
+    if (studentIds.isEmpty) return noResultQuery;
+    String whereClause = """AND META().id IN [${studentIds.map((e) => """'$e'""").join(",")}]""";
+
+    String query = """SELECT META().id, ${TextRes.studentFirstNameJson}, 
+      ${TextRes.studentLastNameJson}, ${TextRes.studentClassLevelJson}, 
+      ${TextRes.studentClassCharJson}, ${TextRes.studentTrainingDirectionsJson},
+      ${TextRes.studentBooksJson}, ${TextRes.studentAmountOfBooksJson}, ${TextRes.studentTagsJson} FROM _ 
+      WHERE ${TextRes.typeJson}='${TextRes.studentTypeJson}' """;
+
+    query += whereClause;
 
     return query;
   }

@@ -61,7 +61,7 @@ class _StudentDetailBookSectionState extends State<StudentDetailBookSection> {
           child: GestureDetector( //used to detect right clicks
             onSecondaryTapUp: (details) {
               var studentDetailState = Provider.of<StudentDetailState>(context, listen: false);
-              if(//studentDetailState.selectedStudentIdObjects.isNotEmpty
+              if(studentDetailState.selectedStudentIdObjects.isNotEmpty &&
                    selectedBooks.isNotEmpty && !isOverlayOpen) {
                 setState(() {
                   isOverlayOpen = true;

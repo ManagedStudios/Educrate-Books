@@ -1,6 +1,7 @@
 
 
 import 'package:buecherteam_2023_desktop/Data/bookLite.dart';
+import 'package:buecherteam_2023_desktop/Data/db.dart';
 import 'package:buecherteam_2023_desktop/Data/student.dart';
 import 'package:buecherteam_2023_desktop/Models/student_detail_state.dart';
 import 'package:buecherteam_2023_desktop/Theme/color_scheme.dart';
@@ -47,7 +48,7 @@ void main () {
       ),
       home: MultiProvider(
         providers: [
-          ChangeNotifierProvider(create: (context) => StudentDetailState())
+          ChangeNotifierProvider(create: (context) => StudentDetailState(DB()))
         ],
           child: const StudentDetailColumn(pressedKey: Keyboard.nothing)),
     );

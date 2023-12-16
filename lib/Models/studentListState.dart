@@ -105,12 +105,14 @@ class StudentListState extends ChangeNotifier {
 
   void setFtsQuery (String query) {
     ftsQuery = query;
-    streamStudents(ftsQuery, filterOptions);
+    //important since this mistake has been done: streamStudents only opens a new stream with
+    //new data using the state management system (provider or flutter setState)
+    // calling the streamStudents method with the updated parameters here wont work!!
   }
 
   void setFilterOptions (Filter filter) {
     filterOptions = filter;
-    streamStudents(ftsQuery, filterOptions);
+
   }
 
   void clearSelectedStudents () {

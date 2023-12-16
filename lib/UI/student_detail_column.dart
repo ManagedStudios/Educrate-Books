@@ -26,35 +26,45 @@ class StudentDetailColumn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
-        stream: Provider.of<StudentDetailState>(context, listen: false)
-                  .streamStudentsDetails(null),
-        builder: (context, change) {
+    return Consumer<StudentDetailState>(
+      builder: (BuildContext context, StudentDetailState studentDetailState, _) {
+        return StreamBuilder(
+            stream: studentDetailState.streamStudentsDetails(
+              studentDetailState.selectedStudentIdObjects
+                  .map((e) => e.id)
+                  .toList()
+            ),
+            builder: (context, change) {
 
-          List<Student> currStudents = change.data ?? [];
+              List<Student> currStudents = change.data ?? [];
 
-          return Column(
-            children: [
-              StudentDetailInfo(students: currStudents, onAddWarning: addWarning),
+              return currStudents.isEmpty
+                  ? Container()
+                  : Column(
+                children: [
+                  StudentDetailInfo(students: currStudents, onAddWarning: addWarning),
 
-              /*
-              Here comes the tag dropdown menu
-               */
+                  /*
+                Here comes the tag dropdown menu
+                 */
 
-              const SizedBox(
-                height: Dimensions.spaceMedium,
-              ),
+                  const SizedBox(
+                    height: Dimensions.spaceMedium,
+                  ),
 
-              Expanded(
-                child: StudentDetailBookSection(
-                    pressedKey: pressedKey,
-                    books: getBooks(currStudents)),
-              )
+                  Expanded(
+                    child: StudentDetailBookSection(
+                        pressedKey: pressedKey,
+                        books: getBooks(currStudents)),
+                  )
 
-            ],
-          );
-          }
+                ],
+              );
+            }
         );
+      },
+
+    );
   }
 
   void addWarning(List<Student> students) {

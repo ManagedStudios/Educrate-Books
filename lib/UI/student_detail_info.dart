@@ -30,7 +30,7 @@ class StudentDetailInfo extends StatelessWidget {
                   Text(
                     students.length==1
                         ? "${students.first.firstName} ${students.first.lastName}"
-                        : TextRes.severalStudents,
+                        : "${students.length} ${TextRes.severalStudents}",
                     style: Theme.of(context).textTheme.bodyLarge,
                   ),
 

@@ -228,6 +228,7 @@ class _AllStudentsColumnState extends State<AllStudentsColumn> {
           .split(RegExp(
           r'(?<=[0-9])(?=[A-Za-z])|\s+')); //use a regex to split up words and classLevel from classChar
       final query = '${parts.join(' AND ')}*';
+
       setState(() {
         ftsQuery = query;
       });
@@ -258,8 +259,7 @@ class _AllStudentsColumnState extends State<AllStudentsColumn> {
     required StudentDetailState studentDetailState,
     required int index, required List<Student> students, String? studentId}) {
 
-    if (studentListState.selectedStudentIds.contains(index)) return true;
-
+    //firstly check if a new student has been added to clear former selection if required
     if(studentId != null && students[index].id == studentId) { //student recently added
       /*
       if new student has been added then select this student immediately
@@ -269,10 +269,15 @@ class _AllStudentsColumnState extends State<AllStudentsColumn> {
         studentDetailState.clearSelectedStudents();
         studentListState.addSelectedStudent(index);
         studentDetailState.addSelectedStudent(students[index]);
+        studentAddedId = null;
       });
 
       return true;
     }
+
+    //then the normal check via studentListState if student has been selected
+    if (studentListState.selectedStudentIds.contains(index)) return true;
+
     return false;
   }
 
