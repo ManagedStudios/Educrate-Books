@@ -87,6 +87,7 @@ class _AllStudentsColumnState extends State<AllStudentsColumn> {
                               widget.onFocusChanged(searched);
                               clearanceNeeded = true;
                               },
+
                               onTap: () {
                               setState(() {
                                 ftsQuery=null;
