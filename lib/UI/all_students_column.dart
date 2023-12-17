@@ -36,6 +36,15 @@ class _AllStudentsColumnState extends State<AllStudentsColumn> {
   ValueNotifier<int> amountOfFilteredStudents = ValueNotifier(0);
   String? ftsQuery;
   bool isOverlayOpen = false;
+
+  /*
+  studentAddedId and clearanceNeeded are both used to control the selected
+  Students. When a new student has been added, his index is not known.
+  In this case we use the id of the student and then add the index to the
+  Providers studentList and studentDetail.
+  ClearanceNeeded clears the selected Students of studentList and studentDetail
+  to avoid memory leaks when the stream changes because of deletions or filtering.
+   */
   String? studentAddedId;
   bool clearanceNeeded = false;
 
@@ -85,7 +94,7 @@ class _AllStudentsColumnState extends State<AllStudentsColumn> {
                                 amountOfFilteredStudents: amountOfFilteredStudents.value,
                               onFocusChange: (searched) {
                               widget.onFocusChanged(searched);
-                              clearanceNeeded = true;
+                              clearanceNeeded = true; //when searching delete selection
                               },
 
                               onTap: () {
@@ -123,6 +132,7 @@ class _AllStudentsColumnState extends State<AllStudentsColumn> {
                           change.data!.length != amountOfFilteredStudents.value) {
                         SchedulerBinding.instance.addPostFrameCallback((_) {
                           amountOfFilteredStudents.value = change.data!.length;
+                          //reset selection to initial state: no students selected
                           if(clearanceNeeded) {
                             clearanceNeeded = false;
                             studentAddedId = null;
@@ -139,7 +149,7 @@ class _AllStudentsColumnState extends State<AllStudentsColumn> {
                           return Consumer<StudentListState>(
                             builder: (context, state, _) {
                               return StudentCard(change.data![index],
-                                  isSelected(
+                                  isSelected( //method that checks if student is selected
                                       studentListState: state,
                                       studentDetailState:
                                       Provider.of<StudentDetailState>(
@@ -160,13 +170,13 @@ class _AllStudentsColumnState extends State<AllStudentsColumn> {
                                         index: index,
                                         students: change.data!);
                                   },
-                                  notifyDetailPage: (student) => {},
+                                  notifyDetailPage: (student) => {}, //dead code
                                   onDeleteStudent: (student) {
                                     clearanceNeeded = true;
                                     Provider.of<StudentListState>(
                                         context, listen: false)
                                         .deleteStudent(student);
-                                    showSnackBar(student,
+                                    showSnackBar(student, //make action reversible
                                         Provider.of<StudentListState>(
                                             context, listen: false),
                                         context);
