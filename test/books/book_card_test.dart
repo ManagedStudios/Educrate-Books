@@ -37,7 +37,7 @@ void main () {
       home: BookCard(clicked: isClicked, onClick: mockFunctions.onClick,
           onDeleteBook: mockFunctions.onDelete,
           bookLite: book1,
-          studentOwnerNum: studentOwnerNum,
+          leadingWidget: Text("$studentOwnerNum | "),
           isDeletable: isDeletable,
           bookAvailableAmount: bookAmount),
     );

@@ -5,12 +5,12 @@ import 'package:flutter/material.dart';
 class BookCard extends StatefulWidget {
   const BookCard({super.key, required this.clicked, required this.onClick,
     required this.onDeleteBook, required this.bookLite,
-    required this.studentOwnerNum, required this.isDeletable,
+    required this.leadingWidget, required this.isDeletable,
     required this.bookAvailableAmount});
 
   final bool clicked; //state
   final BookLite bookLite; //content
-  final int? studentOwnerNum; //conditional content
+  final Widget? leadingWidget; //conditional content
   final Function(BookLite bookLite) onClick; //callback
   final Function(BookLite bookLite) onDeleteBook; //callback
   final bool isDeletable; //conditional content
@@ -50,9 +50,8 @@ class _BookCardState extends State<BookCard> {
               Expanded( //content should take up as much space as possible
                 child: Row( //group content
                   children: [
-                    if(widget.studentOwnerNum != null) //when multiple students selected: Show number how many of them have this specific book
-                      Text("${widget.studentOwnerNum.toString()} | ",
-                      style: Theme.of(context).textTheme.displaySmall,),
+                    if(widget.leadingWidget != null) //show leading widget on demand
+                        widget.leadingWidget!,
 
                     Text("${widget.bookLite.subject} ${widget.bookLite.classLevel}  ",
                         style: Theme.of(context).textTheme.bodyLarge),

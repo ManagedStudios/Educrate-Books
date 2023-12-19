@@ -69,7 +69,7 @@ class _StudentDetailBookListState extends State<StudentDetailBookList> {
                 onDeleteBook: widget.onDeleteBook,
                 bookLite: widget.books.elementAt(index),
                 isDeletable: true,
-                studentOwnerNum: null,
+                leadingWidget: null,
                 bookAvailableAmount: null),
 
         ],
