@@ -17,11 +17,14 @@ This Widget completes the book list with amount indicator, an plus button to
 add books and the feature to take action on selected books with right click
  */
 class StudentDetailBookSection extends StatefulWidget {
+
+
   const StudentDetailBookSection({super.key,
-    required this.pressedKey, required this.books});
+    required this.pressedKey, required this.books, required this.onAddBooks});
 
   final Keyboard pressedKey; //pass forward
   final List<BookLite> books; //pass forward
+  final Function() onAddBooks;
 
   @override
   State<StudentDetailBookSection> createState() => _StudentDetailBookSectionState();
@@ -47,7 +50,7 @@ class _StudentDetailBookSectionState extends State<StudentDetailBookSection> {
                         ?.copyWith(color: Theme.of(context).colorScheme.secondary),
                   ),
                 const SizedBox(width: Dimensions.spaceVerySmall),
-                IconButton(onPressed: (){},
+                IconButton(onPressed: widget.onAddBooks, //addBooks
                     icon: const Icon(Icons.add),
                 color: Theme.of(context).colorScheme.secondary,)
               ],

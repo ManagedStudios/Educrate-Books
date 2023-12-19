@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:buecherteam_2023_desktop/Data/bookLite.dart';
 import 'package:buecherteam_2023_desktop/Models/student_detail_state.dart';
 import 'package:buecherteam_2023_desktop/Resources/dimensions.dart';
+import 'package:buecherteam_2023_desktop/UI/add_book_student_detail_dialog/add_book_student_detail_dialog.dart';
 import 'package:buecherteam_2023_desktop/UI/books/student_detail_book_section.dart';
 import 'package:buecherteam_2023_desktop/UI/keyboard_listener/keyboard_listener.dart';
 import 'package:buecherteam_2023_desktop/UI/student_detail_info.dart';
@@ -55,7 +56,11 @@ class StudentDetailColumn extends StatelessWidget {
                   Expanded(
                     child: StudentDetailBookSection(
                         pressedKey: pressedKey,
-                        books: getBooks(currStudents)),
+                        books: getBooks(currStudents),
+                        onAddBooks: () {
+                          openAddBookStudentDetailDialog(context, currStudents);
+                        },
+                    ),
                   )
 
                 ],

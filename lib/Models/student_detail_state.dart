@@ -4,6 +4,7 @@ import 'dart:collection';
 
 
 
+import 'package:buecherteam_2023_desktop/Data/book.dart';
 import 'package:buecherteam_2023_desktop/Data/student.dart';
 import 'package:flutter/material.dart';
 
@@ -44,6 +45,10 @@ class StudentDetailState extends ChangeNotifier {
           .map((result) => database.toEntity(Student.fromJson, result)) //build Student objects from JSON
           .toList();
     });
+  }
+
+  Stream<List<Book>> streamBooks (String searchQuery) async* {
+
   }
 
   Future<void> deleteBooksOfStudents(List<Student> students, List<BookLite> selectedBooks) async {}

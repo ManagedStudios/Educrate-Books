@@ -37,7 +37,7 @@ class _BookCardState extends State<BookCard> {
           style: const ButtonStyle(
             padding: MaterialStatePropertyAll( //custom padding
               EdgeInsets.only(
-                left: Dimensions.paddingMedium,
+                left: Dimensions.paddingSmall,
                 top: Dimensions.paddingVerySmall,
                 bottom: Dimensions.paddingVerySmall,
                 right: Dimensions.paddingBetweenVerySmallAndSmall
