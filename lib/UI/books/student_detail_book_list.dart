@@ -108,24 +108,24 @@ class _StudentDetailBookListState extends State<StudentDetailBookList> {
           if(selectedBookIndices.isEmpty) {
             for(int i = 0; i<=index; i++) {
               selectedBookIndices.add(i);
-              widget.onAddSelectedBook(books[index]);
+              widget.onAddSelectedBook(books[i]);
             }
             return;
           }
           if(index>selectedBookIndices.last) {
             for (int i = selectedBookIndices.last+1; i<=index; i++) {
               selectedBookIndices.add(i);
-              widget.onAddSelectedBook(books[index]);
+              widget.onAddSelectedBook(books[i]);
             }
           } else if (index<selectedBookIndices.first){
             for (int i = selectedBookIndices.first-1; i>=index; i--) {
               selectedBookIndices.add(i);
-              widget.onAddSelectedBook(books[index]);
+              widget.onAddSelectedBook(books[i]);
             }
           } else {
             for(int i = selectedBookIndices.first+1; i<=index; i++) {
               selectedBookIndices.add(i);
-              widget.onAddSelectedBook(books[index]);
+              widget.onAddSelectedBook(books[i]);
             }
           }
         }

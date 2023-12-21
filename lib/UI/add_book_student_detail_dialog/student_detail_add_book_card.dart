@@ -4,46 +4,41 @@ import 'package:flutter/material.dart';
 import '../../Data/bookLite.dart';
 import '../../Resources/dimensions.dart';
 
-class StudentDetailAddBookCard extends StatefulWidget {
-  const StudentDetailAddBookCard({super.key, required this.onCheckChanged, required this.bookLite});
+class StudentDetailAddBookCard extends StatelessWidget {
+  const StudentDetailAddBookCard({super.key,
+    required this.onCheckChanged,
+    required this.bookLite,
+    required this.isChecked,
+  });
 
-  final Function(bool checked, BookLite bookLite) onCheckChanged;
+  final Function(BookLite bookLite) onCheckChanged;
   final BookLite bookLite;
-
-  @override
-  State<StudentDetailAddBookCard> createState() => _StudentDetailAddBookCardState();
-}
-
-class _StudentDetailAddBookCardState extends State<StudentDetailAddBookCard> {
-
-  bool isChecked = false;
+  final bool isChecked;
 
   @override
   Widget build(BuildContext context) {
-    return BookCard(clicked: false,
-        onClick: (_) {
-          setState(() {
-            isChecked = !isChecked;
-          });
-          widget.onCheckChanged(isChecked, widget.bookLite);
-        },
-        onDeleteBook: (_){},
-        bookLite: widget.bookLite,
-        leadingWidget: Padding(
-          padding: const EdgeInsets.only(right: Dimensions.paddingSmall),
-          child: Checkbox(
-                value: isChecked,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(Dimensions.cornerRadiusSmall)
-                ),
-                onChanged: (checked) {
-                  setState(() {
-                    isChecked = checked ?? false;
-                  });
-                  widget.onCheckChanged(isChecked, widget.bookLite);
-                }),
+    return BookCard(
+      clicked: false,
+      onClick: (_) {
+        onCheckChanged(bookLite);
+      },
+      onDeleteBook: (_) {},
+      bookLite: bookLite,
+      leadingWidget: Padding(
+        padding: const EdgeInsets.only(right: Dimensions.paddingSmall),
+        child: Checkbox(
+          value: isChecked,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(Dimensions.cornerRadiusSmall),
+          ),
+          onChanged: (checked) {
+            onCheckChanged(bookLite);
+          },
         ),
-        isDeletable: false,
-        bookAvailableAmount: null);
+      ),
+      isDeletable: false,
+      bookAvailableAmount: null,
+    );
   }
 }
+

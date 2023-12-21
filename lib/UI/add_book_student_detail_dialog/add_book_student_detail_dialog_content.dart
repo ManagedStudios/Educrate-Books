@@ -1,3 +1,4 @@
+import 'package:buecherteam_2023_desktop/Data/bookLite.dart';
 import 'package:buecherteam_2023_desktop/Models/student_detail_state.dart';
 import 'package:buecherteam_2023_desktop/Resources/dimensions.dart';
 import 'package:buecherteam_2023_desktop/UI/add_book_student_detail_dialog/add_book_student_detail_list.dart';
@@ -9,9 +10,11 @@ import 'package:provider/provider.dart';
 import '../../Resources/text.dart';
 
 class AddBookStudentDetailDialogContent extends StatefulWidget {
-  const AddBookStudentDetailDialogContent({super.key, required this.onFocusChanged});
+  const AddBookStudentDetailDialogContent({super.key, required this.onFocusChanged, required this.onAddSelectedBook, required this.onRemoveSelectedBook});
 
   final Function(bool focused) onFocusChanged;
+  final Function(BookLite bookLite) onAddSelectedBook;
+  final Function(BookLite bookLite) onRemoveSelectedBook;
 
   @override
   State<AddBookStudentDetailDialogContent> createState() => _AddBookStudentDetailDialogContentState();
@@ -46,7 +49,12 @@ class _AddBookStudentDetailDialogContentState extends State<AddBookStudentDetail
                 });
               }
 
-              return Expanded(child: AddBookStudentDetailList(books: books.data ?? []));
+              return Expanded(child: AddBookStudentDetailList(
+                  books: books.data ?? [],
+                onAddSelectedBook: widget.onAddSelectedBook,
+                onRemoveSelectedBook: widget.onRemoveSelectedBook,
+                )
+              );
             })
       ],
     );

@@ -116,6 +116,8 @@
 
   static const String ftsBookStudentDetail = "book_fts_index";
 
+  static const String addBooks = "Ausgewählte Bücher hinzufügen";
+
  
 
 

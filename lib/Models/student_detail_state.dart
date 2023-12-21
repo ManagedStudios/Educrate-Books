@@ -47,20 +47,42 @@ class StudentDetailState extends ChangeNotifier {
     });
   }
 
-  Stream<List<Book>> streamBooks (String? searchQuery) async* {
+  Stream<List<BookLite>> streamBooks (String? searchQuery) async* {
     String query = BuildQuery.buildStudentDetailBookAddQuery(searchQuery);
 
     yield* database.streamLiveDocs(query).asyncMap((change) {
       return change.results
           .asStream()
           .map((result) => database.toEntity(Book.fromJson, result))
+          .map((book) => BookLite(book.id, book.name, book.subject, book.classLevel))
           .toList();
     });
   }
 
-  Future<void> deleteBooksOfStudents(List<Student> students, List<BookLite> selectedBooks) async {}
+  Future<void> deleteBooksOfStudents(List<Student> students, List<BookLite> selectedBooks) async {
+    for (Student student in students) {
+      final doc = (await database.getDoc(student.id))!.toMutable();
+      student.removeBooks(selectedBooks);
+      student.decrementAmountOfBooks(selectedBooks.length);
+      database.updateDocFromEntity(student, doc);
+      database.saveDocument(doc);
+    }
+  }
 
-  Future<void> duplicateBooksOfStudents(List<Student> students, List<BookLite> selectedBooks) async {}
+  Future<void> duplicateBooksOfStudents(List<Student> students, List<BookLite> selectedBooks) async {
+    addBooksToStudent(selectedBooks, students);
+  }
+
+  Future<void> addBooksToStudent(List<BookLite> books, List<Student> selectedStudents) async{
+    for (Student student in selectedStudents) {
+      final doc = (await database.getDoc(student.id))!.toMutable();
+      student.addBooks(books);
+
+      student.incrementAmountOfBooks(books.length);
+      database.updateDocFromEntity(student, doc);
+      database.saveDocument(doc);
+    }
+  }
 
 
 

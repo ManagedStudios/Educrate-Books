@@ -17,7 +17,7 @@ class Student implements SelectableItem {
   final String classChar;
   final List<String> trainingDirections;
   final List<BookLite> books;
-  final int amountOfBooks;
+  int amountOfBooks;
   final List<String> tags;
   String get id => _id;
 
@@ -61,6 +61,29 @@ class Student implements SelectableItem {
     };
     return data;
 }
+
+void addBooks(List<BookLite> books) {
+    this.books.addAll(books);
+}
+
+void incrementAmountOfBooks (int amount) {
+    amountOfBooks+=amount;
+}
+
+void removeBooks (List<BookLite> books) {
+    for (BookLite book in books) {
+      int index = this.books.indexOf(book);
+      if (index != -1) {
+        this.books.removeAt(index);
+      }
+    }
+}
+
+void decrementAmountOfBooks (int amount) {
+    amountOfBooks-=amount;
+}
+
+
 
 @override
 bool operator ==(Object other) {

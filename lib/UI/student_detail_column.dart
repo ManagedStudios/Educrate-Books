@@ -109,6 +109,8 @@ class StudentDetailColumn extends StatelessWidget {
       result.addAll(List.generate(entry.value, (index) => entry.key));
     }
 
+    result.sort();
+
     return result;
   }
 

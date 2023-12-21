@@ -77,13 +77,15 @@ class _StudentDetailBookSectionState extends State<StudentDetailBookSection> {
                         studentDetailState //instantly process action
                             .deleteBooksOfStudents(
                             studentDetailState.selectedStudentIdObjects.toList(), //students passed
-                            selectedBooks); //selected books passed
+                            selectedBooks.toList()); //selected books passed
+                        clearSelectedBooks();
                       },
                       TextRes.duplicate:(students){
                         studentDetailState
                             .duplicateBooksOfStudents(
                             studentDetailState.selectedStudentIdObjects.toList(),
-                            selectedBooks);
+                            selectedBooks.toList());
+                        clearSelectedBooks();
                       }
                     },
                     onOverlayClosed: () {
@@ -102,6 +104,7 @@ class _StudentDetailBookSectionState extends State<StudentDetailBookSection> {
                   books: widget.books,
                   onAddSelectedBook: (book) {
                     selectedBooks.add(book);
+
                   },
                   onRemoveSelectedBook: (book){
                     selectedBooks.remove(book);
@@ -123,5 +126,10 @@ class _StudentDetailBookSectionState extends State<StudentDetailBookSection> {
         )
       ],
     );
+
+  }
+
+  void clearSelectedBooks () {
+    selectedBooks.clear();
   }
 }
