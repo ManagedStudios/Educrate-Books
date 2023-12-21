@@ -4,12 +4,13 @@ import 'package:buecherteam_2023_desktop/Resources/text.dart';
 import 'package:flutter/material.dart';
 
 class LfgSearchbar extends StatefulWidget {
-  const LfgSearchbar({super.key, required this.onChangeText, required this.amountOfFilteredStudents, required this.onFocusChange, required this.onTap});
+  const LfgSearchbar({super.key, required this.onChangeText, required this.amountOfFilteredItems, required this.onFocusChange, required this.onTap, required this.amountType});
 
   final Function(String search) onChangeText;
   final Function (bool focused) onFocusChange;
   final Function () onTap;
-  final int amountOfFilteredStudents; //amount of students that are retrieved after applying filters
+  final int amountOfFilteredItems; //amount of students/books that are retrieved after applying filters
+  final String amountType;
   @override
   State<LfgSearchbar> createState() => _LfgSearchbarState();
 }
@@ -50,7 +51,7 @@ class _LfgSearchbarState extends State<LfgSearchbar> {
             ),
             trailing: [Padding( //trailing displays the amount of students
               padding: const EdgeInsets.all(Dimensions.paddingSmall),
-              child: Text("${widget.amountOfFilteredStudents} ${TextRes.student}",
+              child: Text("${widget.amountOfFilteredItems} ${widget.amountType}",
                 style: Theme.of(context).textTheme.labelMedium?.copyWith(color: Theme.of(context).colorScheme.surfaceTint),
                 overflow: TextOverflow.ellipsis,),
             )],

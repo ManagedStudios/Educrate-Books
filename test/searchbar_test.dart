@@ -32,7 +32,8 @@ void main () {
       ),
       home: LfgSearchbar(
         onChangeText: mockFunction.onChangeText,
-        amountOfFilteredStudents: amountOfFilteredStudents,
+        amountOfFilteredItems: amountOfFilteredStudents,
+        amountType: TextRes.student,
         onFocusChange: (bool focused) {  },
         onTap: () {  },
 

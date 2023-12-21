@@ -91,7 +91,8 @@ class _AllStudentsColumnState extends State<AllStudentsColumn> {
                             LfgSearchbar(onChangeText: (text) {
                               searchForStudents(text);
                             },
-                                amountOfFilteredStudents: amountOfFilteredStudents.value,
+                                amountOfFilteredItems: amountOfFilteredStudents.value,
+                                amountType: TextRes.student,
                               onFocusChange: (searched) {
                               widget.onFocusChanged(searched);
                               clearanceNeeded = true; //when searching delete selection
