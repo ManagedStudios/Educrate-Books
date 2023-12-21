@@ -60,4 +60,21 @@ class BuildQuery {
 
     return query;
   }
+
+  static String buildStudentDetailBookAddQuery(String? searchQuery) {
+    String ftsQueryMatch = "";
+
+    if(searchQuery != null) {
+      ftsQueryMatch = "AND MATCH(${TextRes.ftsBookStudentDetail}, '$searchQuery')";
+    }
+    String query = """SELECT META().id, ${TextRes.bookNameJson}, 
+      ${TextRes.bookSubjectJson}, ${TextRes.bookClassLevelJson}, 
+      ${TextRes.bookTrainingDirectionJson}, ${TextRes.bookExpectedAmountNeededJson},
+      ${TextRes.bookNowAvailableJson}, ${TextRes.bookTotalAvailableJson} FROM _ 
+      WHERE ${TextRes.typeJson}='${TextRes.bookTypeJson}' """;
+    query+=ftsQueryMatch;
+
+    return query;
+
+  }
 }

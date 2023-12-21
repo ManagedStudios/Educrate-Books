@@ -47,8 +47,15 @@ class StudentDetailState extends ChangeNotifier {
     });
   }
 
-  Stream<List<Book>> streamBooks (String searchQuery) async* {
+  Stream<List<Book>> streamBooks (String? searchQuery) async* {
+    String query = BuildQuery.buildStudentDetailBookAddQuery(searchQuery);
 
+    yield* database.streamLiveDocs(query).asyncMap((change) {
+      return change.results
+          .asStream()
+          .map((result) => database.toEntity(Book.fromJson, result))
+          .toList();
+    });
   }
 
   Future<void> deleteBooksOfStudents(List<Student> students, List<BookLite> selectedBooks) async {}

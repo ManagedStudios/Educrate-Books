@@ -50,7 +50,8 @@ void main () {
         providers: [
           ChangeNotifierProvider(create: (context) => StudentDetailState(DB()))
         ],
-          child: const StudentDetailColumn(pressedKey: Keyboard.nothing)),
+          child: StudentDetailColumn(pressedKey: Keyboard.nothing,
+            onFocusChanged: (bool focused) {  },)),
     );
   }
 

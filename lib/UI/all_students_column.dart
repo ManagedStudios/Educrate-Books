@@ -99,9 +99,7 @@ class _AllStudentsColumnState extends State<AllStudentsColumn> {
                               },
 
                               onTap: () {
-                              setState(() {
-                                ftsQuery=null;
-                              });
+
                               },
                             )
                     )

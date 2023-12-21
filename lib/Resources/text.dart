@@ -112,6 +112,10 @@
 
   static const String duplicate = "Duplizieren";
 
+  static const String addBookStudentDetailInstructions = "Wählen Sie die Bücher aus, die sie hinzufügen wollen";
+
+  static const String ftsBookStudentDetail = "book_fts_index";
+
  
 
 

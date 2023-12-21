@@ -21,9 +21,10 @@ this widget contains the detail section for students and uses a self-sufficient
 stream to update the data of the students
  */
 class StudentDetailColumn extends StatelessWidget {
-  const StudentDetailColumn({super.key, required this.pressedKey});
+  const StudentDetailColumn({super.key, required this.pressedKey, required this.onFocusChanged});
 
   final Keyboard pressedKey;
+  final Function(bool focused) onFocusChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +59,8 @@ class StudentDetailColumn extends StatelessWidget {
                         pressedKey: pressedKey,
                         books: getBooks(currStudents),
                         onAddBooks: () {
-                          openAddBookStudentDetailDialog(context, currStudents);
+                          openAddBookStudentDetailDialog(context, currStudents,
+                              studentDetailState, onFocusChanged);
                         },
                     ),
                   )

@@ -1,0 +1,13 @@
+[
+  {
+    "firstName": "Alexa",
+    "lastName": "Dietlein",
+    "classLevel": 7,
+    "classChar": "K",
+    "trainingDirections": ["ETH-TR"],
+    "books": [],
+    "amountOfBooks": 0,
+    "tag":[],
+    "type": "student"
+  }
+]

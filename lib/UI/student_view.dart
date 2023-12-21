@@ -71,7 +71,13 @@ class _StudentViewState extends State<StudentView> {
               color: Theme.of(context).colorScheme.outline,
             ),
             SizedBox(width: space),
-            Expanded(child: StudentDetailColumn(pressedKey: pressedKey)
+            Expanded(child: StudentDetailColumn(
+              pressedKey: pressedKey,
+              onFocusChanged: (focused) {
+                if(!focused) {
+                  lfgKeyboardFocus.requestFocus();
+                }
+              },)
             ), //studentDetail
             SizedBox(width: marginWidth,)
           ],

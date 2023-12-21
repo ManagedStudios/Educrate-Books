@@ -26,8 +26,15 @@ class DB {
       FullTextIndexItem.property(TextRes.studentClassLevelJson),
       FullTextIndexItem.property(TextRes.studentClassCharJson)
     ]);
+
+    final bookFtsIndex = IndexBuilder.fullTextIndex([
+      FullTextIndexItem.property(TextRes.bookNameJson),
+      FullTextIndexItem.property(TextRes.bookSubjectJson),
+      FullTextIndexItem.property(TextRes.bookClassLevelJson)
+    ]);
     await _database.createIndex("Types", typeIndex);
-    await _database.createIndex("fts_student", ftsIndex);
+    await _database.createIndex(TextRes.ftsStudent, ftsIndex);
+    await _database.createIndex(TextRes.ftsBookStudentDetail, bookFtsIndex);
 
   }
 
@@ -139,6 +146,7 @@ class DB {
     }
     return fromJson(json);
   }
+
 
 }
 

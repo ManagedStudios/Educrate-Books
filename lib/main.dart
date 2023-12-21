@@ -1,3 +1,5 @@
+
+
 import 'package:buecherteam_2023_desktop/Data/db.dart';
 import 'package:buecherteam_2023_desktop/Models/right_click_state.dart';
 import 'package:buecherteam_2023_desktop/Models/studentListState.dart';
@@ -17,7 +19,7 @@ void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await CouchbaseLiteFlutter.init();
   await DB().initializeDatabase();
-  //await DB().startReplication();
+  await DB().startReplication();
   runApp(MultiProvider(providers: [ //initialize the Viewmodels
     ChangeNotifierProvider(create: (context) => StudentListState(DB())),
     ChangeNotifierProvider(create: (context) => RightClickState(DB())),
