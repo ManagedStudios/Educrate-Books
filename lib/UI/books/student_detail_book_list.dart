@@ -50,6 +50,7 @@ class _StudentDetailBookListState extends State<StudentDetailBookList> {
     if(!listEquals(oldWidget.books, widget.books)) {
       setState(() {
         selectedBookIndices.clear();
+        widget.onClearSelectedBooks();
       });
     }
   }

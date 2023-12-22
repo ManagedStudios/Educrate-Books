@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../Data/bookLite.dart';
+import '../../Data/student.dart';
 import '../../Models/student_detail_state.dart';
 import '../../Resources/dimensions.dart';
 import '../right_click_actions/actions_overlay.dart';
@@ -20,11 +21,13 @@ class StudentDetailBookSection extends StatefulWidget {
 
 
   const StudentDetailBookSection({super.key,
-    required this.pressedKey, required this.books, required this.onAddBooks});
+    required this.pressedKey, required this.books, required this.onAddBooks,
+     required this.currStudents });
 
   final Keyboard pressedKey; //pass forward
   final List<BookLite> books; //pass forward
   final Function() onAddBooks;
+  final List<Student> currStudents;
 
   @override
   State<StudentDetailBookSection> createState() => _StudentDetailBookSectionState();
@@ -64,27 +67,28 @@ class _StudentDetailBookSectionState extends State<StudentDetailBookSection> {
           child: GestureDetector( //used to detect right clicks
             onSecondaryTapUp: (details) {
               var studentDetailState = Provider.of<StudentDetailState>(context, listen: false);
-              if(studentDetailState.selectedStudentIdObjects.isNotEmpty &&
+              if(widget.currStudents.isNotEmpty &&
                    selectedBooks.isNotEmpty && !isOverlayOpen) {
                 setState(() {
                   isOverlayOpen = true;
                 });
                 var overlay = ActionsOverlay(
-                    selectedItems: studentDetailState.selectedStudentIdObjects.toList(), //actually not used since no dialog and abstraction is needed/possible
+                    selectedItems: widget.currStudents, //actually not used since no dialog and abstraction is needed/possible
                     width: Dimensions.widthRightClickActionMenu,
                     actions: { //inflate actions
                       TextRes.delete:(students) {
                         studentDetailState //instantly process action
                             .deleteBooksOfStudents(
-                            studentDetailState.selectedStudentIdObjects.toList(), //students passed
+                            widget.currStudents, //students passed
                             selectedBooks.toList()); //selected books passed
                         clearSelectedBooks();
                       },
                       TextRes.duplicate:(students){
                         studentDetailState
                             .duplicateBooksOfStudents(
-                            studentDetailState.selectedStudentIdObjects.toList(),
+                            widget.currStudents,
                             selectedBooks.toList());
+
                         clearSelectedBooks();
                       }
                     },
@@ -118,7 +122,7 @@ class _StudentDetailBookSectionState extends State<StudentDetailBookSection> {
                  */
                 var state =  Provider.of<StudentDetailState>(context, listen: false);
                   state.deleteBooksOfStudents(
-                      state.selectedStudentIdObjects.toList(), [bookLite]);
+                      widget.currStudents, [bookLite]);
                 },
                   ),
             ),

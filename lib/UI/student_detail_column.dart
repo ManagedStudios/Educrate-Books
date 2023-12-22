@@ -59,9 +59,9 @@ class StudentDetailColumn extends StatelessWidget {
                         pressedKey: pressedKey,
                         books: getBooks(currStudents),
                         onAddBooks: () {
-                          openAddBookStudentDetailDialog(context, currStudents,
+                           openAddBookStudentDetailDialog(context, currStudents,
                               studentDetailState, onFocusChanged);
-                        },
+                        }, currStudents: currStudents,
                     ),
                   )
 

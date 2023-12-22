@@ -42,9 +42,9 @@ void openAddBookStudentDetailDialog (
         )
       ],
     );
-  }).then((books) {
+  }).then((books) async{
     if(books != null) {
-      Provider.of<StudentDetailState>(context, listen: false)
+      await Provider.of<StudentDetailState>(context, listen: false)
           .addBooksToStudent(books, selectedStudents);
     }
 
