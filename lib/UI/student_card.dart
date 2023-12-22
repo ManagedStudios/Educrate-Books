@@ -96,10 +96,9 @@ class _StudentCardState extends State<StudentCard> {
                               ),
                               Row( //3 Row
                                 children: [
-                                  for (var trainingDirection in widget.student.trainingDirections)
                                     Flexible(
                                       fit: FlexFit.loose,
-                                      child: Text("$trainingDirection  ",
+                                      child: Text(widget.student.trainingDirections.join("  "),
                                           style: Theme.of(context).textTheme.labelSmall,
                                           overflow: TextOverflow.ellipsis,),
                                     ),
