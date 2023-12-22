@@ -2,6 +2,8 @@
 import 'package:buecherteam_2023_desktop/Data/student.dart';
 import 'package:flutter/material.dart';
 
+import '../Resources/dimensions.dart';
+
 class StudentCard extends StatefulWidget {
 
   const StudentCard(this.student,
@@ -41,7 +43,7 @@ class _StudentCardState extends State<StudentCard> {
       }),
       child: Tooltip( //if name can't be fully displayed show tooltip
         message: "${widget.student.firstName} ${widget.student.lastName}",
-        waitDuration: const Duration(seconds: 1),
+        waitDuration: const Duration(seconds: Dimensions.toolTipDuration),
         preferBelow: false,
         child: TextButton(onPressed: ()  { //TextButton acts as the base container providing out of the box click functionality as well as a hover state
           widget.setClickedStudent(widget.student.id);

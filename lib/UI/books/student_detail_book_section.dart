@@ -53,9 +53,13 @@ class _StudentDetailBookSectionState extends State<StudentDetailBookSection> {
                         ?.copyWith(color: Theme.of(context).colorScheme.secondary),
                   ),
                 const SizedBox(width: Dimensions.spaceVerySmall),
-                IconButton(onPressed: widget.onAddBooks, //addBooks
-                    icon: const Icon(Icons.add),
-                color: Theme.of(context).colorScheme.secondary,)
+                Tooltip(
+                  message: "${TextRes.books} ${TextRes.toAdd}",
+                  waitDuration: const Duration(seconds: Dimensions.toolTipDuration),
+                  child: IconButton(onPressed: widget.onAddBooks, //addBooks
+                      icon: const Icon(Icons.add),
+                  color: Theme.of(context).colorScheme.secondary,),
+                )
               ],
             ),
           ),

@@ -37,21 +37,24 @@ class StudentDetailInfo extends StatelessWidget {
                   /*
                   warning button
                    */
-                  TextButton(onPressed: (){
-                    onAddWarning(students);
-                  },
-                    style: ButtonStyle(
-                      shape: MaterialStatePropertyAll(RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(Dimensions.cornerRadiusMedium)
+                  Tooltip(
+                    message: TextRes.standardWarningAdd,
+                    child: TextButton(onPressed: (){
+                      onAddWarning(students);
+                    },
+                      style: ButtonStyle(
+                        shape: MaterialStatePropertyAll(RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(Dimensions.cornerRadiusMedium)
+                          )
                         )
-                      )
-                    ),
-                      child: const Row(
-                        children: [
-                          Icon(Icons.add),
-                          Text(TextRes.warning)
-                        ],
                       ),
+                        child: const Row(
+                          children: [
+                            Icon(Icons.add),
+                            Text(TextRes.warning)
+                          ],
+                        ),
+                    ),
                   )
                 ],
               ),

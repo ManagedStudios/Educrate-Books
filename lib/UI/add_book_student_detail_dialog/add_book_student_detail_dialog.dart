@@ -17,13 +17,20 @@ void openAddBookStudentDetailDialog (
     StudentDetailState studentDetailState,
     Function(bool focused) onFocusChanged) {
 
-  showDialog<List<BookLite>>(context: context, builder: (context) {
+  showDialog<List<BookLite>>(context: context,
+      barrierDismissible: false,
+      builder: (context) {
     double dialogWidth =
     MediaQuery.of(context).size.width*0.5>500?MediaQuery.of(context).size.width*0.5:500;
     double dialogHeight =
         MediaQuery.of(context).size.height*0.7;
     List<BookLite> checkedBooks = [];
     return AlertDialog(
+      title: Text(selectedStudents.length==1
+          ?"${selectedStudents.first.firstName} ${selectedStudents.first.lastName} ${TextRes.books} ${TextRes.toAdd}"
+          : "${selectedStudents.length} ${TextRes.severalStudentsGenitive} ${TextRes.books} ${TextRes.toAdd}",
+      style: Theme.of(context).textTheme.labelMedium) ,
+
       content: SizedBox(
         height: dialogHeight,
         width: dialogWidth,
@@ -33,7 +40,14 @@ void openAddBookStudentDetailDialog (
             onRemoveSelectedBook: (book) => checkedBooks.remove(book),
         ),
       ),
+
       actions: [
+        FilledButton.tonal(onPressed:(){
+          context.pop();
+        }, child: const Text(
+            TextRes.cancel
+        )
+        ),
         FilledButton(onPressed: () {
           context.pop(checkedBooks);
         }, child: const Text(

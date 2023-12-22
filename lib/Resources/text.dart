@@ -118,6 +118,14 @@
 
   static const String addBooks = "Ausgewählte Bücher hinzufügen";
 
+  static const String from = "von";
+
+  static const String severalStudentsGenitive = "Schülern";
+
+  static const String toAdd = "hinzufügen";
+
+  static const String standardWarningAdd = "Standard Mahnung kopieren und als Tag hinzufügen";
+
  
 
 
