@@ -54,9 +54,8 @@ void main() {
       await tester.pumpWidget(createWidgetUnderTest());
       expect(find.text("${student.firstName} ${student.lastName}"), findsOneWidget);
       expect(find.text("${student.classLevel.toString()}${student.classChar} — "), findsOneWidget);
-      for (var training in student.trainingDirections) {
-        expect(find.text("$training  "), findsOneWidget);
-      }
+        expect(find.text(student.trainingDirections.join("  ")), findsOneWidget);
+
     });
 
     testWidgets("Icon sizes increase on hover", (tester) async{

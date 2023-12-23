@@ -31,16 +31,20 @@ class Dropdown<T extends LfgChip> extends StatefulWidget {
   final double width;
   final String? hintText;
 
+
   @override
   State<Dropdown> createState() => _DropdownState();
 }
 
-class _DropdownState<T extends LfgChip> extends State<Dropdown<T>> {
+class _DropdownState<T extends LfgChip> extends State<Dropdown<T>>  {
   bool isOverlayOpen = false;
   late GlobalKey wrapChipsField;
   late List<LfgChip> selectedChips;
   late List<LfgChip> availableChips;
   OverlayEntry? overlayEntry;
+
+
+
 
   @override
   void initState() {
@@ -52,6 +56,7 @@ class _DropdownState<T extends LfgChip> extends State<Dropdown<T>> {
     {
       availableChips.removeWhere((it) => it.getLabelText()==selected.getLabelText());
     });
+
   }
 
   @override
@@ -80,10 +85,10 @@ class _DropdownState<T extends LfgChip> extends State<Dropdown<T>> {
     return IgnorePointer(
       ignoring: isOverlayOpen, //disable interaction when overlay is open
       child: ChipWrap(key: wrapChipsField, chips: selectedChips,
-            onClickChipRow: (_) {
-              showOverlay();
-            },
-            width: widget.width),
+              onClickChipRow: (_) {
+                showOverlay();
+              },
+              width: widget.width),
     );
   }
 
@@ -122,6 +127,7 @@ class _DropdownState<T extends LfgChip> extends State<Dropdown<T>> {
               onAddChip: (chip) {
                 widget.onAddChip(chip);
                 addChip(chip);
+
               }),
         )
       ),
@@ -169,6 +175,9 @@ class _DropdownState<T extends LfgChip> extends State<Dropdown<T>> {
          */
         selectedChips.add(chip);
         availableChips.removeWhere((element) => element.getLabelText()==chip.getLabelText());
+
+        //close the overlay since no more elements can be selected
+        closeOverlay();
       });
     }
 
@@ -182,6 +191,8 @@ class _DropdownState<T extends LfgChip> extends State<Dropdown<T>> {
       });
 
   }
+
+
 
 
 }

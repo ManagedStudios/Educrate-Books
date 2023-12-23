@@ -14,15 +14,19 @@ import 'package:flutter/material.dart';
  */
 
 class StudentDialogContent extends StatefulWidget {
+
+
   const StudentDialogContent({super.key, this.student,
     required this.classes, required this.onStudentClassUpdated,
     required this.trainingDirections,
     required this.onStudentTrainingDirectionsUpdated,
     this.firstNameError, this.lastNameError, this.classError,
     required this.onFirstNameChanged, required this.onLastNameChanged,
-    required this.loading});
+    required this.loading, required this.studentClass});
 
   final Student? student; //update => existing student passed
+
+  final List<ClassData> studentClass;
 
   final Function(String firstName) onFirstNameChanged;
   final Function(String lastName) onLastNameChanged;
@@ -145,7 +149,7 @@ class _StudentDialogContentState extends State<StudentDialogContent> {
                   child: Dropdown<ClassData>(availableChips: widget.classes,
                       selectedChips: widget.student!=null
                           ?[ClassData(widget.student!.classLevel, widget.student!.classChar)]
-                          :List<ClassData>.empty(),
+                          :widget.studentClass, //preserve state even after parent rebuilds
                       onAddChip: (classChip){widget.onStudentClassUpdated(classChip as ClassData);},
                       onDeleteChip: (_){},
                       multiSelect: false, width: dialogWidth*0.8,
@@ -153,7 +157,7 @@ class _StudentDialogContentState extends State<StudentDialogContent> {
                         widget.onStudentClassUpdated(classes.isNotEmpty
                             ?classes[0] as ClassData
                             :null);
-                              }
+                              },
                           ),
                 ),
                 const SizedBox(height: Dimensions.spaceMedium,),

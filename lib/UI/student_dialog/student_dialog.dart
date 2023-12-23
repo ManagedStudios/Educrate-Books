@@ -70,6 +70,9 @@ class _StudentDialogState extends State<StudentDialog> {
         onLastNameChanged: onLastNameChanged,
         classError: classError,
         student: widget.student, loading: widget.loading,
+        studentClass: studentClassChar!=null&&studentClassLevel!=null
+          ? [ClassData(studentClassLevel!, studentClassChar!)]
+          : [],
       ),
       actions: [
         FilledButton.tonal(onPressed:(){

@@ -5,13 +5,14 @@ import 'package:buecherteam_2023_desktop/Data/bookLite.dart';
 import 'package:buecherteam_2023_desktop/Data/class_data.dart';
 import 'package:buecherteam_2023_desktop/Data/student.dart';
 import 'package:buecherteam_2023_desktop/Data/training_directions_data.dart';
-import 'package:buecherteam_2023_desktop/Resources/keys.dart';
 import 'package:buecherteam_2023_desktop/Resources/text.dart';
 import 'package:buecherteam_2023_desktop/Theme/color_scheme.dart';
 import 'package:buecherteam_2023_desktop/Theme/text_theme.dart';
 import 'package:buecherteam_2023_desktop/UI/student_dialog/student_dialog_content.dart';
+import 'package:buecherteam_2023_desktop/UI/tag_dropdown/action_dropdown_available_container.dart';
 import 'package:buecherteam_2023_desktop/UI/tag_dropdown/chip_wrap.dart';
 import 'package:buecherteam_2023_desktop/UI/tag_dropdown/dropdown.dart';
+import 'package:buecherteam_2023_desktop/Util/comparison.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -90,7 +91,7 @@ void main () {
                 onLastNameChanged: mockFunctions.onLastNameChanged,
                 firstNameError: firstNameErrorParam,
                 lastNameError: lastNameErrorParam,
-                classError: classErrorParam,loading: loading,),
+                classError: classErrorParam,loading: loading, studentClass: [],),
 
         )
     );
@@ -217,11 +218,9 @@ void main () {
     await tester.pumpAndSettle(); // Allow the dropdown items to render
 
     // Verify that each class in the provided list is present in the dropdown
-    for (final classData in classes) {
-      await tester.scrollUntilVisible(find.text(classData.getLabelText()), 10,
-          scrollable: find.descendant(of: find.byKey(Key(Keys.ActionDropdownAvailableCardKey)), matching: find.byType(Scrollable)));
-      expect(find.text(classData.getLabelText()), findsOneWidget);
-    }
+      final widget = tester.widget<ActionDropdownAvailableContainer>(find.byType(ActionDropdownAvailableContainer));
+      expect(areListsEqualIgnoringOrder(widget.availableChips, classes), isTrue);
+
   });
 
   testWidgets('displays class error message when classError is provided', (WidgetTester tester) async {
@@ -244,7 +243,7 @@ void main () {
     ));
 
     // Open the class dropdown
-    await tester.tap(find.text(TextRes.addChipsHint).first);
+    await tester.tap(find.byType(Dropdown<ClassData>));
     await tester.pumpAndSettle();
 
     // Simulate a tap on the first class in the dropdown
@@ -252,12 +251,6 @@ void main () {
     await tester.tap(classItem);
     await tester.pumpAndSettle();
 
-    verify(() => mockFunctions.onStudentClassUpdated(classes.first)).called(1);
-
-    await tester.tapAt(Offset(0, 0));
-    await tester.pumpAndSettle();
-
-    // Check if the mock callback was called with the correct argument
     verify(() => mockFunctions.onStudentClassUpdated(classes.first)).called(1);
 
   });

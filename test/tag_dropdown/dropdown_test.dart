@@ -195,9 +195,12 @@ void main () {
 
     // Verify that the initially selected chip is back in the availableChips and the new chip is now in the selectedChips
     final newSelectedChip = find.descendant(of:
-    find.byType(ActionDropdownSelectedWrap),
+    find.byType(ChipWrap),
         matching: find.text(newChipContent.getLabelText()));
     expect(newSelectedChip, findsOneWidget);
+
+    await tester.tap(find.byType(ChipWrap));
+    await tester.pump();
 
     for (LfgChip selectedChip in selectedChips) {
       final newAvailableChip = find.descendant(of:
