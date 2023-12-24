@@ -1,13 +1,16 @@
 import 'dart:math';
 
 import 'package:buecherteam_2023_desktop/Resources/dimensions.dart';
-import 'package:buecherteam_2023_desktop/UI/class_level_column.dart';
 import 'package:flutter/material.dart';
 
 class BookView extends StatelessWidget {
-  static String routeName = '/bookView';
 
-  const BookView({super.key});
+
+  const BookView({super.key, required this.leftColumn, required this.middleColumn, required this.rightColumn});
+
+  final Widget leftColumn;
+  final Widget middleColumn;
+  final Widget rightColumn;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +27,7 @@ class BookView extends StatelessWidget {
 
         children: [
           SizedBox(width: marginWidth),
-          const Expanded(child: ClassLevelColumn()),
+          Expanded(child: leftColumn),
           SizedBox(width: space,),
           Container(
             width: Dimensions.lineWidth,
@@ -32,7 +35,7 @@ class BookView extends StatelessWidget {
             color: Theme.of(context).colorScheme.outline,
           ),
           SizedBox(width: space,),
-          Expanded(child: Container()),
+          Expanded(child: middleColumn),
           SizedBox(width: space,),
           Container(
             width: Dimensions.lineWidth,
@@ -40,7 +43,7 @@ class BookView extends StatelessWidget {
             color: Theme.of(context).colorScheme.outline,
           ),
           SizedBox(width: space,),
-          Expanded(child: Container()),
+          Expanded(child: rightColumn),
           SizedBox(width: marginWidth)
         ],
       ),

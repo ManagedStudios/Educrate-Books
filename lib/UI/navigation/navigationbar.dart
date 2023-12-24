@@ -1,6 +1,6 @@
 
 import 'package:buecherteam_2023_desktop/Resources/text.dart';
-import 'package:buecherteam_2023_desktop/UI/book_view.dart';
+import 'package:buecherteam_2023_desktop/UI/book_depot_view.dart';
 import 'package:buecherteam_2023_desktop/UI/navigation/navigation_button.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -32,7 +32,7 @@ class _LfgNavigationBarState extends State<LfgNavigationBar> {
       isBookViewClicked = true;
       isStudentViewClicked = false;
     });
-    context.go(BookView.routeName);
+    context.go(BookDepotView.routeName);
   }
 
   @override

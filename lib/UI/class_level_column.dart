@@ -63,10 +63,10 @@ class _ClassLevelColumnState extends State<ClassLevelColumn> {
               ),
               const SizedBox(height: Dimensions.spaceMedium,),
               Expanded(
-                child: ListView(
+                child: ListView( //use listView to tacle even exceptional high load of classes
                   children: [
                     for (int index = 0; index<length; index++)
-                      FractionallySizedBox(
+                      FractionallySizedBox( //take up a fraction of full expanded width
                         widthFactor: getCurrFraction(index),
                         alignment: Alignment.centerLeft,
                         child: Consumer<ClassLevelState>(
