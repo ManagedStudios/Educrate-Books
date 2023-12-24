@@ -75,7 +75,7 @@ class _AddBookStudentDetailDialogContentState extends State<AddBookStudentDetail
           .trim() //delete all whitespace to avoid "word AND  *" queries leading to crashes
           .split(RegExp(
           r'(?<=[0-9])(?=[A-Za-z])|\s+')); //use a regex to split up words and classLevel from classChar
-      final query = '${parts.join(' AND ')}*';
+      final query = '${parts.join('* AND ')}*';
 
       setState(() {
         ftsBookQuery = query;

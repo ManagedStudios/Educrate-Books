@@ -240,7 +240,6 @@ class _AllStudentsColumnState extends State<AllStudentsColumn> {
           .split(RegExp(
           r'(?<=[0-9])(?=[A-Za-z])|\s+')); //use a regex to split up words and classLevel from classChar
       final query = '${parts.join(' AND ')}*';
-
       setState(() {
         ftsQuery = query;
       });
