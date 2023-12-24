@@ -8,12 +8,12 @@ import 'package:buecherteam_2023_desktop/Resources/dimensions.dart';
 import 'package:buecherteam_2023_desktop/UI/add_book_student_detail_dialog/add_book_student_detail_dialog.dart';
 import 'package:buecherteam_2023_desktop/UI/books/student_detail_book_section.dart';
 import 'package:buecherteam_2023_desktop/UI/keyboard_listener/keyboard_listener.dart';
-import 'package:buecherteam_2023_desktop/UI/student_detail_info.dart';
+import 'package:buecherteam_2023_desktop/UI/student_detail/student_detail_info.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 
-import '../Data/student.dart';
+import '../../Data/student.dart';
 
 
 /*

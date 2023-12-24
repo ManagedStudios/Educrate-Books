@@ -22,12 +22,12 @@ class AddBookStudentDetailList extends StatefulWidget {
 class _AddBookStudentDetailListState extends State<AddBookStudentDetailList> {
 
 
-  HashSet<BookLite> selectedBooks = HashSet();
+  HashSet<BookLite> selectedBooks = HashSet(); //maintain UI State
 
 
   @override
   Widget build(BuildContext context) {
-    widget.books.sort(orderBySelectedBooks);
+    widget.books.sort(orderBySelectedBooks); //show the checked/selected books at the top
     return ListView.builder(
             itemCount: widget.books.length,
             itemBuilder: (context, index) {
@@ -59,6 +59,7 @@ class _AddBookStudentDetailListState extends State<AddBookStudentDetailList> {
       selectedBooks.remove(book);
     });
   }
+
 
   int orderBySelectedBooks(BookLite a, BookLite b) {
     // Check if a is in selectedBooks

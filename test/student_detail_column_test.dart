@@ -7,7 +7,7 @@ import 'package:buecherteam_2023_desktop/Models/student_detail_state.dart';
 import 'package:buecherteam_2023_desktop/Theme/color_scheme.dart';
 import 'package:buecherteam_2023_desktop/Theme/text_theme.dart';
 import 'package:buecherteam_2023_desktop/UI/keyboard_listener/keyboard_listener.dart';
-import 'package:buecherteam_2023_desktop/UI/student_detail_column.dart';
+import 'package:buecherteam_2023_desktop/UI/student_detail/student_detail_column.dart';
 import 'package:buecherteam_2023_desktop/Util/comparison.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

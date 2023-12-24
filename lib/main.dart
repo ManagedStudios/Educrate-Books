@@ -1,6 +1,7 @@
 
 
 import 'package:buecherteam_2023_desktop/Data/db.dart';
+import 'package:buecherteam_2023_desktop/Models/class_level_state.dart';
 import 'package:buecherteam_2023_desktop/Models/right_click_state.dart';
 import 'package:buecherteam_2023_desktop/Models/studentListState.dart';
 import 'package:buecherteam_2023_desktop/Models/student_detail_state.dart';
@@ -12,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import 'UI/book_view.dart';
 import 'UI/navigation/navigationbar.dart';
 
 
@@ -24,7 +26,8 @@ void main() async{
   runApp(MultiProvider(providers: [ //initialize the Viewmodels
     ChangeNotifierProvider(create: (context) => StudentListState(DB())),
     ChangeNotifierProvider(create: (context) => RightClickState(DB())),
-    ChangeNotifierProvider(create: (context) => StudentDetailState(DB()))
+    ChangeNotifierProvider(create: (context) => StudentDetailState(DB())),
+    ChangeNotifierProvider(create: (context) => ClassLevelState(DB()))
   ],
     child: const MyApp(),
   ));
@@ -37,7 +40,24 @@ final _router = GoRouter(
     return Homepage(child: child);
   },routes: [
     GoRoute(path: StudentView.routeName,
-      builder: (context, state) => const StudentView()
+        pageBuilder: (context, state) => CustomTransitionPage(
+            child: const StudentView(),
+            transitionsBuilder: (context, animation, _, child) {
+              return FadeTransition(
+                  opacity:
+                  CurveTween(curve: Curves.easeInCirc).animate(animation),
+                  child: child);
+            })
+    ),
+    GoRoute(path: BookView.routeName,
+    pageBuilder: (context, state) => CustomTransitionPage(
+        child: const BookView(),
+        transitionsBuilder: (context, animation, _, child) {
+          return FadeTransition(
+              opacity:
+                CurveTween(curve: Curves.bounceIn).animate(animation),
+              child: child);
+        })
     )
   ])
 ]);

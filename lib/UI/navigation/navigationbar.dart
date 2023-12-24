@@ -1,9 +1,12 @@
 
 import 'package:buecherteam_2023_desktop/Resources/text.dart';
+import 'package:buecherteam_2023_desktop/UI/book_view.dart';
 import 'package:buecherteam_2023_desktop/UI/navigation/navigation_button.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../Resources/dimensions.dart';
+import '../student_view.dart';
 
 class LfgNavigationBar extends StatefulWidget {
   const LfgNavigationBar({super.key});
@@ -21,6 +24,7 @@ class _LfgNavigationBarState extends State<LfgNavigationBar> {
       isStudentViewClicked = true;
       isBookViewClicked = false;
     });
+    context.go(StudentView.routeName);
   }
 
   void onBookViewClicked () {
@@ -28,6 +32,7 @@ class _LfgNavigationBarState extends State<LfgNavigationBar> {
       isBookViewClicked = true;
       isStudentViewClicked = false;
     });
+    context.go(BookView.routeName);
   }
 
   @override

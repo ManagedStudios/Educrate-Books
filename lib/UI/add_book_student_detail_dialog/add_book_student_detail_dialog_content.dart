@@ -38,6 +38,9 @@ class _AddBookStudentDetailDialogContentState extends State<AddBookStudentDetail
             amountType: TextRes.books),
         const SizedBox(height: Dimensions.spaceMedium,),
 
+        /*
+        use a streamBuilder to fetch all available books matching the search query (look at LFGSearchbar implemented beneath)
+         */
         StreamBuilder(stream: Provider.of<StudentDetailState>(context, listen: false)
             .streamBooks(ftsBookQuery),
             builder: (context, books) {

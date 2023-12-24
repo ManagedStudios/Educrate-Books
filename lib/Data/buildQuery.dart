@@ -77,4 +77,12 @@ class BuildQuery {
     return query;
 
   }
+
+  static String getAllClassLevels() {
+    String query = """SELECT DISTINCT ${TextRes.classDataClassLevelJson} FROM _ 
+      WHERE ${TextRes.typeJson}='${TextRes.classDataTypeJson}' """;
+
+    return query;
+
+  }
 }

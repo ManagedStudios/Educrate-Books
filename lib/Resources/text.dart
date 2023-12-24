@@ -126,6 +126,12 @@
 
   static const String standardWarningAdd = "Standard Mahnung kopieren und als Tag hinzufügen";
 
+  static const String classLevel = ". Klasse";
+
+  static const String classLevels = "Jahrgangsstufen";
+
+  static const String switchStackBookView = "Wechseln zwischen Bücheransicht/Stapelansicht";
+
  
 
 
