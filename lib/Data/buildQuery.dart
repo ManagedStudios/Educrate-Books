@@ -85,4 +85,19 @@ class BuildQuery {
     return query;
 
   }
+
+  static String buildBookListQuery(int? currClassLevel) {
+    if(currClassLevel == null) return noResultQuery;
+
+    String whereClause = """AND ${TextRes.bookClassLevelJson}=$currClassLevel""";
+
+    String query = """SELECT META().id, ${TextRes.bookNameJson}, 
+      ${TextRes.bookSubjectJson}, ${TextRes.bookClassLevelJson}, 
+      ${TextRes.bookTrainingDirectionJson}, ${TextRes.bookExpectedAmountNeededJson},
+      ${TextRes.bookNowAvailableJson}, ${TextRes.bookTotalAvailableJson} FROM _ 
+      WHERE ${TextRes.typeJson}='${TextRes.bookTypeJson}' """;
+    query+=whereClause;
+
+    return query;
+  }
 }

@@ -35,7 +35,7 @@ class StudentDetailBookSection extends StatefulWidget {
 
 class _StudentDetailBookSectionState extends State<StudentDetailBookSection> {
 
-  List<BookLite> selectedBooks = []; //manage selectedBooks to take action on them
+  List<BookLite> selectedBooks = []; //manage selectedBooks in widget since no other widget is depended on this piece of information
   bool isOverlayOpen = false;
 
 

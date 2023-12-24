@@ -1,14 +1,17 @@
-import 'package:buecherteam_2023_desktop/UI/class_level_card.dart';
+import 'package:buecherteam_2023_desktop/Models/book_list_state.dart';
+import 'package:buecherteam_2023_desktop/UI/classes/class_level_card.dart';
 import 'package:buecherteam_2023_desktop/Util/mathUtil.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../Models/class_level_state.dart';
-import '../Resources/dimensions.dart';
-import '../Resources/text.dart';
+import '../../Models/class_level_state.dart';
+import '../../Resources/dimensions.dart';
+import '../../Resources/text.dart';
 
 class ClassLevelColumn extends StatefulWidget {
-  const ClassLevelColumn({super.key});
+  const ClassLevelColumn({super.key, required this.onSwitchBookView});
+
+  final Function() onSwitchBookView;
 
   @override
   State<ClassLevelColumn> createState() => _ClassLevelColumnState();
@@ -51,11 +54,14 @@ class _ClassLevelColumnState extends State<ClassLevelColumn> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(TextRes.classLevels,
-                style: Theme.of(context).textTheme.displayLarge),
+                  Expanded(
+                    child: Text(TextRes.classLevels,
+                                    style: Theme.of(context).textTheme.displayLarge,
+                    overflow: TextOverflow.ellipsis,),
+                  ),
                   Tooltip(
                     message: TextRes.switchStackBookView,
-                    child: IconButton(onPressed: (){},
+                    child: IconButton(onPressed: widget.onSwitchBookView,
                         icon: const Icon(Icons.compare_arrows,
                             size: Dimensions.iconButtonSizeMedium)),
                   )
@@ -74,6 +80,8 @@ class _ClassLevelColumnState extends State<ClassLevelColumn> {
                               classLevel: levels.data![index],
                               onClick: (selectedLevel){
                                 state.setSelectedClassLevel(selectedLevel);
+                                Provider.of<BookListState>(context, listen: false)
+                                    .setCurrClassLevel(selectedLevel);
                               },
                               clicked: levels.data![index] == state.selectedClassLevel),
                         ),

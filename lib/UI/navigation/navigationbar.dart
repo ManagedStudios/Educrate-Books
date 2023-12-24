@@ -47,10 +47,10 @@ class _LfgNavigationBarState extends State<LfgNavigationBar> {
               onClickAction: onStudentViewClicked,
               text: TextRes.student),
           const SizedBox(width: Dimensions.spaceMedium,),
-          NavigationButton(key: const Key(TextRes.book),
+          NavigationButton(key: const Key(TextRes.books),
               isClicked: isBookViewClicked,
               onClickAction: onBookViewClicked,
-              text: TextRes.book)
+              text: TextRes.books)
         ],
       ),
     );

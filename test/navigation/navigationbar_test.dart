@@ -27,7 +27,7 @@ void main () {
    await tester.pumpWidget(createWidgetUnderTest());
    await tester.pumpAndSettle(const Duration(milliseconds: 260));
    final studentButton = find.byKey(const Key(TextRes.student));
-   final bookButton = find.byKey(const Key(TextRes.book));
+   final bookButton = find.byKey(const Key(TextRes.books));
    expect(studentButton, findsOneWidget);
    expect(bookButton, findsOneWidget);
 
@@ -42,7 +42,7 @@ void main () {
     await tester.pumpWidget(createWidgetUnderTest());
     await tester.pumpAndSettle(const Duration(milliseconds: 260));
     final studentButton = find.byKey(const Key(TextRes.student));
-    final bookButton = find.byKey(const Key(TextRes.book));
+    final bookButton = find.byKey(const Key(TextRes.books));
     await tester.tap(bookButton);
     await tester.pumpAndSettle();
     final NavigationButton studentNavButton = tester.widget(studentButton);
@@ -56,7 +56,7 @@ void main () {
     await tester.pumpWidget(createWidgetUnderTest());
     await tester.pumpAndSettle(const Duration(milliseconds: 260));
     final studentButton = find.byKey(const Key(TextRes.student));
-    final bookButton = find.byKey(const Key(TextRes.book));
+    final bookButton = find.byKey(const Key(TextRes.books));
     await tester.tap(studentButton);
     await tester.pumpAndSettle();
     final NavigationButton studentNavButton = tester.widget(studentButton);
@@ -71,7 +71,7 @@ void main () {
     await tester.pumpAndSettle(const Duration(milliseconds: 260));
 
     final studentButton = find.byKey(const Key(TextRes.student));
-    final bookButton = find.byKey(const Key(TextRes.book));
+    final bookButton = find.byKey(const Key(TextRes.books));
 
     NavigationButton studentNavButton = tester.widget(studentButton);
     NavigationButton bookNavButton = tester.widget(bookButton);

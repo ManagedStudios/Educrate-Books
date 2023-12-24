@@ -2,7 +2,7 @@
 import 'package:buecherteam_2023_desktop/Data/student.dart';
 import 'package:flutter/material.dart';
 
-import '../Resources/dimensions.dart';
+import '../../Resources/dimensions.dart';
 
 class StudentCard extends StatefulWidget {
 

@@ -9,17 +9,17 @@ import 'package:buecherteam_2023_desktop/UI/keyboard_listener/keyboard_listener.
 import 'package:buecherteam_2023_desktop/UI/right_click_actions/actions_overlay.dart';
 import 'package:buecherteam_2023_desktop/UI/right_click_actions/delete_dialog.dart';
 import 'package:buecherteam_2023_desktop/UI/searchbar.dart';
-import 'package:buecherteam_2023_desktop/UI/student_card.dart';
+import 'package:buecherteam_2023_desktop/UI/students/student_card.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 
-import '../Resources/dimensions.dart';
-import '../Resources/text.dart';
-import 'all_students_column_util/all_students_dialog_builder.dart';
-import 'all_students_column_util/revert_student_delete_snackbar.dart';
-import 'all_students_column_util/selection_process_all_students.dart';
+import '../../Resources/dimensions.dart';
+import '../../Resources/text.dart';
+import '../all_students_column_util/all_students_dialog_builder.dart';
+import '../all_students_column_util/revert_student_delete_snackbar.dart';
+import '../all_students_column_util/selection_process_all_students.dart';
 
 class AllStudentsColumn extends StatefulWidget {
   const AllStudentsColumn({super.key, required this.onFocusChanged, required this.pressedKey});
@@ -64,7 +64,7 @@ class _AllStudentsColumnState extends State<AllStudentsColumn> {
               width: Dimensions.widthRightClickActionMenu,
               actions: { //inflate actions
                 TextRes.delete:(actions) {
-                  openDeleteDialog(context, actions, TextRes.student);
+                  openDeleteDialog(context, actions.map((e) => e.getDocId()!).toList(), TextRes.student);
                   clearanceNeeded = true;
                 }
               },

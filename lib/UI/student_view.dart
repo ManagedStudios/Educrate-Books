@@ -1,7 +1,7 @@
 
 import 'dart:math';
 
-import 'package:buecherteam_2023_desktop/UI/all_students_column.dart';
+import 'package:buecherteam_2023_desktop/UI/students/all_students_column.dart';
 
 import 'package:buecherteam_2023_desktop/UI/keyboard_listener/keyboard_listener.dart';
 import 'package:buecherteam_2023_desktop/UI/student_detail/student_detail_column.dart';

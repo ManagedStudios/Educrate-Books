@@ -28,7 +28,7 @@
   static const String studentSearchHint = 'Suche nach Schülernamen, Klassen und Ausbildungen';
 
   static const String student = "Schüler";
-  static const String book = "Bücher";
+  static const String book = "Buch";
 
   static const String addChipsHint = "Klicken zum Hinzufügen";
 
@@ -131,6 +131,10 @@
   static const String classLevels = "Jahrgangsstufen";
 
   static const String switchStackBookView = "Wechseln zwischen Bücheransicht/Stapelansicht";
+
+  static const String edit = "Bearbeiten";
+
+  static const String bookClassLevelJsonIndex = "classLevelIndex";
 
  
 

@@ -19,7 +19,7 @@ class BookView extends StatelessWidget {
     use sigmoid function for a smooth margin/space transitioning
      */
     final double marginWidth = mediaQuery.width * (0.02+0.045/(1+pow(2.71, -0.005*(mediaQuery.width-1150))));
-    final double space = mediaQuery.width * (0.02+0.04/(1+pow(2.71, -0.005*(mediaQuery.width-1150))));
+    final double space = mediaQuery.width * (0.01+0.02/(1+pow(2.71, -0.005*(mediaQuery.width-1150))));
 
     return Padding(
       padding: const EdgeInsets.only(top: Dimensions.paddingVeryBig),

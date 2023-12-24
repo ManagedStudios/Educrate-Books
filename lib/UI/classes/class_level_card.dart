@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../Resources/dimensions.dart';
-import '../Resources/text.dart';
+import '../../Resources/dimensions.dart';
+import '../../Resources/text.dart';
 
 class ClassLevelCard extends StatelessWidget {
   const ClassLevelCard({super.key, required this.classLevel, required this.onClick, required this.clicked});
@@ -35,9 +35,12 @@ class ClassLevelCard extends StatelessWidget {
                 ),
                 child: Row(
                   children: [
-                    Text(
-                      "$classLevel${TextRes.classLevel}",
-                      style: Theme.of(context).textTheme.bodyLarge,
+                    Expanded(
+                      child: Text(
+                        "$classLevel${TextRes.classLevel}",
+                        style: Theme.of(context).textTheme.bodyLarge,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
                   ]
                 ),
