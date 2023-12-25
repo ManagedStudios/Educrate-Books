@@ -53,8 +53,13 @@ class _BookCardState extends State<BookCard> {
                     if(widget.leadingWidget != null) //show leading widget on demand
                         widget.leadingWidget!,
 
-                    Text("${widget.bookLite.subject} ${widget.bookLite.classLevel}  ",
-                        style: Theme.of(context).textTheme.bodyLarge),
+                    Padding(
+                      padding: EdgeInsets.only(left: widget.leadingWidget == null
+                          ? Dimensions.paddingSmall
+                           : 0 ) ,
+                      child: Text("${widget.bookLite.subject} ${widget.bookLite.classLevel}  ",
+                          style: Theme.of(context).textTheme.bodyLarge),
+                    ),
                     Flexible( //names can be very long - show ... when too long
                       fit: FlexFit.loose,
                       child: Text(widget.bookLite.name,
