@@ -136,6 +136,24 @@
 
   static const String bookClassLevelJsonIndex = "classLevelIndex";
 
+  static const String basicTrainingDirection = "BASIC";
+
+  static const String slash = "/";
+
+  static const String hyphen = "—";
+
+  static const String trainingDirectionSelectionRowError = "Einen der Buttons wählen!";
+
+  static const String classLevelWithoutDot = "Jahrgangsstufe";
+
+  static const String trainingDirectionLabelInput = "Ausbildungslabel";
+
+  static const String trainingDirectionsNameError = "Bitte ein label eintippen";
+
+  static const String classLevelError = "Nur Zahlen(=Jahrgangsstufe) sind gültig!";
+
+  static const String trainingDirectionHyphen = "-";
+
  
 
 
