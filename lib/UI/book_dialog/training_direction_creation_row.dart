@@ -47,6 +47,11 @@ class _TrainingDirectionCreationRowState extends State<TrainingDirectionCreation
     classLevelError = TextRes.classLevelError;
     trainingDirectionsNameError = TextRes.trainingDirectionsNameError;
 
+    trainingDirectionsNameController.text = widget.currTrainingDirection;
+    classLevelController.text = widget.currClassLevel;
+    updateClassLevelError(classLevelController.text);
+    updateTrainingDirectionNameError(trainingDirectionsNameController.text);
+
   }
 
   @override

@@ -19,7 +19,7 @@ void main() {
         subject: "Englisch",
         classLevel: 11,
         trainingDirection: ["BASIC-11"],
-        expectedAmountNeeded: 50,
+        amountInStudentOwnership: 50,
         nowAvailable: 10,
         totalAvailable: 60);
 
@@ -29,9 +29,10 @@ void main() {
       TextRes.bookSubjectJson: validBook.subject,
       TextRes.bookClassLevelJson: validBook.classLevel,
       TextRes.bookTrainingDirectionJson: validBook.trainingDirection,
-      TextRes.bookExpectedAmountNeededJson: validBook.expectedAmountNeeded,
+      TextRes.bookAmountInStudentOwnershipJson: validBook.amountInStudentOwnership,
       TextRes.bookNowAvailableJson: validBook.nowAvailable,
       TextRes.bookTotalAvailableJson: validBook.totalAvailable,
+      TextRes.bookIsbnNumberJson:null,
       TextRes.typeJson:TextRes.bookTypeJson
     };
 
@@ -74,7 +75,7 @@ void main() {
     });
 
     test("Negative expectedAmountNeeded throws exception", () {
-      final invalidJson = {...validBookJson, TextRes.bookExpectedAmountNeededJson: -5};
+      final invalidJson = {...validBookJson, TextRes.bookAmountInStudentOwnershipJson: -5};
       expect(() => Book.fromJson(invalidJson), throwsA(isA<Exception>()));
     });
 

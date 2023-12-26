@@ -1,3 +1,4 @@
+import 'package:buecherteam_2023_desktop/Data/training_directions_data.dart';
 import 'package:buecherteam_2023_desktop/UI/book_dialog/training_direction_add_section.dart';
 import 'package:buecherteam_2023_desktop/UI/book_stack_view.dart';
 import 'package:buecherteam_2023_desktop/UI/book_view.dart';
@@ -13,6 +14,10 @@ class BookDepotView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<TrainingDirectionsData?> directions = [
+      TrainingDirectionsData("BASIC-10"),
+      TrainingDirectionsData("SAMSUNG-8"),
+      TrainingDirectionsData("INDEX-5")];
     return BookView(
         leftColumn: ClassLevelColumn(
           onSwitchBookView: () => context.go(BookStackView.routeName),
@@ -26,7 +31,10 @@ class BookDepotView extends StatelessWidget {
                   currSubject: "Englisch",
                   onTrainingDirectionUpdated: (tr) {
                    print(tr.map((e) => e?.label).toList());
-                  }),
+                  },
+              initialTrainingDirections: directions.toList(),
+              ),
+
             )
 
     );

@@ -4,22 +4,64 @@
 import 'package:buecherteam_2023_desktop/Resources/text.dart';
 import 'package:buecherteam_2023_desktop/Theme/color_scheme.dart';
 import 'package:buecherteam_2023_desktop/Theme/text_theme.dart';
+import 'package:buecherteam_2023_desktop/UI/book_depot_view.dart';
+import 'package:buecherteam_2023_desktop/UI/book_stack_view.dart';
 import 'package:buecherteam_2023_desktop/UI/navigation/navigation_button.dart';
-import 'package:buecherteam_2023_desktop/UI/navigation/navigationbar.dart';
+import 'package:buecherteam_2023_desktop/UI/student_view.dart';
+import 'package:buecherteam_2023_desktop/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:go_router/go_router.dart';
 
 void main () {
 
   Widget createWidgetUnderTest () {
-    return MaterialApp(
+    final _router = GoRouter(
+        initialLocation: StudentView.routeName,
+        routes: [
+          ShellRoute(builder: (BuildContext context, GoRouterState state, Widget child) {
+            return Homepage(child: child);
+          },routes: [
+            GoRoute(path: StudentView.routeName,
+                pageBuilder: (context, state) => CustomTransitionPage(
+                    child: Container(),
+                    transitionsBuilder: (context, animation, _, child) {
+                      return FadeTransition(
+                          opacity:
+                          CurveTween(curve: Curves.easeInCirc).animate(animation),
+                          child: child);
+                    })
+            ),
+            GoRoute(path: BookDepotView.routeName,
+                pageBuilder: (context, state) => CustomTransitionPage(
+                    child:  Container(),
+                    transitionsBuilder: (context, animation, _, child) {
+                      return FadeTransition(
+                          opacity:
+                          CurveTween(curve: Curves.easeInCirc).animate(animation),
+                          child: child);
+                    })
+            ),
+            GoRoute(path: BookStackView.routeName,
+                pageBuilder: (context, state) => CustomTransitionPage(
+                    child: Container(),
+                    transitionsBuilder: (context, animation, _, child) {
+                      return FadeTransition(
+                          opacity:
+                          CurveTween(curve: Curves.easeInCirc).animate(animation),
+                          child: child);
+                    })
+            )
+          ])
+        ]);
+    return MaterialApp.router(
       theme: ThemeData(
         colorScheme: lightColorScheme,
         useMaterial3: true,
         fontFamily: 'Helvetica Neue',
         textTheme: textTheme,
       ),
-      home: const LfgNavigationBar()
+      routerConfig: _router,
     );
   }
 

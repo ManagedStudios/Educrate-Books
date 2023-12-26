@@ -21,7 +21,7 @@ class TrainingDirectionButton extends StatelessWidget {
                 )
             ),
             padding: const MaterialStatePropertyAll(
-                EdgeInsets.all(0)
+                EdgeInsets.all(Dimensions.paddingBetweenVerySmallAndSmall)
             ),
             backgroundColor: MaterialStatePropertyAll(
                 isClicked
@@ -30,9 +30,11 @@ class TrainingDirectionButton extends StatelessWidget {
             )
         ),
         child: Text(
-          text,
-          style: Theme.of(context).textTheme.labelSmall,
-        )
+            text,
+            style: Theme.of(context).textTheme.labelSmall,
+            overflow: TextOverflow.ellipsis,
+          ),
+      
     );
   }
 }

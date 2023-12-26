@@ -1,10 +1,10 @@
 [
   {
-    "firstName": "Alexa",
-    "lastName": "Dietlein",
-    "classLevel": 7,
-    "classChar": "K",
-    "trainingDirections": ["ETH-TR"],
+    "firstName": "Hallo",
+    "lastName": "Posch",
+    "classLevel": 8,
+    "classChar": "B",
+    "trainingDirections": ["ETH-10", "BASIC-10"],
     "books": [],
     "amountOfBooks": 0,
     "tag":[],

@@ -3,7 +3,6 @@ import 'package:buecherteam_2023_desktop/Data/bookLite.dart';
 import 'package:buecherteam_2023_desktop/Data/lfg_chip.dart';
 import 'package:buecherteam_2023_desktop/Data/selectableItem.dart';
 import 'package:buecherteam_2023_desktop/Resources/text.dart';
-import 'package:buecherteam_2023_desktop/Util/comparison.dart';
 
 class Book implements LfgChip, BookLite, SelectableItem {
 
@@ -12,17 +11,19 @@ class Book implements LfgChip, BookLite, SelectableItem {
     required this.subject,
     required this.classLevel,
     required this.trainingDirection,
-    required this.expectedAmountNeeded,
-    required this.nowAvailable, required this.totalAvailable}) : _id = bookId;
+    required this.amountInStudentOwnership,
+    required this.nowAvailable, required this.totalAvailable,
+    this.isbnNumber}) : _id = bookId;
 
   final String _id;
   final String name;
   final String subject;
   final int classLevel;
   final List<String> trainingDirection;
-  final int expectedAmountNeeded;
+  final int amountInStudentOwnership;
   final int nowAvailable;
   final int totalAvailable;
+  final String? isbnNumber;
 
   String get id => _id;
 
@@ -33,16 +34,17 @@ class Book implements LfgChip, BookLite, SelectableItem {
         json[TextRes.bookSubjectJson] == null||
         json[TextRes.bookClassLevelJson] == null||
         json[TextRes.bookTrainingDirectionJson] == null||
-        json[TextRes.bookExpectedAmountNeededJson] == null||
+        json[TextRes.bookAmountInStudentOwnershipJson] == null||
         json[TextRes.bookNowAvailableJson] == null ||
         json[TextRes.bookTotalAvailableJson] == null) {
       throw Exception("Incomplete JSON");
     }
 
     final int classLevel = json[TextRes.bookClassLevelJson] is int ? json[TextRes.bookClassLevelJson] as int : int.parse(json[TextRes.bookClassLevelJson] as String);
-    final int expectedAmountNeeded = json[TextRes.bookExpectedAmountNeededJson] is int ? json[TextRes.bookExpectedAmountNeededJson] as int : int.parse(json[TextRes.bookExpectedAmountNeededJson] as String);
+    final int expectedAmountNeeded = json[TextRes.bookAmountInStudentOwnershipJson] is int ? json[TextRes.bookAmountInStudentOwnershipJson] as int : int.parse(json[TextRes.bookAmountInStudentOwnershipJson] as String);
     final int nowAvailable = json[TextRes.bookNowAvailableJson] is int ? json[TextRes.bookNowAvailableJson] as int : int.parse(json[TextRes.bookNowAvailableJson] as String);
     final int totalAvailable = json[TextRes.bookTotalAvailableJson] is int ? json[TextRes.bookTotalAvailableJson] as int : int.parse(json[TextRes.bookTotalAvailableJson] as String);
+    final String? isbnNumber = json[TextRes.bookIsbnNumberJson] != null ? (json[TextRes.bookIsbnNumberJson] as String) : null;
     late List<String> trDirections;
 
     try {
@@ -63,9 +65,10 @@ class Book implements LfgChip, BookLite, SelectableItem {
         subject: json[TextRes.bookSubjectJson] as String,
         classLevel: classLevel,
         trainingDirection: trDirections,
-        expectedAmountNeeded: expectedAmountNeeded,
+        amountInStudentOwnership: expectedAmountNeeded,
         nowAvailable: nowAvailable,
-        totalAvailable: totalAvailable
+        totalAvailable: totalAvailable,
+        isbnNumber: isbnNumber
       );
   }
 
@@ -75,10 +78,11 @@ class Book implements LfgChip, BookLite, SelectableItem {
       TextRes.bookSubjectJson: subject,
       TextRes.bookClassLevelJson: classLevel,
       TextRes.bookTrainingDirectionJson: trainingDirection,
-      TextRes.bookExpectedAmountNeededJson: expectedAmountNeeded,
+      TextRes.bookAmountInStudentOwnershipJson: amountInStudentOwnership,
       TextRes.bookNowAvailableJson: nowAvailable,
       TextRes.bookTotalAvailableJson: totalAvailable,
-      TextRes.typeJson:TextRes.bookTypeJson
+      TextRes.bookIsbnNumberJson:isbnNumber,
+      TextRes.typeJson:TextRes.bookTypeJson,
     };
     return data;
   }
@@ -91,27 +95,13 @@ class Book implements LfgChip, BookLite, SelectableItem {
 
     // Check if other is of type Book and then compare all relevant fields
     return other is Book &&
-        other._id == _id &&
-        other.name == name &&
-        other.subject == subject &&
-        other.classLevel == classLevel &&
-        areListsEqualIgnoringOrder(other.trainingDirection, trainingDirection) &&
-        other.expectedAmountNeeded == expectedAmountNeeded &&
-        other.nowAvailable == nowAvailable &&
-        other.totalAvailable == totalAvailable;
+        other._id == _id;
   }
 
   @override
   int get hashCode {
     // Combine hash codes of all fields for a unique hash code (bitwise shift and bitwise or)
-    return _id.hashCode ^
-    name.hashCode ^
-    subject.hashCode ^
-    classLevel.hashCode ^
-    trainingDirection.hashCode ^
-    expectedAmountNeeded.hashCode ^
-    nowAvailable.hashCode ^
-    totalAvailable.hashCode;
+    return _id.hashCode;
   }
 
   @override
@@ -132,9 +122,7 @@ class Book implements LfgChip, BookLite, SelectableItem {
 
   @override
   bool equals(BookLite other) {
-    return other.subject==subject
-        && other.classLevel==classLevel
-        && other.name == name;
+    return other.bookId == id;
   }
 
   @override
@@ -145,20 +133,17 @@ class Book implements LfgChip, BookLite, SelectableItem {
 
   @override
   String getDocId() {
-    // TODO: implement getDocId
-    throw UnimplementedError();
+    return id;
   }
 
   @override
   String getType() {
-    // TODO: implement getType
-    throw UnimplementedError();
+    return TextRes.bookTypeJson;
   }
 
   @override
   bool isDeletable() {
-    // TODO: implement isDeletable
-    throw UnimplementedError();
+    return true;
   }
 
 }

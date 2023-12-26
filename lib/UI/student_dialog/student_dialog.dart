@@ -4,6 +4,7 @@ import 'package:buecherteam_2023_desktop/Data/class_data.dart';
 import 'package:buecherteam_2023_desktop/Data/student.dart';
 import 'package:buecherteam_2023_desktop/Data/training_directions_data.dart';
 import 'package:buecherteam_2023_desktop/UI/student_dialog/student_dialog_content.dart';
+import 'package:buecherteam_2023_desktop/Util/stringUtil.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -107,7 +108,8 @@ class _StudentDialogState extends State<StudentDialog> {
             }
           }
         },
-            child: Text(widget.actionText))
+            child: Text(widget.actionText)
+        )
       ],
     );
   }
@@ -129,7 +131,7 @@ class _StudentDialogState extends State<StudentDialog> {
   }
 
   void onFirstNameChanged(String firstName) {
-    if(firstName.isNotEmpty) {
+    if(!isOnlyWhitespace(firstName)) {
       setState(() {
         firstNameError = null;
       });
@@ -138,7 +140,7 @@ class _StudentDialogState extends State<StudentDialog> {
   }
 
   void onLastNameChanged(String lastName) {
-    if(lastName.isNotEmpty) {
+    if(!isOnlyWhitespace(lastName)) {
       setState(() {
         lastNameError = null;
       });
@@ -153,7 +155,7 @@ class _StudentDialogState extends State<StudentDialog> {
   }
 
   bool isFirstNameValid(String firstName) {
-    if(firstName.isNotEmpty) {
+    if(!isOnlyWhitespace(firstName)) {
       return true;
     } else {
       setState(() {
@@ -164,7 +166,7 @@ class _StudentDialogState extends State<StudentDialog> {
   }
 
   bool isLastNameValid(String lastName) {
-    if(lastName.isNotEmpty) {
+    if(!isOnlyWhitespace(lastName)) {
       return true;
     } else {
       setState(() {

@@ -64,4 +64,6 @@ class Dimensions {
 
   static const int toolTipDuration = 1;
 
+  static const double widthFactorLarge = 0.8;
+
 }

@@ -153,7 +153,7 @@ void main () {
       subject: "Englisch",
       classLevel: 11,
       trainingDirection: ["BASIC-11"],
-      expectedAmountNeeded: 50,
+      amountInStudentOwnership: 50,
       nowAvailable: 10,
       totalAvailable: 60),
         Book(
@@ -162,7 +162,7 @@ void main () {
             subject: "Mathematics",
             classLevel: 11,
             trainingDirection: ["BASIC-11"],
-            expectedAmountNeeded: 45,
+            amountInStudentOwnership: 45,
             nowAvailable: 8,
             totalAvailable: 53),
         Book(
@@ -171,7 +171,7 @@ void main () {
             subject: "History",
             classLevel: 11,
             trainingDirection: ["BASIC-11"],
-            expectedAmountNeeded: 40,
+            amountInStudentOwnership: 40,
             nowAvailable: 12,
             totalAvailable: 52),
         Book(
@@ -180,7 +180,7 @@ void main () {
             subject: "Chemistry",
             classLevel: 11,
             trainingDirection: ["BASIC-11"],
-            expectedAmountNeeded: 55,
+            amountInStudentOwnership: 55,
             nowAvailable: 15,
             totalAvailable: 70),
         Book(
@@ -189,7 +189,7 @@ void main () {
             subject: "Biology",
             classLevel: 11,
             trainingDirection: ["BASIC-11"],
-            expectedAmountNeeded: 60,
+            amountInStudentOwnership: 60,
             nowAvailable: 20,
             totalAvailable: 80),
         Book(
@@ -198,7 +198,7 @@ void main () {
             subject: "Art",
             classLevel: 10,
             trainingDirection: ["BASIC-11"],
-            expectedAmountNeeded: 65,
+            amountInStudentOwnership: 65,
             nowAvailable: 25,
             totalAvailable: 90),
         Book(
@@ -207,7 +207,7 @@ void main () {
             subject: "Physics",
             classLevel: 10,
             trainingDirection: ["BASIC-11"],
-            expectedAmountNeeded: 70,
+            amountInStudentOwnership: 70,
             nowAvailable: 30,
             totalAvailable: 100)
       ];
@@ -277,7 +277,7 @@ void main () {
               subject: "Art",
               classLevel: 10,
               trainingDirection: ["BASIC-11"],
-              expectedAmountNeeded: 65,
+              amountInStudentOwnership: 65,
               nowAvailable: 25,
               totalAvailable: 90),
           Book(
@@ -286,7 +286,7 @@ void main () {
               subject: "Physics",
               classLevel: 10,
               trainingDirection: ["BASIC-11"],
-              expectedAmountNeeded: 70,
+              amountInStudentOwnership: 70,
               nowAvailable: 30,
               totalAvailable: 100)
           ].map((e) => e.getLabelText()).toList());
@@ -304,7 +304,7 @@ void main () {
                 subject: "Physics",
                 classLevel: 10,
                 trainingDirection: ["BASIC-11"],
-                expectedAmountNeeded: 70,
+                amountInStudentOwnership: 70,
                 nowAvailable: 30,
                 totalAvailable: 100)
           ].map((e) => e.getLabelText()).toList());

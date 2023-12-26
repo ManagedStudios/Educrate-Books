@@ -11,10 +11,13 @@ It consists of a mandatory trainingDirection with TrainingDirectionSelectionRow 
 n optional TrainingDirectionCreationRows
  */
 class TrainingDirectionAddSection extends StatefulWidget {
-  const TrainingDirectionAddSection({super.key, required this.currClass, required this.currSubject, required this.onTrainingDirectionUpdated});
+  const TrainingDirectionAddSection({super.key, required this.currClass, required this.currSubject,
+    required this.onTrainingDirectionUpdated, this.initialTrainingDirections});
 
-  final int currClass;
+  final int? currClass;
   final String currSubject;
+
+  final List<TrainingDirectionsData?>? initialTrainingDirections;
 
   final Function(List<TrainingDirectionsData?> trainingDirections) onTrainingDirectionUpdated;
 
@@ -25,6 +28,25 @@ class TrainingDirectionAddSection extends StatefulWidget {
 class _TrainingDirectionAddSectionState extends State<TrainingDirectionAddSection> {
   List<TrainingDirectionsData?> currTrainingDirectionsExposed = [null]; //add first element which is the selectionRow
   List<String> internalTrainingDirections = [""]; //add first element which is the selectionRow
+
+  bool isBasicClicked = false;
+  bool isSubjectClicked = false;
+
+  @override
+  void initState () {
+    super.initState();
+    if (widget.initialTrainingDirections != null) {
+      internalTrainingDirections =
+          widget.initialTrainingDirections!.map((e) => e!.label).toList();
+      currTrainingDirectionsExposed = widget.initialTrainingDirections!;
+      if(currTrainingDirectionsExposed[0]!.label.contains(TextRes.basicTrainingDirection)) {
+        isBasicClicked = true;
+      } else {
+        isSubjectClicked = true;
+      }
+    }
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,14 +64,24 @@ class _TrainingDirectionAddSectionState extends State<TrainingDirectionAddSectio
                   currTrainingDirectionsExposed[0] =
                       TrainingDirectionsData("${TextRes.basicTrainingDirection}${TextRes.trainingDirectionHyphen}${widget.currClass}");
                   widget.onTrainingDirectionUpdated(currTrainingDirectionsExposed);
+                  setState(() {
+                    isBasicClicked = true;
+                    isSubjectClicked = false;
+                  });
                 },
                 onSubjectClicked: (subject) {
                   currTrainingDirectionsExposed[0] =
                       TrainingDirectionsData("$subject${TextRes.trainingDirectionHyphen}${widget.currClass}");
                   widget.onTrainingDirectionUpdated(currTrainingDirectionsExposed);
+                  setState(() {
+                    isBasicClicked = false;
+                    isSubjectClicked = true;
+                  });
                 },
                 currSubjectText: widget.currSubject, //predefined params
-                currClass: widget.currClass),
+                currClass: widget.currClass,
+              isBasicClicked: isBasicClicked,
+              isSubjectClicked: isSubjectClicked,),
 
             /*
             then you can add n training directions that follow a pattern of

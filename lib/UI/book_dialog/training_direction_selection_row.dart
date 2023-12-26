@@ -7,12 +7,15 @@ import '../../Resources/dimensions.dart';
 class TrainingDirectionSelectionRow extends StatefulWidget {
   const TrainingDirectionSelectionRow({super.key, required this.onBasicClicked,
     required this.onSubjectClicked, required this.currSubjectText,
-    required this.currClass});
+    required this.currClass, required this.isBasicClicked, required this.isSubjectClicked});
 
   final Function() onBasicClicked;
   final Function(String subject) onSubjectClicked;
   final String currSubjectText;
-  final int currClass;
+  final int? currClass;
+
+  final bool isBasicClicked;
+  final bool isSubjectClicked;
 
   @override
   State<TrainingDirectionSelectionRow> createState() => _TrainingDirectionSelectionRowState();
@@ -21,8 +24,15 @@ class TrainingDirectionSelectionRow extends StatefulWidget {
 class _TrainingDirectionSelectionRowState extends State<TrainingDirectionSelectionRow> {
 
   bool hasError = true;
-  bool isBasicClicked = false;
-  bool isSubjectClicked = false;
+
+  @override
+  void initState() {
+    super.initState();
+     if (widget.isBasicClicked || widget.isSubjectClicked) {
+       hasError = false;
+     }
+   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -37,14 +47,12 @@ class _TrainingDirectionSelectionRowState extends State<TrainingDirectionSelecti
             children: [
               Row(
                 children: [
-                  TrainingDirectionButton(text: TextRes.basicTrainingDirection,
-                      isClicked: isBasicClicked,
+                  TrainingDirectionButton(
+                      text: TextRes.basicTrainingDirection,
+                      isClicked: widget.isBasicClicked,
                       onClick: () {
                         widget.onBasicClicked();
-                        setState(() {
-                          isBasicClicked = true;
-                          isSubjectClicked = false;
-                        });
+
                         if(hasError) {
                           setState(() {
                             hasError = false;
@@ -59,13 +67,10 @@ class _TrainingDirectionSelectionRowState extends State<TrainingDirectionSelecti
                   ),
                   const SizedBox(width: Dimensions.spaceSmall,),
                   TrainingDirectionButton(text: widget.currSubjectText,
-                      isClicked: isSubjectClicked,
+                      isClicked: widget.isSubjectClicked,
                       onClick: () {
                         widget.onSubjectClicked(widget.currSubjectText);
-                        setState(() {
-                          isBasicClicked = false;
-                          isSubjectClicked = true;
-                        });
+
                         if(hasError) {
                           setState(() {
                             hasError = false;
@@ -83,7 +88,7 @@ class _TrainingDirectionSelectionRowState extends State<TrainingDirectionSelecti
               IgnorePointer(
                 ignoring: true,
                 child: TrainingDirectionButton(
-                    text: widget.currClass.toString(),
+                    text: widget.currClass?.toString() ?? "",
                     isClicked: false,
                     onClick: (){}),
               )

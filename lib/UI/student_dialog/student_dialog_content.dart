@@ -4,6 +4,7 @@ import 'package:buecherteam_2023_desktop/Data/student.dart';
 import 'package:buecherteam_2023_desktop/Data/training_directions_data.dart';
 import 'package:buecherteam_2023_desktop/Resources/dimensions.dart';
 import 'package:buecherteam_2023_desktop/Resources/text.dart';
+import 'package:buecherteam_2023_desktop/UI/input/dialog_text_field.dart';
 import 'package:buecherteam_2023_desktop/UI/tag_dropdown/dropdown.dart';
 import 'package:flutter/material.dart';
 
@@ -93,33 +94,19 @@ class _StudentDialogContentState extends State<StudentDialogContent> {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Expanded(child: TextField(
-                            controller: firstNameController,
-                            onChanged: widget.onFirstNameChanged,
-                            autocorrect: false,
-                            decoration: InputDecoration(
-                              labelText: TextRes.firstNameHint,
-                                labelStyle: Theme.of(context).textTheme.labelMedium,
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(Dimensions.cornerRadiusMedium)
-                              ),
-                              errorText: widget.firstNameError
-                            ),
+                      Expanded(child: DialogTextField(
+                          controller: firstNameController,
+                          onTextChanged: widget.onFirstNameChanged,
+                          hint: TextRes.firstNameHint,
+                          errorText: widget.firstNameError,
                         )
                       ),
                       const SizedBox(width: Dimensions.spaceLarge,),
-                      Expanded(child: TextField(
+                      Expanded(child: DialogTextField(
                           controller: lastNameController,
-                          onChanged: widget.onLastNameChanged,
-                          decoration: InputDecoration(
-                              labelText: TextRes.lastNameHint,
-                              labelStyle: Theme.of(context).textTheme.labelMedium,
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(Dimensions.cornerRadiusMedium),
-                              ),
-                              errorText: widget.lastNameError
-                          ),
-                        )
+                          onTextChanged: widget.onLastNameChanged,
+                          hint: TextRes.lastNameHint,
+                          errorText: widget.lastNameError)
                       )
                     ],
                   ),

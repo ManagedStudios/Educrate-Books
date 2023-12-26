@@ -47,12 +47,18 @@ class StudentDetailState extends ChangeNotifier {
   Stream<List<BookLite>> streamBooks(String? searchQuery) async* {
     String query = BuildQuery.buildStudentDetailBookAddQuery(searchQuery);
 
+
     yield* database.streamLiveDocs(query).asyncMap((change) {
       return change.results
           .asStream()
-          .map((result) => database.toEntity(Book.fromJson, result))
-          .map((book) =>
-              BookLite(book.id, book.name, book.subject, book.classLevel))
+          .map((result) {
+
+            return database.toEntity(Book.fromJson, result);
+      } )
+          .map((book) {
+        return BookLite(book.id, book.name, book.subject, book.classLevel);
+            }
+              )
           .toList();
     });
   }

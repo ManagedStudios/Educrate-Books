@@ -18,7 +18,10 @@ class TrainingDirectionTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextField(
       controller: controller,
-      onChanged: onTextChanged,
+      onChanged: (text) {
+        controller.text = text.toUpperCase();
+        onTextChanged(controller.text);
+      },
       autocorrect: false,
       style: Theme.of(context).textTheme.labelSmall,
       decoration: InputDecoration(

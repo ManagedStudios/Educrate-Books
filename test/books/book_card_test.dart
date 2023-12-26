@@ -21,7 +21,7 @@ void main () {
   setUp(() {
     mockFunctions = MockFunctions();
     bookLite = BookLite("_bookId", "Green Line New 5", "Englisch", 10);
-    book = Book(bookId: "bookId", name: "Lambacher", subject: "subject", classLevel: 8, trainingDirection: [], expectedAmountNeeded: 100, nowAvailable: 290, totalAvailable: 91);
+    book = Book(bookId: "bookId", name: "Lambacher", subject: "subject", classLevel: 8, trainingDirection: [], amountInStudentOwnership: 100, nowAvailable: 290, totalAvailable: 91);
   });
 
   Widget createWidgetUnderTest(bool isClicked, int? studentOwnerNum,

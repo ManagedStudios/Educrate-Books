@@ -69,8 +69,9 @@ class BuildQuery {
     }
     String query = """SELECT META().id, ${TextRes.bookNameJson}, 
       ${TextRes.bookSubjectJson}, ${TextRes.bookClassLevelJson}, 
-      ${TextRes.bookTrainingDirectionJson}, ${TextRes.bookExpectedAmountNeededJson},
-      ${TextRes.bookNowAvailableJson}, ${TextRes.bookTotalAvailableJson} FROM _ 
+      ${TextRes.bookTrainingDirectionJson}, ${TextRes.bookAmountInStudentOwnershipJson},
+      ${TextRes.bookNowAvailableJson}, ${TextRes.bookTotalAvailableJson}, 
+      ${TextRes.bookIsbnNumberJson} FROM _ 
       WHERE ${TextRes.typeJson}='${TextRes.bookTypeJson}' """;
     query+=ftsQueryMatch;
 
@@ -93,8 +94,9 @@ class BuildQuery {
 
     String query = """SELECT META().id, ${TextRes.bookNameJson}, 
       ${TextRes.bookSubjectJson}, ${TextRes.bookClassLevelJson}, 
-      ${TextRes.bookTrainingDirectionJson}, ${TextRes.bookExpectedAmountNeededJson},
-      ${TextRes.bookNowAvailableJson}, ${TextRes.bookTotalAvailableJson} FROM _ 
+      ${TextRes.bookTrainingDirectionJson}, ${TextRes.bookAmountInStudentOwnershipJson},
+      ${TextRes.bookNowAvailableJson}, ${TextRes.bookTotalAvailableJson}, 
+      ${TextRes.bookIsbnNumberJson} FROM _ 
       WHERE ${TextRes.typeJson}='${TextRes.bookTypeJson}' """;
     query+=whereClause;
 

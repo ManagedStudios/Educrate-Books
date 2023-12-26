@@ -62,7 +62,7 @@
 
   static const String bookTrainingDirectionJson = 'trainingDirection';
 
-  static const bookExpectedAmountNeededJson = 'expectedAmountNeeded';
+  static const bookAmountInStudentOwnershipJson = 'amountInStudentOwnership';
 
   static const bookNowAvailableJson = 'nowAvailable';
 
@@ -153,6 +153,32 @@
   static const String classLevelError = "Nur Zahlen(=Jahrgangsstufe) sind gültig!";
 
   static const String trainingDirectionHyphen = "-";
+
+  static const String bookNameHint = "Buchname";
+
+  static const String bookSubjectHint = "Fach des Buchs";
+
+  static const String classLevelHint = "Jahrgangsstufe";
+
+  static const String bookAmountHint = "Bücheranzahl";
+
+  static const String bookIsbnNumberJson = "isbnNumber";
+
+  static const String availableClassLevelError = "Bitte eine der folgenden Klassen: ";
+
+  static const String toInsert = "eingeben";
+
+  static String bookSubjectError = "Bitte das Fach eingeben!";
+
+  static String bookNameError = "Bitte einen Buchnamen eingeben!";
+
+  static String bookAmountError = "Den Buchbestand als Zahl eingeben!";
+
+  static const String trainingDirectionsAdd = "Ausbildungen zuordnen";
+
+  static const isbnHint = "ISBN (optional)";
+
+
 
  
 
