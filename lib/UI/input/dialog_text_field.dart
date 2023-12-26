@@ -25,7 +25,7 @@ class DialogTextField extends StatelessWidget {
             labelText: hint,
             labelStyle: Theme.of(context).textTheme.labelMedium,
             border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(Dimensions.cornerRadiusMedium)
+                borderRadius: BorderRadius.circular(Dimensions.cornerRadiusSmall)
             ),
             errorText: errorText,
           isDense: true

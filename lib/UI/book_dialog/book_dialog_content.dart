@@ -68,36 +68,25 @@ class _BookDialogContentState extends State<BookDialogContent> {
     return SizedBox(
       width: dialogWidth,
       height: dialogHeight,
-      child: Padding(
-        padding: const EdgeInsets.all(Dimensions.paddingMedium),
-        child: Column(
+      child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.all(Dimensions.paddingSmall),
+              padding: const EdgeInsets.only(left: Dimensions.paddingMedium),
               child: Row(
                 children: [
                   Expanded(
                     child: TextField(
                   controller: bookNameController,
                   onChanged: widget.onBookNameChanged,
+                  style: Theme.of(context).textTheme.labelMedium,
                   decoration: InputDecoration(
                       hintText: TextRes.bookNameHint,
                       errorText: widget.bookNameError,
                       border: InputBorder.none
                       ),
                     )
-                  ),
-                  Expanded(
-                      child: TextField(
-                        controller: isbnController,
-                        onChanged: widget.onIsbnChanged,
-                        decoration: const InputDecoration(
-                            hintText: TextRes.isbnHint,
-                            border: InputBorder.none
-                        ),
-                      )
-                  ),
+                  )
                 ]
               ),
             ),
@@ -120,13 +109,26 @@ class _BookDialogContentState extends State<BookDialogContent> {
                 )
               ],
             ),
-                FractionallySizedBox(
-                  widthFactor: Dimensions.widthFactorLarge,
-                    child:DialogTextField(controller: classLevelController,
-                    onTextChanged: widget.onClassLevelChanged,
-                        hint: TextRes.classLevelHint,
-                        errorText: widget.classLevelError)
+                Row(
+                  children: [
+                    Expanded(
+                    flex: 3,
+                      child:DialogTextField(controller: classLevelController,
+                      onTextChanged: widget.onClassLevelChanged,
+                          hint: TextRes.classLevelHint,
+                          errorText: widget.classLevelError)
 
+                  ),
+                    Expanded(
+                      flex: 2,
+                        child: DialogTextField(
+                          controller: isbnController,
+                          onTextChanged: widget.onIsbnChanged,
+                          hint: TextRes.isbnHint,
+                          errorText: null,
+                          ),
+                        )
+                  ]
                 ),
             Padding(
               padding: const EdgeInsets.only(left: Dimensions.paddingSmall, top: Dimensions.paddingSmall),
@@ -142,7 +144,6 @@ class _BookDialogContentState extends State<BookDialogContent> {
             )
           ],
         ),
-      ),
     );
   }
 
