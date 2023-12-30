@@ -1,7 +1,7 @@
 import 'package:buecherteam_2023_desktop/Models/book_list_state.dart';
 import 'package:buecherteam_2023_desktop/Resources/dimensions.dart';
 import 'package:buecherteam_2023_desktop/Resources/text.dart';
-import 'package:buecherteam_2023_desktop/UI/book_dialog/book_dialog.dart';
+import 'package:buecherteam_2023_desktop/UI/book_dialog/add_book_dialog.dart';
 import 'package:buecherteam_2023_desktop/UI/books/book_depot_book_list.dart';
 import 'package:buecherteam_2023_desktop/UI/right_click_actions/delete_dialog.dart';
 import 'package:flutter/material.dart';
@@ -32,11 +32,7 @@ class _BookDepotBookSectionState extends State<BookDepotBookSection> {
             children: [
               Tooltip(
                 message: "${TextRes.books} ${TextRes.toAdd}",
-                child: IconButton(onPressed: (){
-                  showDialog(context: context, builder: (context) {
-                    return BookDialog(title: "title", book: null, actionText: "Speichern");
-                  }).then((value) => print(value.toString()));
-                },
+                child: IconButton(onPressed: () => addBook(context),
                     icon: const Icon(Icons.add, size: Dimensions.iconButtonSizeMedium,)),
               )
             ],
@@ -56,7 +52,6 @@ class _BookDepotBookSectionState extends State<BookDepotBookSection> {
                           actions: { //inflate actions
                             TextRes.delete:(_) {
                               openDeleteDialog(context, [bookListState.currBookId!], TextRes.book);
-
                             },
                             TextRes.edit:(_){
 

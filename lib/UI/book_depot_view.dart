@@ -15,9 +15,9 @@ class BookDepotView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<TrainingDirectionsData?> directions = [
-      TrainingDirectionsData("BASIC-10"),
-      TrainingDirectionsData("SAMSUNG-8"),
-      TrainingDirectionsData("INDEX-5")];
+      TrainingDirectionsData("ENGLISCH-10"),
+      TrainingDirectionsData("samsung-8"),
+      TrainingDirectionsData("index-5")];
     return BookView(
         leftColumn: ClassLevelColumn(
           onSwitchBookView: () => context.go(BookStackView.routeName),
@@ -30,7 +30,7 @@ class BookDepotView extends StatelessWidget {
                   currClass: 10,
                   currSubject: "Englisch",
                   onTrainingDirectionUpdated: (tr) {
-                   print(tr.map((e) => e?.label).toList());
+                      print(tr.map((e) => e?.label).toList());
                   },
               initialTrainingDirections: directions.toList(),
               ),

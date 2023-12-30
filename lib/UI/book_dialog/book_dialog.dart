@@ -98,8 +98,8 @@ class _BookDialogState extends State<BookDialog> {
               context.pop([
                 bookName,
                 bookSubject,
-                int.parse(classLevel),
-                trainingDirections,
+                classLevel,
+                trainingDirections.map((e) => e!.label).toList(),
                 isbnNumber,
                 amount
               ]);
@@ -122,22 +122,22 @@ class _BookDialogState extends State<BookDialog> {
   }
 
   void onBookSubjectChanged(String text) {
-    setState(() { //trigger rebuild so that the trainingDirectionsAddSection is updated properly
       if (isBookSubjectValid (text)) {
-        bookSubjectError = null;
+        setState(() {
+          bookSubjectError = null;
+        });
       }
       bookSubject = text;
-    });
-
   }
 
   void onClassLevelChanged(String text) {
-    setState(() {//trigger rebuild so that the trainingDirectionsAddSection is updated properly
       if (isClassLevelValid (text)) {
-        classLevelError = null;
+        setState(() {
+          classLevelError = null;
+        });
       }
       classLevel = text;
-    });
+
 
   }
 

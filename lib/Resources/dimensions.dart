@@ -66,4 +66,8 @@ class Dimensions {
 
   static const double widthFactorLarge = 0.8;
 
+  static const int durationMedium = 500;
+
+  static const int durationShort = 150;
+
 }

@@ -10,18 +10,23 @@ import 'package:provider/provider.dart';
 import '../../Resources/text.dart';
 
 class AddBookStudentDetailDialogContent extends StatefulWidget {
-  const AddBookStudentDetailDialogContent({super.key, required this.onFocusChanged, required this.onAddSelectedBook, required this.onRemoveSelectedBook});
+  const AddBookStudentDetailDialogContent(
+      {super.key,
+      required this.onFocusChanged,
+      required this.onAddSelectedBook,
+      required this.onRemoveSelectedBook});
 
   final Function(bool focused) onFocusChanged;
   final Function(BookLite bookLite) onAddSelectedBook;
   final Function(BookLite bookLite) onRemoveSelectedBook;
 
   @override
-  State<AddBookStudentDetailDialogContent> createState() => _AddBookStudentDetailDialogContentState();
+  State<AddBookStudentDetailDialogContent> createState() =>
+      _AddBookStudentDetailDialogContentState();
 }
 
-class _AddBookStudentDetailDialogContentState extends State<AddBookStudentDetailDialogContent> {
-
+class _AddBookStudentDetailDialogContentState
+    extends State<AddBookStudentDetailDialogContent> {
   String? ftsBookQuery;
   int amountOfQueriedBooks = 0;
 
@@ -30,39 +35,52 @@ class _AddBookStudentDetailDialogContentState extends State<AddBookStudentDetail
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        LfgSearchbar(onChangeText: (text) {
-          setFtsBookQuery(text);
-        }, amountOfFilteredItems: amountOfQueriedBooks,
+        LfgSearchbar(
+            onChangeText: (text) {
+              setFtsBookQuery(text);
+            },
+            amountOfFilteredItems: amountOfQueriedBooks,
             onFocusChange: widget.onFocusChanged,
             onTap: () {},
             amountType: TextRes.books),
-        const SizedBox(height: Dimensions.spaceMedium,),
+        const SizedBox(
+          height: Dimensions.spaceMedium,
+        ),
 
         /*
         use a streamBuilder to fetch all available books matching the search query (look at LFGSearchbar implemented beneath)
          */
-        StreamBuilder(stream: Provider.of<StudentDetailState>(context, listen: false)
-            .streamBooks(ftsBookQuery),
+        StreamBuilder(
+            stream: Provider.of<StudentDetailState>(context, listen: false)
+                .streamBooks(ftsBookQuery),
             builder: (context, books) {
+              /*
+              * If the amount of queried books changes, update the amountOfQueriedBooks
+              * This is necessary since the amount of queried books is not updated when the user deletes the search query
+              * */
               if (books.hasData && books.data!.length != amountOfQueriedBooks) {
                 SchedulerBinding.instance.addPostFrameCallback((_) {
+                  //wait for the frame to be rendered to avoid setState during build
                   setState(() {
                     amountOfQueriedBooks = books.data!.length;
                   });
                 });
               }
 
-              return Expanded(child: AddBookStudentDetailList(
-                  books: books.data ?? [],
+              return Expanded(
+                  child: AddBookStudentDetailList(
+                books: books.data ?? [],
                 onAddSelectedBook: widget.onAddSelectedBook,
                 onRemoveSelectedBook: widget.onRemoveSelectedBook,
-                )
-              );
+              ));
             })
       ],
     );
   }
 
+/*
+* This method is used to update the ftsBookQuery
+* */
   void setFtsBookQuery(String text) {
     if (text == "") {
       setState(() {
@@ -71,15 +89,14 @@ class _AddBookStudentDetailDialogContentState extends State<AddBookStudentDetail
     } else {
       List<String> parts = text
           .replaceAll("*",
-          "") //"*" can lead to crashes of couchbase lite since it is a command
+              "") //"*" can lead to crashes of couchbase lite since it is a command
           .trim() //delete all whitespace to avoid "word AND  *" queries leading to crashes
           .split(RegExp(
-          r'(?<=[0-9])(?=[A-Za-z])|\s+')); //use a regex to split up words and classLevel from classChar
+              r'(?<=[0-9])(?=[A-Za-z])|\s+')); //use a regex to split up words and classLevel from classChar
       final query = '${parts.join('* AND ')}*';
 
       setState(() {
         ftsBookQuery = query;
-
       });
     }
   }

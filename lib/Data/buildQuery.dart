@@ -102,4 +102,16 @@ class BuildQuery {
 
     return query;
   }
+
+  static String getSingleTrainingDirection(String trainingDirection) {
+
+    String whereClause = """AND ${TextRes.trainingDirectionsJson}='$trainingDirection'""";
+
+    String query = """SELECT ${TextRes.trainingDirectionsJson} FROM _
+    WHERE ${TextRes.typeJson}='${TextRes.trainingDirectionsTypeJson}' """;
+    query+=whereClause;
+
+    return query;
+
+  }
 }

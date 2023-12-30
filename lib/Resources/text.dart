@@ -176,7 +176,11 @@
 
   static const String trainingDirectionsAdd = "Ausbildungen zuordnen";
 
-  static const isbnHint = "ISBN (optional)";
+  static const String isbnHint = "ISBN (optional)";
+
+  static const String addBook = "Buch hinzufügen";
+
+  static String trainingDirectionsJsonIndex = "trainingDirectionLabelIndex";
 
 
 

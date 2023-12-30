@@ -79,7 +79,7 @@ class _StudentCardState extends State<StudentCard> {
                       children: [
                         Column( //1 Column
                           children: [
-                            Text("$classLevel${widget.student.classChar} — ",
+                            Text("$classLevel${widget.student.classChar} – ",
                             style: Theme.of(context).textTheme.bodyLarge,)
                           ],
                         ),

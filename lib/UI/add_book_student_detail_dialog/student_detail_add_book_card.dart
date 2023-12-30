@@ -5,7 +5,8 @@ import '../../Data/bookLite.dart';
 import '../../Resources/dimensions.dart';
 
 class StudentDetailAddBookCard extends StatelessWidget {
-  const StudentDetailAddBookCard({super.key,
+  const StudentDetailAddBookCard({
+    super.key,
     required this.onCheckChanged,
     required this.bookLite,
     required this.isChecked,
@@ -13,7 +14,7 @@ class StudentDetailAddBookCard extends StatelessWidget {
 
   final Function(BookLite bookLite) onCheckChanged;
   final BookLite bookLite;
-  final bool isChecked;
+  final bool isChecked; //is book already checked
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +33,7 @@ class StudentDetailAddBookCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(Dimensions.cornerRadiusSmall),
           ),
           onChanged: (checked) {
+            //onChanged is called when the checkbox is clicked
             onCheckChanged(bookLite);
           },
         ),
@@ -41,4 +43,3 @@ class StudentDetailAddBookCard extends StatelessWidget {
     );
   }
 }
-

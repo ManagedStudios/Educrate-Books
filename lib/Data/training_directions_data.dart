@@ -32,5 +32,15 @@ class TrainingDirectionsData implements LfgChip {
     return getLabelText().toUpperCase().compareTo(chip.getLabelText().toUpperCase());
   }
 
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true; // If both references are the same
+
+    return other is TrainingDirectionsData && label==other.label;
+  }
+
+  @override
+  int get hashCode => label.hashCode;
+
 
 }

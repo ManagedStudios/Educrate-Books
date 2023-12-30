@@ -43,6 +43,9 @@ class _BookDialogContentState extends State<BookDialogContent> {
   late TextEditingController isbnController;
   late TextEditingController amountController;
 
+  late String currClass;
+  late String currSubject;
+
   @override
   void initState () {
     super.initState();
@@ -57,6 +60,9 @@ class _BookDialogContentState extends State<BookDialogContent> {
     classLevelController.text = widget.book?.classLevel.toString() ?? "";
     isbnController.text = widget.book?.isbnNumber?.toString() ?? "";
     amountController.text = widget.book?.totalAvailable.toString() ?? "";
+
+    currClass = classLevelController.text;
+    currSubject = bookSubjectController.text;
   }
 
   @override
@@ -96,7 +102,12 @@ class _BookDialogContentState extends State<BookDialogContent> {
                   flex: 3,
                   child: DialogTextField(
                       controller: bookSubjectController,
-                      onTextChanged: widget.onBookSubjectChanged,
+                      onTextChanged: (text) {
+                        widget.onBookSubjectChanged(text);
+                        setState(() {
+                          currSubject = text;
+                        });
+                      } ,
                       hint: TextRes.bookSubjectHint,
                       errorText: widget.bookSubjectError),
                 ),
@@ -114,7 +125,12 @@ class _BookDialogContentState extends State<BookDialogContent> {
                     Expanded(
                     flex: 3,
                       child:DialogTextField(controller: classLevelController,
-                      onTextChanged: widget.onClassLevelChanged,
+                      onTextChanged: (text) {
+                        widget.onClassLevelChanged(text);
+                        setState(() {
+                          currClass = text;
+                        });
+                      },
                           hint: TextRes.classLevelHint,
                           errorText: widget.classLevelError)
 
@@ -138,8 +154,8 @@ class _BookDialogContentState extends State<BookDialogContent> {
             ),
             Expanded(
                 child: TrainingDirectionAddSection(
-                    currClass: int.tryParse(classLevelController.text),
-                    currSubject: bookSubjectController.text.toUpperCase(),
+                    currClass: int.tryParse(currClass),
+                    currSubject: currSubject.toUpperCase(),
                     onTrainingDirectionUpdated: widget.onTrainingDirectionsChanged)
             )
           ],

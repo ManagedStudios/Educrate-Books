@@ -8,22 +8,26 @@ import 'package:buecherteam_2023_desktop/UI/input/dialog_text_field.dart';
 import 'package:buecherteam_2023_desktop/UI/tag_dropdown/dropdown.dart';
 import 'package:flutter/material.dart';
 
-
 /*
   StudentDialogContent holds all of the content for a dialog to
   create or update a student
  */
 
 class StudentDialogContent extends StatefulWidget {
-
-
-  const StudentDialogContent({super.key, this.student,
-    required this.classes, required this.onStudentClassUpdated,
-    required this.trainingDirections,
-    required this.onStudentTrainingDirectionsUpdated,
-    this.firstNameError, this.lastNameError, this.classError,
-    required this.onFirstNameChanged, required this.onLastNameChanged,
-    required this.loading, required this.studentClass});
+  const StudentDialogContent(
+      {super.key,
+      this.student,
+      required this.classes,
+      required this.onStudentClassUpdated,
+      required this.trainingDirections,
+      required this.onStudentTrainingDirectionsUpdated,
+      this.firstNameError,
+      this.lastNameError,
+      this.classError,
+      required this.onFirstNameChanged,
+      required this.onLastNameChanged,
+      required this.loading,
+      required this.studentClass});
 
   final Student? student; //update => existing student passed
 
@@ -35,9 +39,9 @@ class StudentDialogContent extends StatefulWidget {
   final List<ClassData> classes;
   final Function(ClassData? classData) onStudentClassUpdated;
 
-  final Function(List<TrainingDirectionsData> trainingDirections) onStudentTrainingDirectionsUpdated;
+  final Function(List<TrainingDirectionsData> trainingDirections)
+      onStudentTrainingDirectionsUpdated;
   final List<TrainingDirectionsData> trainingDirections;
-
 
   final String? firstNameError;
   final String? lastNameError;
@@ -50,17 +54,19 @@ class StudentDialogContent extends StatefulWidget {
 }
 
 class _StudentDialogContentState extends State<StudentDialogContent> {
-
   late TextEditingController firstNameController;
   late TextEditingController lastNameController;
 
+  /*
+  Initialize the text controllers with the student data if available
+  */
   @override
   void initState() {
     super.initState();
     firstNameController = TextEditingController();
     lastNameController = TextEditingController();
-    insertTextController(widget.student); //initialData for firstName and lastName if available
-
+    insertTextController(
+        widget.student); //initialData for firstName and lastName if available
   }
 
   @override
@@ -72,120 +78,157 @@ class _StudentDialogContentState extends State<StudentDialogContent> {
 
   @override
   Widget build(BuildContext context) {
-    double dialogWidth =
-    MediaQuery.of(context).size.width*0.5>500?MediaQuery.of(context).size.width*0.5:500;
-    double dialogHeight =
-        MediaQuery.of(context).size.height*0.7;
+    double dialogWidth = MediaQuery.of(context).size.width * 0.5 > 500
+        ? MediaQuery.of(context).size.width * 0.5
+        : 500;
+    double dialogHeight = MediaQuery.of(context).size.height * 0.7;
     return SizedBox(
-            width: dialogWidth,
-            height: dialogHeight,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                if(widget.loading) ...[const Padding(
-                  padding: EdgeInsets.all(Dimensions.paddingSmall),
-                  child: LinearProgressIndicator(),
-                )],
-                /*
+      width: dialogWidth,
+      height: dialogHeight,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (widget.loading) ...[
+            const Padding(
+              padding: EdgeInsets.all(Dimensions.paddingSmall),
+              child: LinearProgressIndicator(),
+            )
+          ],
+          /*
                 first segment are the two textfields for first name and last name
                  */
-                SizedBox(
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(child: DialogTextField(
-                          controller: firstNameController,
-                          onTextChanged: widget.onFirstNameChanged,
-                          hint: TextRes.firstNameHint,
-                          errorText: widget.firstNameError,
-                        )
-                      ),
-                      const SizedBox(width: Dimensions.spaceLarge,),
-                      Expanded(child: DialogTextField(
-                          controller: lastNameController,
-                          onTextChanged: widget.onLastNameChanged,
-                          hint: TextRes.lastNameHint,
-                          errorText: widget.lastNameError)
-                      )
-                    ],
-                  ),
+          SizedBox(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                    child: DialogTextField(
+                  controller: firstNameController,
+                  onTextChanged: (text) {
+                    if (text.isNotEmpty) {
+                      firstNameController.text = firstNameController.text[0].toUpperCase()+firstNameController.text.substring(1);
+                    }
+                    widget.onFirstNameChanged(firstNameController.text);
+                  } ,
+                  hint: TextRes.firstNameHint,
+                  errorText: widget.firstNameError,
+                )),
+                const SizedBox(
+                  width: Dimensions.spaceLarge,
                 ),
+                Expanded(
+                    child: DialogTextField(
+                        controller: lastNameController,
+                        onTextChanged: (text) {
+                          if (text.isNotEmpty) {
+                            lastNameController.text = lastNameController.text[0].toUpperCase()+lastNameController.text.substring(1);
+                          }
+                          widget.onLastNameChanged(lastNameController.text);
 
-                const SizedBox(height: Dimensions.spaceMedium,),
-              /*
+                        },
+                        hint: TextRes.lastNameHint,
+                        errorText: widget.lastNameError))
+              ],
+            ),
+          ),
+          const SizedBox(
+            height: Dimensions.spaceMedium,
+          ),
+          /*
               Second segment to select the class
                */
-                Padding(
-                  padding: const EdgeInsets.only(left: Dimensions.paddingSmall, top: Dimensions.paddingSmall),
-                  child: Text(TextRes.classDataDropdownDescription,
-                  style: Theme.of(context).textTheme.bodyLarge,
-                  ),
-                ),
-                if(widget.classError!=null) ...[ //show an error message on demand
-                  Padding(
-                    padding: const EdgeInsets.only(left: Dimensions.paddingSmall),
-                    child: Text(widget.classError!,
-                    style: Theme.of(context).textTheme.labelSmall
-                        ?.copyWith(color: Theme.of(context).colorScheme.error, height: Dimensions.tightTextHeight)
-                    ),
-                  )
-                ],
-                Padding(
-                  padding: const EdgeInsets.all(Dimensions.paddingBetweenVerySmallAndSmall),
-                  child: Dropdown<ClassData>(availableChips: widget.classes,
-                      selectedChips: widget.student!=null
-                          ?[ClassData(widget.student!.classLevel, widget.student!.classChar)]
-                          :widget.studentClass, //preserve state even after parent rebuilds
-                      onAddChip: (classChip){widget.onStudentClassUpdated(classChip as ClassData);},
-                      onDeleteChip: (_){},
-                      multiSelect: false, width: dialogWidth*0.8,
-                      onCloseOverlay: (classes) {
-                        widget.onStudentClassUpdated(classes.isNotEmpty
-                            ?classes[0] as ClassData
-                            :null);
-                              },
-                          ),
-                ),
-                const SizedBox(height: Dimensions.spaceMedium,),
+          Padding(
+            padding: const EdgeInsets.only(
+                left: Dimensions.paddingSmall, top: Dimensions.paddingSmall),
+            child: Text(
+              TextRes.classDataDropdownDescription,
+              style: Theme.of(context).textTheme.bodyLarge,
+            ),
+          ),
+          if (widget.classError != null) ...[
+            //show an error message on demand
+            Padding(
+              padding: const EdgeInsets.only(left: Dimensions.paddingSmall),
+              child: Text(widget.classError!,
+                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                      color: Theme.of(context).colorScheme.error,
+                      height: Dimensions.tightTextHeight)),
+            )
+          ],
+          Padding(
+            padding: const EdgeInsets.all(
+                Dimensions.paddingBetweenVerySmallAndSmall),
+            child: Dropdown<ClassData>(
+              availableChips: widget.classes,
+              selectedChips: widget.student != null
+                  ? [
+                      ClassData(
+                          widget.student!.classLevel, widget.student!.classChar)
+                    ]
+                  : widget
+                      .studentClass, //preserve state even after parent rebuilds
+              onAddChip: (classChip) {
+                widget.onStudentClassUpdated(classChip as ClassData);
+              },
+              onDeleteChip: (_) {},
+              multiSelect: false, width: dialogWidth * 0.8,
+              onCloseOverlay: (classes) {
+                widget.onStudentClassUpdated(
+                    classes.isNotEmpty ? classes[0] as ClassData : null);
+              },
+            ),
+          ),
+          const SizedBox(
+            height: Dimensions.spaceMedium,
+          ),
 
-                /*
+          /*
                 Third segment to select training directions
                  */
 
-                Padding(
-                  padding: const EdgeInsets.only(left: Dimensions.paddingSmall, top: Dimensions.paddingSmall),
-                  child: Text(TextRes.trainingDirectionsDataDropdownDescription,
-                    style: Theme.of(context).textTheme.bodyLarge,
-                  ),
-                ),
-
-                Padding(
-                  padding: const EdgeInsets.all(Dimensions.paddingBetweenVerySmallAndSmall),
-                  child: Dropdown(availableChips: widget.trainingDirections,
-                      selectedChips: widget.student!=null
-                          ?widget.student!.trainingDirections.map((e) => TrainingDirectionsData(e)).toList()
-                          :List<TrainingDirectionsData>.empty(),
-                        onAddChip: (_){}, onDeleteChip: (_){},
-                      multiSelect: true, width: dialogWidth*0.8,
-                      onCloseOverlay: (trainingDirections) =>
-                          widget.onStudentTrainingDirectionsUpdated(
-                              trainingDirections.map((e) => e as TrainingDirectionsData).toList())
-                  ),
-                ),
-
-
-              ],
+          Padding(
+            padding: const EdgeInsets.only(
+                left: Dimensions.paddingSmall, top: Dimensions.paddingSmall),
+            child: Text(
+              TextRes.trainingDirectionsDataDropdownDescription,
+              style: Theme.of(context).textTheme.bodyLarge,
             ),
-        );
-
+          ),
+          Padding(
+            padding: const EdgeInsets.all(
+                Dimensions.paddingBetweenVerySmallAndSmall),
+            /*
+                  The dropdown widget is used to select the training directions
+                   */
+            child: Dropdown(
+                availableChips: widget.trainingDirections,
+                selectedChips: widget.student != null
+                    ? widget.student!.trainingDirections
+                        .map((e) => TrainingDirectionsData(e))
+                        .toList() //preserve state even after parent rebuilds
+                    : List<TrainingDirectionsData>.empty(),
+                onAddChip: (_) {},
+                onDeleteChip: (_) {},
+                multiSelect: true,
+                width: dialogWidth * 0.8,
+                onCloseOverlay: (trainingDirections) =>
+                    widget.onStudentTrainingDirectionsUpdated(trainingDirections
+                        .map((e) => e as TrainingDirectionsData)
+                        .toList())),
+          ),
+        ],
+      ),
+    );
   }
 
+  /*
+  Insert the text from the student into the text controllers
+   */
   void insertTextController(Student? student) {
-    if(student != null) {
+    if (student != null) {
       firstNameController.text = student.firstName;
       lastNameController.text = student.lastName;
     }
   }
-
 }

@@ -110,6 +110,7 @@ class _AllStudentsColumnState extends State<AllStudentsColumn> {
                         addStudent(context);
                       }, icon: const Icon(
                         Icons.person_add_alt,
+
                         size: Dimensions.iconSizeVeryBig,),
                         tooltip: TextRes.addStudentTitle,
                       ),
