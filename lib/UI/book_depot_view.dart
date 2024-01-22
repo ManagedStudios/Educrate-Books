@@ -14,7 +14,7 @@ class BookDepotView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<TrainingDirectionsData?> directions = [
+    List<TrainingDirectionsData?>? directions = [
       TrainingDirectionsData("ENGLISCH-10"),
       TrainingDirectionsData("samsung-8"),
       TrainingDirectionsData("index-5")];

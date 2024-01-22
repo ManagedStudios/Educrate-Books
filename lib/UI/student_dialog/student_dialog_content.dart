@@ -112,7 +112,7 @@ class _StudentDialogContentState extends State<StudentDialogContent> {
                     widget.onFirstNameChanged(firstNameController.text);
                   } ,
                   hint: TextRes.firstNameHint,
-                  errorText: widget.firstNameError,
+                  errorText: widget.firstNameError, enabled: true,
                 )),
                 const SizedBox(
                   width: Dimensions.spaceLarge,
@@ -128,7 +128,7 @@ class _StudentDialogContentState extends State<StudentDialogContent> {
 
                         },
                         hint: TextRes.lastNameHint,
-                        errorText: widget.lastNameError))
+                        errorText: widget.lastNameError, enabled: true,))
               ],
             ),
           ),

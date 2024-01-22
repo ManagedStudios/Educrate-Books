@@ -11,11 +11,13 @@ import '../../Resources/text.dart';
 import '../../Util/mathUtil.dart';
 
 class BookDialog extends StatefulWidget {
-  const BookDialog({super.key, required this.title, required this.book, required this.actionText});
+  const BookDialog({super.key, required this.title, required this.book, required this.actionText, this.isFullyEditable});
 
   final String title;
   final Book? book;
   final String actionText;
+  final bool? isFullyEditable;
+
   @override
   State<BookDialog> createState() => _BookDialogState();
 }
@@ -46,6 +48,8 @@ class _BookDialogState extends State<BookDialog> {
     isbnNumber = widget.book?.isbnNumber?.toString() ?? "";
     amount = widget.book?.totalAvailable.toString() ?? "";
     bookId = widget.book?.id;
+    trainingDirections = widget.book?.trainingDirection.map((e) =>
+        TrainingDirectionsData(e)).toList() ?? [null];
     setAvailableClassLevel(Provider.of<ClassLevelState>(context, listen: false).getClassLevels());
   }
 
@@ -68,6 +72,7 @@ class _BookDialogState extends State<BookDialog> {
       onAmountChanged: onAmountChanged,
       onTrainingDirectionsChanged: onTrainingDirectionsChanged,
       book: widget.book,
+        isFullyEditable: widget.isFullyEditable,
         onIsbnChanged: onIsbnChanged),
       actions: [
         FilledButton.tonal(onPressed:(){

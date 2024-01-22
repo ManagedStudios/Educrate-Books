@@ -26,6 +26,10 @@ class DB {
         TextRes.typeJson, TextRes.bookTrainingDirectionJson
       ]
     );
+
+    final studentsOfBookIdIndex = ValueIndexConfiguration([
+      "${TextRes.studentBooksJson}.${TextRes.bookIdJson}"
+    ]);
     final ftsIndex = FullTextIndexConfiguration([
       TextRes.studentFirstNameJson,
       TextRes.studentLastNameJson,
@@ -48,6 +52,7 @@ class DB {
     await _database.createIndex(TextRes.bookClassLevelJsonIndex, bookClassLevelIndex);
     await _database.createIndex(TextRes.trainingDirectionsJsonIndex, trainingDirectionIndex);
     await _database.createIndex(TextRes.booksOfTrainingDirectionsIndex, searchBooksOfTrainingDirectionsIndex);
+    await _database.createIndex(TextRes.studentsOfBookIdIndex, studentsOfBookIdIndex);
 
   }
 

@@ -15,7 +15,8 @@ class BookDialogContent extends StatefulWidget {
     required this.classLevelError, required this.amountError,
     required this.onBookSubjectChanged,
     required this.onClassLevelChanged, required this.onAmountChanged,
-    required this.onTrainingDirectionsChanged, required this.book, required this.onIsbnChanged});
+    required this.onTrainingDirectionsChanged, required this.book, required this.onIsbnChanged,
+    required this.isFullyEditable});
 
   final Function(String text) onBookNameChanged;
   final Function(String text) onBookSubjectChanged;
@@ -30,6 +31,7 @@ class BookDialogContent extends StatefulWidget {
   final String? amountError;
 
   final Book? book;
+  final bool? isFullyEditable;
 
   @override
   State<BookDialogContent> createState() => _BookDialogContentState();
@@ -45,6 +47,8 @@ class _BookDialogContentState extends State<BookDialogContent> {
 
   late String currClass;
   late String currSubject;
+
+  List<TrainingDirectionsData?>? initialTrainingDirections = [];
 
   @override
   void initState () {
@@ -63,6 +67,13 @@ class _BookDialogContentState extends State<BookDialogContent> {
 
     currClass = classLevelController.text;
     currSubject = bookSubjectController.text;
+
+    final initialTrs = widget.book?.trainingDirection //in order to pertain the nullability of TrainingDirectionsData we cannot just map - is just the way how flutter handles types
+        .map((e) => TrainingDirectionsData(e));
+    if (initialTrs != null) {
+      initialTrainingDirections?.addAll(initialTrs);
+    }
+
   }
 
   @override
@@ -77,6 +88,9 @@ class _BookDialogContentState extends State<BookDialogContent> {
       child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            if(widget.isFullyEditable == null || widget.isFullyEditable == false)
+              Text(TextRes.bookDialogNotFullyEditable,
+              style: Theme.of(context).textTheme.bodySmall,),
             Padding(
               padding: const EdgeInsets.only(left: Dimensions.paddingMedium),
               child: Row(
@@ -91,6 +105,7 @@ class _BookDialogContentState extends State<BookDialogContent> {
                       errorText: widget.bookNameError,
                       border: InputBorder.none
                       ),
+                      enabled: widget.isFullyEditable,
                     )
                   )
                 ]
@@ -109,14 +124,14 @@ class _BookDialogContentState extends State<BookDialogContent> {
                         });
                       } ,
                       hint: TextRes.bookSubjectHint,
-                      errorText: widget.bookSubjectError),
+                      errorText: widget.bookSubjectError, enabled: widget.isFullyEditable,),
                 ),
                 Expanded(
                   flex: 1,
                     child: DialogTextField(controller: amountController,
                         onTextChanged: widget.onAmountChanged,
                         hint: TextRes.bookAmountHint,
-                        errorText: widget.amountError)
+                        errorText: widget.amountError, enabled: true)
                 )
               ],
             ),
@@ -132,7 +147,7 @@ class _BookDialogContentState extends State<BookDialogContent> {
                         });
                       },
                           hint: TextRes.classLevelHint,
-                          errorText: widget.classLevelError)
+                          errorText: widget.classLevelError, enabled: widget.isFullyEditable,)
 
                   ),
                     Expanded(
@@ -141,7 +156,7 @@ class _BookDialogContentState extends State<BookDialogContent> {
                           controller: isbnController,
                           onTextChanged: widget.onIsbnChanged,
                           hint: TextRes.isbnHint,
-                          errorText: null,
+                          errorText: null, enabled: true,
                           ),
                         )
                   ]
@@ -153,10 +168,14 @@ class _BookDialogContentState extends State<BookDialogContent> {
               ),
             ),
             Expanded(
-                child: TrainingDirectionAddSection(
-                    currClass: int.tryParse(currClass),
-                    currSubject: currSubject.toUpperCase(),
-                    onTrainingDirectionUpdated: widget.onTrainingDirectionsChanged)
+                child: IgnorePointer(
+                  ignoring: widget.isFullyEditable != null ? !widget.isFullyEditable! : true,
+                  child: TrainingDirectionAddSection(
+                      currClass: int.tryParse(currClass),
+                      currSubject: currSubject.toUpperCase(),
+                      onTrainingDirectionUpdated: widget.onTrainingDirectionsChanged,
+                      initialTrainingDirections: initialTrainingDirections?.toList(),),
+                )
             )
           ],
         ),

@@ -126,6 +126,32 @@ class BookListState extends ChangeNotifier {
     return results.length>1;
   }
 
+  Future<bool> haveStudentsThisBook(String bookId) async{
+    String query = BuildQuery.getStudentsOfBook(bookId);
+
+    var docs = await database.getDocs(query);
+    var results = await docs.allResults();
+
+
+    return results.isNotEmpty; //notEmpty means there are students who own the given book
+
+  }
+
+  Future<Book> getBook (String bookId) async{
+
+    var doc = (await database.getDoc(bookId))!.toMutable();
+    final book = database.toEntity(Book.fromJson, doc);
+
+    return book;
+  }
+
+  Future<void> updateBook(Book book) async{
+    final doc = (await database.getDoc(book.id))!.toMutable();
+    database.updateDocFromEntity(book, doc);
+    database.saveDocument(doc);
+    saveTrainingDirectionsIfNotAvailable(book.trainingDirection);
+  }
+
 
 
 }

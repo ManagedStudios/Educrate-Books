@@ -2,6 +2,7 @@ import 'package:buecherteam_2023_desktop/Models/book_list_state.dart';
 import 'package:buecherteam_2023_desktop/Resources/dimensions.dart';
 import 'package:buecherteam_2023_desktop/Resources/text.dart';
 import 'package:buecherteam_2023_desktop/UI/book_dialog/add_book_dialog.dart';
+import 'package:buecherteam_2023_desktop/UI/book_dialog/edit_book_dialog.dart';
 import 'package:buecherteam_2023_desktop/UI/books/book_depot_book_list.dart';
 import 'package:buecherteam_2023_desktop/UI/right_click_actions/delete_dialog.dart';
 import 'package:flutter/material.dart';
@@ -56,8 +57,13 @@ class _BookDepotBookSectionState extends State<BookDepotBookSection> {
                                   bookListState
                                       .deleteTrainingDirectionsIfRequired(bookListState.currBookId!));
                             },
-                            TextRes.edit:(_){
-
+                            TextRes.edit:(_)async{
+                              if(mounted) { // Check if the widget is still in the tree to avoid async errors
+                                openEditBookDialog(context,
+                                    await bookListState.getBook(bookListState.currBookId!),
+                                    !(await bookListState.haveStudentsThisBook(bookListState.currBookId!))
+                                );
+                              }
                             }
                           },
                           onOverlayClosed: () {

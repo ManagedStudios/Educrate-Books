@@ -184,6 +184,10 @@
 
   static const String booksOfTrainingDirectionsIndex = "booksOfTrainingDirectionIndex";
 
+  static const String bookDialogNotFullyEditable = "Hinweis: Da Schüler dieses Buch besitzen, sind Name, Fach, Ausbildungen nicht veränderbar";
+
+  static const String studentsOfBookIdIndex = "StudentsOfBookIdIndex";
+
 
 
  

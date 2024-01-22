@@ -6,12 +6,14 @@ class DialogTextField extends StatelessWidget {
   const DialogTextField({super.key,
     required this.controller,
     required this.onTextChanged, required this.hint,
-    required this.errorText});
+    required this.errorText, required this.enabled});
 
   final TextEditingController controller;
   final Function(String text) onTextChanged;
   final String hint;
   final String? errorText;
+
+  final bool? enabled;
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +32,7 @@ class DialogTextField extends StatelessWidget {
             errorText: errorText,
           isDense: true
         ),
+        enabled: enabled,
       ),
     );
   }

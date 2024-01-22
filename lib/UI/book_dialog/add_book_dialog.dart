@@ -9,7 +9,7 @@ import 'book_dialog.dart';
 void addBook(BuildContext context) {
   showDialog<List<Object?>>(context: context, builder: (context) {
     return const BookDialog(title: TextRes.addBook,
-        book: null, actionText: TextRes.saveActionText);
+        book: null, actionText: TextRes.saveActionText, isFullyEditable: true,);
   }).then((values) async{
     final bookListState = Provider.of<BookListState>(context, listen: false);
     final classLevelState = Provider.of<ClassLevelState>(context, listen: false);

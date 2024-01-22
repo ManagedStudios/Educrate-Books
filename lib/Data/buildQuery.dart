@@ -133,4 +133,20 @@ class BuildQuery {
 
     return query;
   }
+
+  static String getStudentsOfBook(String bookId) {
+
+    String whereClause = """AND ANY book IN ${TextRes.studentBooksJson} SATISFIES book.${TextRes.bookIdJson} = '$bookId' END;""";
+
+    String query = """SELECT META().id, ${TextRes.studentFirstNameJson}, 
+      ${TextRes.studentLastNameJson}, ${TextRes.studentClassLevelJson}, 
+      ${TextRes.studentClassCharJson}, ${TextRes.studentTrainingDirectionsJson},
+      ${TextRes.studentBooksJson}, ${TextRes.studentAmountOfBooksJson}, ${TextRes.studentTagsJson} FROM _ 
+      WHERE ${TextRes.typeJson}='${TextRes.studentTypeJson}' """;
+
+      query+=whereClause;
+
+
+    return query;
+  }
 }
