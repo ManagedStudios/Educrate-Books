@@ -107,11 +107,30 @@ class BuildQuery {
 
     String whereClause = """AND ${TextRes.trainingDirectionsJson}='$trainingDirection'""";
 
-    String query = """SELECT ${TextRes.trainingDirectionsJson} FROM _
+    String query = """SELECT META().id, ${TextRes.trainingDirectionsJson} FROM _
     WHERE ${TextRes.typeJson}='${TextRes.trainingDirectionsTypeJson}' """;
     query+=whereClause;
 
     return query;
 
+  }
+
+  static String getBooksOfTrainingDirections(List<String> trainingDirections) {
+    
+    String formattedTrainingDirections = "[${trainingDirections.map((tr) => """'$tr'""").join(", ")}]";
+
+    String whereClause = """AND 
+    ANY td IN ${TextRes.bookTrainingDirectionJson} 
+    SATISFIES (td IN $formattedTrainingDirections) END;""";
+
+    String query = """SELECT META().id, ${TextRes.bookNameJson}, 
+      ${TextRes.bookSubjectJson}, ${TextRes.bookClassLevelJson}, 
+      ${TextRes.bookTrainingDirectionJson}, ${TextRes.bookAmountInStudentOwnershipJson},
+      ${TextRes.bookNowAvailableJson}, ${TextRes.bookTotalAvailableJson}, 
+      ${TextRes.bookIsbnNumberJson} FROM _ 
+      WHERE ${TextRes.typeJson}='${TextRes.bookTypeJson}' """;
+    query+=whereClause;
+
+    return query;
   }
 }

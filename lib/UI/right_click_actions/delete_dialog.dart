@@ -12,14 +12,14 @@ Dialog for right_click_actions. Receives a List of SelectableItems that can be
 manipulated.
  */
 
-void openDeleteDialog (
+Future<bool> openDeleteDialog (
     BuildContext context,
     List<String> itemIds,
     String itemType,
-
+    {Function? functionBeforeDeletion}
 
 ) {
-  showDialog<List<String>>(context: context,
+  return showDialog<List<String>>(context: context,
       builder: (context) => AlertDialog(
         content: Text(
           "${TextRes.sure} ${itemIds.length } $itemType ${TextRes.toDelete}" //show how many items of which type will be deleted
@@ -34,6 +34,7 @@ void openDeleteDialog (
 
           FilledButton(onPressed: () {
             context.pop(itemIds);
+
           }, child: const Text(
               TextRes.delete
             )
@@ -42,9 +43,15 @@ void openDeleteDialog (
       )
   ).then((items) {
     var state = Provider.of<RightClickState>(context, listen: false);
-    if (items != null) {
+    if (items != null) { //return true if items have been deleted
+      if (functionBeforeDeletion != null) {
+        functionBeforeDeletion();
+      }
       final ids = items;
       state.deleteItemsInBatch(ids); //delete items
+      return true;
+    } else {
+      return false;
     }
   });
 }

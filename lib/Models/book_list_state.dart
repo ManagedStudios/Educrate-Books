@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 
 import '../Data/buildQuery.dart';
 import '../Data/db.dart';
+import '../Resources/text.dart';
 
 class BookListState extends ChangeNotifier {
 
@@ -16,6 +17,10 @@ class BookListState extends ChangeNotifier {
 
   String? currBookId;
 
+  /*
+  main/entry method that streams the up to date books for a given classLevel
+
+   */
   Stream<List<Book>> streamBooks(int? currClassLevel) async*{
     String query = BuildQuery.buildBookListQuery(currClassLevel);
 
@@ -40,6 +45,9 @@ class BookListState extends ChangeNotifier {
     }
   }
 
+  /*
+  save trainingDirections that do not exist in the DB
+   */
   Future<void> saveTrainingDirectionsIfNotAvailable (List<String> trainingDirections) async{
     for (var trainingDirection in trainingDirections) {
           if (!await trainingDirectionExists(trainingDirection)) {
@@ -50,6 +58,9 @@ class BookListState extends ChangeNotifier {
     }
   }
 
+  /*
+  checks if a trainingDirection with given label exists in the database
+   */
   Future<bool> trainingDirectionExists (String trainingDirection) async {
     String query = BuildQuery.getSingleTrainingDirection(trainingDirection);
 
@@ -58,6 +69,8 @@ class BookListState extends ChangeNotifier {
 
     return results.isNotEmpty;
   }
+
+
 
   Future<void> saveBook (String bookName, String bookSubject, int classLevel,
       List<String> trainingDirections, String? isbnNumber, int amount
@@ -76,5 +89,43 @@ class BookListState extends ChangeNotifier {
     database.updateDocFromEntity(book, document);
     return document;
   }
+
+  /*
+  called when book is deleted
+  purpose: if trainingDirection is to no book attached it is useless and should be deleted
+  this is what happens here. Check if any trainingDirections of the book are useless and delete them
+   */
+  Future<void> deleteTrainingDirectionsIfRequired(String currBookId)async {
+    /*
+    first retrieve the trainingDirections of the d
+     */
+    final bookDoc = (await database.getDoc(currBookId))!.toMutable();
+    Book book = database.toEntity(Book.fromJson, bookDoc);
+    List<String> trainingDirections = book.trainingDirection;
+
+    for (String trainingDirection in trainingDirections) {
+      if (!await trainingDirectionIsObtainedByOtherBook(trainingDirection)) {
+          String query = BuildQuery.getSingleTrainingDirection(trainingDirection);
+          final trainingDirectionDocs = await database.getDocs(query);
+          await for (var trainingDirection in trainingDirectionDocs.asStream()) {
+            final String trainingId = trainingDirection.toPlainMap()[TextRes.idJson] as String;
+            final trainingDoc = await database.getDoc(trainingId);
+            database.deleteDoc(trainingDoc!);
+          }
+      }
+    }
+
+  }
+
+  Future<bool> trainingDirectionIsObtainedByOtherBook(String trainingDirection) async{
+    String query = BuildQuery.getBooksOfTrainingDirections([trainingDirection]);
+
+    var docs = await database.getDocs(query);
+    var results = await docs.allResults();
+
+    return results.length>1;
+  }
+
+
 
 }

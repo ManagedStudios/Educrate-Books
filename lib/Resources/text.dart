@@ -182,6 +182,8 @@
 
   static String trainingDirectionsJsonIndex = "trainingDirectionLabelIndex";
 
+  static const String booksOfTrainingDirectionsIndex = "booksOfTrainingDirectionIndex";
+
 
 
  

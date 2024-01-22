@@ -50,8 +50,11 @@ class _BookDepotBookSectionState extends State<BookDepotBookSection> {
                           selectedItems: [],
                           width: Dimensions.widthRightClickActionMenu,
                           actions: { //inflate actions
-                            TextRes.delete:(_) {
-                              openDeleteDialog(context, [bookListState.currBookId!], TextRes.book);
+                            TextRes.delete:(_) async{
+                              openDeleteDialog(context, [bookListState.currBookId!], TextRes.book,
+                              functionBeforeDeletion: () =>
+                                  bookListState
+                                      .deleteTrainingDirectionsIfRequired(bookListState.currBookId!));
                             },
                             TextRes.edit:(_){
 

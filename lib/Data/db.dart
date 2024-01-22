@@ -22,23 +22,32 @@ class DB {
     final typeIndex = ValueIndexConfiguration(['type']);
     final bookClassLevelIndex = ValueIndexConfiguration([TextRes.bookClassLevelJson]);
     final trainingDirectionIndex = ValueIndexConfiguration([TextRes.trainingDirectionsJson]);
-    final ftsIndex = IndexBuilder.fullTextIndex([
-      FullTextIndexItem.property(TextRes.studentFirstNameJson),
-      FullTextIndexItem.property(TextRes.studentLastNameJson),
-      FullTextIndexItem.property(TextRes.studentClassLevelJson),
-      FullTextIndexItem.property(TextRes.studentClassCharJson)
+    final searchBooksOfTrainingDirectionsIndex = ValueIndexConfiguration([
+        TextRes.typeJson, TextRes.bookTrainingDirectionJson
+      ]
+    );
+    final ftsIndex = FullTextIndexConfiguration([
+      TextRes.studentFirstNameJson,
+      TextRes.studentLastNameJson,
+      TextRes.studentClassLevelJson,
+      TextRes.studentClassCharJson,
+      TextRes.studentTrainingDirectionsJson
     ]);
 
-    final bookFtsIndex = IndexBuilder.fullTextIndex([
-      FullTextIndexItem.property(TextRes.bookNameJson),
-      FullTextIndexItem.property(TextRes.bookSubjectJson),
-      FullTextIndexItem.property(TextRes.bookClassLevelJson)
+
+
+    final bookFtsIndex = FullTextIndexConfiguration([
+      TextRes.bookNameJson,
+      TextRes.bookSubjectJson,
+      TextRes.bookClassLevelJson,
+      TextRes.bookTrainingDirectionJson
     ]);
     await _database.createIndex("Types", typeIndex);
     await _database.createIndex(TextRes.ftsStudent, ftsIndex);
     await _database.createIndex(TextRes.ftsBookStudentDetail, bookFtsIndex);
     await _database.createIndex(TextRes.bookClassLevelJsonIndex, bookClassLevelIndex);
     await _database.createIndex(TextRes.trainingDirectionsJsonIndex, trainingDirectionIndex);
+    await _database.createIndex(TextRes.booksOfTrainingDirectionsIndex, searchBooksOfTrainingDirectionsIndex);
 
   }
 
