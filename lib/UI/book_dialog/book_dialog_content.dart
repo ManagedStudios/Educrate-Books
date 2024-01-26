@@ -72,6 +72,8 @@ class _BookDialogContentState extends State<BookDialogContent> {
         .map((e) => TrainingDirectionsData(e));
     if (initialTrs != null) {
       initialTrainingDirections?.addAll(initialTrs);
+    } else {
+      initialTrainingDirections = null;
     }
 
   }
