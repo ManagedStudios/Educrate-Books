@@ -1,4 +1,4 @@
-import 'package:buecherteam_2023_desktop/Models/book_list_state.dart';
+import 'package:buecherteam_2023_desktop/Models/book_depot_state.dart';
 import 'package:buecherteam_2023_desktop/Resources/dimensions.dart';
 import 'package:buecherteam_2023_desktop/Resources/text.dart';
 import 'package:buecherteam_2023_desktop/UI/book_dialog/add_book_dialog.dart';
@@ -42,7 +42,7 @@ class _BookDepotBookSectionState extends State<BookDepotBookSection> {
            Expanded(
               child: GestureDetector(
                   onSecondaryTapUp: (details) {
-                    var bookListState = Provider.of<BookListState>(context, listen: false);
+                    var bookListState = Provider.of<BookDepotState>(context, listen: false);
                     if(bookListState.currBookId != null && !isOverlayOpen) {
                       setState(() {
                         isOverlayOpen = true;

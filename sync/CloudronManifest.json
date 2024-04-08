@@ -1,0 +1,13 @@
+{
+  "id": "de.lfg.cbbuecherteam",
+  "title": "couchbase server",
+  "author": "Dibbo-Mrinmoy Saha dibbomrinmoy@hotmail.com",
+  "description": "database for the buecherteam",
+  "version": "1.0.0",
+  "healthCheckPath": "/",
+  "httpPort": 8091,
+  "addons": {
+    "localstorage": {}
+  },
+  "manifestVersion": 2
+}

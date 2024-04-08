@@ -1,0 +1,6 @@
+services:
+  couchbase-server:
+    image: couchbase:community-7.2.0
+    ports:
+      - 8091-8097:8091-8097
+      - 11210:11210

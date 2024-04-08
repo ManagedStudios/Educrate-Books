@@ -149,4 +149,17 @@ class BuildQuery {
 
     return query;
   }
+
+  static String buildBookDetailQuery(String? bookId) {
+    String whereClause = """AND META().id = '$bookId'""";
+    String query = """SELECT META().id, ${TextRes.bookNameJson}, 
+      ${TextRes.bookSubjectJson}, ${TextRes.bookClassLevelJson}, 
+      ${TextRes.bookTrainingDirectionJson}, ${TextRes.bookAmountInStudentOwnershipJson},
+      ${TextRes.bookNowAvailableJson}, ${TextRes.bookTotalAvailableJson}, 
+      ${TextRes.bookIsbnNumberJson} FROM _ 
+      WHERE ${TextRes.typeJson}='${TextRes.bookTypeJson}' """;
+    query += whereClause;
+
+    return query;
+  }
 }

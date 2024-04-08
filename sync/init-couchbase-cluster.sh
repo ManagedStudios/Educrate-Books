@@ -54,6 +54,8 @@ done
 
 sleep 5
 
+
+
 SYNC_GATEWAY_DATABASE_CONFIG=$(cat << EOF
 {
   "bucket": "$DATABASE_NAME",
@@ -66,7 +68,10 @@ SYNC_GATEWAY_DATABASE_CONFIG=$(cat << EOF
 EOF
 )
 
-curl -X PUT http://localhost:4985/$DATABASE_NAME/ \
+
+
+
+curl -vX PUT http://localhost:4985/$DATABASE_NAME/ \
   -H "Content-Type: application/json" \
   -d "$SYNC_GATEWAY_DATABASE_CONFIG"
 

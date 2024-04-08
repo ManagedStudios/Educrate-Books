@@ -10,13 +10,16 @@ import 'package:buecherteam_2023_desktop/UI/student_detail/student_detail_column
 import 'package:flutter/material.dart';
 
 
+import '../Data/book.dart';
 import '../Resources/dimensions.dart';
 
 
 class StudentView extends StatefulWidget {
   static String routeName = '/studentView';
 
-  const StudentView({super.key});
+  const StudentView({super.key, required this.filterBook});
+
+  final Book? filterBook;
 
   @override
   State<StudentView> createState() => _StudentViewState();
@@ -33,6 +36,9 @@ class _StudentViewState extends State<StudentView> {
     lfgKeyboardFocus = FocusNode();
     lfgKeyboardFocus.requestFocus();
     pressedKey = Keyboard.nothing;
+    if(widget.filterBook != null) {
+      print(widget.filterBook!.subject);
+    }
   }
 
   @override

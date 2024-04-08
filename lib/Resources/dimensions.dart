@@ -3,6 +3,8 @@
 class Dimensions {
   static const double paddingSmall = 8;
   static const double cornerRadiusMedium = 20;
+
+  static const double cornerRadiusBetweenSmallAndMedium = 16;
   static const double elevationMedium = 4;
 
   static const double paddingVerySmall = 2;
@@ -33,6 +35,8 @@ class Dimensions {
   static const double overlayWidth = 512;
 
   static const double spaceLarge = 40;
+
+  static const double spaceLargeTimes2 = 80;
 
   static const double tightTextHeight = 0.6;
 
@@ -69,5 +73,9 @@ class Dimensions {
   static const int durationMedium = 500;
 
   static const int durationShort = 150;
+
+  static const double boxWidthSmall = 40;
+
+  static const double thickLineWidth = 1.5;
 
 }

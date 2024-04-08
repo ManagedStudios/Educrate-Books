@@ -1,4 +1,4 @@
-import 'package:buecherteam_2023_desktop/Models/book_list_state.dart';
+import 'package:buecherteam_2023_desktop/Models/book_depot_state.dart';
 import 'package:buecherteam_2023_desktop/UI/classes/class_level_card.dart';
 import 'package:buecherteam_2023_desktop/Util/mathUtil.dart';
 import 'package:flutter/material.dart';
@@ -80,7 +80,7 @@ class _ClassLevelColumnState extends State<ClassLevelColumn> {
                               classLevel: levels.data![index],
                               onClick: (selectedLevel){
                                 state.setSelectedClassLevel(selectedLevel);
-                                Provider.of<BookListState>(context, listen: false)
+                                Provider.of<BookDepotState>(context, listen: false)
                                     .setCurrClassLevel(selectedLevel);
                               },
                               clicked: levels.data![index] == state.selectedClassLevel),

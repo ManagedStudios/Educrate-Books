@@ -1,57 +1,43 @@
 
+import 'package:buecherteam_2023_desktop/Models/navigation_state.dart';
 import 'package:buecherteam_2023_desktop/Resources/text.dart';
 import 'package:buecherteam_2023_desktop/UI/book_depot_view.dart';
 import 'package:buecherteam_2023_desktop/UI/navigation/navigation_button.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 import '../../Resources/dimensions.dart';
 import '../student_view.dart';
 
-class LfgNavigationBar extends StatefulWidget {
+class LfgNavigationBar extends StatelessWidget {
   const LfgNavigationBar({super.key});
-
-  @override
-  State<LfgNavigationBar> createState() => _LfgNavigationBarState();
-}
-
-class _LfgNavigationBarState extends State<LfgNavigationBar> {
-  bool isStudentViewClicked = true;
-  bool isBookViewClicked = false;
-
-  void onStudentViewClicked () {
-    setState(() {
-      isStudentViewClicked = true;
-      isBookViewClicked = false;
-    });
-    context.go(StudentView.routeName);
-  }
-
-  void onBookViewClicked () {
-    setState(() {
-      isBookViewClicked = true;
-      isStudentViewClicked = false;
-    });
-    context.go(BookDepotView.routeName);
-  }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: Dimensions.spaceMedium),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          NavigationButton(key: const Key(TextRes.student),
-              isClicked: isStudentViewClicked,
-              onClickAction: onStudentViewClicked,
-              text: TextRes.student),
-          const SizedBox(width: Dimensions.spaceMedium,),
-          NavigationButton(key: const Key(TextRes.books),
-              isClicked: isBookViewClicked,
-              onClickAction: onBookViewClicked,
-              text: TextRes.books)
-        ],
+      child: Consumer<NavigationState>(
+        builder: (context, state, _) => Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            NavigationButton(key: const Key(TextRes.student),
+                isClicked: state.isStudentViewClicked,
+                onClickAction: () {
+                  state.onStudentViewClicked();
+                  context.go(StudentView.routeName);
+                },
+                text: TextRes.student),
+            const SizedBox(width: Dimensions.spaceMedium,),
+            NavigationButton(key: const Key(TextRes.books),
+                isClicked: state.isBookViewClicked,
+                onClickAction: () {
+                  state.onBookViewClicked();
+                  context.go(BookDepotView.routeName);
+                },
+                text: TextRes.books)
+          ],
+        ),
       ),
     );
   }

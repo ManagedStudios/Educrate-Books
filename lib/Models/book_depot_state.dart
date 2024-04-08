@@ -8,9 +8,9 @@ import '../Data/buildQuery.dart';
 import '../Data/db.dart';
 import '../Resources/text.dart';
 
-class BookListState extends ChangeNotifier {
+class BookDepotState extends ChangeNotifier {
 
-  BookListState(this.database);
+  BookDepotState(this.database);
 
   final DB database;
   int? currClassLevel;
@@ -44,6 +44,7 @@ class BookListState extends ChangeNotifier {
       notifyListeners();
     }
   }
+
 
   /*
   save trainingDirections that do not exist in the DB
@@ -150,6 +151,25 @@ class BookListState extends ChangeNotifier {
     database.updateDocFromEntity(book, doc);
     database.saveDocument(doc);
     saveTrainingDirectionsIfNotAvailable(book.trainingDirection);
+  }
+
+
+  /*
+  book detail methods
+   */
+
+
+  Stream<List<Book>> streamBookDetails(String? bookId) async* {
+    String query = BuildQuery.buildBookDetailQuery(bookId);
+
+    yield* database.streamLiveDocs(query).asyncMap((change) {
+      //asyncMap required as the data is asynchronously fetched from the Web
+      return change.results
+          .asStream()
+          .map((result) => database.toEntity(
+          Book.fromJson, result)) //build Book objects from JSON
+          .toList();
+    });
   }
 
 

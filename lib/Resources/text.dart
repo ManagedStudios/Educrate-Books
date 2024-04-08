@@ -176,6 +176,8 @@
 
   static const String trainingDirectionsAdd = "Ausbildungen zuordnen";
 
+  static const String trainingDirectionsDisplay = "Ausbildungen:";
+
   static const String isbnHint = "ISBN (optional)";
 
   static const String addBook = "Buch hinzufügen";
@@ -187,6 +189,12 @@
   static const String bookDialogNotFullyEditable = "Hinweis: Da Schüler dieses Buch besitzen, sind Name, Fach, Ausbildungen nicht veränderbar";
 
   static const String studentsOfBookIdIndex = "StudentsOfBookIdIndex";
+
+  static const String bookAmountAvailable = "Verfügbar: ";
+
+  static const String useAsFilter = "Als Filter verwenden";
+
+  static const String isbnDisplay = "ISBN:";
 
 
 

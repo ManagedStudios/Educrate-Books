@@ -1,5 +1,5 @@
 
-import 'package:buecherteam_2023_desktop/Models/book_list_state.dart';
+import 'package:buecherteam_2023_desktop/Models/book_depot_state.dart';
 import 'package:buecherteam_2023_desktop/UI/books/book_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -14,7 +14,7 @@ class BookDepotBookList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     int length = 0;
-    return Consumer<BookListState>(
+    return Consumer<BookDepotState>(
       builder: (context, state, _) => StreamBuilder<List<Book>>(
           stream: state.streamBooks(state.currClassLevel),
           builder: (context, books) {
@@ -28,7 +28,6 @@ class BookDepotBookList extends StatelessWidget {
                       clicked: state.currBookId == books.data![index].id,
                       onClick: (_) {
                         state.setCurrBookId(books.data![index].id);
-                        //notifyDetailBookColumn
                       },
                       onDeleteBook: (_){},
                       bookLite: books.data![index],

@@ -2,7 +2,7 @@ import 'package:buecherteam_2023_desktop/Models/class_level_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../Models/book_list_state.dart';
+import '../../Models/book_depot_state.dart';
 import '../../Resources/text.dart';
 import 'book_dialog.dart';
 
@@ -11,7 +11,7 @@ void addBook(BuildContext context) {
     return const BookDialog(title: TextRes.addBook,
         book: null, actionText: TextRes.saveActionText, isFullyEditable: true,);
   }).then((values) async{
-    final bookListState = Provider.of<BookListState>(context, listen: false);
+    final bookListState = Provider.of<BookDepotState>(context, listen: false);
     final classLevelState = Provider.of<ClassLevelState>(context, listen: false);
 
     if (values == null) return;

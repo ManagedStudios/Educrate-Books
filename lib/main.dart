@@ -1,8 +1,10 @@
 
 
+import 'package:buecherteam_2023_desktop/Data/book.dart';
 import 'package:buecherteam_2023_desktop/Data/db.dart';
-import 'package:buecherteam_2023_desktop/Models/book_list_state.dart';
+import 'package:buecherteam_2023_desktop/Models/book_depot_state.dart';
 import 'package:buecherteam_2023_desktop/Models/class_level_state.dart';
+import 'package:buecherteam_2023_desktop/Models/navigation_state.dart';
 import 'package:buecherteam_2023_desktop/Models/right_click_state.dart';
 import 'package:buecherteam_2023_desktop/Models/studentListState.dart';
 import 'package:buecherteam_2023_desktop/Models/student_detail_state.dart';
@@ -30,7 +32,8 @@ void main() async{
     ChangeNotifierProvider(create: (context) => RightClickState(DB())),
     ChangeNotifierProvider(create: (context) => StudentDetailState(DB())),
     ChangeNotifierProvider(create: (context) => ClassLevelState(DB())),
-    ChangeNotifierProvider(create: (context) => BookListState(DB()))
+    ChangeNotifierProvider(create: (context) => BookDepotState(DB())),
+    ChangeNotifierProvider(create: (context) => NavigationState())
   ],
     child: const MyApp(),
   ));
@@ -44,7 +47,7 @@ final _router = GoRouter(
   },routes: [
     GoRoute(path: StudentView.routeName,
         pageBuilder: (context, state) => CustomTransitionPage(
-            child: const StudentView(),
+            child: StudentView(filterBook: state.extra as Book?),
             transitionsBuilder: (context, animation, _, child) {
               return FadeTransition(
                   opacity:
