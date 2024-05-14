@@ -28,7 +28,7 @@ class _NavigationButtonState extends State<NavigationButton> with SingleTickerPr
     _controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 250));
     _widthAnimation = Tween<double>(begin: 128, end:224).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOutBack));
     _backgroundAnimation = ColorTween(begin: Colors.transparent, end: lightColorScheme.primary).animate(_controller);
-    _textAnimation = ColorTween(begin: lightColorScheme.onBackground, end:lightColorScheme.onPrimary).animate(_controller);
+    _textAnimation = ColorTween(begin: lightColorScheme.onSurface, end:lightColorScheme.onPrimary).animate(_controller);
     _controller.addListener(() { //updates the UI appropriately with the listener
       setState(() {});
     });
@@ -63,9 +63,9 @@ class _NavigationButtonState extends State<NavigationButton> with SingleTickerPr
   Widget build(BuildContext context) {
     return OutlinedButton(onPressed: () => widget.onClickAction(),
     style: ButtonStyle(
-      fixedSize: MaterialStatePropertyAll(Size.fromWidth(_widthAnimation.value)),
-      backgroundColor: MaterialStatePropertyAll(_backgroundAnimation.value),
-      side: MaterialStatePropertyAll(BorderSide(width: widget.isClicked?0:1,
+      fixedSize: WidgetStatePropertyAll(Size.fromWidth(_widthAnimation.value)),
+      backgroundColor: WidgetStatePropertyAll(_backgroundAnimation.value),
+      side: WidgetStatePropertyAll(BorderSide(width: widget.isClicked?0:1,
           color: Theme.of(context).colorScheme.outline)
         )
       ),
