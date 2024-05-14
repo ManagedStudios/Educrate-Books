@@ -41,9 +41,9 @@ class _LfgSearchbarState extends State<LfgSearchbar> {
             hintText: TextRes.studentSearchHint,
             focusNode: focusNode,
             onTap: widget.onTap,
-            elevation: const MaterialStatePropertyAll(Dimensions.elevationMedium),
-            textStyle: MaterialStatePropertyAll(Theme.of(context).textTheme.labelMedium),
-            hintStyle: MaterialStatePropertyAll(Theme.of(context).textTheme.labelMedium
+            elevation: const WidgetStatePropertyAll(Dimensions.elevationMedium),
+            textStyle: WidgetStatePropertyAll(Theme.of(context).textTheme.labelMedium),
+            hintStyle: WidgetStatePropertyAll(Theme.of(context).textTheme.labelMedium
                 ?.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant)),
             leading: const Padding(
               padding: EdgeInsets.all(Dimensions.paddingSmall),
@@ -55,8 +55,8 @@ class _LfgSearchbarState extends State<LfgSearchbar> {
                 style: Theme.of(context).textTheme.labelMedium?.copyWith(color: Theme.of(context).colorScheme.surfaceTint),
                 overflow: TextOverflow.ellipsis,),
             )],
-            surfaceTintColor: MaterialStatePropertyAll(Theme.of(context).colorScheme.surface),
-            overlayColor: MaterialStatePropertyAll(Theme.of(context).colorScheme.surfaceVariant),
+            surfaceTintColor: WidgetStatePropertyAll(Theme.of(context).colorScheme.surface),
+            overlayColor: WidgetStatePropertyAll(Theme.of(context).colorScheme.surfaceContainerHighest),
             onSubmitted: (text) => textEditingController.clear(), //on enter searchbar should be cleared
             onChanged: widget.onChangeText, //search while typing
           );

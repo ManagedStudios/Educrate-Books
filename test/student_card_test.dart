@@ -53,8 +53,8 @@ void main() {
     testWidgets("Test if all children of studentCard are rendered", (tester) async {
       await tester.pumpWidget(createWidgetUnderTest());
       expect(find.text("${student.firstName} ${student.lastName}"), findsOneWidget);
-      expect(find.text("${student.classLevel.toString()}${student.classChar} — "), findsOneWidget);
-        expect(find.text(student.trainingDirections.join("  ")), findsOneWidget);
+      expect(find.text("${student.classLevel.toString()}${student.classChar} – "), findsOneWidget);
+      expect(find.text(student.trainingDirections.join("  ")), findsOneWidget);
 
     });
 

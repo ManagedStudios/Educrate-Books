@@ -51,7 +51,7 @@ class StudentDetailInfo extends StatelessWidget {
                       onAddWarning(students);
                     },
                       style: ButtonStyle(
-                        shape: MaterialStatePropertyAll(RoundedRectangleBorder(
+                        shape: WidgetStatePropertyAll(RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(Dimensions.cornerRadiusMedium)
                           )
                         )

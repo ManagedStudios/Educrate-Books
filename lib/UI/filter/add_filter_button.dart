@@ -13,10 +13,10 @@ class AddFilterButton extends StatelessWidget {
     return TextButton(
         key: globalKey, //identify the button to position the add filter overlay
         style: ButtonStyle(
-          shape: MaterialStatePropertyAll(
+          shape: WidgetStatePropertyAll(
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(Dimensions.cornerRadiusSmall))
           ),
-          padding: const MaterialStatePropertyAll(EdgeInsets.all(Dimensions.paddingVerySmall))
+          padding: const WidgetStatePropertyAll(EdgeInsets.all(Dimensions.paddingVerySmall))
         ),
         onPressed: onClick,
         child: Row(

@@ -35,7 +35,7 @@ class _BookCardState extends State<BookCard> {
       child: TextButton( //make the card clickable
         onPressed: () => widget.onClick(widget.bookLite),
           style: const ButtonStyle(
-            padding: MaterialStatePropertyAll( //custom padding
+            padding: WidgetStatePropertyAll( //custom padding
               EdgeInsets.only(
                 left: Dimensions.paddingSmall,
                 top: Dimensions.paddingVerySmall,

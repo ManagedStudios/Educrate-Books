@@ -46,8 +46,8 @@ class ChipTag extends StatelessWidget {
                   ),
                   padding: EdgeInsets.zero,
                   style: ButtonStyle(
-                      shape: MaterialStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(Dimensions.cornerRadiusSmall))),
-                    backgroundColor: const MaterialStatePropertyAll(Colors.transparent)
+                      shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(Dimensions.cornerRadiusSmall))),
+                    backgroundColor: const WidgetStatePropertyAll(Colors.transparent)
                   ),
                 )
               ]

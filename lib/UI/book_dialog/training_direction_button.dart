@@ -22,12 +22,12 @@ class TrainingDirectionButton extends StatelessWidget {
     return OutlinedButton(
       onPressed: onClick,
       style: ButtonStyle(
-          shape: MaterialStatePropertyAll(RoundedRectangleBorder(
+          shape: WidgetStatePropertyAll(RoundedRectangleBorder(
               borderRadius:
                   BorderRadius.circular(Dimensions.cornerRadiusSmall))),
-          padding: const MaterialStatePropertyAll(
+          padding: const WidgetStatePropertyAll(
               EdgeInsets.all(Dimensions.paddingBetweenVerySmallAndSmall)),
-          backgroundColor: MaterialStatePropertyAll(isClicked
+          backgroundColor: WidgetStatePropertyAll(isClicked
               ? Theme.of(context).colorScheme.secondaryContainer
               : null)),
       child: Text(

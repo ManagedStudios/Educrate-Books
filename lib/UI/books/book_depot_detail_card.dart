@@ -127,11 +127,11 @@ class BookDepotDetailCard extends StatelessWidget {
                                   context.go(StudentView.routeName, extra: books.data![0]);
                                 },
                                 style: ButtonStyle(
-                                  padding: const MaterialStatePropertyAll(
+                                  padding: const WidgetStatePropertyAll(
                                     EdgeInsets.only(right: Dimensions.paddingMedium,
                                         left: Dimensions.paddingMedium)
                                   ),
-                                  side: MaterialStatePropertyAll(
+                                  side: WidgetStatePropertyAll(
                                     BorderSide(
                                       color: Theme.of(context).colorScheme.secondary,
                                       width: Dimensions.thickLineWidth

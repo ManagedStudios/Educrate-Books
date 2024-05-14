@@ -27,7 +27,7 @@ class ClassLevelCard extends StatelessWidget {
         child: TextButton(
                 onPressed: () => onClick(classLevel),
                 style: ButtonStyle(
-                  shape: MaterialStatePropertyAll(
+                  shape: WidgetStatePropertyAll(
                       RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(Dimensions.cornerRadiusSmall)
                       )

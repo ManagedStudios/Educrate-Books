@@ -50,8 +50,8 @@ class _StudentCardState extends State<StudentCard> {
           widget.notifyDetailPage(widget.student);
         },
             style: ButtonStyle(
-              shape: MaterialStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))),
-              backgroundColor: widget.isClicked ? MaterialStatePropertyAll(Theme.of(context).colorScheme.tertiaryContainer) : const MaterialStatePropertyAll(Colors.transparent)
+              shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))),
+              backgroundColor: widget.isClicked ? WidgetStatePropertyAll(Theme.of(context).colorScheme.tertiaryContainer) : const WidgetStatePropertyAll(Colors.transparent)
             ),
 
              /*
@@ -121,15 +121,15 @@ class _StudentCardState extends State<StudentCard> {
                         children: [
                           IconButton(onPressed: () => widget.openEditDialog(widget.student), icon: const Icon(Icons.edit),
                             style: ButtonStyle(
-                              iconSize: _hovering ? const MaterialStatePropertyAll(16) : const MaterialStatePropertyAll(0),
-                              shape: MaterialStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
+                              iconSize: _hovering ? const WidgetStatePropertyAll(16) : const WidgetStatePropertyAll(0),
+                              shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
 
                             ),
                           ),
                           IconButton(onPressed: () => widget.onDeleteStudent(widget.student), icon: const Icon(Icons.close),
                             style: ButtonStyle(
-                              iconSize: _hovering ? const MaterialStatePropertyAll(16) : const MaterialStatePropertyAll(0),
-                              shape: MaterialStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
+                              iconSize: _hovering ? const WidgetStatePropertyAll(16) : const WidgetStatePropertyAll(0),
+                              shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
                             ),
                           ),
                         ],

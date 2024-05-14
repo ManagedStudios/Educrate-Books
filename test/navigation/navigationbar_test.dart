@@ -1,4 +1,5 @@
 
+import 'package:buecherteam_2023_desktop/Models/navigation_state.dart';
 import 'package:buecherteam_2023_desktop/Resources/text.dart';
 import 'package:buecherteam_2023_desktop/Theme/color_scheme.dart';
 import 'package:buecherteam_2023_desktop/Theme/text_theme.dart';
@@ -10,6 +11,7 @@ import 'package:buecherteam_2023_desktop/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 void main () {
 
@@ -52,14 +54,19 @@ void main () {
             )
           ])
         ]);
-    return MaterialApp.router(
-      theme: ThemeData(
-        colorScheme: lightColorScheme,
-        useMaterial3: true,
-        fontFamily: 'Helvetica Neue',
-        textTheme: textTheme,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => NavigationState())
+      ],
+      child: MaterialApp.router(
+        theme: ThemeData(
+          colorScheme: lightColorScheme,
+          useMaterial3: true,
+          fontFamily: 'Helvetica Neue',
+          textTheme: textTheme,
+        ),
+        routerConfig: _router,
       ),
-      routerConfig: _router,
     );
   }
 

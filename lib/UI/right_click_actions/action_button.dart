@@ -19,7 +19,7 @@ class ActionButton extends StatelessWidget {
           child: TextButton(onPressed: onClick,
               style: ButtonStyle(
                 alignment: Alignment.centerLeft,
-                shape: MaterialStatePropertyAll(RoundedRectangleBorder(
+                shape: WidgetStatePropertyAll(RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(Dimensions.cornerRadiusSmall)
                   )
                 )

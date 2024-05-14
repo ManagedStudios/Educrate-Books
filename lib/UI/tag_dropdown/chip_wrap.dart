@@ -28,8 +28,8 @@ class ChipWrap extends StatelessWidget {
       child: TextButton( //base container - enables clicks
         onPressed: () => onClickChipRow(chips),
         style: ButtonStyle(
-          padding: const MaterialStatePropertyAll(EdgeInsets.zero),
-          shape: MaterialStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(Dimensions.cornerRadiusSmall))),
+          padding: const WidgetStatePropertyAll(EdgeInsets.zero),
+          shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(Dimensions.cornerRadiusSmall))),
           alignment: Alignment.centerLeft
         ),
         child: Wrap(
