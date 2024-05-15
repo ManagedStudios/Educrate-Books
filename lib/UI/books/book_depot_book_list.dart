@@ -1,5 +1,6 @@
 
 import 'package:buecherteam_2023_desktop/Models/book_depot_state.dart';
+import 'package:buecherteam_2023_desktop/Resources/dimensions.dart';
 import 'package:buecherteam_2023_desktop/UI/books/book_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -33,7 +34,8 @@ class BookDepotBookList extends StatelessWidget {
                       bookLite: books.data![index],
                       leadingWidget: null,
                       isDeletable: false,
-                      bookAvailableAmount: books.data![index].nowAvailable);
+                      bookAvailableAmount: books.data![index].nowAvailable,
+                      error: books.data![index].nowAvailable<Dimensions.bookAvAmountThreshold);
                 }
                 );
           }

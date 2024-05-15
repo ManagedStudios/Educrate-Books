@@ -6,7 +6,7 @@ class BookCard extends StatefulWidget {
   const BookCard({super.key, required this.clicked, required this.onClick,
     required this.onDeleteBook, required this.bookLite,
     required this.leadingWidget, required this.isDeletable,
-    required this.bookAvailableAmount});
+    required this.bookAvailableAmount, this.error});
 
   final bool clicked; //state
   final BookLite bookLite; //content
@@ -15,6 +15,7 @@ class BookCard extends StatefulWidget {
   final Function(BookLite bookLite) onDeleteBook; //callback
   final bool isDeletable; //conditional content
   final int? bookAvailableAmount; //conditional content
+  final bool? error;
 
 
   @override
@@ -24,13 +25,19 @@ class BookCard extends StatefulWidget {
 class _BookCardState extends State<BookCard> {
   @override
   Widget build(BuildContext context) {
+    BorderSide border = BorderSide.none;
+    if(widget.error!= null && widget.error==true && !widget.clicked) {
+      border = BorderSide(width: Dimensions.borderWidthMedium,
+          color: Theme.of(context).colorScheme.error);
+    }
+    if (widget.clicked) {
+      border = const BorderSide(width: Dimensions.borderWidthMedium);
+    }
     return Card(
       elevation: Dimensions.elevationVerySmall,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(Dimensions.cornerRadiusMedium),
-        side: widget.clicked //when clicked, show border else not
-          ? const BorderSide(width: Dimensions.borderWidthMedium)
-            :BorderSide.none
+        side: border
       ),
       child: TextButton( //make the card clickable
         onPressed: () => widget.onClick(widget.bookLite),

@@ -75,16 +75,25 @@ class _ClassLevelColumnState extends State<ClassLevelColumn> {
                       FractionallySizedBox( //take up a fraction of full expanded width
                         widthFactor: getCurrFraction(index),
                         alignment: Alignment.centerLeft,
-                        child: Consumer<ClassLevelState>(
-                          builder: (context, state, _) => ClassLevelCard(
-                              classLevel: levels.data![index],
-                              onClick: (selectedLevel){
-                                state.setSelectedClassLevel(selectedLevel);
-                                Provider.of<BookDepotState>(context, listen: false)
-                                    .setCurrClassLevel(selectedLevel);
-                              },
-                              clicked: levels.data![index] == state.selectedClassLevel),
-                        ),
+                        child: FutureBuilder( //check if classLevel contains books subceeding avAmount threshold
+                            future: Provider.of<ClassLevelState>(context, listen: false)
+                                .areBooksSubceedingAmount(levels.data![index]),
+                            initialData: false,
+                            builder: (context, tooFewBooks) {
+
+                              return Consumer<ClassLevelState>(
+                                builder: (context, state, _) => ClassLevelCard(
+                                    classLevel: levels.data![index],
+                                    onClick: (selectedLevel){
+                                      state.setSelectedClassLevel(selectedLevel);
+                                      Provider.of<BookDepotState>(context, listen: false)
+                                          .setCurrClassLevel(selectedLevel);
+                                    },
+                                    clicked: levels.data![index] == state.selectedClassLevel,
+                                    error: tooFewBooks.data??false),
+                              );
+                            },
+                          ),
                       )
                   ],
                 ),

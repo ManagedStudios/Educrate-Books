@@ -162,4 +162,18 @@ class BuildQuery {
 
     return query;
   }
+
+  static String getBooksSubceedingAvAmount (int ofClassLevel, int amount) {
+    String whereClause = """AND ${TextRes.bookNowAvailableJson} < $amount
+      AND ${TextRes.bookClassLevelJson} = $ofClassLevel""";
+    String query = """SELECT META().id, ${TextRes.bookNameJson}, 
+      ${TextRes.bookSubjectJson}, ${TextRes.bookClassLevelJson}, 
+      ${TextRes.bookTrainingDirectionJson}, ${TextRes.bookAmountInStudentOwnershipJson},
+      ${TextRes.bookNowAvailableJson}, ${TextRes.bookTotalAvailableJson}, 
+      ${TextRes.bookIsbnNumberJson} FROM _ 
+      WHERE ${TextRes.typeJson}='${TextRes.bookTypeJson}' """;
+    query+=whereClause;
+
+    return query;
+  }
 }
