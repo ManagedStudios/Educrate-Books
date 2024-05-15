@@ -168,9 +168,9 @@
 
   static const String toInsert = "eingeben";
 
-  static String bookSubjectError = "Bitte das Fach eingeben!";
+  static String bookSubjectError = "Bitte das Fach eingeben und Bindestriche entfernen!";
 
-  static String bookNameError = "Bitte einen Buchnamen eingeben!";
+  static String bookNameError = "Bitte einen Buchnamen eingeben und Bindestriche entfernen!";
 
   static String bookAmountError = "Den Buchbestand als Zahl eingeben!";
 

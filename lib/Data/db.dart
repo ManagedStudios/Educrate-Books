@@ -122,6 +122,24 @@ class DB {
   }
 
   /*
+  Change multiple documents in a batch from respective entities
+   */
+
+  Future<void> changeDocsFromEntities (List<Document> documents, List<Object> entities) async{
+    if (documents.length != entities.length) {
+      throw ArgumentError("Document List has a different length to the belonging entities");
+    }
+    _database.inBatch(() async {
+      for (int i=0;i<documents.length;i++) {
+        final doc = documents[i].toMutable();
+        final entity = entities[i];
+        updateDocFromEntity(entity, doc);
+        saveDocument(doc);
+      }
+    });
+  }
+
+  /*
   startReplication is responsible for handling the sync between local couchbase lite
   db and couchbase server
    */

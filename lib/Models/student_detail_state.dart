@@ -2,6 +2,7 @@ import 'dart:collection';
 
 import 'package:buecherteam_2023_desktop/Data/book.dart';
 import 'package:buecherteam_2023_desktop/Data/student.dart';
+import 'package:cbl/cbl.dart';
 import 'package:flutter/material.dart';
 
 import '../Data/bookLite.dart';
@@ -65,13 +66,18 @@ class StudentDetailState extends ChangeNotifier {
 
   Future<void> deleteBooksOfStudents(
       List<Student> students, List<BookLite> selectedBooks) async {
+    final List<MutableDocument> docs = [];
+    final List<Student> updatedStudentObjects = [];
+
     for (Student student in students) {
       final doc = (await database.getDoc(student.id))!.toMutable();
+      docs.add(doc);
       student.removeBooks(selectedBooks);
       student.decrementAmountOfBooks(selectedBooks.length);
-      database.updateDocFromEntity(student, doc);
-      database.saveDocument(doc);
+      updatedStudentObjects.add(student);
     }
+
+    database.changeDocsFromEntities(docs, updatedStudentObjects);
   }
 
   Future<void> duplicateBooksOfStudents(
