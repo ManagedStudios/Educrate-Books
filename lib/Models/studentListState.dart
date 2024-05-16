@@ -12,12 +12,11 @@ import 'package:buecherteam_2023_desktop/Data/training_directions_data.dart';
 import 'package:cbl/cbl.dart';
 import 'package:flutter/material.dart';
 
+import '../Data/book.dart';
 import '../Data/bookLite.dart';
 
 
 class StudentListState extends ChangeNotifier {
-
-
 
   StudentListState(this.database);
 
@@ -33,7 +32,9 @@ class StudentListState extends ChangeNotifier {
    */
   Future<String> saveStudent(String firstName, String lastName, int classLevel,
       String classChar, List<String> trainingDirections, {List<BookLite>? books, List<String>? tags}) async {
-    final document = createNewStudentDoc(firstName, lastName, classLevel, classChar, trainingDirections, books: books, tags: tags);
+    final document = createNewStudentDoc(firstName, lastName, classLevel, classChar, trainingDirections,
+        books: books??(await getBooksFromTrainingDirections(trainingDirections)), //add books according to trainingDirections if no books given
+        tags: tags);
     await database.saveDocument(document);
     return document.id;
   }
@@ -63,9 +64,12 @@ class StudentListState extends ChangeNotifier {
       String query = BuildQuery.buildStudentListQuery(ftsQuery, filterOptions);
 
       yield* database.streamLiveDocs(query).asyncMap((change) { //asyncMap required as the data is asynchronously fetched from the Web
+
         return change.results
             .asStream()
-            .map((result) => database.toEntity(Student.fromJson, result)) //build Student objects from JSON
+            .map((result) {
+         return database.toEntity(Student.fromJson, result);
+        } ) //build Student objects from JSON
             .toList();
       });
   }
@@ -129,6 +133,18 @@ class StudentListState extends ChangeNotifier {
   void removeSelectedStudent(int index) {
     selectedStudentIds.remove(index);
     notifyListeners();
+  }
+
+  /*
+  Method to retrieve all books of given trainingDirections
+   */
+  Future<List<BookLite>?> getBooksFromTrainingDirections(List<String> trainingDirections) async{
+    if (trainingDirections.isEmpty) return null;
+    final query = BuildQuery.getBooksOfTrainingDirections(trainingDirections);
+    final bookDocs = await database.getDocs(query);
+    List<BookLite> books = await bookDocs.asStream().map((res)
+      => database.toEntity(Book.fromJson, res).toBookLite()).toList();
+    return books;
   }
 
 

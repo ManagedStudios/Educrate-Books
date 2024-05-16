@@ -107,7 +107,9 @@ class DB {
    */
   Future<void> deleteDoc(Document document) async {
     _database.deleteDocument(document);
+
   }
+
 
   /*
   delete multiple documents in a batch

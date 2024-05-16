@@ -87,6 +87,10 @@ class Book implements LfgChip, BookLite, SelectableItem {
     return data;
   }
 
+  BookLite toBookLite () {
+    return BookLite(id, name, subject, classLevel);
+  }
+
 
 
   @override
