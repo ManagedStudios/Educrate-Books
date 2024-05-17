@@ -176,7 +176,7 @@ class _AllStudentsColumnState extends State<AllStudentsColumn> {
                                     Provider.of<StudentListState>(
                                         context, listen: false)
                                         .deleteStudent(student);
-                                    showSnackBar(student, //make action reversible
+                                    showRevertStudentDeleteSnackBar(student, //make action reversible
                                         Provider.of<StudentListState>(
                                             context, listen: false),
                                         context);

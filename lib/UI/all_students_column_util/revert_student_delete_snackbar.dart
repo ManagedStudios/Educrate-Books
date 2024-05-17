@@ -9,7 +9,7 @@ import '../../Models/studentListState.dart';
 import '../../Resources/dimensions.dart';
 import '../../Resources/text.dart';
 
-void showSnackBar(Student student, StudentListState studentListState,
+void showRevertStudentDeleteSnackBar(Student student, StudentListState studentListState,
     BuildContext context) {
   ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(

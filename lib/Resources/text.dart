@@ -196,6 +196,8 @@
 
   static const String isbnDisplay = "ISBN:";
 
+  static const String bookNotDeletable = "Buch kann nicht gelöscht werden, weil Schüler es besitzen!";
+
 
 
  
