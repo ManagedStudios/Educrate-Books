@@ -1,6 +1,5 @@
 
 import 'dart:collection';
-import 'dart:math';
 
 import 'package:buecherteam_2023_desktop/Data/bookLite.dart';
 import 'package:buecherteam_2023_desktop/Models/student_detail_state.dart';
@@ -80,12 +79,12 @@ class StudentDetailColumn extends StatelessWidget {
 
   List<BookLite> getBooks(List<Student> currStudents) {
     List<BookLite> result = [];
-    HashMap<BookLite, int> amountBooks = HashMap(); //track the amount of books that should be added to the result
+    HashMap<String, BookLite> booksByName = HashMap(); //track the amount of books that should be added to the result
 
     /*
     every student can have n books of type x.
-    the student with the highest n is the amount of one book type of x that will be
-    added to the result list.
+    if the same type of book appears more the once its name is marked with + "x. Satz".
+    The result of books is grouped according to the names of the books of the students.
     this facilitates the granular deletion of books. If n students are selected
     and one student owns one book twice you might not want to delete both books
     of this student at the same time.
@@ -93,21 +92,15 @@ class StudentDetailColumn extends StatelessWidget {
     case.
      */
 
+    //create a map that has for every bookName of all books of the students one entry
     for (Student student in currStudents) {
-      HashMap<BookLite, int> oneStudentBookAmounts = HashMap();
-
       for (BookLite bookLite in student.books) {
-        oneStudentBookAmounts[bookLite] = (oneStudentBookAmounts[bookLite] ?? 0) + 1; //local track of amount of book types of one student
-        amountBooks[bookLite] = max(amountBooks[bookLite]??0, oneStudentBookAmounts[bookLite]!); //check new maximum of one booktype
+        booksByName[bookLite.name] = bookLite;
       }
-
     }
 
-    //generate the result list from the amountOfBooks Map that contains book types
-    // and its respective amount
-    for (MapEntry<BookLite, int> entry in amountBooks.entries) {
-      result.addAll(List.generate(entry.value, (index) => entry.key));
-    }
+    //add all the bookLite values of the names to the result
+    result.addAll(booksByName.values.toList());
 
     result.sort();
 

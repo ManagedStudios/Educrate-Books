@@ -53,7 +53,7 @@ class BookLite implements Comparable{
   }
 
   bool equals (BookLite other) {
-    return other.classLevel==classLevel&&other.name==name&&other.subject==subject&&other.bookId==bookId;
+    return other.bookId==bookId;
   }
 
   @override
@@ -68,7 +68,11 @@ class BookLite implements Comparable{
 
   @override
   int compareTo(other) {
-    return subject.compareTo(other.subject);
+    if (subject == other.subject && bookId != other.bookId) {
+      return 1;
+    } else {
+      return subject.compareTo(other.subject);
+    }
   }
 
 

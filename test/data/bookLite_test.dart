@@ -92,5 +92,22 @@ void main () {
     });
   });
 
+  test("contains method works for identical books", () {
+    final list1 = [book1, book2];
+    expect(list1.contains(book1), true);
+  });
+
+  test("contains method works for books with exact same data", () {
+    final list1 = [book1, book2];
+    final book1Clone = BookLite("1234-bookLite", "Green Line New 5", "Englisch", 10);
+    expect(list1.contains(book1Clone), true);
+  });
+
+  test("contains method works for books with different data but same id", () {
+    final list1 = [book1, book2];
+    final book1Clone = BookLite("1234-bookLite", "Green Line New 5 2. Satz", "Englisch neu", 9);
+    expect(list1.contains(book1Clone), true);
+  });
+
 
 }

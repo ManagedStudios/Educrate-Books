@@ -1,4 +1,5 @@
 
+
 import 'package:buecherteam_2023_desktop/Data/bookLite.dart';
 import 'package:buecherteam_2023_desktop/Data/student.dart';
 import 'package:buecherteam_2023_desktop/Resources/text.dart';
@@ -19,6 +20,10 @@ void main () {
   late Map<String, Object?> trainingDirectionsEmpty;
   late Map<String, Object?> emptyJson;
   late Map<String, Object?> missingFields;
+  late BookLite book1;
+  late BookLite book2;
+  late BookLite book3;
+
 
   setUpAll(() async{
     await CouchbaseLiteDart.init(edition: Edition.community);
@@ -42,6 +47,10 @@ void main () {
         lastName: "Kandemir", classLevel: 10, classChar: "K",
         trainingDirections: ["BASIC-10, ETH-LAT-10, KUNST-10"],
         books: [], amountOfBooks: 0, tags: []);
+    book1 = BookLite("456", "Lambacher", "Mathe 8", 8);
+    book2 = BookLite("555", "Green Line New 4", "Englisch", 10);
+    book3 = BookLite("666", "Kollegstufe", "Ethik", 11);
+
 
     validJson1 = {
       TextRes.studentIdJson: student1.id,
@@ -222,6 +231,127 @@ void main () {
       expect(areMapsEqualForStudents(json, expectedJson), true);
     });
 
+    test ("Test adding books", () {
+      studentWithoutBooks.addBooks([book1, book2]);
+      expect(studentWithoutBooks.books, [book1, book2]);
+    });
+
+    test("Test adding books of same type", () {
+      studentWithoutBooks.addBooks([book1]);
+      studentWithoutBooks.addBooks([book1]);
+      expect(studentWithoutBooks.books.map((e) => e.name), [
+        book1.name, "${book1.name} 2. Satz"
+      ]);
+    });
+
+    test("Test adding books of same and different types", () {
+      studentWithoutBooks.addBooks([book1, book2]);
+      studentWithoutBooks.addBooks([book1, book3]);
+      expect(studentWithoutBooks.books.map((e) => e.name), [
+        book1.name, book2.name, "${book1.name} 2. Satz", book3.name
+      ]);
+    });
+
+    test("Test removing books basic", () {
+      studentWithoutBooks.addBooks([book1, book2]);
+      studentWithoutBooks.removeBooks([book1]);
+      expect(studentWithoutBooks.books, [book2]);
+    });
+    test("Test removing multiple books of different type", () {
+      studentWithoutBooks.addBooks([book1, book2]);
+      studentWithoutBooks.removeBooks([book1, book2]);
+      expect(studentWithoutBooks.books, []);
+    });
+
+    test("Test removing book when multiple of the same type are available", () {
+      studentWithoutBooks.addBooks([book1, book2]);
+      studentWithoutBooks.addBooks([book1]);
+      studentWithoutBooks.removeBooks([book1]);
+      expect(studentWithoutBooks.books.map((e) => e.name), [book1.name, book2.name]);
+    });
+
+    test("Test removing book when multiple of the same and different type are available", () {
+      studentWithoutBooks.addBooks([book1, book2]);
+      studentWithoutBooks.addBooks([book1]);
+      studentWithoutBooks.addBooks([book1, book2]);
+      studentWithoutBooks.removeBooks([book1]);
+      expect(studentWithoutBooks.books.map((e) => e.name),
+          [book1.name, book2.name, "${book1.name} 2. Satz", "${book2.name} 2. Satz"]);
+    });
+
+    test("Test removing multiple books when multiple of the same and different type are available", () {
+      studentWithoutBooks.addBooks([book1, book2]);
+      studentWithoutBooks.addBooks([book1]);
+      studentWithoutBooks.addBooks([book1, book2]);
+      studentWithoutBooks.removeBooks([book1, book2]);
+      expect(studentWithoutBooks.books.map((e) => e.name),
+          [book1.name, book2.name, "${book1.name} 2. Satz",]);
+    });
+
+    test("Test removing multiple books of different satz when multiple of the same and different type are available", () {
+      studentWithoutBooks.addBooks([book1, book2]);
+      studentWithoutBooks.addBooks([book1]);
+      studentWithoutBooks.addBooks([book1, book2]);
+      studentWithoutBooks.removeBooks([
+        BookLite(book1.bookId, "${book1.name} 2. Satz", book1.subject, book1.classLevel),
+        book2]);
+      expect(studentWithoutBooks.books.map((e) => e.name),
+          [book1.name, book2.name, "${book1.name} 2. Satz",]);
+    });
+
+    test("Test removing multiple same books when multiple of the same and different type are available", () {
+      studentWithoutBooks.addBooks([book1, book2]);
+      studentWithoutBooks.addBooks([book1]);
+      studentWithoutBooks.addBooks([book1, book2]);
+      studentWithoutBooks.removeBooks([
+        BookLite(book1.bookId, "${book1.name} 2. Satz", book1.subject, book1.classLevel),
+        book1]);
+      expect(studentWithoutBooks.books.map((e) => e.name),
+          [book1.name, book2.name, "${book2.name} 2. Satz",]);
+    });
+
+    test("Test removing multiple same and different books when multiple of the same and different type are available", () {
+      studentWithoutBooks.addBooks([book1, book2]);
+      studentWithoutBooks.addBooks([book1]);
+      studentWithoutBooks.addBooks([book1, book2]);
+      studentWithoutBooks.removeBooks([
+        BookLite(book1.bookId, "${book1.name} 2. Satz", book1.subject, book1.classLevel),
+        book1, book2]);
+      expect(studentWithoutBooks.books.map((e) => e.name),
+          [book1.name, book2.name]);
+    });
+
+    test("Test removing multiple same and different books when multiple of the same and different type are available", () {
+      studentWithoutBooks.addBooks([book1, book2]);
+      studentWithoutBooks.addBooks([book1]);
+      studentWithoutBooks.addBooks([book1, book2]);
+      studentWithoutBooks.removeBooks([
+        BookLite(book1.bookId, "${book1.name} 2. Satz", book1.subject, book1.classLevel),
+        book1, book2, book2]);
+      expect(studentWithoutBooks.books.map((e) => e.name),
+          [book1.name]);
+    });
+    test("Test removing books until empty", () {
+      studentWithoutBooks.addBooks([book1, book2]);
+      studentWithoutBooks.addBooks([book1]);
+      studentWithoutBooks.addBooks([book1, book2]);
+      studentWithoutBooks.removeBooks([
+        BookLite(book1.bookId, "${book1.name} 2. Satz", book1.subject, book1.classLevel),
+        book1, book2, book2, book1]);
+      expect(studentWithoutBooks.books.map((e) => e.name),
+          []);
+    });
+    test("Test removing books until empty in chunks", () {
+      studentWithoutBooks.addBooks([book1, book2]);
+      studentWithoutBooks.addBooks([book1]);
+      studentWithoutBooks.addBooks([book1, book2]);
+      studentWithoutBooks.removeBooks([
+        BookLite(book1.bookId, "${book1.name} 2. Satz", book1.subject, book1.classLevel),
+        book1]);
+      studentWithoutBooks.removeBooks([book2, book2, book1]);
+      expect(studentWithoutBooks.books.map((e) => e.name),
+          []);
+    });
 
   });
 }

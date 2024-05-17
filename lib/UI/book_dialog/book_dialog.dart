@@ -160,7 +160,7 @@ class _BookDialogState extends State<BookDialog> {
   }
 
   bool isBookNameValid(String text) {
-    return !isOnlyWhitespace(text) && !text.contains("-");
+    return !isOnlyWhitespace(text) && !text.contains("-") && !text.contains(".");
   }
 
   bool isBookSubjectValid(String text) {

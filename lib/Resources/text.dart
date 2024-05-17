@@ -170,7 +170,7 @@
 
   static String bookSubjectError = "Bitte das Fach eingeben und Bindestriche entfernen!";
 
-  static String bookNameError = "Bitte einen Buchnamen eingeben und Bindestriche entfernen!";
+  static String bookNameError = "Bitte einen Buchnamen eingeben, Bindestriche und Punkte entfernen!";
 
   static String bookAmountError = "Den Buchbestand als Zahl eingeben!";
 
@@ -197,6 +197,8 @@
   static const String isbnDisplay = "ISBN:";
 
   static const String bookNotDeletable = "Buch kann nicht gelöscht werden, weil Schüler es besitzen!";
+
+  static const String bookSet = ". Satz";
 
 
 

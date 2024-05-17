@@ -63,20 +63,73 @@ class Student implements SelectableItem {
 }
 
 void addBooks(List<BookLite> books) {
-    this.books.addAll(books);
+    Map<BookLite, int> countMap = {};
+    for (BookLite book in this.books) { //count already owned book types
+      countMap[book] = (countMap[book]??0) + 1;
+    }
+    for (BookLite book in books) {
+      if (countMap[book] != null) { //book to be added already owned by student -> Update name of book
+        final updatedBook = BookLite(book.bookId,
+            "${book.name} ${countMap[book]!+1}${TextRes.bookSet}",
+            book.subject, book.classLevel);
+        this.books.add(updatedBook);
+      } else { //if book is newly added, just go ahead
+        this.books.add(book);
+      }
+    }
 }
 
 void incrementAmountOfBooks (int amount) {
     amountOfBooks+=amount;
 }
 
+  int extractNumberBeforeDot(String input) {
+    final regex = RegExp(r'(\d+)\.');
+    final match = regex.firstMatch(input);
+    if (match != null) {
+      return int.parse(match.group(1)!); // Convert the matched string to an integer
+    }
+    return 1; // must be 1 else because it is the 1. Satz of the book
+  }
+
+  /*
+  Method to remove books
+  Always removes at first the books of higher "Satz" number and then gradually
+  the lower ones to ensure data consistency across all students
+   */
 void removeBooks (List<BookLite> books) {
-    for (BookLite book in books) {
-      int index = this.books.indexOf(book);
-      if (index != -1) {
-        this.books.removeAt(index);
+
+    Map<String, int> highestNumberBooks = {};
+    List<String> bookIds = books.map((book) => book.bookId).toList();
+    Map<String, int> bookIdByAmount = {};
+    //create a map bookId and the corresponding amount
+    for (String id in bookIds) {
+      bookIdByAmount[id] = (bookIdByAmount[id]??0) + 1;
+    }
+    //create a map of bookIds that are matched with the highest "satz" number the student owns
+    for (BookLite book in this.books) {
+      if (bookIds.contains(book.bookId)) {
+        final number = extractNumberBeforeDot(book.name);
+        if (!highestNumberBooks.containsKey(book.bookId) ||
+            number > highestNumberBooks[book.bookId]!) {
+          highestNumberBooks[book.bookId] = number;
+        }
       }
     }
+
+
+    //remove the books
+      this.books.removeWhere((book) {
+        if (bookIds.contains(book.bookId) //check first if bookId and "satz"-number is in correct range
+            && extractNumberBeforeDot(book.name)>highestNumberBooks[book.bookId]!-bookIdByAmount[book.bookId]!
+            && extractNumberBeforeDot(book.name)<=highestNumberBooks[book.bookId]!) {
+          return true;
+        } else {
+          return false;
+        }
+      });
+
+
 }
 
 void decrementAmountOfBooks (int amount) {
