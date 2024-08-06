@@ -27,7 +27,9 @@ class BookDepotState extends ChangeNotifier {
     yield* database.streamLiveDocs(query).asyncMap((change) {
       return change.results
           .asStream()
-          .map((result) => database.toEntity(Book.fromJson, result))
+          .map((result) {
+            return database.toEntity(Book.fromJson, result);
+      } )
           .toList();
     });
   }

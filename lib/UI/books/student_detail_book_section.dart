@@ -85,7 +85,7 @@ class _StudentDetailBookSectionState extends State<StudentDetailBookSection> {
                             .deleteBooksOfStudents(
                             widget.currStudents, //students passed
                             selectedBooks.toList()); //selected books passed
-                        clearSelectedBooks();
+                            clearSelectedBooks();
                       },
                       TextRes.duplicate:(students){
                         studentDetailState

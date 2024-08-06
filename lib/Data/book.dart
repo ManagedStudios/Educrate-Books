@@ -20,8 +20,8 @@ class Book implements LfgChip, BookLite, SelectableItem {
   final String subject;
   final int classLevel;
   final List<String> trainingDirection;
-  final int amountInStudentOwnership;
-  final int nowAvailable;
+  int amountInStudentOwnership;
+  int nowAvailable;
   final int totalAvailable;
   final String? isbnNumber;
 
@@ -55,9 +55,17 @@ class Book implements LfgChip, BookLite, SelectableItem {
       }
     }
 
+
+    //TODO search when amounts go to negative and prevent it!
+
+    /*
     if(classLevel<0||expectedAmountNeeded<0||nowAvailable<0||totalAvailable<0) {
+      print("Negative book Int: see class book");
       throw Exception(TextRes.bookNegativeIntError);
     }
+
+     */
+
 
 
     return Book(bookId: json[TextRes.idJson] as String,
@@ -89,6 +97,15 @@ class Book implements LfgChip, BookLite, SelectableItem {
 
   BookLite toBookLite () {
     return BookLite(id, name, subject, classLevel);
+  }
+
+  void updateBookAmountOnDeletes (int n) {
+    if (amountInStudentOwnership>n) amountInStudentOwnership -= n;
+    nowAvailable += n;
+  }
+  void updateBookAmountOnAdds (int n) {
+    amountInStudentOwnership += n;
+    if (amountInStudentOwnership>n) nowAvailable -= n;
   }
 
 
@@ -149,5 +166,7 @@ class Book implements LfgChip, BookLite, SelectableItem {
   bool isDeletable() {
     return true;
   }
+
+
 
 }

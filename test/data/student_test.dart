@@ -6,8 +6,13 @@ import 'package:buecherteam_2023_desktop/Resources/text.dart';
 import 'package:buecherteam_2023_desktop/Util/comparison.dart';
 import 'package:cbl_dart/cbl_dart.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 
+class MockFunction extends Mock {
+  void onRemoveBook(BookLite book);
+}
 void main () {
+  late MockFunction mockFunction;
   late Student student1;
   late Student student2;
   late Student studentWithoutTraining;
@@ -23,6 +28,7 @@ void main () {
   late BookLite book1;
   late BookLite book2;
   late BookLite book3;
+  late BookLite book4;
 
 
   setUpAll(() async{
@@ -30,6 +36,7 @@ void main () {
   });
 
   setUp(() {
+    mockFunction = MockFunction();
     student1 = Student("jfiwoejfoiwjeiof", firstName: "Dibbo-Mrinmoy",
         lastName: "Saha", classLevel: 11, classChar: "Q",
         trainingDirections: ["BASIC-11, ETH-LAT-11"],
@@ -50,6 +57,7 @@ void main () {
     book1 = BookLite("456", "Lambacher", "Mathe 8", 8);
     book2 = BookLite("555", "Green Line New 4", "Englisch", 10);
     book3 = BookLite("666", "Kollegstufe", "Ethik", 11);
+    book4 = BookLite("777", "Hallo", "Neu", 10);
 
 
     validJson1 = {
@@ -254,19 +262,19 @@ void main () {
 
     test("Test removing books basic", () {
       studentWithoutBooks.addBooks([book1, book2]);
-      studentWithoutBooks.removeBooks([book1]);
+      studentWithoutBooks.removeBooks([book1], (book) => mockFunction.onRemoveBook(book));
       expect(studentWithoutBooks.books, [book2]);
     });
     test("Test removing multiple books of different type", () {
       studentWithoutBooks.addBooks([book1, book2]);
-      studentWithoutBooks.removeBooks([book1, book2]);
+      studentWithoutBooks.removeBooks([book1, book2], (book) => mockFunction.onRemoveBook(book));
       expect(studentWithoutBooks.books, []);
     });
 
     test("Test removing book when multiple of the same type are available", () {
       studentWithoutBooks.addBooks([book1, book2]);
       studentWithoutBooks.addBooks([book1]);
-      studentWithoutBooks.removeBooks([book1]);
+      studentWithoutBooks.removeBooks([book1], (book) => mockFunction.onRemoveBook(book));
       expect(studentWithoutBooks.books.map((e) => e.name), [book1.name, book2.name]);
     });
 
@@ -274,7 +282,7 @@ void main () {
       studentWithoutBooks.addBooks([book1, book2]);
       studentWithoutBooks.addBooks([book1]);
       studentWithoutBooks.addBooks([book1, book2]);
-      studentWithoutBooks.removeBooks([book1]);
+      studentWithoutBooks.removeBooks([book1], (book) => mockFunction.onRemoveBook(book));
       expect(studentWithoutBooks.books.map((e) => e.name),
           [book1.name, book2.name, "${book1.name} 2. Satz", "${book2.name} 2. Satz"]);
     });
@@ -283,9 +291,11 @@ void main () {
       studentWithoutBooks.addBooks([book1, book2]);
       studentWithoutBooks.addBooks([book1]);
       studentWithoutBooks.addBooks([book1, book2]);
-      studentWithoutBooks.removeBooks([book1, book2]);
+      studentWithoutBooks.removeBooks([book1, book2], (book) => mockFunction.onRemoveBook(book));
       expect(studentWithoutBooks.books.map((e) => e.name),
           [book1.name, book2.name, "${book1.name} 2. Satz",]);
+      verify(() => mockFunction.onRemoveBook(book1)).called(1);
+      verify(() => mockFunction.onRemoveBook(book2)).called(1);
     });
 
     test("Test removing multiple books of different satz when multiple of the same and different type are available", () {
@@ -294,9 +304,11 @@ void main () {
       studentWithoutBooks.addBooks([book1, book2]);
       studentWithoutBooks.removeBooks([
         BookLite(book1.bookId, "${book1.name} 2. Satz", book1.subject, book1.classLevel),
-        book2]);
+        book2], (book) => mockFunction.onRemoveBook(book));
       expect(studentWithoutBooks.books.map((e) => e.name),
           [book1.name, book2.name, "${book1.name} 2. Satz",]);
+      verify(() => mockFunction.onRemoveBook(book1)).called(1);
+      verify(() => mockFunction.onRemoveBook(book2)).called(1);
     });
 
     test("Test removing multiple same books when multiple of the same and different type are available", () {
@@ -305,9 +317,10 @@ void main () {
       studentWithoutBooks.addBooks([book1, book2]);
       studentWithoutBooks.removeBooks([
         BookLite(book1.bookId, "${book1.name} 2. Satz", book1.subject, book1.classLevel),
-        book1]);
+        book1], (book) => mockFunction.onRemoveBook(book));
       expect(studentWithoutBooks.books.map((e) => e.name),
           [book1.name, book2.name, "${book2.name} 2. Satz",]);
+      verify(() => mockFunction.onRemoveBook(book1)).called(2);
     });
 
     test("Test removing multiple same and different books when multiple of the same and different type are available", () {
@@ -316,9 +329,11 @@ void main () {
       studentWithoutBooks.addBooks([book1, book2]);
       studentWithoutBooks.removeBooks([
         BookLite(book1.bookId, "${book1.name} 2. Satz", book1.subject, book1.classLevel),
-        book1, book2]);
+        book1, book2], (book) => mockFunction.onRemoveBook(book));
       expect(studentWithoutBooks.books.map((e) => e.name),
           [book1.name, book2.name]);
+      verify(() => mockFunction.onRemoveBook(book1)).called(2);
+      verify(() => mockFunction.onRemoveBook(book2)).called(1);
     });
 
     test("Test removing multiple same and different books when multiple of the same and different type are available", () {
@@ -327,9 +342,11 @@ void main () {
       studentWithoutBooks.addBooks([book1, book2]);
       studentWithoutBooks.removeBooks([
         BookLite(book1.bookId, "${book1.name} 2. Satz", book1.subject, book1.classLevel),
-        book1, book2, book2]);
+        book1, book2, book2], (book) => mockFunction.onRemoveBook(book));
       expect(studentWithoutBooks.books.map((e) => e.name),
           [book1.name]);
+      verify(() => mockFunction.onRemoveBook(book1)).called(2);
+      verify(() => mockFunction.onRemoveBook(book2)).called(2);
     });
     test("Test removing books until empty", () {
       studentWithoutBooks.addBooks([book1, book2]);
@@ -337,9 +354,11 @@ void main () {
       studentWithoutBooks.addBooks([book1, book2]);
       studentWithoutBooks.removeBooks([
         BookLite(book1.bookId, "${book1.name} 2. Satz", book1.subject, book1.classLevel),
-        book1, book2, book2, book1]);
+        book1, book2, book2, book1], (book) => mockFunction.onRemoveBook(book));
       expect(studentWithoutBooks.books.map((e) => e.name),
           []);
+      verify(() => mockFunction.onRemoveBook(book1)).called(3);
+      verify(() => mockFunction.onRemoveBook(book2)).called(2);
     });
     test("Test removing books until empty in chunks", () {
       studentWithoutBooks.addBooks([book1, book2]);
@@ -347,10 +366,27 @@ void main () {
       studentWithoutBooks.addBooks([book1, book2]);
       studentWithoutBooks.removeBooks([
         BookLite(book1.bookId, "${book1.name} 2. Satz", book1.subject, book1.classLevel),
-        book1]);
-      studentWithoutBooks.removeBooks([book2, book2, book1]);
+        book1], (book) => mockFunction.onRemoveBook(book));
+      studentWithoutBooks.removeBooks([book2, book2, book1], (book) => mockFunction.onRemoveBook(book));
       expect(studentWithoutBooks.books.map((e) => e.name),
           []);
+      verify(() => mockFunction.onRemoveBook(book1)).called(3);
+      verify(() => mockFunction.onRemoveBook(book2)).called(2);
+    });
+
+    test("Test removing book that does not exist", () {
+      studentWithoutBooks.addBooks([book1, book2]);
+      studentWithoutBooks.addBooks([book1]);
+      studentWithoutBooks.addBooks([book1, book2]);
+      studentWithoutBooks.removeBooks([
+        BookLite(book1.bookId, "${book1.name} 2. Satz", book1.subject, book1.classLevel),
+        book1], (book) => mockFunction.onRemoveBook(book));
+      studentWithoutBooks.removeBooks([book2, book2, book4], (book) => mockFunction.onRemoveBook(book));
+      expect(studentWithoutBooks.books.map((e) => e.name),
+          [book1.name]);
+      verify(() => mockFunction.onRemoveBook(book1)).called(2);
+      verify(() => mockFunction.onRemoveBook(book2)).called(2);
+      verifyNever(() => mockFunction.onRemoveBook(book4));
     });
 
   });

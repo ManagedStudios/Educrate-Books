@@ -26,7 +26,8 @@ void main() async{
   await CouchbaseLiteFlutter.init();
 
   await DB().initializeDatabase();
-  await DB().startReplication();
+  //await DB().startReplication();
+
 
   runApp(MultiProvider(providers: [ //initialize the Viewmodels
     ChangeNotifierProvider(create: (context) => StudentListState(DB())),

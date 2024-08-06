@@ -79,9 +79,7 @@ void addBooks(List<BookLite> books) {
     }
 }
 
-void incrementAmountOfBooks (int amount) {
-    amountOfBooks+=amount;
-}
+
 
   int extractNumberBeforeDot(String input) {
     final regex = RegExp(r'(\d+)\.');
@@ -96,8 +94,13 @@ void incrementAmountOfBooks (int amount) {
   Method to remove books
   Always removes at first the books of higher "Satz" number and then gradually
   the lower ones to ensure data consistency across all students
+
+  Ensure that the book amounts are updated correctly by the caller!!!
+  (Updating happens not here because of performance reasons -> calculate
+  the amount updated upfront, especially beneficial when you delete books of
+  multiple students)
    */
-void removeBooks (List<BookLite> books) {
+void removeBooks (List<BookLite> books, Function(BookLite) onRemoveBook) {
 
     Map<String, int> highestNumberBooks = {};
     List<String> bookIds = books.map((book) => book.bookId).toList();
@@ -123,6 +126,7 @@ void removeBooks (List<BookLite> books) {
         if (bookIds.contains(book.bookId) //check first if bookId and "satz"-number is in correct range
             && extractNumberBeforeDot(book.name)>highestNumberBooks[book.bookId]!-bookIdByAmount[book.bookId]!
             && extractNumberBeforeDot(book.name)<=highestNumberBooks[book.bookId]!) {
+          onRemoveBook(book);
           return true;
         } else {
           return false;
@@ -132,9 +136,7 @@ void removeBooks (List<BookLite> books) {
 
 }
 
-void decrementAmountOfBooks (int amount) {
-    amountOfBooks-=amount;
-}
+
 
 
 
