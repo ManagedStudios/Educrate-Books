@@ -101,7 +101,6 @@ class StudentDetailState extends ChangeNotifier {
   }
 
   Future<void> addBooksToStudent(
-      //TODO BookUtils updateBookAmount
       List<BookLite> books, List<Student> selectedStudents) async {
     for (Student student in selectedStudents) {
       final doc = (await database.getDoc(student.id))!.toMutable();
@@ -109,6 +108,11 @@ class StudentDetailState extends ChangeNotifier {
 
       database.updateDocFromEntity(student, doc);
       await database.saveDocument(doc);
+    }
+    for(BookLite bookLite in books) {
+      BookUtils
+          .updateAmountOnBookToStudentAdded(
+          bookLite.bookId, selectedStudents.length, database);
     }
   }
 }
