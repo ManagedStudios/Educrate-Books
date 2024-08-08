@@ -100,12 +100,19 @@ class Book implements LfgChip, BookLite, SelectableItem {
   }
 
   void updateBookAmountOnDeletes (int n) {
-    if (amountInStudentOwnership>n) amountInStudentOwnership -= n;
+    if (amountInStudentOwnership>=n) amountInStudentOwnership -= n;
     nowAvailable += n;
   }
-  void updateBookAmountOnAdds (int n) {
+
+  /*
+  updates Book amount if enough books are available
+  returns false if not enough books are available else true
+   */
+  bool updateBookAmountOnAdds (int n) {
+    if (nowAvailable - n < 0) return false;
     amountInStudentOwnership += n;
-    if (amountInStudentOwnership>n) nowAvailable -= n;
+    nowAvailable -= n;
+    return true;
   }
 
 

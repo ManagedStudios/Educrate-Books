@@ -4,7 +4,7 @@ import 'package:buecherteam_2023_desktop/Resources/text.dart';
 import 'package:buecherteam_2023_desktop/UI/book_dialog/add_book_dialog.dart';
 import 'package:buecherteam_2023_desktop/UI/book_dialog/edit_book_dialog.dart';
 import 'package:buecherteam_2023_desktop/UI/books/book_depot_book_list.dart';
-import 'package:buecherteam_2023_desktop/UI/books/book_not_deletable_snackbar.dart';
+import 'package:buecherteam_2023_desktop/Util/lfg_snackbar.dart';
 import 'package:buecherteam_2023_desktop/UI/right_click_actions/delete_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -56,7 +56,7 @@ class _BookDepotBookSectionState extends State<BookDepotBookSection> {
                               //Ensure Book won't be deleted if students own it
                               if (await bookListState.haveStudentsThisBook(bookListState.currBookId!)) {
                                 if (context.mounted) { //avoid async errors
-                                  showBookNotDeletableSnackBar(context); //notify user
+                                  showLFGSnackbar(context, TextRes.bookNotDeletable); //notify user
                                 }
                               } else {
                                 if (context.mounted) {//avoid async errors

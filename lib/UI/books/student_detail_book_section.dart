@@ -10,6 +10,7 @@ import '../../Data/bookLite.dart';
 import '../../Data/student.dart';
 import '../../Models/student_detail_state.dart';
 import '../../Resources/dimensions.dart';
+import '../../Util/lfg_snackbar.dart';
 import '../right_click_actions/actions_overlay.dart';
 
 
@@ -91,7 +92,8 @@ class _StudentDetailBookSectionState extends State<StudentDetailBookSection> {
                         studentDetailState
                             .duplicateBooksOfStudents(
                             widget.currStudents,
-                            selectedBooks.toList());
+                            selectedBooks.toList(),
+                            (message) => showLFGSnackbar(context, message));
 
                         clearSelectedBooks();
                       }

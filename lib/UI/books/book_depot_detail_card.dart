@@ -89,6 +89,17 @@ class BookDepotDetailCard extends StatelessWidget {
                         ),
                         const SizedBox(height: Dimensions.spaceVerySmall,),
 
+                        //display how many times the book was lent
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text("${books.data![0].amountInStudentOwnership} ${TextRes.bookAmountInStudentOwnershipDisplay}",
+                              overflow: TextOverflow.ellipsis,),
+                            )
+                          ],
+                        ),
+                        const SizedBox(height: Dimensions.spaceVerySmall,),
+
                             //ISBN Number display
                             Row(
                               children: [

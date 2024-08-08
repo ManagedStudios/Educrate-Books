@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import '../Data/bookLite.dart';
 import '../Data/buildQuery.dart';
 import '../Data/db.dart';
+import '../Resources/text.dart';
 
 class StudentDetailState extends ChangeNotifier {
   HashSet<Student> selectedStudentIdObjects =
@@ -96,23 +97,40 @@ class StudentDetailState extends ChangeNotifier {
   }
 
   Future<void> duplicateBooksOfStudents(
-      List<Student> students, List<BookLite> selectedBooks) async {
-    await addBooksToStudent(selectedBooks, students);
+      List<Student> students, List<BookLite> selectedBooks,
+      Function(String message) onShowSnackbar) async {
+    await addBooksToStudent(selectedBooks, students, onShowSnackbar);
   }
 
   Future<void> addBooksToStudent(
-      List<BookLite> books, List<Student> selectedStudents) async {
+      List<BookLite> books, List<Student> selectedStudents, Function(String message) onShowSnackbar) async {
+    final List<BookLite> booksThatCanBeAdded = []; //for books that are in stock
+    final List<BookLite> booksThatCannotBeAdded = []; //for books that aren't in stock
+
+    //check which books are available and update their amount if they are
+    for(BookLite bookLite in books) {
+      if (await BookUtils
+          .updateAmountOnBookToStudentAdded(
+          bookLite.bookId, selectedStudents.length, database)) {
+        booksThatCanBeAdded.add(bookLite);
+      } else {
+        booksThatCannotBeAdded.add(bookLite);
+      }
+    }
+
+    //add the books to students that are in stock
     for (Student student in selectedStudents) {
       final doc = (await database.getDoc(student.id))!.toMutable();
-      student.addBooks(books);
+      student.addBooks(booksThatCanBeAdded);
 
       database.updateDocFromEntity(student, doc);
       await database.saveDocument(doc);
     }
-    for(BookLite bookLite in books) {
-      BookUtils
-          .updateAmountOnBookToStudentAdded(
-          bookLite.bookId, selectedStudents.length, database);
+
+    //show the user which books were not available
+    if (booksThatCannotBeAdded.isNotEmpty) {
+      onShowSnackbar("${TextRes.booksNotAddable} ${booksThatCannotBeAdded.map((it) => "${it.name} ${it.classLevel}")}");
     }
+
   }
 }

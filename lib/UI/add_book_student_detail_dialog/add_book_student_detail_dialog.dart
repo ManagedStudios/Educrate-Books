@@ -1,6 +1,7 @@
 import 'package:buecherteam_2023_desktop/Data/bookLite.dart';
 import 'package:buecherteam_2023_desktop/Models/student_detail_state.dart';
 import 'package:buecherteam_2023_desktop/UI/add_book_student_detail_dialog/add_book_student_detail_dialog_content.dart';
+import 'package:buecherteam_2023_desktop/Util/lfg_snackbar.dart';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -54,7 +55,9 @@ void openAddBookStudentDetailDialog(
       }).then((books) async {
     if (books != null) {
       await Provider.of<StudentDetailState>(context, listen: false)
-          .addBooksToStudent(books, selectedStudents);
+          .addBooksToStudent(books, selectedStudents, (message) =>
+            showLFGSnackbar(context, message)
+      );
     }
   });
 }

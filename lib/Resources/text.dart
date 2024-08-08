@@ -200,6 +200,10 @@
 
   static const String bookSet = ". Satz";
 
+  static const String bookAmountInStudentOwnershipDisplay = "mal wurde dieses Buch entliehen";
+
+  static const String booksNotAddable = "Folgende Bücher sind in zu geringer Anzahl verfügbar:";
+
 
 
  
