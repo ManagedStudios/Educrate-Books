@@ -25,6 +25,7 @@ class BookUtils {
     dbBook.updateBookAmountOnDeletes(amount);
     database.updateDocFromEntity(dbBook, doc);
     database.saveDocument(doc);
+
   }
   static Future<bool> updateAmountOnBookToStudentAdded (String bookId, int amount, DB database) async {
     final doc = (await database.getDoc(bookId))!.toMutable();

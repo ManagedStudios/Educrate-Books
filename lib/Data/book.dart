@@ -1,4 +1,5 @@
 
+
 import 'package:buecherteam_2023_desktop/Data/bookLite.dart';
 import 'package:buecherteam_2023_desktop/Data/lfg_chip.dart';
 import 'package:buecherteam_2023_desktop/Data/selectableItem.dart';
@@ -100,7 +101,7 @@ class Book implements LfgChip, BookLite, SelectableItem {
   }
 
   void updateBookAmountOnDeletes (int n) {
-    if (amountInStudentOwnership>=n) amountInStudentOwnership -= n;
+    amountInStudentOwnership -= n;
     nowAvailable += n;
   }
 

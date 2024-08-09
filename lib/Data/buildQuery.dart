@@ -40,7 +40,7 @@ class BuildQuery {
   }
 
   static String getAllTrainingDirections() {
-    String query = """SELECT ${TextRes.trainingDirectionsJson} FROM _
+    String query = """SELECT META().id, ${TextRes.trainingDirectionsJson} FROM _
     WHERE ${TextRes.typeJson}='${TextRes.trainingDirectionsTypeJson}' """;
 
     return query;

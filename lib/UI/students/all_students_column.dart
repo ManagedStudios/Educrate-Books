@@ -17,6 +17,7 @@ import 'package:provider/provider.dart';
 
 import '../../Resources/dimensions.dart';
 import '../../Resources/text.dart';
+import '../../Util/lfg_snackbar.dart';
 import '../all_students_column_util/all_students_dialog_builder.dart';
 import '../all_students_column_util/revert_student_delete_snackbar.dart';
 import '../all_students_column_util/selection_process_all_students.dart';
@@ -55,16 +56,20 @@ class _AllStudentsColumnState extends State<AllStudentsColumn> {
       onSecondaryTapUp: (details) { //right click actions
         var state = Provider.of<StudentDetailState>(context, listen: false);
         var studentListState = Provider.of<StudentListState>(context, listen: false);
+        List<Student> selectedStudents = state.selectedStudentIdObjects.toList(); //make copy of selected students to avoid side effects
         if (studentListState.selectedStudentIds.isNotEmpty && !isOverlayOpen) { //are there any students? Check StudentListState as StudentDetail can differ! Dont open an overlay twice
           setState(() {
             isOverlayOpen = true;
           });
           var overlay = ActionsOverlay(
-              selectedItems: state.selectedStudentIdObjects.toList(), //make copy of selected students to avoid side effects
+              selectedItems: selectedStudents,
               width: Dimensions.widthRightClickActionMenu,
               actions: { //inflate actions
                 TextRes.delete:(actions) {
-                  openDeleteDialog(context, actions.map((e) => e.getDocId()!).toList(), TextRes.student);
+                  openDeleteDialog(context, actions.map((e) => e.getDocId()!).toList(), TextRes.student,
+                      functionBeforeDeletion: () {
+                          state.updateBookAmountOnStudentDelete(selectedStudents);
+                      });
                   clearanceNeeded = true;
                 }
               },
@@ -173,13 +178,20 @@ class _AllStudentsColumnState extends State<AllStudentsColumn> {
                                   notifyDetailPage: (student) => {}, //dead code
                                   onDeleteStudent: (student) {
                                     clearanceNeeded = true;
-                                    Provider.of<StudentListState>(
+
+                                    Provider.of<StudentListState>( //delete the student
                                         context, listen: false)
                                         .deleteStudent(student);
+                                    Provider.of<StudentDetailState>( //then update the book amount of the books the student owned
+                                        context, listen: false)
+                                        .updateBookAmountOnStudentDelete([student]);
                                     showRevertStudentDeleteSnackBar(student, //make action reversible
                                         Provider.of<StudentListState>(
                                             context, listen: false),
-                                        context);
+                                      Provider.of<StudentDetailState>(
+                                          context, listen: false),
+                                        context
+                                   );
                                   },
                                   openEditDialog: (student) {
                                     updateStudent(student, context);
@@ -222,7 +234,12 @@ class _AllStudentsColumnState extends State<AllStudentsColumn> {
 
       //save the student to db
       String id = await studentListState.saveStudent(firstName, lastName, classLevel,
-          classChar, trainingDirections);
+          classChar, trainingDirections,
+          onAddBooksToStudent: (books, student) =>
+              Provider.of<StudentDetailState>(context, listen: false)
+                  .addBooksToStudent(books??[], [student], (message) =>
+                      showLFGSnackbar(context, message))
+      );
       studentAddedId = id; //do not use setState to avoid race conditions betweens stream changes and setState changes
     });
   }

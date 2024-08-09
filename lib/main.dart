@@ -29,6 +29,7 @@ void main() async{
   //await DB().startReplication();
 
 
+
   runApp(MultiProvider(providers: [ //initialize the Viewmodels
     ChangeNotifierProvider(create: (context) => StudentListState(DB())),
     ChangeNotifierProvider(create: (context) => RightClickState(DB())),

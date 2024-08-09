@@ -107,6 +107,8 @@ class StudentDetailState extends ChangeNotifier {
     final List<BookLite> booksThatCanBeAdded = []; //for books that are in stock
     final List<BookLite> booksThatCannotBeAdded = []; //for books that aren't in stock
 
+    if (books.isEmpty) return;
+
     //check which books are available and update their amount if they are
     for(BookLite bookLite in books) {
       if (await BookUtils
@@ -132,5 +134,21 @@ class StudentDetailState extends ChangeNotifier {
       onShowSnackbar("${TextRes.booksNotAddable} ${booksThatCannotBeAdded.map((it) => "${it.name} ${it.classLevel}")}");
     }
 
+  }
+
+  Future<void> updateBookAmountOnStudentDelete(List<Student> selectedStudents) async {
+    Map<String, int> bookIdByAmount = {};
+
+    for (Student student in selectedStudents) {
+      for (BookLite bookLite in student.books) {
+        bookIdByAmount[bookLite.bookId] = (bookIdByAmount[bookLite.bookId]??0) + 1;
+      }
+    }
+
+    for (MapEntry<String, int> bookByAmount in bookIdByAmount.entries) {
+      BookUtils
+          .updateAmountOnBookFromStudentDeleted(
+          bookByAmount.key, bookByAmount.value, database);
+    }
   }
 }

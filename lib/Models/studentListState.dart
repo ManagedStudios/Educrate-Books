@@ -3,6 +3,7 @@ import 'dart:async';
 import 'dart:collection';
 
 
+
 import 'package:buecherteam_2023_desktop/Data/buildQuery.dart';
 import 'package:buecherteam_2023_desktop/Data/class_data.dart';
 import 'package:buecherteam_2023_desktop/Data/db.dart';
@@ -31,11 +32,22 @@ class StudentListState extends ChangeNotifier {
   saveStudent saves completely new Students
    */
   Future<String> saveStudent(String firstName, String lastName, int classLevel,
-      String classChar, List<String> trainingDirections, {List<BookLite>? books, List<String>? tags}) async {
+      String classChar, List<String> trainingDirections,
+      {required Function(List<BookLite>? books, Student student) onAddBooksToStudent,
+        List<BookLite>? books, List<String>? tags}) async {
+
     final document = createNewStudentDoc(firstName, lastName, classLevel, classChar, trainingDirections,
-        books: books??(await getBooksFromTrainingDirections(trainingDirections)), //add books according to trainingDirections if no books given
+        books: [], //don't add books here since this way book amounts will not be updated
         tags: tags);
     await database.saveDocument(document);
+    if (books == null) { //if no books were given add books according to trainingDirection
+      onAddBooksToStudent((await getBooksFromTrainingDirections(trainingDirections)),
+          database.toEntity(Student.fromJson, document));
+    } else { //if books were given add them
+
+      onAddBooksToStudent(books, database.toEntity(Student.fromJson, document));
+    }
+
     return document.id;
   }
 
