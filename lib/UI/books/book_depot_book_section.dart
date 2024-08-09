@@ -64,6 +64,8 @@ class _BookDepotBookSectionState extends State<BookDepotBookSection> {
                                     functionBeforeDeletion: () async{
                                       bookListState
                                           .deleteTrainingDirectionsIfRequired(bookListState.currBookId!);
+                                      bookListState
+                                        .setCurrBookId(null);
                                     });
                                 }
                               }
