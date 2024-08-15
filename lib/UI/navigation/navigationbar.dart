@@ -3,6 +3,7 @@ import 'package:buecherteam_2023_desktop/Models/navigation_state.dart';
 import 'package:buecherteam_2023_desktop/Resources/text.dart';
 import 'package:buecherteam_2023_desktop/UI/book_depot_view.dart';
 import 'package:buecherteam_2023_desktop/UI/navigation/navigation_button.dart';
+import 'package:buecherteam_2023_desktop/UI/settings_dialog/settings_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -19,8 +20,10 @@ class LfgNavigationBar extends StatelessWidget {
       padding: const EdgeInsets.only(top: Dimensions.spaceMedium),
       child: Consumer<NavigationState>(
         builder: (context, state, _) => Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            const Spacer(),
             NavigationButton(key: const Key(TextRes.student),
                 isClicked: state.isStudentViewClicked,
                 onClickAction: () {
@@ -35,7 +38,16 @@ class LfgNavigationBar extends StatelessWidget {
                   state.onBookViewClicked();
                   context.go(BookDepotView.routeName);
                 },
-                text: TextRes.books)
+                text: TextRes.books),
+            const Spacer(),
+            Tooltip(
+              message: TextRes.settingsTooltip,
+              child: IconButton(onPressed: (){
+                showDialog(context: context,
+                    builder: (context) => SettingsDialog());
+              }, icon: const Icon(Icons.settings)),
+            ),
+            const SizedBox(width: Dimensions.spaceMedium,)
           ],
         ),
       ),

@@ -204,6 +204,10 @@
 
   static const String booksNotAddable = "Folgende Bücher sind in zu geringer Anzahl verfügbar:";
 
+  static const String settingsTooltip = "Einstellungen/Import";
+
+  static const String seperator = "|";
+
 
 
  
