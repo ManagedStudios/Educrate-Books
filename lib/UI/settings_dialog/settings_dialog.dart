@@ -14,7 +14,6 @@ class SettingsDialog extends StatelessWidget {
         ? MediaQuery.of(context).size.width * 0.7
         : 700;
     double dialogHeight = MediaQuery.of(context).size.height * 0.7;
-    double navButtonsPadding = MediaQuery.of(context).size.width * 0.1;
     return Dialog(
         child: SizedBox(
           width: dialogWidth,
@@ -29,33 +28,38 @@ class SettingsDialog extends StatelessWidget {
             child: Consumer<SettingsNavState>(
               builder: (context, state, _) => Column(
                 children: [
-                  Padding(
-                    padding:  EdgeInsets.only(
-                      left: navButtonsPadding,
-                      right: navButtonsPadding
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        for (int i = 0; i<SettingsNavButtons.values.length; i++)
-                          ...[
-                            TextButton(onPressed: () =>
-                              state.navigateTo(SettingsNavButtons.values[i]),
-                                child: Text(
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          for (int i = 0; i<SettingsNavButtons.values.length; i++)
+                            ...[
+                              TextButton(onPressed: () =>
+                                  state.navigateTo(SettingsNavButtons.values[i]),
+                                  child: Text(
                                     SettingsNavButtons.values[i].value,
-                              style: state.selectedButton==SettingsNavButtons.values[i]
-                                      ? Theme.of(context).textTheme.bodyLarge
-                                      : Theme.of(context).textTheme.bodyMedium,
-                                )
-                            ),
-                            if (i != SettingsNavButtons.values.length-1)
-                               Text(
-                                  TextRes.seperator,
-                                  style: Theme.of(context).textTheme.bodyMedium,
-                              )
-                          ]
-                      ],
-                    ),
+                                    style: state.selectedButton==SettingsNavButtons.values[i]
+                                        ? Theme.of(context).textTheme.bodyLarge
+                                        : Theme.of(context).textTheme.bodyMedium,
+                                  )
+                              ),
+                              if (i != SettingsNavButtons.values.length-1)
+                                ...[
+                                  const SizedBox(width: Dimensions.paddingSmall,),
+                                  Text(
+                                    TextRes.seperator,
+                                    style: Theme.of(context).textTheme.bodyMedium,
+                                  ),
+                                  const SizedBox(width: Dimensions.paddingSmall,)
+                                ]
+                            ]
+                        ],
+                      )
+
+                    ],
                   ),
                   state.currWidget
                 ],

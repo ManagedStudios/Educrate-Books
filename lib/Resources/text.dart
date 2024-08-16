@@ -208,6 +208,23 @@
 
   static const String seperator = "|";
 
+  static const String equals = "=";
+
+  static const String studentAttrbMapperFirstname = "Vorname";
+
+  static const String studentAttrbMapperLastname = "Nachname";
+
+  static const String studentAttrbMapperClass = "Klasse";
+
+  static const String studentAttrbMapperTrainingDirection = "Ausbildung";
+
+  static const String studentAttrbMapperTags = "Tags";
+
+  static const String studentAttrbMapperIgnore = "Ignorieren";
+
+
+
+
 
 
  
