@@ -66,7 +66,7 @@ void main () {
   });
 
   testWidgets("Renders correctly with subtype of T", (tester) async{
-    await tester.pumpWidget(createWidgetUnderTest(mockChipContentSubtype, false));
+    await tester.pumpWidget(createWidgetUnderTest<LfgChip>(mockChipContentSubtype, false));
     final text = find.text(label);
     final chipTag = find.byType(ChipTag);
     final card = find.byType(Card);

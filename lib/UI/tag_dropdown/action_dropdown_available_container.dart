@@ -10,12 +10,12 @@ import 'package:flutter/material.dart';
 ActionDropdownAvailableContainer shows the options you can select in a dropdownAction
  */
 
-class ActionDropdownAvailableContainer extends StatelessWidget {
+class ActionDropdownAvailableContainer<T extends LfgChip> extends StatelessWidget {
   const ActionDropdownAvailableContainer({super.key, required this.availableChips,
     required this.onAddChip, required this.width, this.hintText});
 
-  final List<LfgChip> availableChips;
-  final Function(LfgChip chip) onAddChip;
+  final List<T> availableChips;
+  final Function(T chip) onAddChip;
   final double width;
   final String? hintText;
 
@@ -67,7 +67,7 @@ class ActionDropdownAvailableContainer extends StatelessWidget {
               use ChipWrap with fixed width to use as optionButtons
                */
               for (int chipIndex = 0; chipIndex<availableChips.length; chipIndex++)
-                ChipWrap(chips: [availableChips[chipIndex]],
+                ChipWrap<T>(chips: [availableChips[chipIndex]],
                   onClickChipRow: (chip) {
                     onAddChip(chip[0]);
                   },

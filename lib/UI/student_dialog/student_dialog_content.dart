@@ -169,13 +169,13 @@ class _StudentDialogContentState extends State<StudentDialogContent> {
                   : widget
                       .studentClass, //preserve state even after parent rebuilds
               onAddChip: (classChip) {
-                widget.onStudentClassUpdated(classChip as ClassData);
+                widget.onStudentClassUpdated(classChip);
               },
               onDeleteChip: (_) {},
               multiSelect: false, width: dialogWidth * 0.8,
               onCloseOverlay: (classes) {
                 widget.onStudentClassUpdated(
-                    classes.isNotEmpty ? classes[0] as ClassData : null);
+                    classes.isNotEmpty ? classes[0] : null);
               },
             ),
           ),
@@ -201,7 +201,7 @@ class _StudentDialogContentState extends State<StudentDialogContent> {
             /*
                   The dropdown widget is used to select the training directions
                    */
-            child: Dropdown(
+            child: Dropdown<TrainingDirectionsData>(
                 availableChips: widget.trainingDirections,
                 selectedChips: widget.student != null
                     ? widget.student!.trainingDirections
@@ -214,7 +214,6 @@ class _StudentDialogContentState extends State<StudentDialogContent> {
                 width: dialogWidth * 0.8,
                 onCloseOverlay: (trainingDirections) =>
                     widget.onStudentTrainingDirectionsUpdated(trainingDirections
-                        .map((e) => e as TrainingDirectionsData)
                         .toList())),
           ),
         ],

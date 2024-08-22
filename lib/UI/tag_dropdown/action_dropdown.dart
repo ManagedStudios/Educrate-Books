@@ -13,24 +13,24 @@ the overlay widget which makes selecting and deleting options possible
 in ActionDropdown only the filtering State is managed, all other state is managed
 by Dropdown
  */
-class ActionDropdown extends StatefulWidget {
+class ActionDropdown<T extends LfgChip> extends StatefulWidget {
   const ActionDropdown({super.key, required this.width,
     required this.selectedChips, required this.onDeleteChip,
     required this.availableChips, required this.onAddChip, this.hintText});
 
   final double width;
-  final List<LfgChip> selectedChips;
-  final Function(LfgChip chip) onDeleteChip;
+  final List<T> selectedChips;
+  final Function(T chip) onDeleteChip;
 
-  final List<LfgChip> availableChips;
-  final Function(LfgChip chip) onAddChip;
+  final List<T> availableChips;
+  final Function(T chip) onAddChip;
   final String? hintText;
 
   /*
   filterList filters for numbers in elements and additionally for text matches
   ensures filtering just after class_level
    */
-  List<LfgChip> filterList(List<LfgChip> fullList, String filterText) {
+  List<T> filterList(List<T> fullList, String filterText) {
     // Get numeric value from filterText.
     final filterNum = RegExp(r'\d+').firstMatch(filterText)?.group(0) ?? '';
 
@@ -51,12 +51,12 @@ class ActionDropdown extends StatefulWidget {
   }
 
   @override
-  State<ActionDropdown> createState() => _ActionDropdownState();
+  State<ActionDropdown<T>> createState() => _ActionDropdownState<T>();
 }
 
-class _ActionDropdownState extends State<ActionDropdown> {
+class _ActionDropdownState<T extends LfgChip> extends State<ActionDropdown<T>> {
 
-  late List<LfgChip> filteredAvailableChips;
+  late List<T> filteredAvailableChips;
   String filterText = "";
 
   @override
@@ -87,7 +87,7 @@ class _ActionDropdownState extends State<ActionDropdown> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ActionDropdownSelectedWrap(width: widget.width,
+          ActionDropdownSelectedWrap<T>(width: widget.width,
               selectedChips: widget.selectedChips,
               onDeleteChip: widget.onDeleteChip,
             onFilterTextChange: (text) {

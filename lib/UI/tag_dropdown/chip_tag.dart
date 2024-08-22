@@ -6,14 +6,14 @@ import 'package:flutter/material.dart';
 /*
 ChipTag is a customized chip widget with an optional delete button
  */
-class ChipTag extends StatelessWidget {
+class ChipTag<T extends LfgChip> extends StatelessWidget {
   const ChipTag({super.key, required this.chipContent, required this.color,
     required this.deletable, required this.onDelete});
 
-  final LfgChip chipContent;
+  final T chipContent;
   final Color color;
   final bool deletable;
-  final Function(LfgChip chip) onDelete; //delegate onDelete action
+  final Function(T chip) onDelete; //delegate onDelete action
 
   @override
   Widget build(BuildContext context) {

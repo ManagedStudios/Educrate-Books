@@ -22,25 +22,25 @@ class Dropdown<T extends LfgChip> extends StatefulWidget {
     required this.multiSelect, required this.width, this.hintText,
     required this.onCloseOverlay});
 
-  final List<LfgChip> selectedChips;
-  final List<LfgChip> availableChips;
-  final Function(LfgChip chip) onAddChip;
-  final Function(LfgChip chip) onDeleteChip;
-  final Function (List<LfgChip> selectedChips) onCloseOverlay;
+  final List<T> selectedChips;
+  final List<T> availableChips;
+  final Function(T chip) onAddChip;
+  final Function(T chip) onDeleteChip;
+  final Function (List<T> selectedChips) onCloseOverlay;
   final bool multiSelect;
   final double width;
   final String? hintText;
 
 
   @override
-  State<Dropdown> createState() => _DropdownState();
+  State<Dropdown<T>> createState() => _DropdownState<T>();
 }
 
 class _DropdownState<T extends LfgChip> extends State<Dropdown<T>>  {
   bool isOverlayOpen = false;
   late GlobalKey wrapChipsField;
-  late List<LfgChip> selectedChips;
-  late List<LfgChip> availableChips;
+  late List<T> selectedChips;
+  late List<T> availableChips;
   OverlayEntry? overlayEntry;
 
 
@@ -84,7 +84,7 @@ class _DropdownState<T extends LfgChip> extends State<Dropdown<T>>  {
   Widget build(BuildContext context) {
     return IgnorePointer(
       ignoring: isOverlayOpen, //disable interaction when overlay is open
-      child: ChipWrap(key: wrapChipsField, chips: selectedChips,
+      child: ChipWrap<T>(key: wrapChipsField, chips: selectedChips,
               onClickChipRow: (_) {
                 showOverlay();
               },
@@ -117,7 +117,7 @@ class _DropdownState<T extends LfgChip> extends State<Dropdown<T>>  {
             closeOverlay();
             widget.onCloseOverlay(selectedChips);
           },
-          child: ActionDropdown(width: widget.width, selectedChips: selectedChips,
+          child: ActionDropdown<T>(width: widget.width, selectedChips: selectedChips,
               hintText: widget.hintText,
               onDeleteChip: (chip) {
                   widget.onDeleteChip(chip); //notify parents about changes
@@ -155,7 +155,7 @@ class _DropdownState<T extends LfgChip> extends State<Dropdown<T>>  {
     }
   }
 
-  void addChip(LfgChip chip) {
+  void addChip(T chip) {
     markOverlayReadyForUpdate(); //update Overlay on next state change occurring right in addChip
     if(widget.multiSelect) {
       setState(() {
@@ -183,7 +183,7 @@ class _DropdownState<T extends LfgChip> extends State<Dropdown<T>>  {
 
   }
 
-  void deleteChip(LfgChip chip) {
+  void deleteChip(T chip) {
     markOverlayReadyForUpdate();
       setState(() {
         availableChips.add(chip);

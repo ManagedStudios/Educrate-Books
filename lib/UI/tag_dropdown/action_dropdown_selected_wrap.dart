@@ -15,21 +15,21 @@ and makes filtering for chips in ActionDropdown possible
 No State managed here besides the TextEditingController for the textField
  */
 
-class ActionDropdownSelectedWrap extends StatefulWidget {
+class ActionDropdownSelectedWrap<T extends LfgChip> extends StatefulWidget {
   const ActionDropdownSelectedWrap({super.key, required this.width,
     required this.selectedChips, required this.onDeleteChip,
     required this.onFilterTextChange});
 
   final double width;
-  final List<LfgChip> selectedChips;
-  final Function(LfgChip chip) onDeleteChip;
+  final List<T> selectedChips;
+  final Function(T chip) onDeleteChip;
   final Function(String text) onFilterTextChange;
 
   @override
-  State<ActionDropdownSelectedWrap> createState() => _ActionDropdownSelectedWrapState();
+  State<ActionDropdownSelectedWrap<T>> createState() => _ActionDropdownSelectedWrapState<T>();
 }
 
-class _ActionDropdownSelectedWrapState extends State<ActionDropdownSelectedWrap> {
+class _ActionDropdownSelectedWrapState<T extends LfgChip> extends State<ActionDropdownSelectedWrap<T>> {
 
   late TextEditingController controller;
   @override

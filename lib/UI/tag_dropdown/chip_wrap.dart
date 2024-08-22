@@ -11,12 +11,12 @@ ChipWrap acts as container for chips; it is used for the availableChips in
 ActionDropdown and to show the static
 selectedChips in the Dropdown before ActionDropdown opens
  */
-class ChipWrap extends StatelessWidget {
+class ChipWrap<T extends LfgChip> extends StatelessWidget {
   const ChipWrap({super.key, required this.chips, required this.onClickChipRow,
     this.color, required this.width});
 
-  final List<LfgChip> chips;
-  final void Function(List<LfgChip>) onClickChipRow; //delegate the onClickChipRow
+  final List<T> chips;
+  final void Function(List<T>) onClickChipRow; //delegate the onClickChipRow
   final Color? color;
   final double width;
 
@@ -44,7 +44,7 @@ class ChipWrap extends StatelessWidget {
               )
             ],
             for (int chipIndex = 0; chipIndex<(chips.length); chipIndex++) //render all chips
-              ChipTag(chipContent: chips[chipIndex], color: color??ChipColors.chipColors[chipIndex%ChipColors.chipColors.length], deletable: false, onDelete: (_){})
+              ChipTag<T>(chipContent: chips[chipIndex], color: color??ChipColors.chipColors[chipIndex%ChipColors.chipColors.length], deletable: false, onDelete: (_){})
             /*
             use chipIndex%ChipColors.chipColors.length to iterate through chipColors based on chipIndex
              */
