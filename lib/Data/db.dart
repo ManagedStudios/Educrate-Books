@@ -148,7 +148,7 @@ class DB {
 
   Future<void> startReplication () async{
     final replicator = await Replicator.create(ReplicatorConfiguration(database: _database,
-        target: UrlEndpoint(Uri.parse('wss://buecherteamsync.dibbomrinmoysaha.engineer/buecherteam/')), //The URI your reverse proxy server or your sync gateway is located - ws is websocket
+        target: UrlEndpoint(Uri.parse('ws://localhost:4984/buecherteam/')), //The URI your reverse proxy server or your sync gateway is located - ws is websocket
         continuous: true,
         replicatorType: ReplicatorType.pushAndPull,
         authenticator: BasicAuthenticator(username: "dibbo", password: "dibboMrinmoy"),

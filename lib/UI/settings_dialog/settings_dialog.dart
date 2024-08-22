@@ -18,17 +18,17 @@ class SettingsDialog extends StatelessWidget {
         child: SizedBox(
           width: dialogWidth,
           height: dialogHeight,
-          child: Padding(
-            padding: const EdgeInsets.only(
-              left: Dimensions.paddingVeryBig,
-              right: Dimensions.paddingVeryBig,
-              top: Dimensions.paddingMedium,
-              bottom: Dimensions.paddingSmall
+          child: Consumer<SettingsNavState>(
+            builder: (context, state, _) => Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(
+                left: Dimensions.paddingVeryBig,
+                right: Dimensions.paddingVeryBig,
+                top: Dimensions.paddingMedium,
+                bottom: Dimensions.paddingSmall
             ),
-            child: Consumer<SettingsNavState>(
-              builder: (context, state, _) => Column(
-                children: [
-                  Row(
+                  child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Row(
@@ -61,9 +61,9 @@ class SettingsDialog extends StatelessWidget {
 
                     ],
                   ),
-                  state.currWidget
-                ],
-              ),
+                ),
+                Expanded(child: state.currWidget)
+              ],
             ),
           ),
         ),

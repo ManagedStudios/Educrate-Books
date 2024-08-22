@@ -222,6 +222,10 @@
 
   static const String studentAttrbMapperIgnore = "Ignorieren";
 
+  static const String back = "Zurück";
+
+  static const String next = "Weiter";
+
 
 
 
