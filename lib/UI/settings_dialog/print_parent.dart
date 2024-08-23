@@ -6,9 +6,7 @@ class PrintParent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: [
-        Text("Hi I'm Drucken")
-      ],
+      children: [Text("Hi I'm Drucken")],
     );
   }
 }

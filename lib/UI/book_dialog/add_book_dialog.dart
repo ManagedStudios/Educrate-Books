@@ -7,12 +7,19 @@ import '../../Resources/text.dart';
 import 'book_dialog.dart';
 
 void addBook(BuildContext context) {
-  showDialog<List<Object?>>(context: context, builder: (context) {
-    return const BookDialog(title: TextRes.addBook,
-        book: null, actionText: TextRes.saveActionText, isFullyEditable: true,);
-  }).then((values) async{
+  showDialog<List<Object?>>(
+      context: context,
+      builder: (context) {
+        return const BookDialog(
+          title: TextRes.addBook,
+          book: null,
+          actionText: TextRes.saveActionText,
+          isFullyEditable: true,
+        );
+      }).then((values) async {
     final bookListState = Provider.of<BookDepotState>(context, listen: false);
-    final classLevelState = Provider.of<ClassLevelState>(context, listen: false);
+    final classLevelState =
+        Provider.of<ClassLevelState>(context, listen: false);
 
     if (values == null) return;
 
@@ -23,11 +30,9 @@ void addBook(BuildContext context) {
     String? isbnNumber = values[4] as String?;
     int amount = int.parse((values[5] as String));
 
-    bookListState.saveBook(bookName, bookSubject, classLevel, trainingDirections, isbnNumber, amount);
+    bookListState.saveBook(bookName, bookSubject, classLevel,
+        trainingDirections, isbnNumber, amount);
     bookListState.setCurrClassLevel(classLevel);
     classLevelState.setSelectedClassLevel(classLevel);
-
-
-
   });
 }

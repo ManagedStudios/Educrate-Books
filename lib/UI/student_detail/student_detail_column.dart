@@ -1,4 +1,3 @@
-
 import 'dart:collection';
 
 import 'package:buecherteam_2023_desktop/Data/bookLite.dart';
@@ -11,16 +10,15 @@ import 'package:buecherteam_2023_desktop/UI/student_detail/student_detail_info.d
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-
 import '../../Data/student.dart';
-
 
 /*
 this widget contains the detail section for students and uses a self-sufficient
 stream to update the data of the students
  */
 class StudentDetailColumn extends StatelessWidget {
-  const StudentDetailColumn({super.key, required this.pressedKey, required this.onFocusChanged});
+  const StudentDetailColumn(
+      {super.key, required this.pressedKey, required this.onFocusChanged});
 
   final Keyboard pressedKey;
   final Function(bool focused) onFocusChanged;
@@ -28,58 +26,57 @@ class StudentDetailColumn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<StudentDetailState>(
-      builder: (BuildContext context, StudentDetailState studentDetailState, _) {
+      builder:
+          (BuildContext context, StudentDetailState studentDetailState, _) {
         return StreamBuilder(
-            stream: studentDetailState.streamStudentsDetails(
-              studentDetailState.selectedStudentIdObjects
-                  .map((e) => e.id)
-                  .toList()
-            ),
+            stream: studentDetailState.streamStudentsDetails(studentDetailState
+                .selectedStudentIdObjects
+                .map((e) => e.id)
+                .toList()),
             builder: (context, change) {
-
               List<Student> currStudents = change.data ?? [];
 
               return currStudents.isEmpty
                   ? Container()
                   : Column(
-                children: [
-                  StudentDetailInfo(students: currStudents, onAddWarning: addWarning),
+                      children: [
+                        StudentDetailInfo(
+                            students: currStudents, onAddWarning: addWarning),
 
-                  /*
+                        /*
                 Here comes the tag dropdown menu
                  */
 
-                  const SizedBox(
-                    height: Dimensions.spaceMedium,
-                  ),
-
-                  Expanded(
-                    child: StudentDetailBookSection(
-                        pressedKey: pressedKey,
-                        books: getBooks(currStudents),
-                        onAddBooks: () {
-                           openAddBookStudentDetailDialog(context, currStudents,
-                              studentDetailState, onFocusChanged);
-                        }, currStudents: currStudents,
-                    ),
-                  )
-
-                ],
-              );
-            }
-        );
+                        const SizedBox(
+                          height: Dimensions.spaceMedium,
+                        ),
+                        Expanded(
+                          child: StudentDetailBookSection(
+                            pressedKey: pressedKey,
+                            books: getBooks(currStudents),
+                            onAddBooks: () {
+                              openAddBookStudentDetailDialog(
+                                  context,
+                                  currStudents,
+                                  studentDetailState,
+                                  onFocusChanged);
+                            },
+                            currStudents: currStudents,
+                          ),
+                        )
+                      ],
+                    );
+            });
       },
-
     );
   }
 
-  void addWarning(List<Student> students) {
-
-  }
+  void addWarning(List<Student> students) {}
 
   List<BookLite> getBooks(List<Student> currStudents) {
     List<BookLite> result = [];
-    HashMap<String, BookLite> booksByName = HashMap(); //track the amount of books that should be added to the result
+    HashMap<String, BookLite> booksByName =
+        HashMap(); //track the amount of books that should be added to the result
 
     /*
     every student can have n books of type x.
@@ -106,6 +103,4 @@ class StudentDetailColumn extends StatelessWidget {
 
     return result;
   }
-
-
 }

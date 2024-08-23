@@ -14,13 +14,12 @@ class ChipDisplayRow extends StatelessWidget {
       scrollDirection: Axis.horizontal,
       child: Wrap(
         children: [
-          for (String chip in chips)
-            ...[
-              ChipDisplayCard(chipText: chip),
-              const SizedBox(width: Dimensions.paddingSmall,)
-            ]
-
-
+          for (String chip in chips) ...[
+            ChipDisplayCard(chipText: chip),
+            const SizedBox(
+              width: Dimensions.paddingSmall,
+            )
+          ]
         ],
       ),
     );

@@ -1,12 +1,12 @@
-
- class TextRes {
+class TextRes {
   static const String dbName = "lfgBooks";
 
   static const String dbAccesError = "Datenbankinteraktion fehlgeschlagen: ";
 
   static const String timeOutException = "Ladefehler: ";
 
-  static const String unexpectedDbError = "Ein unerwarteter Fehler bei der Datenbankinteraktion: ";
+  static const String unexpectedDbError =
+      "Ein unerwarteter Fehler bei der Datenbankinteraktion: ";
 
   static const String typeJson = 'type';
 
@@ -19,13 +19,14 @@
   static const String studentBooksJson = 'books';
   static const String studentTypeJson = 'student';
   static const String studentAmountOfBooksJson = 'amountOfBooks';
-  
+
   static const String bookIdJson = 'bookId';
   static const String bookNameJson = 'name';
   static const String bookSubjectJson = 'subject';
   static const String bookClassLevelJson = 'classLevel';
 
-  static const String studentSearchHint = 'Suche nach Schülernamen, Klassen und Ausbildungen';
+  static const String studentSearchHint =
+      'Suche nach Schülernamen, Klassen und Ausbildungen';
 
   static const String student = "Schüler";
   static const String book = "Buch";
@@ -50,7 +51,8 @@
 
   static const String classDataDropdownDescription = "Klasse auswählen";
 
-  static const String trainingDirectionsDataDropdownDescription = "Ausbildung(en) auswählen";
+  static const String trainingDirectionsDataDropdownDescription =
+      "Ausbildung(en) auswählen";
 
   static const String addStudentTitle = "Schüler hinzufügen";
 
@@ -70,7 +72,8 @@
 
   static const bookTypeJson = 'book';
 
-  static const String bookNegativeIntError = "Negative value for on or more of this variables: "
+  static const String bookNegativeIntError =
+      "Negative value for on or more of this variables: "
       "classLevel, expectedAmountNeeded, nowAvailable, totalAvailable";
 
   static const String idJson = 'id';
@@ -103,7 +106,8 @@
 
   static const String severalStudents = "Schüler";
 
-  static const String severalStudentsInfo = "Hinzufüge-Aktionen betreffen alle ausgewählten Schüler \n"
+  static const String severalStudentsInfo =
+      "Hinzufüge-Aktionen betreffen alle ausgewählten Schüler \n"
       "Löschen-Aktionen nur Diejenigen, die das Attribut auch besitzen";
 
   static const String warning = "Mahnung";
@@ -112,7 +116,8 @@
 
   static const String duplicate = "Duplizieren";
 
-  static const String addBookStudentDetailInstructions = "Wählen Sie die Bücher aus, die sie hinzufügen wollen";
+  static const String addBookStudentDetailInstructions =
+      "Wählen Sie die Bücher aus, die sie hinzufügen wollen";
 
   static const String ftsBookStudentDetail = "book_fts_index";
 
@@ -124,13 +129,15 @@
 
   static const String toAdd = "hinzufügen";
 
-  static const String standardWarningAdd = "Standard Mahnung kopieren und als Tag hinzufügen";
+  static const String standardWarningAdd =
+      "Standard Mahnung kopieren und als Tag hinzufügen";
 
   static const String classLevel = ". Klasse";
 
   static const String classLevels = "Jahrgangsstufen";
 
-  static const String switchStackBookView = "Wechseln zwischen Bücheransicht/Stapelansicht";
+  static const String switchStackBookView =
+      "Wechseln zwischen Bücheransicht/Stapelansicht";
 
   static const String edit = "Bearbeiten";
 
@@ -142,7 +149,8 @@
 
   static const String hyphen = "—";
 
-  static const String trainingDirectionSelectionRowError = "Einen der Buttons wählen!";
+  static const String trainingDirectionSelectionRowError =
+      "Einen der Buttons wählen!";
 
   static const String classLevelWithoutDot = "Jahrgangsstufe";
 
@@ -150,7 +158,8 @@
 
   static const String trainingDirectionsNameError = "Bitte ein label eintippen";
 
-  static const String classLevelError = "Nur Zahlen(=Jahrgangsstufe) sind gültig!";
+  static const String classLevelError =
+      "Nur Zahlen(=Jahrgangsstufe) sind gültig!";
 
   static const String trainingDirectionHyphen = "-";
 
@@ -164,13 +173,16 @@
 
   static const String bookIsbnNumberJson = "isbnNumber";
 
-  static const String availableClassLevelError = "Bitte eine der folgenden Klassen: ";
+  static const String availableClassLevelError =
+      "Bitte eine der folgenden Klassen: ";
 
   static const String toInsert = "eingeben";
 
-  static String bookSubjectError = "Bitte das Fach eingeben und Bindestriche entfernen!";
+  static String bookSubjectError =
+      "Bitte das Fach eingeben und Bindestriche entfernen!";
 
-  static String bookNameError = "Bitte einen Buchnamen eingeben, Bindestriche und Punkte entfernen!";
+  static String bookNameError =
+      "Bitte einen Buchnamen eingeben, Bindestriche und Punkte entfernen!";
 
   static String bookAmountError = "Den Buchbestand als Zahl eingeben!";
 
@@ -184,9 +196,11 @@
 
   static String trainingDirectionsJsonIndex = "trainingDirectionLabelIndex";
 
-  static const String booksOfTrainingDirectionsIndex = "booksOfTrainingDirectionIndex";
+  static const String booksOfTrainingDirectionsIndex =
+      "booksOfTrainingDirectionIndex";
 
-  static const String bookDialogNotFullyEditable = "Hinweis: Da Schüler dieses Buch besitzen, sind Name, Fach, Ausbildungen nicht veränderbar";
+  static const String bookDialogNotFullyEditable =
+      "Hinweis: Da Schüler dieses Buch besitzen, sind Name, Fach, Ausbildungen nicht veränderbar";
 
   static const String studentsOfBookIdIndex = "StudentsOfBookIdIndex";
 
@@ -196,13 +210,16 @@
 
   static const String isbnDisplay = "ISBN:";
 
-  static const String bookNotDeletable = "Buch kann nicht gelöscht werden, weil Schüler es besitzen!";
+  static const String bookNotDeletable =
+      "Buch kann nicht gelöscht werden, weil Schüler es besitzen!";
 
   static const String bookSet = ". Satz";
 
-  static const String bookAmountInStudentOwnershipDisplay = "mal wurde dieses Buch entliehen";
+  static const String bookAmountInStudentOwnershipDisplay =
+      "mal wurde dieses Buch entliehen";
 
-  static const String booksNotAddable = "Folgende Bücher sind in zu geringer Anzahl verfügbar:";
+  static const String booksNotAddable =
+      "Folgende Bücher sind in zu geringer Anzahl verfügbar:";
 
   static const String settingsTooltip = "Einstellungen/Import";
 
@@ -225,17 +242,4 @@
   static const String back = "Zurück";
 
   static const String next = "Weiter";
-
-
-
-
-
-
- 
-
-
-
-
-  
-
- }
+}

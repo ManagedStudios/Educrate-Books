@@ -1,8 +1,5 @@
-
 import 'dart:async';
 import 'dart:collection';
-
-
 
 import 'package:buecherteam_2023_desktop/Data/buildQuery.dart';
 import 'package:buecherteam_2023_desktop/Data/class_data.dart';
@@ -16,14 +13,13 @@ import 'package:flutter/material.dart';
 import '../Data/book.dart';
 import '../Data/bookLite.dart';
 
-
 class StudentListState extends ChangeNotifier {
-
   StudentListState(this.database);
 
   final DB database;
 
-  SplayTreeSet<int> selectedStudentIds = SplayTreeSet(); //always ordered hashset
+  SplayTreeSet<int> selectedStudentIds =
+      SplayTreeSet(); //always ordered hashset
 
   String? ftsQuery;
   Filter? filterOptions;
@@ -33,17 +29,22 @@ class StudentListState extends ChangeNotifier {
    */
   Future<String> saveStudent(String firstName, String lastName, int classLevel,
       String classChar, List<String> trainingDirections,
-      {required Function(List<BookLite>? books, Student student) onAddBooksToStudent,
-        List<BookLite>? books, List<String>? tags}) async {
-
-    final document = createNewStudentDoc(firstName, lastName, classLevel, classChar, trainingDirections,
+      {required Function(List<BookLite>? books, Student student)
+          onAddBooksToStudent,
+      List<BookLite>? books,
+      List<String>? tags}) async {
+    final document = createNewStudentDoc(
+        firstName, lastName, classLevel, classChar, trainingDirections,
         books: [], //don't add books here since this way book amounts will not be updated
         tags: tags);
     await database.saveDocument(document);
-    if (books == null) { //if no books were given add books according to trainingDirection
-      onAddBooksToStudent((await getBooksFromTrainingDirections(trainingDirections)),
+    if (books == null) {
+      //if no books were given add books according to trainingDirection
+      onAddBooksToStudent(
+          (await getBooksFromTrainingDirections(trainingDirections)),
           database.toEntity(Student.fromJson, document));
-    } else { //if books were given add them
+    } else {
+      //if books were given add them
 
       onAddBooksToStudent(books, database.toEntity(Student.fromJson, document));
     }
@@ -55,13 +56,20 @@ class StudentListState extends ChangeNotifier {
   createNewStudentDoc creates the appropriate document for the saveStudent method
   the arguments are validated in the Stateful form widget
    */
-  MutableDocument createNewStudentDoc (String firstName, String lastName, int classLevel,
-      String classChar, List<String> trainingDirections, {List<BookLite>? books, List<String>? tags}) {
-    final document = MutableDocument(); //create empty MutableDocument to retrieve students id
-    final student = Student(document.id, firstName: firstName, lastName: lastName,
-        classLevel: classLevel, classChar: classChar,
-        trainingDirections: trainingDirections, books: books??[], amountOfBooks: books?.length??0,
-        tags: tags??[]);
+  MutableDocument createNewStudentDoc(String firstName, String lastName,
+      int classLevel, String classChar, List<String> trainingDirections,
+      {List<BookLite>? books, List<String>? tags}) {
+    final document =
+        MutableDocument(); //create empty MutableDocument to retrieve students id
+    final student = Student(document.id,
+        firstName: firstName,
+        lastName: lastName,
+        classLevel: classLevel,
+        classChar: classChar,
+        trainingDirections: trainingDirections,
+        books: books ?? [],
+        amountOfBooks: books?.length ?? 0,
+        tags: tags ?? []);
     database.updateDocFromEntity(student, document);
     return document;
   }
@@ -72,70 +80,66 @@ class StudentListState extends ChangeNotifier {
   yields live data - so when on an other device a student is created the student will
   immediately appear in the stream, if the student is included by ftsQuery and filterOptions
    */
-  Stream<List<Student>> streamStudents (String? ftsQuery, Filter? filterOptions) async* {
-      String query = BuildQuery.buildStudentListQuery(ftsQuery, filterOptions);
+  Stream<List<Student>> streamStudents(
+      String? ftsQuery, Filter? filterOptions) async* {
+    String query = BuildQuery.buildStudentListQuery(ftsQuery, filterOptions);
 
-      yield* database.streamLiveDocs(query).asyncMap((change) { //asyncMap required as the data is asynchronously fetched from the Web
+    yield* database.streamLiveDocs(query).asyncMap((change) {
+      //asyncMap required as the data is asynchronously fetched from the Web
 
-        return change.results
-            .asStream()
-            .map((result) {
-         return database.toEntity(Student.fromJson, result);
-        } ) //build Student objects from JSON
-            .toList();
-      });
+      return change.results.asStream().map((result) {
+        return database.toEntity(Student.fromJson, result);
+      }) //build Student objects from JSON
+          .toList();
+    });
   }
 
-  Future<String> updateStudent(Student newStudent) async{
+  Future<String> updateStudent(Student newStudent) async {
     final doc = (await database.getDoc(newStudent.id))!.toMutable();
     database.updateDocFromEntity(newStudent, doc);
     database.saveDocument(doc);
     return doc.id;
   }
 
-  Future<List<ClassData>> getAllClasses () async{
-
+  Future<List<ClassData>> getAllClasses() async {
     String query = BuildQuery.getAllClassesQuery();
     final res = await database.getDocs(query);
     return res
-    .asStream()
-    .map((result) => database.toEntity(ClassData.fromJson, result))
-    .toList();
+        .asStream()
+        .map((result) => database.toEntity(ClassData.fromJson, result))
+        .toList();
   }
 
-  Future<List<TrainingDirectionsData>> getAllTrainingDirections () async{
+  Future<List<TrainingDirectionsData>> getAllTrainingDirections() async {
     String query = BuildQuery.getAllTrainingDirections();
     final res = await database.getDocs(query);
     return res
         .asStream()
-        .map((result) => database.toEntity(TrainingDirectionsData.fromJson, result))
+        .map((result) =>
+            database.toEntity(TrainingDirectionsData.fromJson, result))
         .toList();
   }
 
-
-
-  Future<void> deleteStudent (Student student) async{
+  Future<void> deleteStudent(Student student) async {
     final doc = await database.getDoc(student.id);
     if (doc != null) database.deleteDoc(doc);
   }
 
-  void setFtsQuery (String query) {
+  void setFtsQuery(String query) {
     ftsQuery = query;
     //important since this mistake has been done: streamStudents only opens a new stream with
     //new data using the state management system (provider or flutter setState)
     // calling the streamStudents method with the updated parameters here wont work!!
   }
 
-  void setFilterOptions (Filter filter) {
+  void setFilterOptions(Filter filter) {
     filterOptions = filter;
-
   }
 
-  void clearSelectedStudents () {
+  void clearSelectedStudents() {
     selectedStudentIds = SplayTreeSet();
     notifyListeners();
   }
-
 
   void addSelectedStudent(int studentIndex) {
     selectedStudentIds.add(studentIndex);
@@ -150,13 +154,15 @@ class StudentListState extends ChangeNotifier {
   /*
   Method to retrieve all books of given trainingDirections
    */
-  Future<List<BookLite>?> getBooksFromTrainingDirections(List<String> trainingDirections) async{
+  Future<List<BookLite>?> getBooksFromTrainingDirections(
+      List<String> trainingDirections) async {
     if (trainingDirections.isEmpty) return null;
     final query = BuildQuery.getBooksOfTrainingDirections(trainingDirections);
     final bookDocs = await database.getDocs(query);
-    List<BookLite> books = await bookDocs.asStream().map((res)
-      => database.toEntity(Book.fromJson, res).toBookLite()).toList();
+    List<BookLite> books = await bookDocs
+        .asStream()
+        .map((res) => database.toEntity(Book.fromJson, res).toBookLite())
+        .toList();
     return books;
   }
-
 }

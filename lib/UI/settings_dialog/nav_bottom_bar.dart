@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class NavBottomBar extends StatelessWidget {
-  const NavBottomBar({super.key, required this.nextWidget, required this.previousWidget});
+  const NavBottomBar(
+      {super.key, required this.nextWidget, required this.previousWidget});
 
   final Widget nextWidget;
   final Widget previousWidget;
@@ -17,8 +18,9 @@ class NavBottomBar extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          TextButton(onPressed: () =>
-              Provider.of<SettingsNavState>(context, listen: false)
+          TextButton(
+              onPressed: () =>
+                  Provider.of<SettingsNavState>(context, listen: false)
                       .setCurrWidget(previousWidget),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
@@ -26,34 +28,37 @@ class NavBottomBar extends StatelessWidget {
                 children: [
                   Icon(Icons.arrow_back_outlined,
                       color: Theme.of(context).colorScheme.secondary),
-                  const SizedBox(width: Dimensions.spaceVerySmall,),
+                  const SizedBox(
+                    width: Dimensions.spaceVerySmall,
+                  ),
                   Text(
                     TextRes.back,
-                    style: Theme.of(context).textTheme.bodyMedium
-                            ?.copyWith(color:
-                                Theme.of(context).colorScheme.secondary),
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: Theme.of(context).colorScheme.secondary),
                   ),
                 ],
-              )
-          ),
-          TextButton(onPressed: () =>
-              Provider.of<SettingsNavState>(context, listen: false)
-                  .setCurrWidget(nextWidget),
+              )),
+          TextButton(
+              onPressed: () =>
+                  Provider.of<SettingsNavState>(context, listen: false)
+                      .setCurrWidget(nextWidget),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
                     TextRes.next,
-                    style: Theme.of(context).textTheme.bodyMedium
-                        ?.copyWith(color:
-                    Theme.of(context).colorScheme.secondary),
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: Theme.of(context).colorScheme.secondary),
                   ),
-                  const SizedBox(width: Dimensions.spaceVerySmall,),
-                  Icon(Icons.arrow_forward_outlined,
-                      color: Theme.of(context).colorScheme.secondary,)
+                  const SizedBox(
+                    width: Dimensions.spaceVerySmall,
+                  ),
+                  Icon(
+                    Icons.arrow_forward_outlined,
+                    color: Theme.of(context).colorScheme.secondary,
+                  )
                 ],
-              )
-          )
+              ))
         ],
       ),
     );

@@ -1,4 +1,3 @@
-
 import 'package:buecherteam_2023_desktop/UI/right_click_actions/right_click_container.dart';
 import 'package:flutter/material.dart';
 
@@ -16,9 +15,13 @@ closing behavior primarily controlled by right_click_container
  */
 
 class ActionsOverlay {
-
-  ActionsOverlay({required this.selectedItems, required this.width, required this.actions,
-  required this.onOverlayClosed, required this.offset, required this.context});
+  ActionsOverlay(
+      {required this.selectedItems,
+      required this.width,
+      required this.actions,
+      required this.onOverlayClosed,
+      required this.offset,
+      required this.context});
 
   final List<SelectableItem> selectedItems;
   final double width;
@@ -29,41 +32,42 @@ class ActionsOverlay {
   bool isOverlayEntryOpen = false;
   OverlayEntry? overlayEntry;
 
-  void showOverlayEntry () {
+  void showOverlayEntry() {
     final overlay = Overlay.of(context);
-    overlayEntry??{ //if no overlayEntry is created, create a new one
-      createOverlayEntry(offset),
-      overlay.insert(overlayEntry!)
-    };
+    overlayEntry ??
+        {
+          //if no overlayEntry is created, create a new one
+          createOverlayEntry(offset),
+          overlay.insert(overlayEntry!)
+        };
   }
 
-
-  void createOverlayEntry (Offset offset) {
+  void createOverlayEntry(Offset offset) {
     overlayEntry = OverlayEntry(
-        builder: (context) => Positioned( //position near to mouse click
+        builder: (context) => Positioned(
+            //position near to mouse click
             left: offset.dx,
-            top: offset.dy-50, //there's an offset, hardcoded could vary a bit
+            top: offset.dy - 50, //there's an offset, hardcoded could vary a bit
             child: TapRegion(
               onTapOutside: (_) {
                 closeOverlay();
                 onOverlayClosed();
               },
-              child: RightClickActionContainer( //show actions
+              child: RightClickActionContainer(
+                  //show actions
                   width: width,
                   actions: actions,
                   selectedItems: selectedItems,
-                  onCloseOverlay: (){ //close when an item has been selected - callback
+                  onCloseOverlay: () {
+                    //close when an item has been selected - callback
                     closeOverlay();
                     onOverlayClosed();
                   }),
-            )
-        )
-
-    );
+            )));
   }
 
   void closeOverlay() {
-    if(overlayEntry != null) {
+    if (overlayEntry != null) {
       overlayEntry!.remove();
       overlayEntry = null;
       onOverlayClosed();

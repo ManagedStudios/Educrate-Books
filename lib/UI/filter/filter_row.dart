@@ -10,16 +10,17 @@ class FilterRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: Dimensions.paddingVerySmall, bottom: Dimensions.paddingSmall),
+      padding: const EdgeInsets.only(
+          top: Dimensions.paddingVerySmall, bottom: Dimensions.paddingSmall),
       child: Row(
         children: [
           StandardFilterButton(
-              onClick: (click){},
-              active: true,
-              standardText: "standardText"),
-          const SizedBox(width: Dimensions.spaceVerySmall,),
-          Expanded(child: AddFilterButton(globalKey: GlobalKey(), onClick: (){}))
-
+              onClick: (click) {}, active: true, standardText: "standardText"),
+          const SizedBox(
+            width: Dimensions.spaceVerySmall,
+          ),
+          Expanded(
+              child: AddFilterButton(globalKey: GlobalKey(), onClick: () {}))
         ],
       ),
     );

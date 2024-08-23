@@ -55,9 +55,8 @@ void openAddBookStudentDetailDialog(
       }).then((books) async {
     if (books != null) {
       await Provider.of<StudentDetailState>(context, listen: false)
-          .addBooksToStudent(books, selectedStudents, (message) =>
-            showLFGSnackbar(context, message)
-      );
+          .addBooksToStudent(books, selectedStudents,
+              (message) => showLFGSnackbar(context, message));
     }
   });
 }

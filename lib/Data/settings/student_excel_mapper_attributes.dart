@@ -26,9 +26,8 @@ enum StudentAttributes implements LfgChip {
   @override
   int compareTo(other) {
     LfgChip chip = other as LfgChip;
-    return getLabelText().toUpperCase().compareTo(chip.getLabelText().toUpperCase());
+    return getLabelText()
+        .toUpperCase()
+        .compareTo(chip.getLabelText().toUpperCase());
   }
-
-
 }
-

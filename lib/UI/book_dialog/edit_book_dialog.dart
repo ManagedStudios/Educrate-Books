@@ -8,15 +8,18 @@ import 'book_dialog.dart';
 
 void openEditBookDialog(BuildContext context, Book book, bool isFullyEditable) {
   final bookListState = Provider.of<BookDepotState>(context, listen: false);
-  showDialog<Book>(context: context, builder: (context) {
-
-    return BookDialog(title: TextRes.addBook,
-        book: book, actionText: TextRes.saveActionText, isFullyEditable: isFullyEditable,);
-  }).then((book) async{
-
+  showDialog<Book>(
+      context: context,
+      builder: (context) {
+        return BookDialog(
+          title: TextRes.addBook,
+          book: book,
+          actionText: TextRes.saveActionText,
+          isFullyEditable: isFullyEditable,
+        );
+      }).then((book) async {
     if (book == null) return;
 
     bookListState.updateBook(book);
-
   });
 }

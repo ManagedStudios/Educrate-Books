@@ -1,5 +1,3 @@
-
-
 import 'package:buecherteam_2023_desktop/Data/book.dart';
 import 'package:buecherteam_2023_desktop/Data/db.dart';
 import 'package:buecherteam_2023_desktop/Models/book_depot_state.dart';
@@ -21,66 +19,65 @@ import 'package:provider/provider.dart';
 
 import 'UI/navigation/navigationbar.dart';
 
-
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await CouchbaseLiteFlutter.init();
 
   await DB().initializeDatabase();
   //await DB().startReplication();
 
-
-
-  runApp(MultiProvider(providers: [ //initialize the Viewmodels
-    ChangeNotifierProvider(create: (context) => StudentListState(DB())),
-    ChangeNotifierProvider(create: (context) => RightClickState(DB())),
-    ChangeNotifierProvider(create: (context) => StudentDetailState(DB())),
-    ChangeNotifierProvider(create: (context) => ClassLevelState(DB())),
-    ChangeNotifierProvider(create: (context) => BookDepotState(DB())),
-    ChangeNotifierProvider(create: (context) => NavigationState()),
-    ChangeNotifierProvider(create: (context) => SettingsNavState())
-  ],
+  runApp(MultiProvider(
+    providers: [
+      //initialize the Viewmodels
+      ChangeNotifierProvider(create: (context) => StudentListState(DB())),
+      ChangeNotifierProvider(create: (context) => RightClickState(DB())),
+      ChangeNotifierProvider(create: (context) => StudentDetailState(DB())),
+      ChangeNotifierProvider(create: (context) => ClassLevelState(DB())),
+      ChangeNotifierProvider(create: (context) => BookDepotState(DB())),
+      ChangeNotifierProvider(create: (context) => NavigationState()),
+      ChangeNotifierProvider(create: (context) => SettingsNavState())
+    ],
     child: const MyApp(),
   ));
 }
 
-final _router = GoRouter(
-    initialLocation: StudentView.routeName,
-    routes: [
-  ShellRoute(builder: (BuildContext context, GoRouterState state, Widget child) {
-    return Homepage(child: child);
-  },routes: [
-    GoRoute(path: StudentView.routeName,
-        pageBuilder: (context, state) => CustomTransitionPage(
-            child: StudentView(filterBook: state.extra as Book?),
-            transitionsBuilder: (context, animation, _, child) {
-              return FadeTransition(
-                  opacity:
-                  CurveTween(curve: Curves.easeInCirc).animate(animation),
-                  child: child);
-            })
-    ),
-    GoRoute(path: BookDepotView.routeName,
-    pageBuilder: (context, state) => CustomTransitionPage(
-        child: const BookDepotView(),
-        transitionsBuilder: (context, animation, _, child) {
-          return FadeTransition(
-              opacity:
-                CurveTween(curve: Curves.easeInCirc).animate(animation),
-              child: child);
-        })
-    ),
-    GoRoute(path: BookStackView.routeName,
-    pageBuilder: (context, state) => CustomTransitionPage(
-        child: const BookStackView(),
-        transitionsBuilder: (context, animation, _, child) {
-          return FadeTransition(
-              opacity:
-              CurveTween(curve: Curves.easeInCirc).animate(animation),
-              child: child);
-        })
-    )
-  ])
+final _router = GoRouter(initialLocation: StudentView.routeName, routes: [
+  ShellRoute(
+      builder: (BuildContext context, GoRouterState state, Widget child) {
+        return Homepage(child: child);
+      },
+      routes: [
+        GoRoute(
+            path: StudentView.routeName,
+            pageBuilder: (context, state) => CustomTransitionPage(
+                child: StudentView(filterBook: state.extra as Book?),
+                transitionsBuilder: (context, animation, _, child) {
+                  return FadeTransition(
+                      opacity: CurveTween(curve: Curves.easeInCirc)
+                          .animate(animation),
+                      child: child);
+                })),
+        GoRoute(
+            path: BookDepotView.routeName,
+            pageBuilder: (context, state) => CustomTransitionPage(
+                child: const BookDepotView(),
+                transitionsBuilder: (context, animation, _, child) {
+                  return FadeTransition(
+                      opacity: CurveTween(curve: Curves.easeInCirc)
+                          .animate(animation),
+                      child: child);
+                })),
+        GoRoute(
+            path: BookStackView.routeName,
+            pageBuilder: (context, state) => CustomTransitionPage(
+                child: const BookStackView(),
+                transitionsBuilder: (context, animation, _, child) {
+                  return FadeTransition(
+                      opacity: CurveTween(curve: Curves.easeInCirc)
+                          .animate(animation),
+                      child: child);
+                }))
+      ])
 ]);
 
 class MyApp extends StatelessWidget {
@@ -88,16 +85,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  MaterialApp.router(
-        title: 'Buecherteam',
-        theme: ThemeData(
-            colorScheme: lightColorScheme,
-            useMaterial3: true,
-            fontFamily: 'Helvetica Neue',
-            textTheme: textTheme,
-        ),
-        routerConfig: _router,
-      );
+    return MaterialApp.router(
+      title: 'Buecherteam',
+      theme: ThemeData(
+        colorScheme: lightColorScheme,
+        useMaterial3: true,
+        fontFamily: 'Helvetica Neue',
+        textTheme: textTheme,
+      ),
+      routerConfig: _router,
+    );
   }
 }
 
@@ -108,11 +105,10 @@ class Homepage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const PreferredSize(
-        preferredSize: Size(364, 56),
-        child: LfgNavigationBar(),
-      ),
-      body: child
-    );
+        appBar: const PreferredSize(
+          preferredSize: Size(364, 56),
+          child: LfgNavigationBar(),
+        ),
+        body: child);
   }
 }

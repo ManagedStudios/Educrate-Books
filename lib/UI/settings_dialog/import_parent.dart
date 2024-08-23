@@ -1,4 +1,3 @@
-
 import 'package:buecherteam_2023_desktop/Data/settings/excel_data.dart';
 import 'package:buecherteam_2023_desktop/Data/settings/student_excel_mapper_attributes.dart';
 import 'package:buecherteam_2023_desktop/Resources/dimensions.dart';
@@ -12,35 +11,27 @@ import 'package:flutter/material.dart';
 class ImportParent extends StatelessWidget {
   const ImportParent({super.key});
 
-
-
   @override
   Widget build(BuildContext context) {
     double availableWidth = MediaQuery.of(context).size.width;
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.all(Dimensions.paddingMedium),
-          child: AttributeMapperList<StudentAttributes>(
-              availableDropdownItems: StudentAttributes.values,
-              initialMap: Map.fromEntries(
-                List.generate(5, (i) =>
-                    MapEntry(
+            padding: const EdgeInsets.all(Dimensions.paddingMedium),
+            child: AttributeMapperList<StudentAttributes>(
+                availableDropdownItems: StudentAttributes.values,
+                initialMap: Map.fromEntries(List.generate(
+                    5,
+                    (i) => MapEntry(
                         ExcelData(row: 1, column: 1, content: "content nr: $i"),
-                        null)
-                )
-              ),
-              onUpdatedMap: (m){
-                print(
-                    m.map((key, value) => MapEntry(key.content, value))
-                );
+                        null))),
+                onUpdatedMap: (m) {
+                  print(m.map((key, value) => MapEntry(key.content, value)));
                 },
-              width: availableWidth*0.4)
-        ),
-         const Spacer(),
-
-         const NavBottomBar(nextWidget: PrintParent(),
-             previousWidget: WarningParent())
+                width: availableWidth * 0.4)),
+        const Spacer(),
+        const NavBottomBar(
+            nextWidget: PrintParent(), previousWidget: WarningParent())
       ],
     );
   }

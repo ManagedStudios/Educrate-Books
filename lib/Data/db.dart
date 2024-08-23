@@ -1,6 +1,4 @@
-
 import 'dart:async';
-
 
 import 'package:buecherteam_2023_desktop/Resources/text.dart';
 import 'package:cbl/cbl.dart';
@@ -8,7 +6,7 @@ import 'package:cbl/cbl.dart';
 class DB {
   static final DB _instance = DB._internal();
 
-  factory DB () {
+  factory DB() {
     return _instance;
   }
 
@@ -16,20 +14,18 @@ class DB {
 
   DB._internal();
 
-
   Future<void> initializeDatabase() async {
     _database = await Database.openAsync(TextRes.dbName);
     final typeIndex = ValueIndexConfiguration(['type']);
-    final bookClassLevelIndex = ValueIndexConfiguration([TextRes.bookClassLevelJson]);
-    final trainingDirectionIndex = ValueIndexConfiguration([TextRes.trainingDirectionsJson]);
-    final searchBooksOfTrainingDirectionsIndex = ValueIndexConfiguration([
-        TextRes.typeJson, TextRes.bookTrainingDirectionJson
-      ]
-    );
+    final bookClassLevelIndex =
+        ValueIndexConfiguration([TextRes.bookClassLevelJson]);
+    final trainingDirectionIndex =
+        ValueIndexConfiguration([TextRes.trainingDirectionsJson]);
+    final searchBooksOfTrainingDirectionsIndex = ValueIndexConfiguration(
+        [TextRes.typeJson, TextRes.bookTrainingDirectionJson]);
 
-    final studentsOfBookIdIndex = ValueIndexConfiguration([
-      "${TextRes.studentBooksJson}.${TextRes.bookIdJson}"
-    ]);
+    final studentsOfBookIdIndex = ValueIndexConfiguration(
+        ["${TextRes.studentBooksJson}.${TextRes.bookIdJson}"]);
     final ftsIndex = FullTextIndexConfiguration([
       TextRes.studentFirstNameJson,
       TextRes.studentLastNameJson,
@@ -37,8 +33,6 @@ class DB {
       TextRes.studentClassCharJson,
       TextRes.studentTrainingDirectionsJson
     ]);
-
-
 
     final bookFtsIndex = FullTextIndexConfiguration([
       TextRes.bookNameJson,
@@ -49,15 +43,18 @@ class DB {
     await _database.createIndex("Types", typeIndex);
     await _database.createIndex(TextRes.ftsStudent, ftsIndex);
     await _database.createIndex(TextRes.ftsBookStudentDetail, bookFtsIndex);
-    await _database.createIndex(TextRes.bookClassLevelJsonIndex, bookClassLevelIndex);
-    await _database.createIndex(TextRes.trainingDirectionsJsonIndex, trainingDirectionIndex);
-    await _database.createIndex(TextRes.booksOfTrainingDirectionsIndex, searchBooksOfTrainingDirectionsIndex);
-    await _database.createIndex(TextRes.studentsOfBookIdIndex, studentsOfBookIdIndex);
-
+    await _database.createIndex(
+        TextRes.bookClassLevelJsonIndex, bookClassLevelIndex);
+    await _database.createIndex(
+        TextRes.trainingDirectionsJsonIndex, trainingDirectionIndex);
+    await _database.createIndex(TextRes.booksOfTrainingDirectionsIndex,
+        searchBooksOfTrainingDirectionsIndex);
+    await _database.createIndex(
+        TextRes.studentsOfBookIdIndex, studentsOfBookIdIndex);
   }
 
-  Future<void> saveDocument(MutableDocument document) async{
-      _database.saveDocument(document);
+  Future<void> saveDocument(MutableDocument document) async {
+    _database.saveDocument(document);
   }
 
   /*
@@ -68,20 +65,19 @@ class DB {
   IMPORTANT: security risk when using dynamic arguments or user inputs for the query argument,
    as every query is executed. Always provide hardcoded queries to this method!
    */
-  Stream<QueryChange<ResultSet>> streamLiveDocs(String query) async*{
+  Stream<QueryChange<ResultSet>> streamLiveDocs(String query) async* {
     try {
       final queryRes = await Query.fromN1ql(_database, query); //build query
       yield* queryRes.changes(); //pass the generic stream of the build query
       /*
       handle db specific errors in order to prevent duplicate error handling further down the line
        */
-    } on DatabaseException catch(e) {
+    } on DatabaseException catch (e) {
       throw Exception("${TextRes.dbAccesError} ${e.message}");
-    } on TimeoutException catch(e) {
+    } on TimeoutException catch (e) {
       throw Exception("${TextRes.timeOutException} ${e.message}");
     }
   }
-
 
   /*
     Method to get a standalone queryResult
@@ -98,7 +94,7 @@ class DB {
   retrieve single document with its id
    */
 
-  Future<Document?> getDoc (String docId) async {
+  Future<Document?> getDoc(String docId) async {
     return _database.document(docId);
   }
 
@@ -107,17 +103,15 @@ class DB {
    */
   Future<void> deleteDoc(Document document) async {
     _database.deleteDocument(document);
-
   }
-
 
   /*
   delete multiple documents in a batch
    */
 
-  Future<void> deleteDocs (List<Document> documents) async {
+  Future<void> deleteDocs(List<Document> documents) async {
     _database.inBatch(() async {
-      for(Document document in documents) {
+      for (Document document in documents) {
         await _database.deleteDocument(document);
       }
     });
@@ -127,12 +121,14 @@ class DB {
   Change multiple documents in a batch from respective entities
    */
 
-  Future<void> changeDocsFromEntities (List<Document> documents, List<Object> entities) async{
+  Future<void> changeDocsFromEntities(
+      List<Document> documents, List<Object> entities) async {
     if (documents.length != entities.length) {
-      throw ArgumentError("Document List has a different length to the belonging entities");
+      throw ArgumentError(
+          "Document List has a different length to the belonging entities");
     }
     _database.inBatch(() async {
-      for (int i=0;i<documents.length;i++) {
+      for (int i = 0; i < documents.length; i++) {
         final doc = documents[i].toMutable();
         final entity = entities[i];
         updateDocFromEntity(entity, doc);
@@ -146,12 +142,15 @@ class DB {
   db and couchbase server
    */
 
-  Future<void> startReplication () async{
-    final replicator = await Replicator.create(ReplicatorConfiguration(database: _database,
-        target: UrlEndpoint(Uri.parse('ws://localhost:4984/buecherteam/')), //The URI your reverse proxy server or your sync gateway is located - ws is websocket
-        continuous: true,
-        replicatorType: ReplicatorType.pushAndPull,
-        authenticator: BasicAuthenticator(username: "dibbo", password: "dibboMrinmoy"),
+  Future<void> startReplication() async {
+    final replicator = await Replicator.create(ReplicatorConfiguration(
+      database: _database,
+      target: UrlEndpoint(Uri.parse(
+          'ws://localhost:4984/buecherteam/')), //The URI your reverse proxy server or your sync gateway is located - ws is websocket
+      continuous: true,
+      replicatorType: ReplicatorType.pushAndPull,
+      authenticator:
+          BasicAuthenticator(username: "dibbo", password: "dibboMrinmoy"),
     ));
 
     await replicator.start();
@@ -177,14 +176,12 @@ class DB {
   the json data.
    */
 
-  T toEntity<T>(T Function(Map<String, Object?> json) fromJson, DictionaryInterface result) {
+  T toEntity<T>(T Function(Map<String, Object?> json) fromJson,
+      DictionaryInterface result) {
     final json = result.toPlainMap();
     if (result case Document(:final id)) {
       json[TextRes.studentIdJson] = id;
     }
     return fromJson(json);
   }
-
-
 }
-

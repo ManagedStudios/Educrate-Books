@@ -107,28 +107,34 @@ class _StudentDialogContentState extends State<StudentDialogContent> {
                   controller: firstNameController,
                   onTextChanged: (text) {
                     if (text.isNotEmpty) {
-                      firstNameController.text = firstNameController.text[0].toUpperCase()+firstNameController.text.substring(1);
+                      firstNameController.text =
+                          firstNameController.text[0].toUpperCase() +
+                              firstNameController.text.substring(1);
                     }
                     widget.onFirstNameChanged(firstNameController.text);
-                  } ,
+                  },
                   hint: TextRes.firstNameHint,
-                  errorText: widget.firstNameError, enabled: true,
+                  errorText: widget.firstNameError,
+                  enabled: true,
                 )),
                 const SizedBox(
                   width: Dimensions.spaceLarge,
                 ),
                 Expanded(
                     child: DialogTextField(
-                        controller: lastNameController,
-                        onTextChanged: (text) {
-                          if (text.isNotEmpty) {
-                            lastNameController.text = lastNameController.text[0].toUpperCase()+lastNameController.text.substring(1);
-                          }
-                          widget.onLastNameChanged(lastNameController.text);
-
-                        },
-                        hint: TextRes.lastNameHint,
-                        errorText: widget.lastNameError, enabled: true,))
+                  controller: lastNameController,
+                  onTextChanged: (text) {
+                    if (text.isNotEmpty) {
+                      lastNameController.text =
+                          lastNameController.text[0].toUpperCase() +
+                              lastNameController.text.substring(1);
+                    }
+                    widget.onLastNameChanged(lastNameController.text);
+                  },
+                  hint: TextRes.lastNameHint,
+                  errorText: widget.lastNameError,
+                  enabled: true,
+                ))
               ],
             ),
           ),
@@ -213,8 +219,8 @@ class _StudentDialogContentState extends State<StudentDialogContent> {
                 multiSelect: true,
                 width: dialogWidth * 0.8,
                 onCloseOverlay: (trainingDirections) =>
-                    widget.onStudentTrainingDirectionsUpdated(trainingDirections
-                        .toList())),
+                    widget.onStudentTrainingDirectionsUpdated(
+                        trainingDirections.toList())),
           ),
         ],
       ),

@@ -6,9 +6,7 @@ class FilterParent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: [
-        Text("Hi I'm Filter")
-      ],
+      children: [Text("Hi I'm Filter")],
     );
   }
 }

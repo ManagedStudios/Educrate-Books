@@ -1,9 +1,7 @@
-
 import 'package:buecherteam_2023_desktop/Data/filter.dart';
 import 'package:buecherteam_2023_desktop/Resources/text.dart';
 
 class BuildQuery {
-
   static String noResultQuery = "SELECT * FROM _ WHERE 1 = 0";
   /*
   WICHTIG beim query builden: Enter werden auch als Zeichen gesehen und führen
@@ -12,11 +10,12 @@ class BuildQuery {
   SELECT FROM Und WHERE an derselben Stelle lassen!!!
    */
 
-  static String buildStudentListQuery (String? ftsQuery, Filter? filterOptions) {
+  static String buildStudentListQuery(String? ftsQuery, Filter? filterOptions) {
     String ftsQueryMatch = "";
-    String orderClause = "ORDER BY ${TextRes.studentClassLevelJson}, ${TextRes.studentClassCharJson}, ${TextRes.studentLastNameJson}";
+    String orderClause =
+        "ORDER BY ${TextRes.studentClassLevelJson}, ${TextRes.studentClassCharJson}, ${TextRes.studentLastNameJson}";
 
-    if(ftsQuery != null) {
+    if (ftsQuery != null) {
       ftsQueryMatch = "AND MATCH(${TextRes.ftsStudent}, '$ftsQuery')";
     }
 
@@ -25,8 +24,8 @@ class BuildQuery {
       ${TextRes.studentClassCharJson}, ${TextRes.studentTrainingDirectionsJson},
       ${TextRes.studentBooksJson}, ${TextRes.studentAmountOfBooksJson}, ${TextRes.studentTagsJson} FROM _ 
       WHERE ${TextRes.typeJson}='${TextRes.studentTypeJson}' """;
-    query+=ftsQueryMatch;
-    query+=orderClause;
+    query += ftsQueryMatch;
+    query += orderClause;
 
     return query;
   }
@@ -48,7 +47,8 @@ class BuildQuery {
 
   static String buildStudentDetailQuery(List<String> studentIds) {
     if (studentIds.isEmpty) return noResultQuery;
-    String whereClause = """AND META().id IN [${studentIds.map((e) => """'$e'""").join(",")}]""";
+    String whereClause =
+        """AND META().id IN [${studentIds.map((e) => """'$e'""").join(",")}]""";
 
     String query = """SELECT META().id, ${TextRes.studentFirstNameJson}, 
       ${TextRes.studentLastNameJson}, ${TextRes.studentClassLevelJson}, 
@@ -64,8 +64,9 @@ class BuildQuery {
   static String buildStudentDetailBookAddQuery(String? searchQuery) {
     String ftsQueryMatch = "";
 
-    if(searchQuery != null) {
-      ftsQueryMatch = "AND MATCH(${TextRes.ftsBookStudentDetail}, '$searchQuery')";
+    if (searchQuery != null) {
+      ftsQueryMatch =
+          "AND MATCH(${TextRes.ftsBookStudentDetail}, '$searchQuery')";
     }
     String query = """SELECT META().id, ${TextRes.bookNameJson}, 
       ${TextRes.bookSubjectJson}, ${TextRes.bookClassLevelJson}, 
@@ -73,10 +74,9 @@ class BuildQuery {
       ${TextRes.bookNowAvailableJson}, ${TextRes.bookTotalAvailableJson}, 
       ${TextRes.bookIsbnNumberJson} FROM _ 
       WHERE ${TextRes.typeJson}='${TextRes.bookTypeJson}' """;
-    query+=ftsQueryMatch;
+    query += ftsQueryMatch;
 
     return query;
-
   }
 
   static String getAllClassLevels() {
@@ -84,13 +84,13 @@ class BuildQuery {
       WHERE ${TextRes.typeJson}='${TextRes.classDataTypeJson}' """;
 
     return query;
-
   }
 
   static String buildBookListQuery(int? currClassLevel) {
-    if(currClassLevel == null) return noResultQuery;
+    if (currClassLevel == null) return noResultQuery;
 
-    String whereClause = """AND ${TextRes.bookClassLevelJson}=$currClassLevel""";
+    String whereClause =
+        """AND ${TextRes.bookClassLevelJson}=$currClassLevel""";
 
     String query = """SELECT META().id, ${TextRes.bookNameJson}, 
       ${TextRes.bookSubjectJson}, ${TextRes.bookClassLevelJson}, 
@@ -98,26 +98,25 @@ class BuildQuery {
       ${TextRes.bookNowAvailableJson}, ${TextRes.bookTotalAvailableJson}, 
       ${TextRes.bookIsbnNumberJson} FROM _ 
       WHERE ${TextRes.typeJson}='${TextRes.bookTypeJson}' """;
-    query+=whereClause;
+    query += whereClause;
 
     return query;
   }
 
   static String getSingleTrainingDirection(String trainingDirection) {
-
-    String whereClause = """AND ${TextRes.trainingDirectionsJson}='$trainingDirection'""";
+    String whereClause =
+        """AND ${TextRes.trainingDirectionsJson}='$trainingDirection'""";
 
     String query = """SELECT META().id, ${TextRes.trainingDirectionsJson} FROM _
     WHERE ${TextRes.typeJson}='${TextRes.trainingDirectionsTypeJson}' """;
-    query+=whereClause;
+    query += whereClause;
 
     return query;
-
   }
 
   static String getBooksOfTrainingDirections(List<String> trainingDirections) {
-    
-    String formattedTrainingDirections = "[${trainingDirections.map((tr) => """'$tr'""").join(", ")}]";
+    String formattedTrainingDirections =
+        "[${trainingDirections.map((tr) => """'$tr'""").join(", ")}]";
 
     String whereClause = """AND 
     ANY td IN ${TextRes.bookTrainingDirectionJson} 
@@ -129,14 +128,14 @@ class BuildQuery {
       ${TextRes.bookNowAvailableJson}, ${TextRes.bookTotalAvailableJson}, 
       ${TextRes.bookIsbnNumberJson} FROM _ 
       WHERE ${TextRes.typeJson}='${TextRes.bookTypeJson}' """;
-    query+=whereClause;
+    query += whereClause;
 
     return query;
   }
 
   static String getStudentsOfBook(String bookId) {
-
-    String whereClause = """AND ANY book IN ${TextRes.studentBooksJson} SATISFIES book.${TextRes.bookIdJson} = '$bookId' END;""";
+    String whereClause =
+        """AND ANY book IN ${TextRes.studentBooksJson} SATISFIES book.${TextRes.bookIdJson} = '$bookId' END;""";
 
     String query = """SELECT META().id, ${TextRes.studentFirstNameJson}, 
       ${TextRes.studentLastNameJson}, ${TextRes.studentClassLevelJson}, 
@@ -144,8 +143,7 @@ class BuildQuery {
       ${TextRes.studentBooksJson}, ${TextRes.studentAmountOfBooksJson}, ${TextRes.studentTagsJson} FROM _ 
       WHERE ${TextRes.typeJson}='${TextRes.studentTypeJson}' """;
 
-      query+=whereClause;
-
+    query += whereClause;
 
     return query;
   }
@@ -163,7 +161,7 @@ class BuildQuery {
     return query;
   }
 
-  static String getBooksSubceedingAvAmount (int ofClassLevel, int amount) {
+  static String getBooksSubceedingAvAmount(int ofClassLevel, int amount) {
     String whereClause = """AND ${TextRes.bookNowAvailableJson} < $amount
       AND ${TextRes.bookClassLevelJson} = $ofClassLevel""";
     String query = """SELECT META().id, ${TextRes.bookNameJson}, 
@@ -172,7 +170,7 @@ class BuildQuery {
       ${TextRes.bookNowAvailableJson}, ${TextRes.bookTotalAvailableJson}, 
       ${TextRes.bookIsbnNumberJson} FROM _ 
       WHERE ${TextRes.typeJson}='${TextRes.bookTypeJson}' """;
-    query+=whereClause;
+    query += whereClause;
 
     return query;
   }

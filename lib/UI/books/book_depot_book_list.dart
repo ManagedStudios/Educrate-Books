@@ -1,4 +1,3 @@
-
 import 'package:buecherteam_2023_desktop/Models/book_depot_state.dart';
 import 'package:buecherteam_2023_desktop/Resources/dimensions.dart';
 import 'package:buecherteam_2023_desktop/UI/books/book_card.dart';
@@ -10,8 +9,6 @@ import '../../Data/book.dart';
 class BookDepotBookList extends StatelessWidget {
   const BookDepotBookList({super.key});
 
-
-
   @override
   Widget build(BuildContext context) {
     int length = 0;
@@ -19,7 +16,6 @@ class BookDepotBookList extends StatelessWidget {
       builder: (context, state, _) => StreamBuilder<List<Book>>(
           stream: state.streamBooks(state.currClassLevel),
           builder: (context, books) {
-
             length = books.data?.length ?? 0;
 
             return ListView.builder(
@@ -30,16 +26,15 @@ class BookDepotBookList extends StatelessWidget {
                       onClick: (_) {
                         state.setCurrBookId(books.data![index].id);
                       },
-                      onDeleteBook: (_){},
+                      onDeleteBook: (_) {},
                       bookLite: books.data![index],
                       leadingWidget: null,
                       isDeletable: false,
                       bookAvailableAmount: books.data![index].nowAvailable,
-                      error: books.data![index].nowAvailable<Dimensions.bookAvAmountThreshold);
-                }
-                );
-          }
-          ),
+                      error: books.data![index].nowAvailable <
+                          Dimensions.bookAvAmountThreshold);
+                });
+          }),
     );
   }
 }

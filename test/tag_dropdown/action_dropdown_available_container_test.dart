@@ -42,13 +42,13 @@ void main () {
   testWidgets('SizedBox inside Card respects Dimensions.overlayHeight', (WidgetTester tester) async {
     await tester.pumpWidget(createWidgetUnderTest(availableChips));
 
-    final sizedBox = tester.widget<SizedBox>(find.byKey(Key(Keys.ActionDropdownAvailableContainerSizedBoxKey)));
+    final sizedBox = tester.widget<SizedBox>(find.byKey(Key(Keys.actionDropdownAvailableContainerSizedBoxKey)));
     expect(sizedBox.height, Dimensions.overlayHeight);
   });
 
   testWidgets('Card has proper shape, color, and margin properties', (WidgetTester tester) async {
     await tester.pumpWidget(createWidgetUnderTest(availableChips));
-    final card = tester.widget<Card>(find.byKey(Key(Keys.ActionDropdownAvailableCardKey)));
+    final card = tester.widget<Card>(find.byKey(Key(Keys.actionDropdownAvailableCardKey)));
     // Check shape of the Card
     final shape = card.shape as RoundedRectangleBorder;
     expect(
@@ -59,7 +59,7 @@ void main () {
       ),
     );
     // Check color of the Card
-    final cardColor = Theme.of(tester.element(find.byKey(Key(Keys.ActionDropdownAvailableCardKey)))).colorScheme.surface;
+    final cardColor = Theme.of(tester.element(find.byKey(Key(Keys.actionDropdownAvailableCardKey)))).colorScheme.surface;
     expect(card.surfaceTintColor, cardColor);
     // Check margin of the Card
     expect(card.margin, const EdgeInsets.only(top: 0));

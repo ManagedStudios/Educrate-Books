@@ -70,7 +70,7 @@ initialize the state with the initialTrainingDirections if they are not null
   }
 
   @override
-  void didUpdateWidget (oldWidget) {
+  void didUpdateWidget(oldWidget) {
     super.didUpdateWidget(oldWidget);
 
     /*
@@ -79,13 +79,11 @@ initialize the state with the initialTrainingDirections if they are not null
     when button is clicked, but when the subject/class has changed trD. also has to be
     updated
      */
-    if(isSubjectClicked &&
-        (oldWidget.currSubject != widget.currSubject
-         || oldWidget.currClass != widget.currClass)
-    ) {
+    if (isSubjectClicked &&
+        (oldWidget.currSubject != widget.currSubject ||
+            oldWidget.currClass != widget.currClass)) {
       currTrainingDirectionsExposed[0] = TrainingDirectionsData(
-        "${widget.currSubject}${TextRes.hyphen}${widget.currClass}"
-      );
+          "${widget.currSubject}${TextRes.hyphen}${widget.currClass}");
       widget.onTrainingDirectionUpdated(currTrainingDirectionsExposed);
     }
 
@@ -94,7 +92,6 @@ initialize the state with the initialTrainingDirections if they are not null
           "${TextRes.basicTrainingDirection}${TextRes.trainingDirectionHyphen}${widget.currClass}");
       widget.onTrainingDirectionUpdated(currTrainingDirectionsExposed);
     }
-
   }
 
   @override
@@ -189,7 +186,6 @@ initialize the state with the initialTrainingDirections if they are not null
             WidgetsBinding.instance.addPostFrameCallback((_) {
               scrollToBottom();
             });
-
           },
           icon: const Icon(Icons.add_circle_outline))
     ]);

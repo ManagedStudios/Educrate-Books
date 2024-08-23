@@ -4,9 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class LFGKeyboard extends StatefulWidget {
-  LFGKeyboard({super.key, required this.changePress, required this.child, required this.focus});
+  const LFGKeyboard(
+      {super.key,
+      required this.changePress,
+      required this.child,
+      required this.focus});
 
-  final Function (Keyboard pressed) changePress;
+  final Function(Keyboard pressed) changePress;
   final Widget child;
   final FocusNode focus;
 
@@ -15,22 +19,20 @@ class LFGKeyboard extends StatefulWidget {
 }
 
 class _LFGKeyboardState extends State<LFGKeyboard> {
-
-
-
-
-
   @override
   Widget build(BuildContext context) {
-
-    return RawKeyboardListener(
+    return KeyboardListener(
       focusNode: widget.focus,
-      onKey: (RawKeyEvent event) {
-        if (event is RawKeyDownEvent) {
+      onKeyEvent: (KeyEvent event) {
+        if (event is KeyDownEvent) {
           //detect cmd taps on mac and windows
-          if (Platform.isMacOS && event.logicalKey == LogicalKeyboardKey.metaLeft || event.logicalKey == LogicalKeyboardKey.metaRight) {
+          if (Platform.isMacOS &&
+                  event.logicalKey == LogicalKeyboardKey.metaLeft ||
+              event.logicalKey == LogicalKeyboardKey.metaRight) {
             widget.changePress(Keyboard.cmd);
-          } else if ((Platform.isWindows || Platform.isLinux) && event.logicalKey == LogicalKeyboardKey.controlLeft || event.logicalKey == LogicalKeyboardKey.controlRight) {
+          } else if ((Platform.isWindows || Platform.isLinux) &&
+                  event.logicalKey == LogicalKeyboardKey.controlLeft ||
+              event.logicalKey == LogicalKeyboardKey.controlRight) {
             widget.changePress(Keyboard.cmd);
 
             //detect shift taps
@@ -40,7 +42,7 @@ class _LFGKeyboardState extends State<LFGKeyboard> {
           }
 
           //detect when shift/cmd is not anymore pressed - or base case, nothing is pressed
-        } else if (event is RawKeyUpEvent) {
+        } else if (event is KeyUpEvent) {
           widget.changePress(Keyboard.nothing);
         }
       },
@@ -49,8 +51,4 @@ class _LFGKeyboardState extends State<LFGKeyboard> {
   }
 }
 
-enum Keyboard {
-  shift,
-  cmd,
-  nothing
-}
+enum Keyboard { shift, cmd, nothing }

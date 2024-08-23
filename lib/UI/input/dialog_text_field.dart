@@ -3,10 +3,13 @@ import 'package:flutter/material.dart';
 import '../../Resources/dimensions.dart';
 
 class DialogTextField extends StatelessWidget {
-  const DialogTextField({super.key,
-    required this.controller,
-    required this.onTextChanged, required this.hint,
-    required this.errorText, required this.enabled});
+  const DialogTextField(
+      {super.key,
+      required this.controller,
+      required this.onTextChanged,
+      required this.hint,
+      required this.errorText,
+      required this.enabled});
 
   final TextEditingController controller;
   final Function(String text) onTextChanged;
@@ -27,11 +30,10 @@ class DialogTextField extends StatelessWidget {
             labelText: hint,
             labelStyle: Theme.of(context).textTheme.labelMedium,
             border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(Dimensions.cornerRadiusSmall)
-            ),
+                borderRadius:
+                    BorderRadius.circular(Dimensions.cornerRadiusSmall)),
             errorText: errorText,
-          isDense: true
-        ),
+            isDense: true),
         enabled: enabled,
       ),
     );

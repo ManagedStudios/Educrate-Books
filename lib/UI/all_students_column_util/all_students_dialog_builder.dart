@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 
 import '../../Data/class_data.dart';
@@ -24,13 +22,14 @@ Widget studentDialogFutureBuilder({
       if (snapshot.connectionState == ConnectionState.done &&
           snapshot.hasData) {
         List<dynamic> rawClassList = snapshot.data?[0] ?? [];
-        List<ClassData> classList = rawClassList.map((e) => e as ClassData)
-            .toList();
+        List<ClassData> classList =
+            rawClassList.map((e) => e as ClassData).toList();
 
         List<dynamic> rawTrainingDirectionsList = snapshot.data?[1] ?? [];
         List<TrainingDirectionsData> trainingDirectionsList =
-        rawTrainingDirectionsList.map((e) => e as TrainingDirectionsData)
-            .toList();
+            rawTrainingDirectionsList
+                .map((e) => e as TrainingDirectionsData)
+                .toList();
 
         return StudentDialog(
           key: UniqueKey(),

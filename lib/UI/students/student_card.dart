@@ -1,19 +1,15 @@
-
 import 'package:buecherteam_2023_desktop/Data/student.dart';
 import 'package:flutter/material.dart';
 
 import '../../Resources/dimensions.dart';
 
 class StudentCard extends StatefulWidget {
-
-  const StudentCard(this.student,
-      this.isClicked,
+  const StudentCard(this.student, this.isClicked,
       {super.key,
-    required this.setClickedStudent,
-    required this.notifyDetailPage,
-    required this.onDeleteStudent,
-    required this.openEditDialog});
-
+      required this.setClickedStudent,
+      required this.notifyDetailPage,
+      required this.onDeleteStudent,
+      required this.openEditDialog});
 
   final Function(String id) setClickedStudent;
   final Function(Student currStudent) notifyDetailPage;
@@ -33,28 +29,35 @@ class _StudentCardState extends State<StudentCard> {
   @override
   Widget build(BuildContext context) {
     String classRaw = widget.student.classLevel.toString();
-    String classLevel = classRaw.length==1?"  $classRaw" : classRaw;
-    return MouseRegion( //enable tracking hover states
+    String classLevel = classRaw.length == 1 ? "  $classRaw" : classRaw;
+    return MouseRegion(
+      //enable tracking hover states
       onEnter: (_) => setState(() {
         _hovering = true;
       }),
       onExit: (_) => setState(() {
         _hovering = false;
       }),
-      child: Tooltip( //if name can't be fully displayed show tooltip
+      child: Tooltip(
+        //if name can't be fully displayed show tooltip
         message: "${widget.student.firstName} ${widget.student.lastName}",
         waitDuration: const Duration(seconds: Dimensions.toolTipDuration),
         preferBelow: false,
-        child: TextButton(onPressed: ()  { //TextButton acts as the base container providing out of the box click functionality as well as a hover state
-          widget.setClickedStudent(widget.student.id);
-          widget.notifyDetailPage(widget.student);
-        },
+        child: TextButton(
+            onPressed: () {
+              //TextButton acts as the base container providing out of the box click functionality as well as a hover state
+              widget.setClickedStudent(widget.student.id);
+              widget.notifyDetailPage(widget.student);
+            },
             style: ButtonStyle(
-              shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))),
-              backgroundColor: widget.isClicked ? WidgetStatePropertyAll(Theme.of(context).colorScheme.tertiaryContainer) : const WidgetStatePropertyAll(Colors.transparent)
-            ),
+                shape: WidgetStatePropertyAll(RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20))),
+                backgroundColor: widget.isClicked
+                    ? WidgetStatePropertyAll(
+                        Theme.of(context).colorScheme.tertiaryContainer)
+                    : const WidgetStatePropertyAll(Colors.transparent)),
 
-             /*
+            /*
             High level layout: Row1<Row2<Column1,Column2<Text1, Row3>>, Column3<Row4>>
             First Column acts as leading text and shows class of student. It adds the appropriate
             horizontal space. Second column for student name and trainingDirections.
@@ -67,43 +70,60 @@ class _StudentCardState extends State<StudentCard> {
             the margins which are set higher in the widget tree. The height of the card is adjusted to the content
              */
 
-            child: Row( //1 Row
-              crossAxisAlignment: CrossAxisAlignment.start, //crossAxis.start ensures that all the text is positioned the same way at the very top
+            child: Row(
+              //1 Row
+              crossAxisAlignment: CrossAxisAlignment
+                  .start, //crossAxis.start ensures that all the text is positioned the same way at the very top
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Row( //2 Row
+                    child: Row(
+                      //2 Row
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Column( //1 Column
+                        Column(
+                          //1 Column
                           children: [
-                            Text("$classLevel${widget.student.classChar} – ",
-                            style: Theme.of(context).textTheme.bodyLarge,)
+                            Text(
+                              "$classLevel${widget.student.classChar} – ",
+                              style: Theme.of(context).textTheme.bodyLarge,
+                            )
                           ],
                         ),
                         Expanded(
-                          child: Column( //2 Column
-                            crossAxisAlignment: CrossAxisAlignment.start, //ensure that text is aligned left
+                          child: Column(
+                            //2 Column
+                            crossAxisAlignment: CrossAxisAlignment
+                                .start, //ensure that text is aligned left
                             children: [
                               Row(
                                 children: [
                                   Expanded(
-                                    child: Text("${widget.student.firstName} ${widget.student.lastName}", //Text 1
-                                        style: Theme.of(context).textTheme.bodyLarge,
-                                        overflow: TextOverflow.ellipsis,),
+                                    child: Text(
+                                      "${widget.student.firstName} ${widget.student.lastName}", //Text 1
+                                      style:
+                                          Theme.of(context).textTheme.bodyLarge,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
                                   ),
                                 ],
                               ),
-                              Row( //3 Row
+                              Row(
+                                //3 Row
                                 children: [
-                                    Flexible(
-                                      fit: FlexFit.loose,
-                                      child: Text(widget.student.trainingDirections.join("  "),
-                                          style: Theme.of(context).textTheme.labelSmall,
-                                          overflow: TextOverflow.ellipsis,),
+                                  Flexible(
+                                    fit: FlexFit.loose,
+                                    child: Text(
+                                      widget.student.trainingDirections
+                                          .join("  "),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelSmall,
+                                      overflow: TextOverflow.ellipsis,
                                     ),
+                                  ),
                                 ],
                               )
                             ],
@@ -115,21 +135,35 @@ class _StudentCardState extends State<StudentCard> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(4.0),
-                  child: Column( //Column 4
+                  child: Column(
+                    //Column 4
                     children: [
                       Row(
                         children: [
-                          IconButton(onPressed: () => widget.openEditDialog(widget.student), icon: const Icon(Icons.edit),
+                          IconButton(
+                            onPressed: () =>
+                                widget.openEditDialog(widget.student),
+                            icon: const Icon(Icons.edit),
                             style: ButtonStyle(
-                              iconSize: _hovering ? const WidgetStatePropertyAll(16) : const WidgetStatePropertyAll(0),
-                              shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
-
+                              iconSize: _hovering
+                                  ? const WidgetStatePropertyAll(16)
+                                  : const WidgetStatePropertyAll(0),
+                              shape: WidgetStatePropertyAll(
+                                  RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12))),
                             ),
                           ),
-                          IconButton(onPressed: () => widget.onDeleteStudent(widget.student), icon: const Icon(Icons.close),
+                          IconButton(
+                            onPressed: () =>
+                                widget.onDeleteStudent(widget.student),
+                            icon: const Icon(Icons.close),
                             style: ButtonStyle(
-                              iconSize: _hovering ? const WidgetStatePropertyAll(16) : const WidgetStatePropertyAll(0),
-                              shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
+                              iconSize: _hovering
+                                  ? const WidgetStatePropertyAll(16)
+                                  : const WidgetStatePropertyAll(0),
+                              shape: WidgetStatePropertyAll(
+                                  RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12))),
                             ),
                           ),
                         ],
@@ -138,8 +172,7 @@ class _StudentCardState extends State<StudentCard> {
                   ),
                 )
               ],
-            )
-        ),
+            )),
       ),
     );
   }

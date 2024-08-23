@@ -1,11 +1,15 @@
-
 import 'package:buecherteam_2023_desktop/Data/lfg_chip.dart';
 import 'package:buecherteam_2023_desktop/Data/settings/excel_data.dart';
 import 'package:buecherteam_2023_desktop/UI/settings_dialog/import/attribute_mapper.dart';
 import 'package:flutter/material.dart';
 
 class AttributeMapperList<T extends LfgChip> extends StatefulWidget {
-  const AttributeMapperList({super.key, required this.availableDropdownItems, required this.initialMap, required this.onUpdatedMap, required this.width});
+  const AttributeMapperList(
+      {super.key,
+      required this.availableDropdownItems,
+      required this.initialMap,
+      required this.onUpdatedMap,
+      required this.width});
 
   final List<T> availableDropdownItems;
   final Map<ExcelData, T?> initialMap;
@@ -16,12 +20,12 @@ class AttributeMapperList<T extends LfgChip> extends StatefulWidget {
   State<AttributeMapperList<T>> createState() => _AttributeMapperListState<T>();
 }
 
-class _AttributeMapperListState<T extends LfgChip> extends State<AttributeMapperList<T>> {
-
+class _AttributeMapperListState<T extends LfgChip>
+    extends State<AttributeMapperList<T>> {
   late Map<ExcelData, T?> currMap;
 
   @override
-  void initState () {
+  void initState() {
     super.initState();
     currMap = widget.initialMap;
   }

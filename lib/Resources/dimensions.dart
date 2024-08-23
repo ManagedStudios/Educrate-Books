@@ -1,5 +1,3 @@
-
-
 class Dimensions {
   static const double paddingSmall = 8;
   static const double cornerRadiusMedium = 20;
@@ -26,7 +24,6 @@ class Dimensions {
   static const double widthMedium = 128;
 
   static const double spaceSmall = 8;
-
 
   static const double elevationZero = 0;
 
@@ -79,5 +76,4 @@ class Dimensions {
   static const double thickLineWidth = 1.5;
 
   static const int bookAvAmountThreshold = 15;
-
 }

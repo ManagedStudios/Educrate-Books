@@ -18,7 +18,6 @@ class ClassLevelColumn extends StatefulWidget {
 }
 
 class _ClassLevelColumnState extends State<ClassLevelColumn> {
-
   late Future<List<int>> classLevels;
 
   /*
@@ -29,88 +28,96 @@ class _ClassLevelColumnState extends State<ClassLevelColumn> {
   late double fractionPerJump;
   late double currFraction;
 
-
   @override
-  void initState () {
+  void initState() {
     super.initState();
-    classLevels = Provider.of<ClassLevelState>(context, listen: false).getClassLevels();
+    classLevels =
+        Provider.of<ClassLevelState>(context, listen: false).getClassLevels();
     currFraction = minFactorClassLevelWidth;
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<int>>(
-      future: classLevels,
-      initialData: const [],
-      builder: (context, levels) {
-        int length = levels.data?.length ?? 0;
-        currFraction = minFactorClassLevelWidth;
-        amountOfJumps = roundUpDivision(length, 3);
-        fractionPerJump = (1-minFactorClassLevelWidth)/amountOfJumps.toDouble();
-        return Padding(
-          padding: const EdgeInsets.only(top: Dimensions.paddingMedium),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: Text(TextRes.classLevels,
-                                    style: Theme.of(context).textTheme.displayLarge,
-                    overflow: TextOverflow.ellipsis,),
-                  ),
-                  Tooltip(
-                    message: TextRes.switchStackBookView,
-                    child: IconButton(onPressed: widget.onSwitchBookView,
-                        icon: const Icon(Icons.compare_arrows,
-                            size: Dimensions.iconButtonSizeMedium)),
-                  )
-                ]
-              ),
-              const SizedBox(height: Dimensions.spaceMedium,),
-              Expanded(
-                child: ListView( //use listView to tacle even exceptional high load of classes
-                  children: [
-                    for (int index = 0; index<length; index++)
-                      FractionallySizedBox( //take up a fraction of full expanded width
-                        widthFactor: getCurrFraction(index),
-                        alignment: Alignment.centerLeft,
-                        child: FutureBuilder( //check if classLevel contains books subceeding avAmount threshold
-                            future: Provider.of<ClassLevelState>(context, listen: false)
+        future: classLevels,
+        initialData: const [],
+        builder: (context, levels) {
+          int length = levels.data?.length ?? 0;
+          currFraction = minFactorClassLevelWidth;
+          amountOfJumps = roundUpDivision(length, 3);
+          fractionPerJump =
+              (1 - minFactorClassLevelWidth) / amountOfJumps.toDouble();
+          return Padding(
+            padding: const EdgeInsets.only(top: Dimensions.paddingMedium),
+            child: Column(
+              children: [
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          TextRes.classLevels,
+                          style: Theme.of(context).textTheme.displayLarge,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      Tooltip(
+                        message: TextRes.switchStackBookView,
+                        child: IconButton(
+                            onPressed: widget.onSwitchBookView,
+                            icon: const Icon(Icons.compare_arrows,
+                                size: Dimensions.iconButtonSizeMedium)),
+                      )
+                    ]),
+                const SizedBox(
+                  height: Dimensions.spaceMedium,
+                ),
+                Expanded(
+                  child: ListView(
+                    //use listView to tacle even exceptional high load of classes
+                    children: [
+                      for (int index = 0; index < length; index++)
+                        FractionallySizedBox(
+                          //take up a fraction of full expanded width
+                          widthFactor: getCurrFraction(index),
+                          alignment: Alignment.centerLeft,
+                          child: FutureBuilder(
+                            //check if classLevel contains books subceeding avAmount threshold
+                            future: Provider.of<ClassLevelState>(context,
+                                    listen: false)
                                 .areBooksSubceedingAmount(levels.data![index]),
                             initialData: false,
                             builder: (context, tooFewBooks) {
-
                               return Consumer<ClassLevelState>(
                                 builder: (context, state, _) => ClassLevelCard(
                                     classLevel: levels.data![index],
-                                    onClick: (selectedLevel){
-                                      state.setSelectedClassLevel(selectedLevel);
-                                      Provider.of<BookDepotState>(context, listen: false)
+                                    onClick: (selectedLevel) {
+                                      state
+                                          .setSelectedClassLevel(selectedLevel);
+                                      Provider.of<BookDepotState>(context,
+                                              listen: false)
                                           .setCurrClassLevel(selectedLevel);
                                     },
-                                    clicked: levels.data![index] == state.selectedClassLevel,
-                                    error: tooFewBooks.data??false),
+                                    clicked: levels.data![index] ==
+                                        state.selectedClassLevel,
+                                    error: tooFewBooks.data ?? false),
                               );
                             },
                           ),
-                      )
-                  ],
-                ),
-              )
-            ],
-          ),
-        );
-      }
-    );
+                        )
+                    ],
+                  ),
+                )
+              ],
+            ),
+          );
+        });
   }
 
   double getCurrFraction(int index) {
-    if(index%3 == 0) {
+    if (index % 3 == 0) {
       currFraction += fractionPerJump;
     }
-    return currFraction<=1.0?currFraction:1.0;
+    return currFraction <= 1.0 ? currFraction : 1.0;
   }
-
-
 }

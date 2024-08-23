@@ -1,4 +1,3 @@
-
 import 'dart:ui';
 
 class ChipColors {
@@ -13,7 +12,13 @@ class ChipColors {
   static const Color red = Color(0xFFF7E0DB);
 
   static const List<Color> chipColors = [
-    gray, orange, yellow, green, blue, purple, pink, red
+    gray,
+    orange,
+    yellow,
+    green,
+    blue,
+    purple,
+    pink,
+    red
   ];
-
 }

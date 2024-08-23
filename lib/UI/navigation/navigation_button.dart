@@ -1,9 +1,12 @@
-
 import 'package:buecherteam_2023_desktop/Theme/color_scheme.dart';
 import 'package:flutter/material.dart';
 
 class NavigationButton extends StatefulWidget {
-   const NavigationButton({super.key, required this.isClicked, required this.onClickAction, required this.text});
+  const NavigationButton(
+      {super.key,
+      required this.isClicked,
+      required this.onClickAction,
+      required this.text});
 
   final bool isClicked;
   final Function onClickAction;
@@ -13,7 +16,9 @@ class NavigationButton extends StatefulWidget {
   State<NavigationButton> createState() => _NavigationButtonState();
 }
 
-class _NavigationButtonState extends State<NavigationButton> with SingleTickerProviderStateMixin { //SingleTickerProviderStateMixin handles animations
+class _NavigationButtonState extends State<NavigationButton>
+    with SingleTickerProviderStateMixin {
+  //SingleTickerProviderStateMixin handles animations
   late AnimationController _controller;
   late Animation _widthAnimation;
   late Animation _backgroundAnimation;
@@ -25,14 +30,22 @@ class _NavigationButtonState extends State<NavigationButton> with SingleTickerPr
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 250));
-    _widthAnimation = Tween<double>(begin: 128, end:224).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOutBack));
-    _backgroundAnimation = ColorTween(begin: Colors.transparent, end: lightColorScheme.primary).animate(_controller);
-    _textAnimation = ColorTween(begin: lightColorScheme.onSurface, end:lightColorScheme.onPrimary).animate(_controller);
-    _controller.addListener(() { //updates the UI appropriately with the listener
+    _controller = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 250));
+    _widthAnimation = Tween<double>(begin: 128, end: 224).animate(
+        CurvedAnimation(parent: _controller, curve: Curves.easeInOutBack));
+    _backgroundAnimation =
+        ColorTween(begin: Colors.transparent, end: lightColorScheme.primary)
+            .animate(_controller);
+    _textAnimation = ColorTween(
+            begin: lightColorScheme.onSurface, end: lightColorScheme.onPrimary)
+        .animate(_controller);
+    _controller.addListener(() {
+      //updates the UI appropriately with the listener
       setState(() {});
     });
-    if(widget.isClicked) _controller.forward(); //start the animation on start if button is clicked
+    if (widget.isClicked)
+      _controller.forward(); //start the animation on start if button is clicked
   }
 
   /*
@@ -58,18 +71,21 @@ class _NavigationButtonState extends State<NavigationButton> with SingleTickerPr
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
-    return OutlinedButton(onPressed: () => widget.onClickAction(),
-    style: ButtonStyle(
-      fixedSize: WidgetStatePropertyAll(Size.fromWidth(_widthAnimation.value)),
-      backgroundColor: WidgetStatePropertyAll(_backgroundAnimation.value),
-      side: WidgetStatePropertyAll(BorderSide(width: widget.isClicked?0:1,
-          color: Theme.of(context).colorScheme.outline)
-        )
+    return OutlinedButton(
+      onPressed: () => widget.onClickAction(),
+      style: ButtonStyle(
+          fixedSize:
+              WidgetStatePropertyAll(Size.fromWidth(_widthAnimation.value)),
+          backgroundColor: WidgetStatePropertyAll(_backgroundAnimation.value),
+          side: WidgetStatePropertyAll(BorderSide(
+              width: widget.isClicked ? 0 : 1,
+              color: Theme.of(context).colorScheme.outline))),
+      child: Text(
+        widget.text,
+        style: TextStyle(color: _textAnimation.value),
       ),
-        child: Text(widget.text, style: TextStyle(color: _textAnimation.value),),
     );
   }
 }

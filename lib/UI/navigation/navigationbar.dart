@@ -1,4 +1,3 @@
-
 import 'package:buecherteam_2023_desktop/Models/navigation_state.dart';
 import 'package:buecherteam_2023_desktop/Resources/text.dart';
 import 'package:buecherteam_2023_desktop/UI/book_depot_view.dart';
@@ -24,15 +23,19 @@ class LfgNavigationBar extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const Spacer(),
-            NavigationButton(key: const Key(TextRes.student),
+            NavigationButton(
+                key: const Key(TextRes.student),
                 isClicked: state.isStudentViewClicked,
                 onClickAction: () {
                   state.onStudentViewClicked();
                   context.go(StudentView.routeName);
                 },
                 text: TextRes.student),
-            const SizedBox(width: Dimensions.spaceMedium,),
-            NavigationButton(key: const Key(TextRes.books),
+            const SizedBox(
+              width: Dimensions.spaceMedium,
+            ),
+            NavigationButton(
+                key: const Key(TextRes.books),
                 isClicked: state.isBookViewClicked,
                 onClickAction: () {
                   state.onBookViewClicked();
@@ -42,18 +45,20 @@ class LfgNavigationBar extends StatelessWidget {
             const Spacer(),
             Tooltip(
               message: TextRes.settingsTooltip,
-              child: IconButton(onPressed: (){
-                showDialog(context: context,
-                    builder: (context) => SettingsDialog());
-              }, icon: const Icon(Icons.settings)),
+              child: IconButton(
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) => SettingsDialog());
+                  },
+                  icon: const Icon(Icons.settings)),
             ),
-            const SizedBox(width: Dimensions.spaceMedium,)
+            const SizedBox(
+              width: Dimensions.spaceMedium,
+            )
           ],
         ),
       ),
     );
   }
 }
-
-
-

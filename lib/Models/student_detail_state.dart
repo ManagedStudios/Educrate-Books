@@ -50,25 +50,17 @@ class StudentDetailState extends ChangeNotifier {
   Stream<List<BookLite>> streamBooks(String? searchQuery) async* {
     String query = BuildQuery.buildStudentDetailBookAddQuery(searchQuery);
 
-
     yield* database.streamLiveDocs(query).asyncMap((change) {
-      return change.results
-          .asStream()
-          .map((result) {
-
-            return database.toEntity(Book.fromJson, result);
-      } )
-          .map((book) {
+      return change.results.asStream().map((result) {
+        return database.toEntity(Book.fromJson, result);
+      }).map((book) {
         return BookLite(book.id, book.name, book.subject, book.classLevel);
-            }
-              )
-          .toList();
+      }).toList();
     });
   }
 
   Future<void> deleteBooksOfStudents(
       List<Student> students, List<BookLite> selectedBooks) async {
-
     final List<MutableDocument> docs = [];
     final List<Student> updatedStudentObjects = [];
     final Map<String, int> bookIdByAmountDeleted = {};
@@ -78,17 +70,17 @@ class StudentDetailState extends ChangeNotifier {
       final doc = (await database.getDoc(student.id))!.toMutable();
       docs.add(doc);
       // Remove books from the student and accumulate deletion counts
-      student.removeBooks(selectedBooks,
+      student.removeBooks(
+          selectedBooks,
           (book) => bookIdByAmountDeleted[book.bookId] =
-              (bookIdByAmountDeleted[book.bookId] ?? 0) + 1
-      );
+              (bookIdByAmountDeleted[book.bookId] ?? 0) + 1);
       updatedStudentObjects.add(student);
     }
 
     // Update the book amounts in the database based on the accumulated deletion counts
-    for (MapEntry<String, int> bookIdByAmount in bookIdByAmountDeleted.entries) {
-      BookUtils
-          .updateAmountOnBookFromStudentDeleted(
+    for (MapEntry<String, int> bookIdByAmount
+        in bookIdByAmountDeleted.entries) {
+      BookUtils.updateAmountOnBookFromStudentDeleted(
           bookIdByAmount.key, bookIdByAmount.value, database);
     }
 
@@ -97,22 +89,25 @@ class StudentDetailState extends ChangeNotifier {
   }
 
   Future<void> duplicateBooksOfStudents(
-      List<Student> students, List<BookLite> selectedBooks,
+      List<Student> students,
+      List<BookLite> selectedBooks,
       Function(String message) onShowSnackbar) async {
     await addBooksToStudent(selectedBooks, students, onShowSnackbar);
   }
 
   Future<void> addBooksToStudent(
-      List<BookLite> books, List<Student> selectedStudents, Function(String message) onShowSnackbar) async {
+      List<BookLite> books,
+      List<Student> selectedStudents,
+      Function(String message) onShowSnackbar) async {
     final List<BookLite> booksThatCanBeAdded = []; //for books that are in stock
-    final List<BookLite> booksThatCannotBeAdded = []; //for books that aren't in stock
+    final List<BookLite> booksThatCannotBeAdded =
+        []; //for books that aren't in stock
 
     if (books.isEmpty) return;
 
     //check which books are available and update their amount if they are
-    for(BookLite bookLite in books) {
-      if (await BookUtils
-          .updateAmountOnBookToStudentAdded(
+    for (BookLite bookLite in books) {
+      if (await BookUtils.updateAmountOnBookToStudentAdded(
           bookLite.bookId, selectedStudents.length, database)) {
         booksThatCanBeAdded.add(bookLite);
       } else {
@@ -131,23 +126,24 @@ class StudentDetailState extends ChangeNotifier {
 
     //show the user which books were not available
     if (booksThatCannotBeAdded.isNotEmpty) {
-      onShowSnackbar("${TextRes.booksNotAddable} ${booksThatCannotBeAdded.map((it) => "${it.name} ${it.classLevel}")}");
+      onShowSnackbar(
+          "${TextRes.booksNotAddable} ${booksThatCannotBeAdded.map((it) => "${it.name} ${it.classLevel}")}");
     }
-
   }
 
-  Future<void> updateBookAmountOnStudentDelete(List<Student> selectedStudents) async {
+  Future<void> updateBookAmountOnStudentDelete(
+      List<Student> selectedStudents) async {
     Map<String, int> bookIdByAmount = {};
 
     for (Student student in selectedStudents) {
       for (BookLite bookLite in student.books) {
-        bookIdByAmount[bookLite.bookId] = (bookIdByAmount[bookLite.bookId]??0) + 1;
+        bookIdByAmount[bookLite.bookId] =
+            (bookIdByAmount[bookLite.bookId] ?? 0) + 1;
       }
     }
 
     for (MapEntry<String, int> bookByAmount in bookIdByAmount.entries) {
-      BookUtils
-          .updateAmountOnBookFromStudentDeleted(
+      BookUtils.updateAmountOnBookFromStudentDeleted(
           bookByAmount.key, bookByAmount.value, database);
     }
   }

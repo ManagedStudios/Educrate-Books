@@ -19,9 +19,7 @@ class BookDepotBookSection extends StatefulWidget {
 }
 
 class _BookDepotBookSectionState extends State<BookDepotBookSection> {
-
   bool isOverlayOpen = false;
-
 
   @override
   Widget build(BuildContext context) {
@@ -34,49 +32,64 @@ class _BookDepotBookSectionState extends State<BookDepotBookSection> {
             children: [
               Tooltip(
                 message: "${TextRes.books} ${TextRes.toAdd}",
-                child: IconButton(onPressed: () => addBook(context),
-                    icon: const Icon(Icons.add, size: Dimensions.iconButtonSizeMedium,)),
+                child: IconButton(
+                    onPressed: () => addBook(context),
+                    icon: const Icon(
+                      Icons.add,
+                      size: Dimensions.iconButtonSizeMedium,
+                    )),
               )
             ],
           ),
-          const SizedBox(height: Dimensions.spaceMedium,),
-           Expanded(
+          const SizedBox(
+            height: Dimensions.spaceMedium,
+          ),
+          Expanded(
               child: GestureDetector(
                   onSecondaryTapUp: (details) {
-                    var bookListState = Provider.of<BookDepotState>(context, listen: false);
-                    if(bookListState.currBookId != null && !isOverlayOpen) {
+                    var bookListState =
+                        Provider.of<BookDepotState>(context, listen: false);
+                    if (bookListState.currBookId != null && !isOverlayOpen) {
                       setState(() {
                         isOverlayOpen = true;
                       });
                       var overlay = ActionsOverlay(
                           selectedItems: [],
                           width: Dimensions.widthRightClickActionMenu,
-                          actions: { //inflate actions
-                            TextRes.delete:(_) async{
+                          actions: {
+                            //inflate actions
+                            TextRes.delete: (_) async {
                               //Ensure Book won't be deleted if students own it
-                              if (await bookListState.haveStudentsThisBook(bookListState.currBookId!)) {
-                                if (context.mounted) { //avoid async errors
-                                  showLFGSnackbar(context, TextRes.bookNotDeletable); //notify user
+                              if (await bookListState.haveStudentsThisBook(
+                                  bookListState.currBookId!)) {
+                                if (context.mounted) {
+                                  //avoid async errors
+                                  showLFGSnackbar(context,
+                                      TextRes.bookNotDeletable); //notify user
                                 }
                               } else {
-                                if (context.mounted) {//avoid async errors
-                                  openDeleteDialog(context, [bookListState.currBookId!], TextRes.book,
-                                    functionBeforeDeletion: () async{
-                                      bookListState
-                                          .deleteTrainingDirectionsIfRequired(bookListState.currBookId!);
-                                      bookListState
-                                        .setCurrBookId(null);
-                                    });
+                                if (context.mounted) {
+                                  //avoid async errors
+                                  openDeleteDialog(context,
+                                      [bookListState.currBookId!], TextRes.book,
+                                      functionBeforeDeletion: () async {
+                                    bookListState
+                                        .deleteTrainingDirectionsIfRequired(
+                                            bookListState.currBookId!);
+                                    bookListState.setCurrBookId(null);
+                                  });
                                 }
                               }
-
                             },
-                            TextRes.edit:(_)async{
-                              if(context.mounted) { // Check if the widget is still in the tree to avoid async errors
-                                openEditBookDialog(context,
-                                    await bookListState.getBook(bookListState.currBookId!),
-                                    !(await bookListState.haveStudentsThisBook(bookListState.currBookId!))
-                                );
+                            TextRes.edit: (_) async {
+                              if (context.mounted) {
+                                // Check if the widget is still in the tree to avoid async errors
+                                openEditBookDialog(
+                                    context,
+                                    await bookListState
+                                        .getBook(bookListState.currBookId!),
+                                    !(await bookListState.haveStudentsThisBook(
+                                        bookListState.currBookId!)));
                               }
                             }
                           },
@@ -92,10 +105,7 @@ class _BookDepotBookSectionState extends State<BookDepotBookSection> {
                   },
                   child: IgnorePointer(
                       ignoring: isOverlayOpen,
-                      child: const BookDepotBookList()
-                  )
-              )
-          )
+                      child: const BookDepotBookList())))
         ],
       ),
     );

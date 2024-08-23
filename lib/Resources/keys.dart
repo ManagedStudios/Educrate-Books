@@ -1,13 +1,12 @@
-
 class Keys {
-  static String ActionDropdownAvailableContainerSizedBoxKey = "ActionAvConSB";
+  static String actionDropdownAvailableContainerSizedBoxKey = "ActionAvConSB";
 
-  static String ActionDropdownAvailableCardKey = "ActionAvCard";
+  static String actionDropdownAvailableCardKey = "ActionAvCard";
 
-  static String ActionDropdownSelectedWrapCard = "ActionSeWrCard";
+  static String actionDropdownSelectedWrapCard = "ActionSeWrCard";
 
-  static String ActionDropdownSelectedWrapSizedBoxForCard = "ActionSeWrSBFCard";
+  static String actionDropdownSelectedWrapSizedBoxForCard = "ActionSeWrSBFCard";
 
-  static String ActionDropdownSelectedWrapSizedBoxForTextfield = "ActionSeWrFTf";
-
+  static String actionDropdownSelectedWrapSizedBoxForTextfield =
+      "ActionSeWrFTf";
 }
