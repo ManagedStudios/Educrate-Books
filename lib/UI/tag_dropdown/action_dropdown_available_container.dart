@@ -68,7 +68,7 @@ class ActionDropdownAvailableContainer<T extends LfgChip> extends StatelessWidge
                */
               for (int chipIndex = 0; chipIndex<availableChips.length; chipIndex++)
                 ChipWrap<T>(chips: [availableChips[chipIndex]],
-                  onClickChipRow: (chip) {
+                  onClickChipRow: (List<T> chip) {
                     onAddChip(chip[0]);
                   },
                   width: width,

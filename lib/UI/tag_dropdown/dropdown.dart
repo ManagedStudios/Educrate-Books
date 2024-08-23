@@ -26,7 +26,7 @@ class Dropdown<T extends LfgChip> extends StatefulWidget {
   final List<T> availableChips;
   final Function(T chip) onAddChip;
   final Function(T chip) onDeleteChip;
-  final Function (List<T> selectedChips) onCloseOverlay;
+  final Function (List<T> selectedChips) onCloseOverlay; //is not called on single Select!
   final bool multiSelect;
   final double width;
   final String? hintText;
@@ -124,7 +124,7 @@ class _DropdownState<T extends LfgChip> extends State<Dropdown<T>>  {
                   deleteChip(chip); //internally update State
               },
               availableChips: availableChips,
-              onAddChip: (chip) {
+              onAddChip: (T chip) {
                 widget.onAddChip(chip);
                 addChip(chip);
 

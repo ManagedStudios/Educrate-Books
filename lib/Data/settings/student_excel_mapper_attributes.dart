@@ -1,6 +1,6 @@
 import 'package:buecherteam_2023_desktop/Data/lfg_chip.dart';
 
-import '../Resources/text.dart';
+import '../../Resources/text.dart';
 
 /*
 This enum enables easy attribute mapping: You can behave according to the
