@@ -5,11 +5,11 @@ import 'package:buecherteam_2023_desktop/UI/settings_dialog/import/attribute_map
 import 'package:flutter/material.dart';
 
 class AttributeMapperList<T extends LfgChip> extends StatefulWidget {
-  const AttributeMapperList({super.key, required this.availableDropdownItems, required this.excelDataKeys, required this.onUpdatedMap, required this.width});
+  const AttributeMapperList({super.key, required this.availableDropdownItems, required this.initialMap, required this.onUpdatedMap, required this.width});
 
   final List<T> availableDropdownItems;
-  final List<ExcelData> excelDataKeys;
-  final Function(Map<ExcelData, T> updatedItems) onUpdatedMap;
+  final Map<ExcelData, T?> initialMap;
+  final Function(Map<ExcelData, T?> updatedItems) onUpdatedMap;
   final double width;
 
   @override
@@ -18,19 +18,26 @@ class AttributeMapperList<T extends LfgChip> extends StatefulWidget {
 
 class _AttributeMapperListState<T extends LfgChip> extends State<AttributeMapperList<T>> {
 
-  Map<ExcelData, T> currMap = {};
+  late Map<ExcelData, T?> currMap;
+
+  @override
+  void initState () {
+    super.initState();
+    currMap = widget.initialMap;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        for (ExcelData key in widget.excelDataKeys)
+        for (MapEntry<ExcelData, T?> entry in widget.initialMap.entries)
           AttributeMapper<T>(
-              excelDataKey: key,
+              excelDataKey: entry.key,
               availableAttributes: widget.availableDropdownItems,
               width: widget.width,
+              selectedAttribute: entry.value,
               onItemSelected: (T item) {
-                currMap[key] = item;
+                currMap[entry.key] = item;
                 widget.onUpdatedMap(currMap);
               })
       ],

@@ -8,9 +8,10 @@ import 'package:buecherteam_2023_desktop/UI/tag_dropdown/dropdown.dart';
 import 'package:flutter/material.dart';
 
 class AttributeMapper<T extends LfgChip> extends StatelessWidget {
-  const AttributeMapper({super.key, required this.excelDataKey, required this.availableAttributes, required this.width, required this.onItemSelected});
+  const AttributeMapper({super.key, required this.excelDataKey, required this.availableAttributes, required this.width, required this.onItemSelected, this.selectedAttribute});
   final ExcelData excelDataKey;
   final List<T> availableAttributes;
+  final T? selectedAttribute;
   final double width;
   final Function(T item) onItemSelected;
 
@@ -34,7 +35,9 @@ class AttributeMapper<T extends LfgChip> extends StatelessWidget {
             const SizedBox(width: Dimensions.spaceLarge,),
             Dropdown<T>(
                 availableChips: availableAttributes,
-                selectedChips: <T>[], //don't put const [] in here since it leads to type conflicts (Dart treats const [] as List<Never>)
+                selectedChips: selectedAttribute != null
+                                ? <T>[selectedAttribute!]
+                                : <T>[], //don't put const [] in here since it leads to type conflicts (Dart treats const [] as List<Never>)
                 onAddChip: (item){
                   onItemSelected(item);
                 },

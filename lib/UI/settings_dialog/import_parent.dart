@@ -23,8 +23,13 @@ class ImportParent extends StatelessWidget {
           padding: const EdgeInsets.all(Dimensions.paddingMedium),
           child: AttributeMapperList<StudentAttributes>(
               availableDropdownItems: StudentAttributes.values,
-              excelDataKeys: List.generate(5, (i) =>
-                  ExcelData(row: i, column: i, content: "content nr: $i")),
+              initialMap: Map.fromEntries(
+                List.generate(5, (i) =>
+                    MapEntry(
+                        ExcelData(row: 1, column: 1, content: "content nr: $i"),
+                        null)
+                )
+              ),
               onUpdatedMap: (m){
                 print(
                     m.map((key, value) => MapEntry(key.content, value))
