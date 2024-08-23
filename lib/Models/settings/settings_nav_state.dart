@@ -24,8 +24,9 @@ class SettingsNavState extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setCurrWidget(Widget nextWidget) {
+  void setCurrWidget(Widget nextWidget, SettingsNavButtons navButton) {
     currWidget = nextWidget;
+    selectedButton = navButton;
     notifyListeners();
   }
 }

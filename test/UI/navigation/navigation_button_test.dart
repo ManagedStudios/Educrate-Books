@@ -51,7 +51,7 @@ void main () {
     expect(outlineButton.style?.backgroundColor?.resolve({}), Colors.transparent);
     expect(outlineButton.style?.side?.resolve({})?.width, 1);
     expect(outlineButton.style?.side?.resolve({})?.color, lightColorScheme.outline);
-    expect(buttonText.style?.color, lightColorScheme.onBackground);
+    expect(buttonText.style?.color, lightColorScheme.onSurface);
   });
 
   testWidgets("Test if animation starts when isClicked true", (tester) async {
@@ -87,7 +87,7 @@ void main () {
     expect(outlineButton.style?.backgroundColor?.resolve({}), Colors.transparent);
     expect(outlineButton.style?.side?.resolve({})?.width, 1);
     expect(outlineButton.style?.side?.resolve({})?.color, lightColorScheme.outline);
-    expect(buttonText.style?.color, lightColorScheme.onBackground);
+    expect(buttonText.style?.color, lightColorScheme.onSurface);
   });
 
   testWidgets("test if config changes with same values trigger animation", (tester) async{

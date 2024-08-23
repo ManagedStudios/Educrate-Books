@@ -1,5 +1,6 @@
 import 'package:buecherteam_2023_desktop/Data/settings/excel_data.dart';
 import 'package:buecherteam_2023_desktop/Data/settings/student_excel_mapper_attributes.dart';
+import 'package:buecherteam_2023_desktop/Models/settings/settings_nav_state.dart';
 import 'package:buecherteam_2023_desktop/Resources/dimensions.dart';
 import 'package:buecherteam_2023_desktop/UI/settings_dialog/import/attribute_mapper_list.dart';
 import 'package:buecherteam_2023_desktop/UI/settings_dialog/nav_bottom_bar.dart';
@@ -16,22 +17,25 @@ class ImportParent extends StatelessWidget {
     double availableWidth = MediaQuery.of(context).size.width;
     return Column(
       children: [
-        Padding(
-            padding: const EdgeInsets.all(Dimensions.paddingMedium),
-            child: AttributeMapperList<StudentAttributes>(
-                availableDropdownItems: StudentAttributes.values,
-                initialMap: Map.fromEntries(List.generate(
-                    5,
-                    (i) => MapEntry(
-                        ExcelData(row: 1, column: 1, content: "content nr: $i"),
-                        null))),
-                onUpdatedMap: (m) {
-                  print(m.map((key, value) => MapEntry(key.content, value)));
-                },
-                width: availableWidth * 0.4)),
-        const Spacer(),
+        Expanded(
+          child: Padding(
+              padding: const EdgeInsets.all(Dimensions.paddingMedium),
+              child: AttributeMapperList<StudentAttributes>(
+                  availableDropdownItems: StudentAttributes.values,
+                  initialMap: Map.fromEntries(List.generate(
+                      5,
+                      (i) => MapEntry(
+                          ExcelData(row: 1, column: 1, content: "content nr: $i"),
+                          null))),
+                  onUpdatedMap: (m) {
+                    print(m.map((key, value) => MapEntry(key.content, value)));
+                  },
+                  width: availableWidth * 0.4)),
+        ),
         const NavBottomBar(
-            nextWidget: PrintParent(), previousWidget: WarningParent())
+            nextWidget: MapEntry(SettingsNavButtons.DRUCKEN, PrintParent()),
+            previousWidget: MapEntry(SettingsNavButtons.MAHNUNG, WarningParent()),
+        )
       ],
     );
   }

@@ -3,6 +3,10 @@ import 'package:buecherteam_2023_desktop/Data/settings/excel_data.dart';
 import 'package:buecherteam_2023_desktop/UI/settings_dialog/import/attribute_mapper.dart';
 import 'package:flutter/material.dart';
 
+/*
+Widget that creates a List of Attribute Mappers in a column and sends the latest
+Excel-Attribute-Map whenever any of the Attribute Mappers has changed.
+ */
 class AttributeMapperList<T extends LfgChip> extends StatefulWidget {
   const AttributeMapperList(
       {super.key,
@@ -32,7 +36,7 @@ class _AttributeMapperListState<T extends LfgChip>
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return ListView(
       children: [
         for (MapEntry<ExcelData, T?> entry in widget.initialMap.entries)
           AttributeMapper<T>(

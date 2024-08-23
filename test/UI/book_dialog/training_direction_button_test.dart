@@ -42,7 +42,7 @@ void main () {
   testWidgets("Color changes when isClicked turns from false to true", (tester) async {
     await tester.pumpWidget(createWidgetUnderTest(false));
 
-    Set<MaterialState> states = <MaterialState>{};
+    Set<WidgetState> states = <WidgetState>{};
     final button = tester.widget<OutlinedButton>(find.descendant(of: find.byType(TrainingDirectionButton),
         matching: find.byType(OutlinedButton)));
     Color? color = button.style?.backgroundColor?.resolve(states);
