@@ -265,5 +265,7 @@ class TextRes {
   static const String importPreferencesExistingStudentsDescription = "Vorhandene Schüler behalten und mit neuen Daten aktualisieren.\n"
       "Hinweis: Dabei werden alte Ausbildungen gelöscht und neue Ausbildungen und Bücher hinzugefügt. Alte Bücher bleiben erhalten.";
 
+  static const String success = "Operation erfolgreich - Weiterleitung erfolgt gleich";
+
 
 }
