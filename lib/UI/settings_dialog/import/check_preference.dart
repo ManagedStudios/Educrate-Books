@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class CheckPreference extends StatefulWidget {
   const CheckPreference({super.key, required this.onChanged, required this.text});
 
-  final Function(bool? updatedValue) onChanged;
+  final Function(bool updatedValue) onChanged;
   final String text;
 
   @override
@@ -12,7 +12,7 @@ class CheckPreference extends StatefulWidget {
 }
 
 class _CheckPreferenceState extends State<CheckPreference> {
-  bool? isClicked = false;
+  bool isClicked = false;
 
   @override
   Widget build(BuildContext context) {
@@ -21,9 +21,9 @@ class _CheckPreferenceState extends State<CheckPreference> {
         Checkbox(
             value: isClicked,
             onChanged: (updatedValue) {
-              widget.onChanged(updatedValue);
+              widget.onChanged(updatedValue??false);
               setState(() {
-                isClicked = updatedValue;
+                isClicked = updatedValue??false;
               });
             }),
         const SizedBox(width: Dimensions.spaceSmall,),

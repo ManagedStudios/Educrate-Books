@@ -30,6 +30,13 @@ class ImportState extends ChangeNotifier {
       "${TextRes.areMandatory}";
 
   /*
+  Import options
+   */
+
+  bool isClassWithoutCharAllowed = false;
+  bool updateExistingStudents = false;
+
+  /*
   Select Excel file screen
    */
   String? importFileName;
@@ -58,6 +65,14 @@ class ImportState extends ChangeNotifier {
     excelFile = getExcelFileOf(filePickerResult);
     selectExcelFileError = null;
     notifyListeners();
+  }
+
+  void setIsClassWithoutCharAllowed(bool allowClassWithoutChar) {
+    isClassWithoutCharAllowed = allowClassWithoutChar;
+  }
+
+  void setUpdateExistingStudent(bool updateExistingStudents) {
+    this.updateExistingStudents = updateExistingStudents;
   }
 
 
