@@ -29,9 +29,13 @@ class AttributeMapper<T extends LfgChip> extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              excelDataKey.content,
-              style: Theme.of(context).textTheme.bodyLarge,
+            SizedBox(
+              width: width*0.25,
+              child: Text(
+                excelDataKey.content,
+                style: Theme.of(context).textTheme.bodyLarge,
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
             const SizedBox(
               width: Dimensions.spaceLarge,

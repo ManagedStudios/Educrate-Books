@@ -4,6 +4,7 @@ import 'package:buecherteam_2023_desktop/Models/book_depot_state.dart';
 import 'package:buecherteam_2023_desktop/Models/class_level_state.dart';
 import 'package:buecherteam_2023_desktop/Models/navigation_state.dart';
 import 'package:buecherteam_2023_desktop/Models/right_click_state.dart';
+import 'package:buecherteam_2023_desktop/Models/settings/import_state.dart';
 import 'package:buecherteam_2023_desktop/Models/settings/settings_nav_state.dart';
 import 'package:buecherteam_2023_desktop/Models/studentListState.dart';
 import 'package:buecherteam_2023_desktop/Models/student_detail_state.dart';
@@ -35,7 +36,8 @@ void main() async {
       ChangeNotifierProvider(create: (context) => ClassLevelState(DB())),
       ChangeNotifierProvider(create: (context) => BookDepotState(DB())),
       ChangeNotifierProvider(create: (context) => NavigationState()),
-      ChangeNotifierProvider(create: (context) => SettingsNavState())
+      ChangeNotifierProvider(create: (context) => SettingsNavState()),
+      ChangeNotifierProvider(create: (context) => ImportState(DB()))
     ],
     child: const MyApp(),
   ));

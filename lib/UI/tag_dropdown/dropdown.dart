@@ -65,8 +65,7 @@ class _DropdownState<T extends LfgChip> extends State<Dropdown<T>> {
   @override
   void didUpdateWidget(oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.availableChips != widget.availableChips &&
-        oldWidget.availableChips.isEmpty) {
+    if (oldWidget.availableChips != widget.availableChips) {
       availableChips = widget.availableChips.toList();
       for (var selected in selectedChips) {
         availableChips
@@ -84,6 +83,7 @@ class _DropdownState<T extends LfgChip> extends State<Dropdown<T>> {
 
   @override
   Widget build(BuildContext context) {
+
     return IgnorePointer(
       ignoring: isOverlayOpen, //disable interaction when overlay is open
       child: ChipWrap<T>(

@@ -26,10 +26,8 @@ class NavBottomBar extends StatelessWidget {
             children: [
               TextButton(
                   onPressed: () {
-                    if (error == null) {
                       Provider.of<SettingsNavState>(context, listen: false)
                           .setCurrWidget(previousWidget.value, previousWidget.key);
-                    }
                   },
                   child: Row(
                     mainAxisSize: MainAxisSize.min,

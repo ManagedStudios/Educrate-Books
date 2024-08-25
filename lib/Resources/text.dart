@@ -242,4 +242,6 @@ class TextRes {
   static const String back = "Zurück";
 
   static const String next = "Weiter";
+
+  static const String areMandatory = "sind verpflichtend auszuwählen!";
 }
