@@ -18,7 +18,7 @@ class ImportParent extends StatelessWidget {
       children: [
         BigButton(onPressed: (){
           Provider.of<SettingsNavState>(context, listen: false)
-              .setCurrWidget(ImportPreferences(), SettingsNavButtons.IMPORT);
+              .setCurrWidget(const ImportPreferences(), SettingsNavButtons.IMPORT);
         }, text: TextRes.importNewSchoolYearTitle),
         const SizedBox(height: Dimensions.spaceLarge,),
         BigButton(onPressed: (){}, text: TextRes.importNewStudents),

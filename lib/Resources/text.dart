@@ -243,5 +243,24 @@ class TextRes {
 
   static const String next = "Weiter";
 
-  static const String areMandatory = "sind verpflichtend auszuwählen!";
+  static const String areMandatory = "verpflichtend auszuwählen!";
+
+  static const String importNewSchoolYearTitle = "Neues Schuljahr";
+
+  static const String importNewStudents = "Schüler importieren";
+
+  static const String importNewAttributes = "Attribute importieren";
+
+  static const String importPreferencesClassCharDescription = "Schüler die keiner Klasse mit Buchstabe zugeordnet sind importieren.\n"
+      "Hinweis: Falls diese Option nicht gewählt wurde werden Schüler z.B. der Klasse 12 nicht importiert.";
+
+  static const String importOptionsTitle = "Importoptionen:";
+
+  static const String openExcelFileLabel = "Excel Datei auswählen";
+
+  static const String selected = "ausgewählt";
+
+  static const String selectExcelFileError = "Eine Excel Datei muss ausgewählt werden!";
+
+
 }
