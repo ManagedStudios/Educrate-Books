@@ -41,6 +41,7 @@ dependencies:
   cbl: ^2.2.2
   cbl_flutter: ^2.0.9
   cbl_flutter_ce: ^2.2.2
+  file_picker: ^8.0.7
 
 dev_dependencies:
   flutter_test:

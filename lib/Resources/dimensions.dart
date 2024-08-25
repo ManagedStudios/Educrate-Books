@@ -63,6 +63,8 @@ class Dimensions {
 
   static const double elevationVerySmall = 0.5;
 
+  static const double elevationSmall = 2.5;
+
   static const int toolTipDuration = 1;
 
   static const double widthFactorLarge = 0.8;
