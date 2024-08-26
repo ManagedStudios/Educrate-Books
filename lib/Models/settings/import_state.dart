@@ -19,12 +19,8 @@ class ImportState extends ChangeNotifier {
   Excel header to attributes Screen
    */
   List<StudentAttributes> availableStudentAttributes = StudentAttributes.values;
-  Map<ExcelData, StudentAttributes?> currHeaderToAttributeMap = {
-    ExcelData(row: 1, column: 1, content: "hello"):null,
-    ExcelData(row: 1, column: 1, content: "hello 1"):null,
-    ExcelData(row: 1, column: 1, content: "hello 2"):null,
-    ExcelData(row: 1, column: 1, content: "hello 3"):null,
-  };
+  Map<ExcelData, StudentAttributes?> currHeaderToAttributeMap = {};
+
   String? currHeaderToAttributeError = "${StudentAttributes.FIRSTNAME.getLabelText()} "
       "${StudentAttributes.LASTNAME.getLabelText()} ${StudentAttributes.CLASS.getLabelText()} "
       "${TextRes.areMandatory}";
@@ -76,6 +72,28 @@ class ImportState extends ChangeNotifier {
   }
 
 
+
+  Future<bool> getExcelHeaders() async{
+    if (excelFile == null) throw Exception(TextRes.selectExcelFileError);
+    if (excelFile!.sheets.length != 1) throw Exception(TextRes.excelFileTooManySheetsError);
+    Sheet sheet = excelFile!.sheets.values.first;
+    List<Data?> headerRow = sheet.row(0);
+
+
+    if (headerRow.isEmpty || (headerRow.length == 1 && headerRow.first == null)) {
+      throw Exception(TextRes.excelNoHeaderError);
+    }
+    for (Data? cell in headerRow) {
+        if (cell != null) {
+          currHeaderToAttributeMap[
+            ExcelData(
+              row: cell.rowIndex,
+              column: cell.columnIndex,
+                content: cell.value.toString())] = null;
+        }
+    }
+    return true;
+  }
 }
 
 

@@ -267,5 +267,10 @@ class TextRes {
 
   static const String success = "Operation erfolgreich - Weiterleitung erfolgt gleich";
 
+  static const String excelFileTooManySheetsError = "Die Excel Datei darf nur 1 Tabellenblatt besitzen!";
+
+  static const String excelNoHeaderError = "Die Excel Datei scheint keine Spaltentitel zu besitzen.\n"
+      "Bitte in der ersten Zeile Titel für die Spalten eintragen.";
+
 
 }

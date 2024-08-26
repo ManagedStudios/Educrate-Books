@@ -30,11 +30,14 @@ class AttributeMapper<T extends LfgChip> extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             SizedBox(
-              width: width*0.25,
-              child: Text(
-                excelDataKey.content,
-                style: Theme.of(context).textTheme.bodyLarge,
-                overflow: TextOverflow.ellipsis,
+              width: width*0.35,
+              child: Tooltip(
+                message: excelDataKey.content,
+                child: Text(
+                  excelDataKey.content,
+                  style: Theme.of(context).textTheme.bodyLarge,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
             ),
             const SizedBox(
@@ -57,7 +60,7 @@ class AttributeMapper<T extends LfgChip> extends StatelessWidget {
                 },
                 onDeleteChip: (_) {},
                 multiSelect: false,
-                width: width,
+                width: width*0.75,
                 onCloseOverlay: (_) {})
           ],
         ),

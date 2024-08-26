@@ -1,11 +1,10 @@
 import 'package:buecherteam_2023_desktop/Models/settings/import_state.dart';
 import 'package:buecherteam_2023_desktop/Models/settings/settings_nav_state.dart';
 import 'package:buecherteam_2023_desktop/Resources/dimensions.dart';
-import 'package:buecherteam_2023_desktop/UI/settings_dialog/filter_parent.dart';
+import 'package:buecherteam_2023_desktop/UI/settings_dialog/import/header_to_attribute_mapper.dart';
 import 'package:buecherteam_2023_desktop/UI/settings_dialog/import/import_preferences.dart';
 import 'package:buecherteam_2023_desktop/UI/settings_dialog/import/loading.dart';
 import 'package:buecherteam_2023_desktop/UI/settings_dialog/nav_bottom_bar.dart';
-import 'package:buecherteam_2023_desktop/UI/settings_dialog/print_parent.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -42,17 +41,9 @@ class SelectExcel extends StatelessWidget {
             builder: (context, state, _) => NavBottomBar(
                 nextWidget: MapEntry(SettingsNavButtons.IMPORT,
                     Loading(
-                        functionToBeExecuted: () async {
-                          final Future<String> calculation = Future<String>.delayed(
-                            const Duration(seconds: 4),
-                                () => 'Data Loaded',
-                          );
-                          String s = await calculation;
-                          //throw Exception("No way an error ocurred");
-                          return true;
-                        },
-                        nextWidget: const MapEntry(SettingsNavButtons.FILTER, FilterParent()),
-                        fallbackWidget: const MapEntry(SettingsNavButtons.DRUCKEN, PrintParent()))
+                        functionToBeExecuted: state.getExcelHeaders,
+                        nextWidget: const MapEntry(SettingsNavButtons.IMPORT, HeaderToAttributeMapper()),
+                        fallbackWidget: const MapEntry(SettingsNavButtons.IMPORT, SelectExcel()))
                 ),
                 previousWidget: const MapEntry(SettingsNavButtons.IMPORT, ImportPreferences()),
                 error: state.selectExcelFileError
