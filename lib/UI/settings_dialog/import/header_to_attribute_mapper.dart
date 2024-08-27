@@ -1,4 +1,6 @@
 import 'package:buecherteam_2023_desktop/Models/settings/import_state.dart';
+import 'package:buecherteam_2023_desktop/UI/settings_dialog/import/loading.dart';
+import 'package:buecherteam_2023_desktop/UI/settings_dialog/import/select_excel.dart';
 import 'package:buecherteam_2023_desktop/UI/settings_dialog/print_parent.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -40,8 +42,13 @@ class HeaderToAttributeMapper extends StatelessWidget {
              Padding(
                padding: const EdgeInsets.all(Dimensions.paddingSmall),
                child: NavBottomBar(
-                  nextWidget: MapEntry(SettingsNavButtons.MAHNUNG, WarningParent()),
-                  previousWidget: MapEntry(SettingsNavButtons.DRUCKEN, PrintParent()),
+                  nextWidget: MapEntry(SettingsNavButtons.IMPORT,
+                      Loading(
+                          functionToBeExecuted: state.preProcessExcel,
+                          nextWidget: MapEntry(SettingsNavButtons.DRUCKEN, PrintParent()),
+                          fallbackWidget: MapEntry(SettingsNavButtons.MAHNUNG, WarningParent()))
+                  ),
+                  previousWidget: const MapEntry(SettingsNavButtons.IMPORT, SelectExcel()),
                   error: state.currHeaderToAttributeError,
                            ),
              )

@@ -26,6 +26,15 @@ class ImportState extends ChangeNotifier {
       "${TextRes.areMandatory}";
 
   /*
+  Excel header to attributes processing and checks -> Excel PreProcessing
+   */
+
+  Excel? excelFormatErrors;
+  Map<StudentAttributes, List<ExcelData>> studentAttributeToHeaders = {};
+
+
+
+  /*
   Import options
    */
 
@@ -38,7 +47,6 @@ class ImportState extends ChangeNotifier {
   String? importFileName;
   Excel? excelFile;
   String? selectExcelFileError = TextRes.selectExcelFileError;
-
 
 
   void setCurrHeaderToAttributeMap(Map<ExcelData, StudentAttributes?> headerToAttribute) {
@@ -92,6 +100,13 @@ class ImportState extends ChangeNotifier {
                 content: cell.value.toString())] = null;
         }
     }
+    return true;
+  }
+
+  Future<bool> preProcessExcel() async{
+    studentAttributeToHeaders = getStudentAttributesToHeadersFrom(currHeaderToAttributeMap);
+
+
     return true;
   }
 }

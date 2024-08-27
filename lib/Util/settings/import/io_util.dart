@@ -24,3 +24,4 @@ Excel getExcelFileOf(FilePickerResult res) {
   Excel excel = Excel.decodeBytes(bytes);
   return excel;
 }
+

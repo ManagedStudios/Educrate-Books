@@ -1,4 +1,6 @@
 import '../Data/bookLite.dart';
+import '../Data/settings/excel_data.dart';
+import '../Data/settings/student_excel_mapper_attributes.dart';
 import '../Resources/text.dart';
 
 bool areListsEqualIgnoringOrder<T>(List<T> list1, List<T> list2) {
@@ -27,6 +29,28 @@ bool areMapsEqual(Map<String, Object?> map1, Map<String, Object?> map2) {
       return false;
     }
   }
+  return true;
+}
+
+bool areImportMapsEqual (Map<StudentAttributes, List<ExcelData>> map1,
+Map<StudentAttributes, List<ExcelData>> map2) {
+  if (map1.length != map2.length) {
+    return false;
+  }
+
+  for (MapEntry<StudentAttributes, List<ExcelData>> entry in map1.entries) {
+    if (!map2.containsKey(entry.key)) {
+      return false;
+    } else {
+      for (var excelData in map2[entry.key]!) {
+        if (!entry.value.contains(excelData)) {
+          return false;
+        }
+      }
+    }
+  }
+
+
   return true;
 }
 
