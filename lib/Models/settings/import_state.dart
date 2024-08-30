@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:buecherteam_2023_desktop/Resources/text.dart';
 import 'package:buecherteam_2023_desktop/Util/settings/import/import_general_util.dart';
 import 'package:buecherteam_2023_desktop/Util/settings/import/io_util.dart';
@@ -8,13 +10,13 @@ import 'package:flutter/material.dart';
 import '../../Data/db.dart';
 import '../../Data/settings/excel_data.dart';
 import '../../Data/settings/student_excel_mapper_attributes.dart';
+
 import '../../Util/settings/import/import_errors_util.dart';
 
 class ImportState extends ChangeNotifier {
   ImportState(this.database);
 
   final DB database;
-
   /*
   Excel header to attributes Screen
    */
@@ -31,23 +33,19 @@ class ImportState extends ChangeNotifier {
 
   Excel? excelFormatErrors;
   Map<StudentAttributes, List<ExcelData>> studentAttributeToHeaders = {};
-
-
+  List<int> rowsToRemove = [];
 
   /*
   Import options
    */
-
   bool isClassWithoutCharAllowed = false;
   bool updateExistingStudents = false;
-
   /*
   Select Excel file screen
    */
   String? importFileName;
   Excel? excelFile;
   String? selectExcelFileError = TextRes.selectExcelFileError;
-
 
   void setCurrHeaderToAttributeMap(Map<ExcelData, StudentAttributes?> headerToAttribute) {
     currHeaderToAttributeMap = headerToAttribute;
@@ -79,14 +77,12 @@ class ImportState extends ChangeNotifier {
     this.updateExistingStudents = updateExistingStudents;
   }
 
-
-
   Future<bool> getExcelHeaders() async{
+    currHeaderToAttributeMap = {};
     if (excelFile == null) throw Exception(TextRes.selectExcelFileError);
     if (excelFile!.sheets.length != 1) throw Exception(TextRes.excelFileTooManySheetsError);
     Sheet sheet = excelFile!.sheets.values.first;
     List<Data?> headerRow = sheet.row(0);
-
 
     if (headerRow.isEmpty || (headerRow.length == 1 && headerRow.first == null)) {
       throw Exception(TextRes.excelNoHeaderError);
@@ -105,10 +101,76 @@ class ImportState extends ChangeNotifier {
 
   Future<bool> preProcessExcel() async{
     studentAttributeToHeaders = getStudentAttributesToHeadersFrom(currHeaderToAttributeMap);
-
+    checkAndCorrectExcelFile();
+    if (excelFormatErrors != null) {
+      throw Exception(TextRes.importExcelFormatError);
+    }
 
     return true;
   }
+
+  void checkAndCorrectExcelFile () {
+    Sheet sheet = excelFile!.sheets.values.first;
+    for (int i = 1; i<sheet.maxRows; i++) {
+      String accumulatedFormatError = accumulateFormatErrorsFor(
+          sheet.row(i).toList(),
+          isClassWithoutCharAllowed,
+          studentAttributeToHeaders);
+
+      print(sheet.row(i).map((e) => e?.value.toString()));
+
+      if (accumulatedFormatError.isNotEmpty) {
+        if (excelFormatErrors == null) {
+           initializeExcelFormatErrorFile();
+        }
+        List<CellValue?> errorRow = sheet.row(i).map((e) => e?.value).toList();
+        errorRow.add(TextCellValue(accumulatedFormatError));
+        excelFormatErrors!.sheets.values.first.appendRow(errorRow);
+        rowsToRemove.add(i);
+      }
+
+    }
+  }
+
+
+  void initializeExcelFormatErrorFile () {
+
+    excelFormatErrors = Excel.createExcel();
+    List<CellValue?> headerRow = [];
+    for (ExcelData currHeader in currHeaderToAttributeMap.keys) {
+      headerRow.add(TextCellValue(currHeader.content));
+    }
+    headerRow.add(TextCellValue(TextRes.excelFormatErrorComment));
+    excelFormatErrors!.sheets.values.first.appendRow(headerRow);
+  }
+
+  Future<bool> downloadExcelFormatErrorFile () async{
+    String? outputFile = await FilePicker.platform.saveFile(
+      dialogTitle: TextRes.saveExcelFormatErrorLabel,
+      fileName: TextRes.excelFormatErrorFileName,
+    );
+
+    if (outputFile != null) {
+      final excelBytes = excelFormatErrors!.encode();
+
+      File(outputFile)
+            ..createSync(recursive: true)
+            ..writeAsBytesSync(excelBytes!);
+
+      return true;
+    } else {
+      return false;
+    }
+  }
+
 }
+
+
+
+
+
+
+
+
 
 

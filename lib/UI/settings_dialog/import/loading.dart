@@ -6,12 +6,19 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
 
 class Loading extends StatelessWidget {
-  const Loading({super.key, required this.functionToBeExecuted, required this.nextWidget, required this.fallbackWidget, this.progressInformation});
+  const Loading({super.key,
+    required this.functionToBeExecuted,
+    required this.nextWidget,
+    required this.fallbackWidget,
+    this.progressInformation,
+    this.goToFallbackText = TextRes.back
+  });
   
   final Future<bool> Function() functionToBeExecuted;
   final MapEntry<SettingsNavButtons, Widget> nextWidget;
   final MapEntry<SettingsNavButtons, Widget> fallbackWidget;
   final Widget? progressInformation;
+  final String goToFallbackText;
 
   @override
   Widget build(BuildContext context) {
@@ -37,8 +44,8 @@ class Loading extends StatelessWidget {
               const SizedBox(height: Dimensions.spaceSmall,),
               OutlinedButton(onPressed: () { //go back to the previous widget (fallback widget) and try again
                 Provider.of<SettingsNavState>(context, listen: false)
-                    .setCurrWidget(fallbackWidget.value, nextWidget.key);
-              }, child: const Text(TextRes.back))
+                    .setCurrWidget(fallbackWidget.value, fallbackWidget.key);
+              }, child: Text(goToFallbackText))
             ];
           } else { //show loading screen
             children = [
@@ -49,9 +56,13 @@ class Loading extends StatelessWidget {
                   progressInformation!
             ];
           }
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: children,
+          return Padding(
+            padding: const EdgeInsets.all(Dimensions.paddingMedium),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: children,
+            ),
           );
           }
         );

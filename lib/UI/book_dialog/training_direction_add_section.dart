@@ -83,7 +83,7 @@ initialize the state with the initialTrainingDirections if they are not null
         (oldWidget.currSubject != widget.currSubject ||
             oldWidget.currClass != widget.currClass)) {
       currTrainingDirectionsExposed[0] = TrainingDirectionsData(
-          "${widget.currSubject}${TextRes.hyphen}${widget.currClass}");
+          "${widget.currSubject}${TextRes.trainingDirectionHyphen}${widget.currClass}");
       widget.onTrainingDirectionUpdated(currTrainingDirectionsExposed);
     }
 

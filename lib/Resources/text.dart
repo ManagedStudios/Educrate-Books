@@ -272,5 +272,40 @@ class TextRes {
   static const String excelNoHeaderError = "Die Excel Datei scheint keine Spaltentitel zu besitzen.\n"
       "Bitte in der ersten Zeile Titel für die Spalten eintragen.";
 
+  static const String importFirstNameCannotBeEmptyError = " | Der Vorname darf nicht leer sein! | \n";
+
+  static const String importFirstNameMustNotContainNonAlphabeticalError = " | Der Vorname darf keine Sonderzeichen (Kommas, Hashtags etc.) und Zahlen enthalten! | \n";
+
+  static const String importLastNameCannotBeEmptyError = " | Der Nachname darf nicht leer sein! | \n";
+
+  static const String importLastNameMustNotContainNonAlphabeticalError = " | Der Vorname darf keine Sonderzeichen (Kommas, Hashtags etc.) und Zahlen enthalten! | \n";
+
+  static const String importClassCannotBeEmptyError = " | Die Klasse darf nicht leer sein! | \n";
+
+  static const String importClassPatternNumericAllowedError = " | Die Klasse muss dem Muster Nummer+Text/Buchstabe folgen, z.B. 10K, 5A oder nur eine Nummer sein: 8, 12, 13 | \n";
+
+  static const String importClassPatternError =" | Die Klasse muss dem Muster Nummer+Text/Buchstabe folgen, z.B. 10K, 5A | \n" ;
+
+  static const String importTrainingDirectionInvalid = r'| Ausbildungen dürfen keine "-", "–", ",", ";" beinhalten! | ' "\n";
+
+  static const String excelFormatErrorComment = "Fehlerkommentar";
+
+  static const String importExcelFormatError = "Die Excel Datei enthält Formatierungsfehler. "
+      "Bitte im nächsten Schritt die Excel Datei mit den fehlerhaften Zeilen herunterladen und ausbessern. \n"
+      "Hinweis: Alle Zeilen ohne Formatierungsfehler werden importiert.";
+
+  static const String downloadExcelFormatError = "Excel Datei mit fehlerhaft formatierten Zeilen herunterladen:";
+
+  static const String download = "Herunterladen";
+
+  static const String saveExcelFormatErrorLabel = "Excel Datei mti fehlerhaften Zeilen speichern";
+
+  static const String excelFormatErrorFileName = "Buecherteam_Format_Error_Excel.xlsx";
+
+  static const String fileSaved = "Datei gespeichert!";
+
+  static const String goToDownload = "Zum Herunterladen";
+
+
 
 }

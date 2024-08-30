@@ -1,4 +1,6 @@
 import 'package:buecherteam_2023_desktop/Models/settings/import_state.dart';
+import 'package:buecherteam_2023_desktop/Resources/text.dart';
+import 'package:buecherteam_2023_desktop/UI/settings_dialog/import/download_excel_format_error.dart';
 import 'package:buecherteam_2023_desktop/UI/settings_dialog/import/loading.dart';
 import 'package:buecherteam_2023_desktop/UI/settings_dialog/import/select_excel.dart';
 import 'package:buecherteam_2023_desktop/UI/settings_dialog/print_parent.dart';
@@ -9,7 +11,6 @@ import '../../../Data/settings/student_excel_mapper_attributes.dart';
 import '../../../Models/settings/settings_nav_state.dart';
 import '../../../Resources/dimensions.dart';
 import '../nav_bottom_bar.dart';
-import '../warning_parent.dart';
 import 'attribute_mapper_list.dart';
 
 class HeaderToAttributeMapper extends StatelessWidget {
@@ -45,8 +46,10 @@ class HeaderToAttributeMapper extends StatelessWidget {
                   nextWidget: MapEntry(SettingsNavButtons.IMPORT,
                       Loading(
                           functionToBeExecuted: state.preProcessExcel,
-                          nextWidget: MapEntry(SettingsNavButtons.DRUCKEN, PrintParent()),
-                          fallbackWidget: MapEntry(SettingsNavButtons.MAHNUNG, WarningParent()))
+                          nextWidget: const MapEntry(SettingsNavButtons.IMPORT, PrintParent()),
+                          fallbackWidget: const MapEntry(SettingsNavButtons.IMPORT, DownloadExcelFormatError()),
+                          goToFallbackText: TextRes.goToDownload,
+                      )
                   ),
                   previousWidget: const MapEntry(SettingsNavButtons.IMPORT, SelectExcel()),
                   error: state.currHeaderToAttributeError,
