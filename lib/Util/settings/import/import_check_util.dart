@@ -13,8 +13,9 @@ String getRowFirstNameError (List<ExcelData> columns, List<Data?> row) {
     if (isOnlyWhitespace(cell.value.toString())) {
       errorString.write(TextRes.importFirstNameCannotBeEmptyError);
     }
-    if (containsNonAlphabetical(cell.value.toString())) {
+    if (containsNonAlphabetical(cell.value.toString().trim())) {
       errorString.write(TextRes.importFirstNameMustNotContainNonAlphabeticalError);
+
     }
   }
   return errorString.toString();
@@ -28,7 +29,7 @@ String getLastNameError(List<ExcelData> columns, List<Data?> row) {
     if (isOnlyWhitespace(cell.value.toString())) {
       errorString.write(TextRes.importLastNameCannotBeEmptyError);
     }
-    if (containsNonAlphabetical(cell.value.toString())) {
+    if (containsNonAlphabetical(cell.value.toString().trim())) {
       errorString.write(TextRes.importLastNameMustNotContainNonAlphabeticalError);
     }
   }
@@ -48,11 +49,11 @@ String getClassError(List<ExcelData> columns, List<Data?> row, bool isClassWitho
     }
 
     if (isClassWithoutCharAllowed
-        && !isClassValid(isClassWithoutCharAllowed, cell.value.toString())) {
+        && !isClassValid(isClassWithoutCharAllowed, cell.value.toString().trim())) {
       errorString.write(TextRes.importClassPatternNumericAllowedError);
 
     } else if (!isClassWithoutCharAllowed
-        && !isClassValid(isClassWithoutCharAllowed, cell.value.toString())) {
+        && !isClassValid(isClassWithoutCharAllowed, cell.value.toString().trim())) {
       errorString.write(TextRes.importClassPatternError);
     }
 
@@ -69,7 +70,6 @@ String getTrainingDirectionError(List<ExcelData> columns, List<Data?> row) {
   for (Data cell in cells) {
     if (!isTrainingDirectionValid(cell.value.toString())) {
       errorString.write(TextRes.importTrainingDirectionInvalid);
-      print("${row.first!.value.toString()}: ${cell.value.toString()}");
     }
   }
 

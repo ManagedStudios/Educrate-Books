@@ -11,7 +11,8 @@ bool isOnlyWhitespace(String str) {
 }
 
 bool containsNonAlphabetical(String input) {
-  final regex = RegExp(r"[^a-zA-Z']");
+  final regex = RegExp(r"[0-9,;.:?=)(/&%$§!*+#><]");
+
   return regex.hasMatch(input);
 }
 

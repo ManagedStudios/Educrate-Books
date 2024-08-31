@@ -116,14 +116,13 @@ class ImportState extends ChangeNotifier {
           sheet.row(i).toList(),
           isClassWithoutCharAllowed,
           studentAttributeToHeaders);
-
-      print(sheet.row(i).map((e) => e?.value.toString()));
-
+      //print(sheet.row(i).map((e) => e?.value.toString()??''));
       if (accumulatedFormatError.isNotEmpty) {
         if (excelFormatErrors == null) {
            initializeExcelFormatErrorFile();
         }
-        List<CellValue?> errorRow = sheet.row(i).map((e) => e?.value).toList();
+        List<CellValue?> errorRow = sheet.row(i).map((e) => e?.value ?? TextCellValue('')).toList();
+
         errorRow.add(TextCellValue(accumulatedFormatError));
         excelFormatErrors!.sheets.values.first.appendRow(errorRow);
         rowsToRemove.add(i);

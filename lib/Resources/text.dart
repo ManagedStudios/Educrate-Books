@@ -278,7 +278,7 @@ class TextRes {
 
   static const String importLastNameCannotBeEmptyError = " | Der Nachname darf nicht leer sein! | \n";
 
-  static const String importLastNameMustNotContainNonAlphabeticalError = " | Der Vorname darf keine Sonderzeichen (Kommas, Hashtags etc.) und Zahlen enthalten! | \n";
+  static const String importLastNameMustNotContainNonAlphabeticalError = " | Der Nachname darf keine Sonderzeichen (Kommas, Hashtags etc.) und Zahlen enthalten! | \n";
 
   static const String importClassCannotBeEmptyError = " | Die Klasse darf nicht leer sein! | \n";
 
