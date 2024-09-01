@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:buecherteam_2023_desktop/Data/class_data.dart';
 import 'package:buecherteam_2023_desktop/Data/training_directions_data.dart';
 import 'package:buecherteam_2023_desktop/Resources/text.dart';
+import 'package:buecherteam_2023_desktop/Util/database/getter.dart';
 import 'package:buecherteam_2023_desktop/Util/settings/import/import_general_util.dart';
 import 'package:buecherteam_2023_desktop/Util/settings/import/io_util.dart';
 import 'package:excel/excel.dart';
@@ -37,8 +38,12 @@ class ImportState extends ChangeNotifier {
   Excel? excelFormatErrors;
   Map<StudentAttributes, List<ExcelData>> studentAttributeToHeaders = {};
   List<int> rowsToRemove = [];
-  HashSet<TrainingDirectionsData> uniqueTrainingDirections = HashSet();
+  Map<TrainingDirectionsData, Set<int>> uniqueTrainingDirections = {};
   HashSet<ClassData> uniqueClasses = HashSet();
+
+  List<TrainingDirectionsData> availableTrainingDirections = [];
+
+  Map<ExcelData, TrainingDirectionsData?> currTrainingDirectionMap = {};
 
   /*
   Import options
@@ -51,6 +56,10 @@ class ImportState extends ChangeNotifier {
   String? importFileName;
   Excel? excelFile;
   String? selectExcelFileError = TextRes.selectExcelFileError;
+
+  void setCurrTrainingDirectionMap(Map<ExcelData, TrainingDirectionsData?> trMap) {
+    currTrainingDirectionMap = trMap;
+  }
 
   void setCurrHeaderToAttributeMap(Map<ExcelData, StudentAttributes?> headerToAttribute) {
     currHeaderToAttributeMap = headerToAttribute;
@@ -113,8 +122,7 @@ class ImportState extends ChangeNotifier {
     }
     uniqueTrainingDirections = getUniqueTrainingDirectionsOf(sheet, studentAttributeToHeaders);
     uniqueClasses = getUniqueClassesOf(sheet, studentAttributeToHeaders);
-    print(uniqueTrainingDirections.map((e) => e.getLabelText()));
-    print(uniqueClasses.map((e) => e.getLabelText()));
+    await getAndStructureTrainingDirections();
 
     if (excelFormatErrors != null) {
       throw Exception(TextRes.importExcelFormatError);
@@ -177,7 +185,24 @@ class ImportState extends ChangeNotifier {
     }
   }
 
+  Future<void> getAndStructureTrainingDirections() async{
+    availableTrainingDirections = await getAllTrainingDirectionsUtil(database);
+    for (MapEntry<TrainingDirectionsData, Set<int>> entry in uniqueTrainingDirections.entries) {
+      for (int level in entry.value) {
+        currTrainingDirectionMap[
+          ExcelData(
+              row: -1,
+              column: -1,
+              content: "${entry.key.getLabelText()}${TextRes.trainingDirectionHyphen}$level"
+          )
+        ] = null;
+      }
+    }
+  }
+
 }
+
+
 
 
 

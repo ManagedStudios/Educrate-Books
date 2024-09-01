@@ -3,7 +3,7 @@ import 'package:buecherteam_2023_desktop/Resources/text.dart';
 import 'package:buecherteam_2023_desktop/UI/settings_dialog/import/download_excel_format_error.dart';
 import 'package:buecherteam_2023_desktop/UI/settings_dialog/import/loading.dart';
 import 'package:buecherteam_2023_desktop/UI/settings_dialog/import/select_excel.dart';
-import 'package:buecherteam_2023_desktop/UI/settings_dialog/print_parent.dart';
+import 'package:buecherteam_2023_desktop/UI/settings_dialog/import/training_direction_mapper.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -46,7 +46,7 @@ class HeaderToAttributeMapper extends StatelessWidget {
                   nextWidget: MapEntry(SettingsNavButtons.IMPORT,
                       Loading(
                           functionToBeExecuted: state.preProcessExcel,
-                          nextWidget: const MapEntry(SettingsNavButtons.IMPORT, PrintParent()),
+                          nextWidget: const MapEntry(SettingsNavButtons.IMPORT, TrainingDirectionMapper()),
                           fallbackWidget: const MapEntry(SettingsNavButtons.IMPORT, DownloadExcelFormatError()),
                           goToFallbackText: TextRes.goToDownload,
                       )

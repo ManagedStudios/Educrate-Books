@@ -37,16 +37,24 @@ Map<StudentAttributes, List<ExcelData>> getStudentAttributesToHeadersFrom
   return res;
 }
 
-HashSet<TrainingDirectionsData> getUniqueTrainingDirectionsOf
+Map<TrainingDirectionsData, Set<int>> getUniqueTrainingDirectionsOf
     (Sheet sheet,
     Map<StudentAttributes, List<ExcelData>> studentAttributeToHeaders) {
-  HashSet<TrainingDirectionsData> res = HashSet();
+  Map<TrainingDirectionsData, Set<int>> res = {};
 
   for (int i = 1; i<sheet.maxRows; i++) {
     for (ExcelData data in
     studentAttributeToHeaders[StudentAttributes.TRAININGDIRECTION]!){
-      String? tr = sheet.row(i)[data.column]?.value.toString().trim();
-      if (tr != null) res.add(TrainingDirectionsData(tr));
+      //TODO I have used Null-Check operators, would be great to avoid them for class
+      int columnClass = studentAttributeToHeaders[StudentAttributes.CLASS]!.first.column;
+      String? trainingDirectionValue = sheet.row(i)[data.column]?.value.toString().trim();
+      String? classLevel = sheet.row(i)[columnClass]?.value.toString().trim();
+
+      if (trainingDirectionValue != null && classLevel != null) {
+        ClassData classData = parseStringToClass(classLevel);
+        res[TrainingDirectionsData(trainingDirectionValue)] ??=Set<int>();
+        res[TrainingDirectionsData(trainingDirectionValue)]!.add(classData.classLevel);
+      }
     }
   }
 
@@ -72,5 +80,13 @@ HashSet<ClassData> getUniqueClassesOf
 
   return res;
 
+}
+
+List<int> getUniqueClassLevelsFrom(HashSet<ClassData> uniqueClasses) {
+  Set<int> classLevels = {};
+  for (ClassData data in uniqueClasses) {
+    classLevels.add(data.classLevel);
+  }
+  return classLevels.toList();
 }
 
