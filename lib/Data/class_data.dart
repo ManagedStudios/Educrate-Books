@@ -39,4 +39,14 @@ class ClassData implements LfgChip {
   String getLabelText() {
     return "$classLevel$classChar";
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true; // If both references are the same
+
+    return other is ClassData && classLevel == other.classLevel && classChar == other.classChar;
+  }
+
+  @override
+  int get hashCode => classLevel.hashCode + classChar.hashCode;
 }

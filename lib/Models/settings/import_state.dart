@@ -1,5 +1,8 @@
+import 'dart:collection';
 import 'dart:io';
 
+import 'package:buecherteam_2023_desktop/Data/class_data.dart';
+import 'package:buecherteam_2023_desktop/Data/training_directions_data.dart';
 import 'package:buecherteam_2023_desktop/Resources/text.dart';
 import 'package:buecherteam_2023_desktop/Util/settings/import/import_general_util.dart';
 import 'package:buecherteam_2023_desktop/Util/settings/import/io_util.dart';
@@ -34,6 +37,8 @@ class ImportState extends ChangeNotifier {
   Excel? excelFormatErrors;
   Map<StudentAttributes, List<ExcelData>> studentAttributeToHeaders = {};
   List<int> rowsToRemove = [];
+  HashSet<TrainingDirectionsData> uniqueTrainingDirections = HashSet();
+  HashSet<ClassData> uniqueClasses = HashSet();
 
   /*
   Import options
@@ -101,10 +106,20 @@ class ImportState extends ChangeNotifier {
 
   Future<bool> preProcessExcel() async{
     studentAttributeToHeaders = getStudentAttributesToHeadersFrom(currHeaderToAttributeMap);
+    Sheet sheet = excelFile!.sheets.values.first;
     checkAndCorrectExcelFile();
+    for (int i in rowsToRemove) {
+      sheet.removeRow(i);
+    }
+    uniqueTrainingDirections = getUniqueTrainingDirectionsOf(sheet, studentAttributeToHeaders);
+    uniqueClasses = getUniqueClassesOf(sheet, studentAttributeToHeaders);
+    print(uniqueTrainingDirections.map((e) => e.getLabelText()));
+    print(uniqueClasses.map((e) => e.getLabelText()));
+
     if (excelFormatErrors != null) {
       throw Exception(TextRes.importExcelFormatError);
     }
+
 
     return true;
   }
@@ -163,6 +178,10 @@ class ImportState extends ChangeNotifier {
   }
 
 }
+
+
+
+
 
 
 
