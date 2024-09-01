@@ -86,4 +86,8 @@ void main () {
     });
 
   });
+
+  group("test isOnlyWhitespace", () {
+
+  });
 }

@@ -9,6 +9,10 @@ String getRowFirstNameError (List<ExcelData> columns, List<Data?> row) {
   StringBuffer errorString = StringBuffer();
   List<Data> cells = getDataOf(columns, row);
 
+  if(cells.isEmpty) {
+    errorString.write(TextRes.importFirstNameCannotBeEmptyError);
+  }
+
   for (Data cell in cells) {
     if (isOnlyWhitespace(cell.value.toString())) {
       errorString.write(TextRes.importFirstNameCannotBeEmptyError);
@@ -24,6 +28,10 @@ String getRowFirstNameError (List<ExcelData> columns, List<Data?> row) {
 String getLastNameError(List<ExcelData> columns, List<Data?> row) {
   StringBuffer errorString = StringBuffer();
   List<Data> cells = getDataOf(columns, row);
+
+  if(cells.isEmpty) {
+    errorString.write(TextRes.importLastNameCannotBeEmptyError);
+  }
 
   for (Data cell in cells) {
     if (isOnlyWhitespace(cell.value.toString())) {
@@ -42,6 +50,10 @@ String getLastNameError(List<ExcelData> columns, List<Data?> row) {
 String getClassError(List<ExcelData> columns, List<Data?> row, bool isClassWithoutCharAllowed) {
   StringBuffer errorString = StringBuffer();
   List<Data> cells = getDataOf(columns, row);
+
+  if (cells.isEmpty) {
+    errorString.write(TextRes.importClassCannotBeEmptyError);
+  }
 
   for (Data cell in cells) {
     if (isOnlyWhitespace(cell.value.toString())) {
