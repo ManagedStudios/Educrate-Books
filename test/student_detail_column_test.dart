@@ -9,17 +9,16 @@ import 'package:buecherteam_2023_desktop/Theme/text_theme.dart';
 import 'package:buecherteam_2023_desktop/UI/keyboard_listener/keyboard_listener.dart';
 import 'package:buecherteam_2023_desktop/UI/student_detail/student_detail_column.dart';
 import 'package:buecherteam_2023_desktop/Util/comparison.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
 import 'package:provider/provider.dart';
 
-class MockStudent extends Mock implements Student {
-  MockStudent(this.books);
+Student MockStudent (List<BookLite> books,
+    {List<BookLite> booksAlreadyOwned = const <BookLite>[]}) {
 
-  @override
-  final List<BookLite> books;
+  Student student = Student("_id", firstName: "firstName", lastName: "lastName", classLevel: 10, classChar: "k", trainingDirections: [], books: booksAlreadyOwned.toList(), amountOfBooks: 0, tags: []);
+  student.addBooks(books);
+  return student;
 }
 
 void main () {
@@ -81,6 +80,8 @@ void main () {
         MockStudent([book1, book2, book3])
       ];
 
+
+
       final expectedResult = [book1, book1, book2, book3];
 
       expect(areListsEqualIgnoringOrder(widget.getBooks(students), expectedResult), isTrue);
@@ -131,5 +132,22 @@ void main () {
       expect(areListsEqualIgnoringOrder(widget.getBooks(students), expectedResult), isTrue);
     });
 
+    testWidgets("Test with already existing books of students", (tester) async {
+      await tester.pumpWidget(createWidgetUnderTest());
+
+      final widget = tester.widget<StudentDetailColumn>(find.byType(StudentDetailColumn));
+      final students = [
+        MockStudent([book1, book2, book1, book3, book3], booksAlreadyOwned: [book1, book3, book1]),
+        MockStudent([book1, book1, book1], booksAlreadyOwned: [book2]),
+        MockStudent([book1, book2, book3])
+      ];
+
+      final expectedResult = [book1, book1, book1, book1, book2, book3, book3, book3];
+
+      expect(areListsEqualIgnoringOrder(widget.getBooks(students), expectedResult), isTrue);
+    });
+
   });
+
+
 }

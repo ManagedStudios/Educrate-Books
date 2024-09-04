@@ -74,6 +74,7 @@ class Student implements SelectableItem {
 
   void addBooks(List<BookLite> books) {
     Map<BookLite, int> countMap = {};
+    int uniqueBooks = books.toSet().length;
     for (BookLite book in this.books) {
       //count already owned book types
       countMap[book] = (countMap[book] ?? 0) + 1;
@@ -91,6 +92,8 @@ class Student implements SelectableItem {
         //if book is newly added, just go ahead
         this.books.add(book);
       }
+      //update the map along the adds if books of the same type are added multiple times
+      if (uniqueBooks != books.length) countMap[book] = (countMap[book] ?? 0) + 1;
     }
   }
 
