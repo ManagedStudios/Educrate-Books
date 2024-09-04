@@ -200,6 +200,14 @@ class ImportState extends ChangeNotifier {
     }
   }
 
+  Future<bool> importStudents() async{
+    //1. build a List of Student objects without their books
+    //2. Import the students
+    //3. add books to all students according to their trainingDirection
+    //4. Finish Import students
+    return true;
+  }
+
 }
 
 

@@ -1,10 +1,17 @@
 import 'package:buecherteam_2023_desktop/Data/training_directions_data.dart';
+import 'package:buecherteam_2023_desktop/UI/settings_dialog/import/header_to_attribute_mapper.dart';
+import 'package:buecherteam_2023_desktop/UI/settings_dialog/import/success_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../Models/settings/import_state.dart';
+import '../../../Models/settings/settings_nav_state.dart';
 import '../../../Resources/dimensions.dart';
+import '../../../Resources/text.dart';
+import '../nav_bottom_bar.dart';
 import 'attribute_mapper_list.dart';
+import 'import_error_screen.dart';
+import 'loading.dart';
 
 class TrainingDirectionMapper extends StatelessWidget {
   const TrainingDirectionMapper({super.key});
@@ -31,6 +38,21 @@ class TrainingDirectionMapper extends StatelessWidget {
                     width: availableWidth * 0.4),
               )),
         ),
+        Padding(
+          padding: const EdgeInsets.all(Dimensions.paddingSmall),
+          child: NavBottomBar(
+            nextWidget: MapEntry(SettingsNavButtons.IMPORT,
+                Loading(
+                  functionToBeExecuted: () => Provider.of<ImportState>(context, listen: false)
+                                                  .importStudents(),
+                  nextWidget: const MapEntry(SettingsNavButtons.IMPORT, SuccessScreen()),
+                  fallbackWidget: const MapEntry(SettingsNavButtons.IMPORT, ImportErrorScreen()),
+                  goToFallbackText: TextRes.goToImportError,
+                )
+            ),
+            previousWidget: const MapEntry(SettingsNavButtons.IMPORT, HeaderToAttributeMapper()),
+          ),
+        )
       ],
     );
   }

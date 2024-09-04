@@ -306,6 +306,8 @@ class TextRes {
 
   static const String goToDownload = "Zum Herunterladen";
 
+  static const String goToImportError = "Zu den Fehlern";
+
 
 
 }
