@@ -9,18 +9,17 @@ import 'package:buecherteam_2023_desktop/Theme/text_theme.dart';
 import 'package:buecherteam_2023_desktop/UI/keyboard_listener/keyboard_listener.dart';
 import 'package:buecherteam_2023_desktop/UI/student_detail/student_detail_column.dart';
 import 'package:buecherteam_2023_desktop/Util/comparison.dart';
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
 import 'package:provider/provider.dart';
 
-class MockStudent extends Mock implements Student {
-  MockStudent(this.books);
 
-  @override
-  final List<BookLite> books;
+Student MockStudent(List<BookLite> books) {
+  return Student("_id", firstName: "firstName", lastName: "lastName", classLevel: 10, classChar: "K", trainingDirections: [], books: books, amountOfBooks: books.length, tags: []);
 }
+
+
 
 void main () {
 
@@ -33,7 +32,7 @@ void main () {
 
 
   setUp(() {
-    book1 = BookLite("123", "Green Line New 5 ", "English", 10);
+    book1 = BookLite("123", "Green Line New 5", "English", 10);
     book2 = BookLite("567", "Lambacher", "Mathe", 10);
     book3 = BookLite("189", "Kollegstufen", "Ethik", 10);
   });
@@ -66,6 +65,7 @@ void main () {
         MockStudent([book1, book2, book3])
       ];
 
+
       final expectedResult = [book1, book2, book3];
 
       expect(areListsEqualIgnoringOrder(widget.getBooks(students), expectedResult), isTrue);
@@ -83,6 +83,7 @@ void main () {
 
       final expectedResult = [book1, book1, book2, book3];
 
+
       expect(areListsEqualIgnoringOrder(widget.getBooks(students), expectedResult), isTrue);
     });
 
@@ -98,6 +99,7 @@ void main () {
 
       final expectedResult = [book1, book1, book2, book3];
 
+
       expect(areListsEqualIgnoringOrder(widget.getBooks(students), expectedResult), isFalse);
     });
 
@@ -112,8 +114,10 @@ void main () {
       ];
 
       final expectedResult = [book1, book1, book2, book3];
+      final res =  widget.getBooks(students);
 
-      expect(areListsEqualIgnoringOrder(widget.getBooks(students), expectedResult), isTrue);
+
+      expect(areListsEqualIgnoringOrder(res, expectedResult), isTrue);
     });
 
     testWidgets("Test with multiple students having multiple books of one type", (tester) async {
@@ -127,6 +131,7 @@ void main () {
       ];
 
       final expectedResult = [book1, book1, book1, book2, book3, book3];
+
 
       expect(areListsEqualIgnoringOrder(widget.getBooks(students), expectedResult), isTrue);
     });

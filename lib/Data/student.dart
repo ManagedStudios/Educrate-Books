@@ -10,9 +10,12 @@ class Student implements SelectableItem {
       required this.classLevel,
       required this.classChar,
       required this.trainingDirections,
-      required this.books,
+      required List<BookLite> books,
       required this.amountOfBooks,
-      required this.tags});
+      required this.tags}) {
+      this.books = [];
+      addBooks(books);
+  }
 
   final String _id; //make id private
   final String firstName;
@@ -20,7 +23,7 @@ class Student implements SelectableItem {
   final int classLevel;
   final String classChar;
   final List<String> trainingDirections;
-  final List<BookLite> books;
+  late List<BookLite> books;
   int amountOfBooks;
   final List<String> tags;
   String get id => _id;
@@ -73,25 +76,30 @@ class Student implements SelectableItem {
   }
 
   void addBooks(List<BookLite> books) {
+    for (BookLite book in books) {
+      _addBook(book);
+    }
+  }
+
+  void _addBook(BookLite book) {
     Map<BookLite, int> countMap = {};
-    for (BookLite book in this.books) {
+    for (BookLite book in books) {
       //count already owned book types
       countMap[book] = (countMap[book] ?? 0) + 1;
     }
-    for (BookLite book in books) {
-      if (countMap[book] != null) {
-        //book to be added already owned by student -> Update name of book
-        final updatedBook = BookLite(
-            book.bookId,
-            "${book.name} ${countMap[book]! + 1}${TextRes.bookSet}",
-            book.subject,
-            book.classLevel);
-        this.books.add(updatedBook);
-      } else {
-        //if book is newly added, just go ahead
-        this.books.add(book);
-      }
+    if (countMap[book] != null) {
+      //book to be added already owned by student -> Update name of book
+      final updatedBook = BookLite(
+          book.bookId,
+          "${book.name} ${countMap[book]! + 1}${TextRes.bookSet}",
+          book.subject,
+          book.classLevel);
+      books.add(updatedBook);
+    } else {
+      //if book is newly added, just go ahead
+      books.add(book);
     }
+
   }
 
   int extractNumberBeforeDot(String input) {
