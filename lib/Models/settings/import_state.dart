@@ -59,6 +59,7 @@ class ImportState extends ChangeNotifier {
 
   void setCurrTrainingDirectionMap(Map<ExcelData, TrainingDirectionsData?> trMap) {
     currTrainingDirectionMap = trMap;
+    notifyListeners();
   }
 
   void setCurrHeaderToAttributeMap(Map<ExcelData, StudentAttributes?> headerToAttribute) {
@@ -66,8 +67,8 @@ class ImportState extends ChangeNotifier {
     availableStudentAttributes = getUpdatedAvailableAttributes(currHeaderToAttributeMap.values.toList());
     currHeaderToAttributeError = updateHeaderToAttributeError(headerToAttribute);
     notifyListeners();
-
   }
+
 
   void setImportFileName (String? fileName) {
     importFileName = fileName;
@@ -93,6 +94,11 @@ class ImportState extends ChangeNotifier {
 
   Future<bool> getExcelHeaders() async{
     currHeaderToAttributeMap = {};
+    availableStudentAttributes = StudentAttributes.values;
+    currHeaderToAttributeError = "${StudentAttributes.FIRSTNAME.getLabelText()} "
+        "${StudentAttributes.LASTNAME.getLabelText()} ${StudentAttributes.CLASS.getLabelText()} "
+        "${TextRes.areMandatory}";
+
     if (excelFile == null) throw Exception(TextRes.selectExcelFileError);
     if (excelFile!.sheets.length != 1) throw Exception(TextRes.excelFileTooManySheetsError);
     Sheet sheet = excelFile!.sheets.values.first;
@@ -205,6 +211,7 @@ class ImportState extends ChangeNotifier {
     //2. Import the students
     //3. add books to all students according to their trainingDirection
     //4. Finish Import students
+
     return true;
   }
 

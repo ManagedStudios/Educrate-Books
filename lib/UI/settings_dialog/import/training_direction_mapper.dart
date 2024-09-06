@@ -19,6 +19,7 @@ class TrainingDirectionMapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double availableWidth = MediaQuery.of(context).size.width;
+    final stateListenFalse = Provider.of<ImportState>(context, listen: false);
     return Column(
       children: [
         Expanded(
@@ -33,7 +34,7 @@ class TrainingDirectionMapper extends StatelessWidget {
                     availableDropdownItems: state.availableTrainingDirections,
                     initialMap: state.currTrainingDirectionMap,
                     onUpdatedMap: (updatedMap) {
-
+                        state.setCurrTrainingDirectionMap(updatedMap);
                     },
                     width: availableWidth * 0.4),
               )),
@@ -43,7 +44,7 @@ class TrainingDirectionMapper extends StatelessWidget {
           child: NavBottomBar(
             nextWidget: MapEntry(SettingsNavButtons.IMPORT,
                 Loading(
-                  functionToBeExecuted: () => Provider.of<ImportState>(context, listen: false)
+                  functionToBeExecuted: () => stateListenFalse
                                                   .importStudents(),
                   nextWidget: const MapEntry(SettingsNavButtons.IMPORT, SuccessScreen()),
                   fallbackWidget: const MapEntry(SettingsNavButtons.IMPORT, ImportErrorScreen()),
