@@ -1,7 +1,4 @@
 
-
-
-
 import '../../Data/buildQuery.dart';
 import '../../Data/db.dart';
 import '../../Data/student.dart';

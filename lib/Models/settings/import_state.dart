@@ -124,7 +124,7 @@ class ImportState extends ChangeNotifier {
   Future<bool> preProcessExcel() async{
     currStudentAttributeToHeaders = getStudentAttributesToHeadersFrom(currHeaderToAttributeMap);
     Sheet sheet = excelFile!.sheets.values.first;
-    excelFile = trimExcelFile(excelFile!);
+    trimExcelFile(excelFile!);
     checkAndCorrectExcelFile();
     for (int i in rowsToRemove) {
       sheet.removeRow(i);
@@ -230,7 +230,7 @@ class ImportState extends ChangeNotifier {
     return true;
   }
 
-  Excel trimExcelFile(Excel excelFile) {
+  void trimExcelFile(Excel excelFile) {
     Sheet sheet = excelFile.sheets.values.first;
     for (int i = 0; i<sheet.maxRows; i++) {
       final row = sheet.row(i);
@@ -245,7 +245,6 @@ class ImportState extends ChangeNotifier {
         }
       }
     }
-    return excelFile;
   }
 
 }
