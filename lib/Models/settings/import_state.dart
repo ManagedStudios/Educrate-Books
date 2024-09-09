@@ -59,6 +59,7 @@ class ImportState extends ChangeNotifier {
 
   void setCurrTrainingDirectionMap(Map<ExcelData, TrainingDirectionsData?> trMap) {
     currTrainingDirectionMap = trMap;
+
     notifyListeners();
   }
 
@@ -66,6 +67,7 @@ class ImportState extends ChangeNotifier {
     currHeaderToAttributeMap = headerToAttribute;
     availableStudentAttributes = getUpdatedAvailableAttributes(currHeaderToAttributeMap.values.toList());
     currHeaderToAttributeError = updateHeaderToAttributeError(headerToAttribute);
+    print(currHeaderToAttributeMap.map((key, value) => MapEntry(key.content, value?.getLabelText())));
     notifyListeners();
   }
 
@@ -216,19 +218,3 @@ class ImportState extends ChangeNotifier {
   }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

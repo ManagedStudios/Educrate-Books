@@ -122,7 +122,7 @@ class _DropdownState<T extends LfgChip> extends State<Dropdown<T>> {
           child: TapRegion(
             onTapOutside: (_) {
               closeOverlay();
-              widget.onCloseOverlay(selectedChips);
+
             },
             child: ActionDropdown<T>(
                 width: widget.width,
@@ -159,6 +159,7 @@ class _DropdownState<T extends LfgChip> extends State<Dropdown<T>> {
       setState(() {
         isOverlayOpen = false;
       });
+      widget.onCloseOverlay(selectedChips);
     }
   }
 

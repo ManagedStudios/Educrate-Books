@@ -44,7 +44,7 @@ class _AttributeMapperListState<T extends LfgChip>
               availableAttributes: widget.availableDropdownItems,
               width: widget.width,
               selectedAttribute: entry.value,
-              onItemSelected: (T item) {
+              onItemSelected: (T? item) {
                 currMap[entry.key] = item;
                 widget.onUpdatedMap(currMap);
               })

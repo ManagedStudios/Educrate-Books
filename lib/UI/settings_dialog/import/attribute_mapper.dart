@@ -18,7 +18,7 @@ class AttributeMapper<T extends LfgChip> extends StatelessWidget {
   final List<T> availableAttributes;
   final T? selectedAttribute;
   final double width;
-  final Function(T item) onItemSelected;
+  final Function(T? item) onItemSelected;
 
   @override
   Widget build(BuildContext context) {
@@ -55,13 +55,15 @@ class AttributeMapper<T extends LfgChip> extends StatelessWidget {
                 selectedChips: selectedAttribute != null
                     ? <T>[selectedAttribute!]
                     : <T>[], //don't put const [] in here since it leads to type conflicts (Dart treats const [] as List<Never>)
-                onAddChip: (item) {
-                  onItemSelected(item);
+                onAddChip: (_) {
+
                 },
                 onDeleteChip: (_) {},
                 multiSelect: false,
                 width: width*0.75,
-                onCloseOverlay: (_) {})
+                onCloseOverlay: (items) {
+                  onItemSelected(items.firstOrNull);
+                })
           ],
         ),
       ],
