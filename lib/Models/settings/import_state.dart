@@ -8,6 +8,7 @@ import 'package:buecherteam_2023_desktop/Resources/text.dart';
 import 'package:buecherteam_2023_desktop/Util/database/getter.dart';
 import 'package:buecherteam_2023_desktop/Util/settings/import/import_general_util.dart';
 import 'package:buecherteam_2023_desktop/Util/settings/import/io_util.dart';
+import 'package:cbl/cbl.dart';
 import 'package:excel/excel.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,7 @@ import '../../Data/settings/excel_data.dart';
 import '../../Data/settings/student_excel_mapper_attributes.dart';
 
 import '../../Util/settings/import/import_errors_util.dart';
+import '../../Util/settings/import/students_from_excel.dart';
 
 class ImportState extends ChangeNotifier {
   ImportState(this.database);
@@ -221,7 +223,10 @@ class ImportState extends ChangeNotifier {
     if (updateExistingStudents) {
       existingStudents = await getAllStudentsUtil(database);
     }
-    //List<Student> studentsToBeImported = getStudentsFromExcel(excelFile, currTrainingDirectionMap, currStudentAttributeToHeaders);
+
+    List<MutableDocument> studentsToBeImported = getStudentsFromExcel(excelFile!,
+        currTrainingDirectionMap,
+        currStudentAttributeToHeaders, database);
     //1. build a List of Student objects without their books
     //2. Import the students
     //3. add books to all students according to their trainingDirection and their former student instances
@@ -248,4 +253,6 @@ class ImportState extends ChangeNotifier {
   }
 
 }
+
+
 
