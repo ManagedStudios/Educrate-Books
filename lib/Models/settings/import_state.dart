@@ -67,7 +67,6 @@ class ImportState extends ChangeNotifier {
     currHeaderToAttributeMap = headerToAttribute;
     availableStudentAttributes = getUpdatedAvailableAttributes(currHeaderToAttributeMap.values.toList());
     currHeaderToAttributeError = updateHeaderToAttributeError(headerToAttribute);
-    print(currHeaderToAttributeMap.map((key, value) => MapEntry(key.content, value?.getLabelText())));
     notifyListeners();
   }
 
@@ -124,6 +123,7 @@ class ImportState extends ChangeNotifier {
   Future<bool> preProcessExcel() async{
     studentAttributeToHeaders = getStudentAttributesToHeadersFrom(currHeaderToAttributeMap);
     Sheet sheet = excelFile!.sheets.values.first;
+    excelFile = trimExcelFile(excelFile!);
     checkAndCorrectExcelFile();
     for (int i in rowsToRemove) {
       sheet.removeRow(i);
@@ -215,6 +215,22 @@ class ImportState extends ChangeNotifier {
     //4. Finish Import students
 
     return true;
+  }
+
+  Excel trimExcelFile(Excel excelFile) {
+    Sheet sheet = excelFile.sheets.values.first;
+    for (int i = 0; i<sheet.maxRows; i++) {
+      final row = sheet.row(i);
+      for (int j=0; j<row.length; j++) {
+        final trimmedCellValue = sheet.cell(CellIndex
+            .indexByColumnRow(columnIndex: j, rowIndex: i)).value
+            .toString().trim();
+        sheet.updateCell(CellIndex.indexByColumnRow(
+            columnIndex: j, rowIndex: i),
+            TextCellValue(trimmedCellValue));
+      }
+    }
+    return excelFile;
   }
 
 }
