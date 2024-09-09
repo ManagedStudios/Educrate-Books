@@ -2,6 +2,7 @@ import 'dart:collection';
 import 'dart:io';
 
 import 'package:buecherteam_2023_desktop/Data/class_data.dart';
+import 'package:buecherteam_2023_desktop/Data/student.dart';
 import 'package:buecherteam_2023_desktop/Data/training_directions_data.dart';
 import 'package:buecherteam_2023_desktop/Resources/text.dart';
 import 'package:buecherteam_2023_desktop/Util/database/getter.dart';
@@ -36,7 +37,7 @@ class ImportState extends ChangeNotifier {
    */
 
   Excel? excelFormatErrors;
-  Map<StudentAttributes, List<ExcelData>> studentAttributeToHeaders = {};
+  Map<StudentAttributes, List<ExcelData>> currStudentAttributeToHeaders = {};
   List<int> rowsToRemove = [];
   Map<TrainingDirectionsData, Set<int>> uniqueTrainingDirections = {};
   HashSet<ClassData> uniqueClasses = HashSet();
@@ -121,15 +122,15 @@ class ImportState extends ChangeNotifier {
   }
 
   Future<bool> preProcessExcel() async{
-    studentAttributeToHeaders = getStudentAttributesToHeadersFrom(currHeaderToAttributeMap);
+    currStudentAttributeToHeaders = getStudentAttributesToHeadersFrom(currHeaderToAttributeMap);
     Sheet sheet = excelFile!.sheets.values.first;
     excelFile = trimExcelFile(excelFile!);
     checkAndCorrectExcelFile();
     for (int i in rowsToRemove) {
       sheet.removeRow(i);
     }
-    uniqueTrainingDirections = getUniqueTrainingDirectionsOf(sheet, studentAttributeToHeaders);
-    uniqueClasses = getUniqueClassesOf(sheet, studentAttributeToHeaders);
+    uniqueTrainingDirections = getUniqueTrainingDirectionsOf(sheet, currStudentAttributeToHeaders);
+    uniqueClasses = getUniqueClassesOf(sheet, currStudentAttributeToHeaders);
     await getAndStructureTrainingDirections();
 
     if (excelFormatErrors != null) {
@@ -146,7 +147,7 @@ class ImportState extends ChangeNotifier {
       String accumulatedFormatError = accumulateFormatErrorsFor(
           sheet.row(i).toList(),
           isClassWithoutCharAllowed,
-          studentAttributeToHeaders);
+          currStudentAttributeToHeaders);
       //print(sheet.row(i).map((e) => e?.value.toString()??''));
       if (accumulatedFormatError.isNotEmpty) {
         if (excelFormatErrors == null) {
@@ -195,7 +196,13 @@ class ImportState extends ChangeNotifier {
 
   Future<void> getAndStructureTrainingDirections() async{
     availableTrainingDirections = await getAllTrainingDirectionsUtil(database);
-    for (MapEntry<TrainingDirectionsData, Set<int>> entry in uniqueTrainingDirections.entries) {
+    Map<TrainingDirectionsData, List<int>> uniqueTrainingDirectionsSorted = uniqueTrainingDirections
+        .map((key, value) {
+          final sortedList = value.toList();
+          sortedList.sort();
+          return MapEntry(key, sortedList);
+    });
+    for (MapEntry<TrainingDirectionsData, List<int>> entry in uniqueTrainingDirectionsSorted.entries) {
       for (int level in entry.value) {
         currTrainingDirectionMap[
           ExcelData(
@@ -209,9 +216,15 @@ class ImportState extends ChangeNotifier {
   }
 
   Future<bool> importStudents() async{
+    //0. get all existing students if updateExistingStudents is true
+    Set<Student>? existingStudents;
+    if (updateExistingStudents) {
+      existingStudents = await getAllStudentsUtil(database);
+    }
+    //List<Student> studentsToBeImported = getStudentsFromExcel(excelFile, currTrainingDirectionMap, currStudentAttributeToHeaders);
     //1. build a List of Student objects without their books
     //2. Import the students
-    //3. add books to all students according to their trainingDirection
+    //3. add books to all students according to their trainingDirection and their former student instances
     //4. Finish Import students
 
     return true;
@@ -222,15 +235,18 @@ class ImportState extends ChangeNotifier {
     for (int i = 0; i<sheet.maxRows; i++) {
       final row = sheet.row(i);
       for (int j=0; j<row.length; j++) {
-        final trimmedCellValue = sheet.cell(CellIndex
-            .indexByColumnRow(columnIndex: j, rowIndex: i)).value
-            .toString().trim();
-        sheet.updateCell(CellIndex.indexByColumnRow(
+        //the ? is important here since real null values else get transformed to "null" due to .toString()
+        String? trimmedCellValue = sheet.cell(CellIndex
+            .indexByColumnRow(columnIndex: j, rowIndex: i)).value?.toString().trim();
+        if (trimmedCellValue != null) { //update if not null
+          sheet.updateCell(CellIndex.indexByColumnRow(
             columnIndex: j, rowIndex: i),
             TextCellValue(trimmedCellValue));
+        }
       }
     }
     return excelFile;
   }
 
 }
+

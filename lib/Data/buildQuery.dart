@@ -45,6 +45,16 @@ class BuildQuery {
     return query;
   }
 
+  static String getAllStudents() {
+    String query = """SELECT META().id, ${TextRes.studentFirstNameJson}, 
+      ${TextRes.studentLastNameJson}, ${TextRes.studentClassLevelJson}, 
+      ${TextRes.studentClassCharJson}, ${TextRes.studentTrainingDirectionsJson},
+      ${TextRes.studentBooksJson}, ${TextRes.studentAmountOfBooksJson}, ${TextRes.studentTagsJson} FROM _ 
+      WHERE ${TextRes.typeJson}='${TextRes.studentTypeJson}' """;
+
+    return query;
+  }
+
   static String buildStudentDetailQuery(List<String> studentIds) {
     if (studentIds.isEmpty) return noResultQuery;
     String whereClause =

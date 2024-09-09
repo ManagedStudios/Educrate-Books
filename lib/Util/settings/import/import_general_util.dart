@@ -47,13 +47,14 @@ Map<TrainingDirectionsData, Set<int>> getUniqueTrainingDirectionsOf
     studentAttributeToHeaders[StudentAttributes.TRAININGDIRECTION]!){
       //TODO I have used Null-Check operators, would be great to avoid them for class
       int columnClass = studentAttributeToHeaders[StudentAttributes.CLASS]!.first.column;
-      String? trainingDirectionValue = sheet.row(i)[data.column]?.value.toString().trim();
-      String? classLevel = sheet.row(i)[columnClass]?.value.toString().trim();
+      //use cellValues instead of strings since .toString() transforms null in just "null"!!!
+      CellValue? trainingDirectionValue = sheet.row(i)[data.column]?.value;
+      CellValue? classLevel = sheet.row(i)[columnClass]?.value;
 
       if (trainingDirectionValue != null && classLevel != null) {
-        ClassData classData = parseStringToClass(classLevel);
-        res[TrainingDirectionsData(trainingDirectionValue)] ??=Set<int>();
-        res[TrainingDirectionsData(trainingDirectionValue)]!.add(classData.classLevel);
+        ClassData classData = parseStringToClass(classLevel.toString());
+        res[TrainingDirectionsData(trainingDirectionValue.toString())] ??=Set<int>();
+        res[TrainingDirectionsData(trainingDirectionValue.toString())]!.add(classData.classLevel);
       }
     }
   }
@@ -69,9 +70,9 @@ HashSet<ClassData> getUniqueClassesOf
   for (int i = 1; i<sheet.maxRows; i++) {
     for (ExcelData data in
     studentAttributeToHeaders[StudentAttributes.CLASS]!){
-      String? cellValue = sheet.row(i)[data.column]?.value.toString().trim();
+      CellValue? cellValue = sheet.row(i)[data.column]?.value;
       if (cellValue != null) {
-        ClassData classData = parseStringToClass(cellValue);
+        ClassData classData = parseStringToClass(cellValue.toString());
         res.add(classData);
       }
 
