@@ -12,7 +12,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockFunctions<T extends LfgChip> extends Mock {
-  void onItemSelected(T item);
+  void onItemSelected(T? item);
 }
 
 void main() {
