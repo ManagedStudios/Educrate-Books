@@ -11,8 +11,7 @@ enum StudentAttributes implements LfgChip {
   LASTNAME(TextRes.studentAttrbMapperLastname),
   CLASS(TextRes.studentAttrbMapperClass),
   TRAININGDIRECTION(TextRes.studentAttrbMapperTrainingDirection),
-  TAGS(TextRes.studentAttrbMapperTags),
-  IGNORE(TextRes.studentAttrbMapperIgnore);
+  TAGS(TextRes.studentAttrbMapperTags);
 
   final String value;
 

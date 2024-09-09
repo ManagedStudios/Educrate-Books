@@ -237,7 +237,7 @@ class TextRes {
 
   static const String studentAttrbMapperTags = "Tags";
 
-  static const String studentAttrbMapperIgnore = "Ignorieren";
+
 
   static const String back = "Zurück";
 
