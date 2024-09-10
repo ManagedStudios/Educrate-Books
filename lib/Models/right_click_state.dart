@@ -1,5 +1,5 @@
-import 'package:cbl/cbl.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:buecherteam_2023_desktop/Util/database/delete.dart';
+import 'package:flutter/material.dart';
 
 import '../Data/db.dart';
 
@@ -14,11 +14,6 @@ class RightClickState extends ChangeNotifier {
   }
 
   Future<void> deleteItemsInBatch(List<String> ids) async {
-    List<Document> docs = [];
-    for (String id in ids) {
-      final doc = await database.getDoc(id);
-      if (doc != null) docs.add(doc);
-    }
-    database.deleteDocs(docs);
+    await deleteItemsInBatchUtil(ids, database);
   }
 }
