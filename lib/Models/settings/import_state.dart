@@ -5,6 +5,7 @@ import 'package:buecherteam_2023_desktop/Data/class_data.dart';
 import 'package:buecherteam_2023_desktop/Data/student.dart';
 import 'package:buecherteam_2023_desktop/Data/training_directions_data.dart';
 import 'package:buecherteam_2023_desktop/Resources/text.dart';
+import 'package:buecherteam_2023_desktop/Util/database/delete.dart';
 import 'package:buecherteam_2023_desktop/Util/database/getter.dart';
 import 'package:buecherteam_2023_desktop/Util/settings/import/import_general_util.dart';
 import 'package:buecherteam_2023_desktop/Util/settings/import/io_util.dart';
@@ -17,6 +18,7 @@ import '../../Data/db.dart';
 import '../../Data/settings/excel_data.dart';
 import '../../Data/settings/student_excel_mapper_attributes.dart';
 
+import '../../Util/settings/import/import_add_books.dart';
 import '../../Util/settings/import/import_errors_util.dart';
 import '../../Util/settings/import/students_from_excel.dart';
 
@@ -218,18 +220,23 @@ class ImportState extends ChangeNotifier {
   }
 
   Future<bool> importStudents() async{
-    //0. get all existing students if updateExistingStudents is true
+    //0. get all existing students if updateExistingStudents is true and delete them
     Set<Student>? existingStudents;
     if (updateExistingStudents) {
-      existingStudents = await getAllStudentsUtil(database);
+      existingStudents = (await getAllStudentsUtil(database)).toSet();
+      await deleteItemsInBatchUtil(existingStudents.map((e) => e.id).toList(), database);
     }
-
+    //1. build a List of Student objects without their books
     List<MutableDocument> studentsToBeImported = getStudentsFromExcel(excelFile!,
         currTrainingDirectionMap,
         currStudentAttributeToHeaders, database);
-    //1. build a List of Student objects without their books
     //2. Import the students
+    await database.saveDocuments(studentsToBeImported);
+
+    List<Student> importedStudents = await getAllStudentsUtil(database);
     //3. add books to all students according to their trainingDirection and their former student instances
+    await addBooksTo(importedStudents, database, existingStudents: existingStudents);
+
     //4. Finish Import students
 
     return true;
@@ -253,6 +260,10 @@ class ImportState extends ChangeNotifier {
   }
 
 }
+
+
+
+
 
 
 

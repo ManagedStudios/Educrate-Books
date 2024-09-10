@@ -56,6 +56,17 @@ class DB {
   Future<void> saveDocument(MutableDocument document) async {
     _database.saveDocument(document);
   }
+  /*
+  save multiple Documents
+   */
+
+  Future<void> saveDocuments(List<MutableDocument> documents) async {
+    _database.inBatch(() async{
+      for (MutableDocument document in documents) {
+       await _database.saveDocument(document);
+      }
+    });
+  }
 
   /*
   generic method to retrieve a stream of generic db results from the database which is

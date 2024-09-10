@@ -17,14 +17,14 @@ Future<List<TrainingDirectionsData>> getAllTrainingDirectionsUtil (DB database) 
 }
 
 
-Future<Set<Student>> getAllStudentsUtil(DB database) async{
+Future<List<Student>> getAllStudentsUtil(DB database) async{
   String query = BuildQuery.getAllStudents();
   final res = await database.getDocs(query);
   return res
       .asStream()
       .map((result) =>
       database.toEntity(Student.fromJson, result))
-      .toSet();
+      .toList();
 }
 
 /*
