@@ -11,7 +11,6 @@ import 'package:buecherteam_2023_desktop/Util/database/getter.dart';
 import 'package:cbl/cbl.dart';
 import 'package:flutter/material.dart';
 
-import '../Data/book.dart';
 import '../Data/bookLite.dart';
 
 class StudentListState extends ChangeNotifier {
@@ -151,13 +150,8 @@ class StudentListState extends ChangeNotifier {
    */
   Future<List<BookLite>?> getBooksFromTrainingDirections(
       List<String> trainingDirections) async {
-    if (trainingDirections.isEmpty) return null;
-    final query = BuildQuery.getBooksOfTrainingDirections(trainingDirections);
-    final bookDocs = await database.getDocs(query);
-    List<BookLite> books = await bookDocs
-        .asStream()
-        .map((res) => database.toEntity(Book.fromJson, res).toBookLite())
-        .toList();
+    List<BookLite>? books =
+          await getBooksFromTrainingDirectionsUtil(trainingDirections, database);
     return books;
   }
 }
