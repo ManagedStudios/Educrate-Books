@@ -119,8 +119,8 @@ class Book implements LfgChip, BookLite, SelectableItem {
   updates Book amount if enough books are available
   returns false if not enough books are available else true
    */
-  bool updateBookAmountOnAdds(int n) {
-    if (nowAvailable - n < 0) return false;
+  bool updateBookAmountOnAdds(int n, bool allowNegativeAmount) {
+    if (!allowNegativeAmount && nowAvailable - n < 0) return false;
     amountInStudentOwnership += n;
     nowAvailable -= n;
     return true;

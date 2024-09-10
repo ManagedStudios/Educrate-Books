@@ -26,11 +26,12 @@ class BookUtils {
   }
 
   static Future<bool> updateAmountOnBookToStudentAdded(
-      String bookId, int amount, DB database) async {
+      String bookId, int amount, DB database,
+      {bool allowNegativeBookAmount = false}) async {
     final doc = (await database.getDoc(bookId))!.toMutable();
     Book dbBook = database.toEntity(Book.fromJson, doc);
     //update amount if enough books are available else quit by returning false
-    if (dbBook.updateBookAmountOnAdds(amount)) {
+    if (dbBook.updateBookAmountOnAdds(amount, allowNegativeBookAmount)) {
       database.updateDocFromEntity(dbBook, doc);
       database.saveDocument(doc);
       return true;
