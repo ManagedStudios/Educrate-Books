@@ -25,7 +25,8 @@ Future<void> addBooksTo(List<MutableDocument> importedStudents, DB database,
       if (firstLastNameExistingStudents != null &&
             firstLastNameExistingStudents
                 .containsKey("${student.firstName}${student.lastName}")) {
-                    student.addBooks(
+                    booksToAdd ??= [];
+                    booksToAdd.addAll(
                         firstLastNameExistingStudents["${student.firstName}${student.lastName}"]!
                     );
       }
