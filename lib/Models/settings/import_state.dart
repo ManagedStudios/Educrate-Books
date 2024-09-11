@@ -1,6 +1,7 @@
 import 'dart:collection';
 import 'dart:io';
 
+import 'package:buecherteam_2023_desktop/Data/bookLite.dart';
 import 'package:buecherteam_2023_desktop/Data/class_data.dart';
 import 'package:buecherteam_2023_desktop/Data/student.dart';
 import 'package:buecherteam_2023_desktop/Data/training_directions_data.dart';
@@ -221,9 +222,17 @@ class ImportState extends ChangeNotifier {
 
   Future<bool> importStudents() async{
     //0. get all existing students if updateExistingStudents is true and delete them
-    Set<Student>? existingStudents;
+    List<Student>? existingStudents;
+    //in order to compare the students with the imported ones we combine first and last Name and make a lookup
+    Map<String, List<BookLite>>? studentFirstLastNameExistingStudents;
     if (updateExistingStudents) {
-      existingStudents = (await getAllStudentsUtil(database)).toSet();
+      existingStudents = await getAllStudentsUtil(database);
+      studentFirstLastNameExistingStudents = {};
+      for (Student student in existingStudents) {
+        studentFirstLastNameExistingStudents["${student.firstName}${student.lastName}"] = student.books;
+
+      }
+
       await deleteItemsInBatchUtil(existingStudents.map((e) => e.id).toList(), database);
     }
     //1. build a List of Student objects without their books
@@ -233,9 +242,9 @@ class ImportState extends ChangeNotifier {
     //2. Import the students
     await database.saveDocuments(studentsToBeImported);
 
-    List<Student> importedStudents = await getAllStudentsUtil(database);
     //3. add books to all students according to their trainingDirection and their former student instances
-    await addBooksTo(importedStudents, database, existingStudents: existingStudents);
+    await addBooksTo(studentsToBeImported, database,
+        firstLastNameExistingStudents: studentFirstLastNameExistingStudents);
 
     //4. Finish Import students
 

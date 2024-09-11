@@ -11,3 +11,4 @@ Future<void> deleteItemsInBatchUtil(List<String> ids, DB database) async {
   }
   database.deleteDocs(docs);
 }
+
