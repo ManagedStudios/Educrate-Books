@@ -236,6 +236,7 @@ class ImportState extends ChangeNotifier {
       studentFirstLastNameExistingStudents = {};
       for (Student student in existingStudents) {
         studentFirstLastNameExistingStudents["${student.firstName}${student.lastName}"] = student.books;
+
       }
     }
     //1. build a List of Student objects without their books
@@ -244,6 +245,7 @@ class ImportState extends ChangeNotifier {
         currStudentAttributeToHeaders, database);
     //2. Import the students
     await database.saveDocuments(studentsToBeImported);
+    await Future.delayed(Duration(seconds: 1));
 
     //3. add books to all students according to their trainingDirection and their former student instances
     await addBooksTo(studentsToBeImported, database,
