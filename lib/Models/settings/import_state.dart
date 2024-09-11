@@ -19,6 +19,7 @@ import '../../Data/db.dart';
 import '../../Data/settings/excel_data.dart';
 import '../../Data/settings/student_excel_mapper_attributes.dart';
 
+import '../../Util/database/update.dart';
 import '../../Util/settings/import/import_add_books.dart';
 import '../../Util/settings/import/import_errors_util.dart';
 import '../../Util/settings/import/students_from_excel.dart';
@@ -221,19 +222,21 @@ class ImportState extends ChangeNotifier {
   }
 
   Future<bool> importStudents() async{
-    //0. get all existing students if updateExistingStudents is true and delete them
+    //0. get all existing students, delete them and update the book amounts accordingly
+    // if updateExistingStudents is true create a NameToBooks Map to add their books to the imported successor
     List<Student>? existingStudents;
     //in order to compare the students with the imported ones we combine first and last Name and make a lookup
     Map<String, List<BookLite>>? studentFirstLastNameExistingStudents;
+
+    existingStudents = await getAllStudentsUtil(database);
+    await deleteItemsInBatchUtil(existingStudents.map((e) => e.id).toList(), database);
+    await updateBookAmountOnStudentsDeletedUtil(existingStudents, database);
+
     if (updateExistingStudents) {
-      existingStudents = await getAllStudentsUtil(database);
       studentFirstLastNameExistingStudents = {};
       for (Student student in existingStudents) {
         studentFirstLastNameExistingStudents["${student.firstName}${student.lastName}"] = student.books;
-
       }
-
-      await deleteItemsInBatchUtil(existingStudents.map((e) => e.id).toList(), database);
     }
     //1. build a List of Student objects without their books
     List<MutableDocument> studentsToBeImported = getStudentsFromExcel(excelFile!,
