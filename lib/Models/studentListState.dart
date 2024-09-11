@@ -8,6 +8,7 @@ import 'package:buecherteam_2023_desktop/Data/filter.dart';
 import 'package:buecherteam_2023_desktop/Data/student.dart';
 import 'package:buecherteam_2023_desktop/Data/training_directions_data.dart';
 import 'package:buecherteam_2023_desktop/Util/database/getter.dart';
+import 'package:buecherteam_2023_desktop/Util/database/update.dart';
 import 'package:cbl/cbl.dart';
 import 'package:flutter/material.dart';
 
@@ -116,7 +117,10 @@ class StudentListState extends ChangeNotifier {
 
   Future<void> deleteStudent(Student student) async {
     final doc = await database.getDoc(student.id);
-    if (doc != null) database.deleteDoc(doc);
+    if (doc != null) {
+      database.deleteDoc(doc);
+      updateBookAmountOnStudentsDeletedUtil([student], database);
+    }
   }
 
   void setFtsQuery(String query) {

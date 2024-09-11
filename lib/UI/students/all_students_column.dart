@@ -195,12 +195,6 @@ class _AllStudentsColumnState extends State<AllStudentsColumn> {
                                               context,
                                               listen: false)
                                           .deleteStudent(student);
-                                      Provider.of<StudentDetailState>(
-                                              //then update the book amount of the books the student owned
-                                              context,
-                                              listen: false)
-                                          .updateBookAmountOnStudentDelete(
-                                              [student]);
                                       showRevertStudentDeleteSnackBar(
                                           student, //make action reversible
                                           Provider.of<StudentListState>(context,

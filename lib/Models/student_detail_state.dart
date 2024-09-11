@@ -10,6 +10,7 @@ import '../Data/bookLite.dart';
 import '../Data/buildQuery.dart';
 import '../Data/db.dart';
 import '../Resources/text.dart';
+import '../Util/database/update.dart';
 
 class StudentDetailState extends ChangeNotifier {
   HashSet<Student> selectedStudentIdObjects =
@@ -133,18 +134,6 @@ class StudentDetailState extends ChangeNotifier {
 
   Future<void> updateBookAmountOnStudentDelete(
       List<Student> selectedStudents) async {
-    Map<String, int> bookIdByAmount = {};
-
-    for (Student student in selectedStudents) {
-      for (BookLite bookLite in student.books) {
-        bookIdByAmount[bookLite.bookId] =
-            (bookIdByAmount[bookLite.bookId] ?? 0) + 1;
-      }
-    }
-
-    for (MapEntry<String, int> bookByAmount in bookIdByAmount.entries) {
-      BookUtils.updateAmountOnBookFromStudentDeleted(
-          bookByAmount.key, bookByAmount.value, database);
-    }
+    await updateBookAmountOnStudentsDeletedUtil(selectedStudents, database);
   }
 }
