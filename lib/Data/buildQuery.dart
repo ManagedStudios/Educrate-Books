@@ -90,8 +90,13 @@ class BuildQuery {
   }
 
   static String getAllClassLevels() {
+
+    String orderClause =
+        "ORDER BY ${TextRes.classDataClassLevelJson}";
+
     String query = """SELECT DISTINCT ${TextRes.classDataClassLevelJson} FROM _ 
       WHERE ${TextRes.typeJson}='${TextRes.classDataTypeJson}' """;
+    query+=orderClause;
 
     return query;
   }
