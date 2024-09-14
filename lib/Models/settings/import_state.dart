@@ -132,11 +132,18 @@ class ImportState extends ChangeNotifier {
     Sheet sheet = excelFile!.sheets.values.first;
     trimExcelFile(excelFile!);
     checkAndCorrectExcelFile();
-    for (int i in rowsToRemove) {
-      sheet.removeRow(i);
+
+    for (int i = 0; i<rowsToRemove.length; i++) {
+      //reduce the index value of rowsToRemove by i since maxRows is reduced by i due to the row deletions
+      //which causes all indices after i to shift upwards
+      //IMPORTANT: Works only if rowsToRemove is sorted!
+      sheet.removeRow(rowsToRemove[i]-i);
     }
+
+
     uniqueTrainingDirections = getUniqueTrainingDirectionsOf(sheet, currStudentAttributeToHeaders);
     uniqueClasses = getUniqueClassesOf(sheet, currStudentAttributeToHeaders);
+    //TODO update class data in database
     await getAndStructureTrainingDirections();
 
     if (excelFormatErrors != null) {
@@ -149,12 +156,13 @@ class ImportState extends ChangeNotifier {
 
   void checkAndCorrectExcelFile () {
     Sheet sheet = excelFile!.sheets.values.first;
+
     for (int i = 1; i<sheet.maxRows; i++) {
       String accumulatedFormatError = accumulateFormatErrorsFor(
           sheet.row(i).toList(),
           isClassWithoutCharAllowed,
           currStudentAttributeToHeaders);
-      //print(sheet.row(i).map((e) => e?.value.toString()??''));
+
       if (accumulatedFormatError.isNotEmpty) {
         if (excelFormatErrors == null) {
            initializeExcelFormatErrorFile();
@@ -164,6 +172,7 @@ class ImportState extends ChangeNotifier {
         errorRow.add(TextCellValue(accumulatedFormatError));
         excelFormatErrors!.sheets.values.first.appendRow(errorRow);
         rowsToRemove.add(i);
+
       }
 
     }
