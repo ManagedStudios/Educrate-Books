@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 
 class SettingsNavState extends ChangeNotifier {
   SettingsNavButtons selectedButton = SettingsNavButtons.IMPORT;
-  Widget currWidget = ImportParent();
+  Widget currWidget = const ImportParent();
 
   void navigateTo(SettingsNavButtons navButton) {
     selectedButton = navButton;
