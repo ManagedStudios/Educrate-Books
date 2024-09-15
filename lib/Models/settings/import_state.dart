@@ -254,13 +254,14 @@ class ImportState extends ChangeNotifier {
         currStudentAttributeToHeaders, database);
     //2. Import the students
     await database.saveDocuments(studentsToBeImported);
-    await Future.delayed(Duration(seconds: 1));
+    await Future.delayed(const Duration(seconds: 1));
 
     //3. add books to all students according to their trainingDirection and their former student instances
     await addBooksTo(studentsToBeImported, database,
         firstLastNameExistingStudents: studentFirstLastNameExistingStudents);
 
     //4. Finish Import students
+    resetValues();
 
     return true;
   }
@@ -280,6 +281,27 @@ class ImportState extends ChangeNotifier {
         }
       }
     }
+  }
+
+  void resetValues () {
+    availableStudentAttributes = StudentAttributes.values;
+    currHeaderToAttributeMap = {};
+    currHeaderToAttributeError = "${StudentAttributes.FIRSTNAME.getLabelText()} "
+        "${StudentAttributes.LASTNAME.getLabelText()} ${StudentAttributes.CLASS.getLabelText()} "
+        "${TextRes.areMandatory}";
+    currStudentAttributeToHeaders = {};
+    rowsToRemove = [];
+    uniqueTrainingDirections = {};
+    uniqueClasses = HashSet();
+    availableTrainingDirections = [];
+    currTrainingDirectionMap = {};
+    excelFormatErrors = null;
+    isClassWithoutCharAllowed = false;
+    updateExistingStudents = false;
+    importFileName = null;
+    excelFile = null;
+    selectExcelFileError = TextRes.selectExcelFileError;
+
   }
 
 }

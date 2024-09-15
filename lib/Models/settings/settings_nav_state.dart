@@ -9,17 +9,16 @@ class SettingsNavState extends ChangeNotifier {
   Widget currWidget = ImportParent();
 
   void navigateTo(SettingsNavButtons navButton) {
-    if (navButton == selectedButton) return;
     selectedButton = navButton;
     switch (navButton) {
       case SettingsNavButtons.IMPORT:
-        currWidget = ImportParent();
+        currWidget = const ImportParent();
       case SettingsNavButtons.MAHNUNG:
-        currWidget = WarningParent();
+        currWidget = const WarningParent();
       case SettingsNavButtons.FILTER:
-        currWidget = FilterParent();
+        currWidget = const FilterParent();
       case SettingsNavButtons.DRUCKEN:
-        currWidget = PrintParent();
+        currWidget = const PrintParent();
     }
     notifyListeners();
   }

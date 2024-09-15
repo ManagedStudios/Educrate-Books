@@ -308,6 +308,10 @@ class TextRes {
 
   static const String goToImportError = "Zu den Fehlern";
 
+  static const String finishImport = "Import abschließen";
+
+  static const String importSuccess = "Import erfolgreich!";
+
 
 
 }
