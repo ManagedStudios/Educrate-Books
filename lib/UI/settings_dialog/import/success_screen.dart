@@ -29,7 +29,6 @@ class SuccessScreen extends StatelessWidget {
             )
         )
 
-
       ],
     );
   }

@@ -13,7 +13,11 @@ class Book implements LfgChip, BookLite, SelectableItem {
       required this.amountInStudentOwnership,
       required this.nowAvailable,
       required this.totalAvailable,
-      this.isbnNumber})
+      this.isbnNumber,
+        this.publisher,
+        this.price,
+        this.admissionNumber,
+        this.followingBook, })
       : _id = bookId;
 
   final String _id;
@@ -24,7 +28,13 @@ class Book implements LfgChip, BookLite, SelectableItem {
   int amountInStudentOwnership;
   int nowAvailable;
   final int totalAvailable;
+
   final String? isbnNumber;
+  final String? publisher;
+  final String? price;
+  final String? admissionNumber;
+  final Book? followingBook;
+
 
   String get id => _id;
 
@@ -57,8 +67,20 @@ class Book implements LfgChip, BookLite, SelectableItem {
     final String? isbnNumber = json[TextRes.bookIsbnNumberJson] != null
         ? (json[TextRes.bookIsbnNumberJson] as String)
         : null;
-    late List<String> trDirections;
+    final String? publisher = json[TextRes.bookPublisherJson] != null
+        ? (json[TextRes.bookPublisherJson] as String)
+        : null;
+    final String? price = json[TextRes.bookPriceJson] != null
+        ? (json[TextRes.bookPriceJson] as String)
+        : null;
+    final String? admissionNumber = json[TextRes.bookAdmissionNumberJson] != null
+        ? (json[TextRes.bookAdmissionNumberJson] as String)
+        : null;
+    final Book? followingBook = json[TextRes.bookFollowingBookJson] != null
+        ? Book.fromJson(json[TextRes.bookFollowingBookJson] as dynamic)
+        : null;
 
+    late List<String> trDirections;
     try {
       trDirections =
           List.from(json[TextRes.bookTrainingDirectionJson] as dynamic);
@@ -87,7 +109,12 @@ class Book implements LfgChip, BookLite, SelectableItem {
         amountInStudentOwnership: expectedAmountNeeded,
         nowAvailable: nowAvailable,
         totalAvailable: totalAvailable,
-        isbnNumber: isbnNumber);
+        isbnNumber: isbnNumber,
+        publisher: publisher,
+        price: price,
+        admissionNumber: admissionNumber,
+        followingBook: followingBook
+    );
   }
 
   Map<String, Object?> toJson() {
@@ -101,6 +128,10 @@ class Book implements LfgChip, BookLite, SelectableItem {
       TextRes.bookNowAvailableJson: nowAvailable,
       TextRes.bookTotalAvailableJson: totalAvailable,
       TextRes.bookIsbnNumberJson: isbnNumber,
+      TextRes.bookPublisherJson: publisher,
+      TextRes.bookPriceJson: price,
+      TextRes.bookAdmissionNumberJson: admissionNumber,
+      TextRes.bookFollowingBookJson: followingBook?.toJson(),
       TextRes.typeJson: TextRes.bookTypeJson,
     };
     return data;

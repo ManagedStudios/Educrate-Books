@@ -169,7 +169,9 @@ class BuildQuery {
       ${TextRes.bookSubjectJson}, ${TextRes.bookClassLevelJson}, 
       ${TextRes.bookTrainingDirectionJson}, ${TextRes.bookAmountInStudentOwnershipJson},
       ${TextRes.bookNowAvailableJson}, ${TextRes.bookTotalAvailableJson}, 
-      ${TextRes.bookIsbnNumberJson} FROM _ 
+      ${TextRes.bookIsbnNumberJson}, ${TextRes.bookPublisherJson},
+      ${TextRes.bookPriceJson}, ${TextRes.bookAdmissionNumberJson},
+      ${TextRes.bookFollowingBookJson} FROM _ 
       WHERE ${TextRes.typeJson}='${TextRes.bookTypeJson}' """;
     query += whereClause;
 

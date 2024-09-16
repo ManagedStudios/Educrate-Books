@@ -24,6 +24,11 @@ class TextRes {
   static const String bookNameJson = 'name';
   static const String bookSubjectJson = 'subject';
   static const String bookClassLevelJson = 'classLevel';
+  static const String bookPublisherJson = 'bookPublisher';
+  static const String bookPriceJson = 'bookPrice';
+  static const String bookAdmissionNumberJson = 'admissionNumber';
+  static const String bookFollowingBookJson = 'followingBook';
+
 
   static const String studentSearchHint =
       'Suche nach Schülernamen, Klassen und Ausbildungen';
@@ -311,6 +316,14 @@ class TextRes {
   static const String finishImport = "Import abschließen";
 
   static const String importSuccess = "Import erfolgreich!";
+
+
+
+
+
+
+
+
 
 
 

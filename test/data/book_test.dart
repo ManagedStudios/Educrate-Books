@@ -10,7 +10,9 @@ void main() {
   late Map<String, Object?> classLevelStringJson;
   late Map<String, Object?> bookStringJson;
   late Map<String, Object?> emptyJson;
+  late Map<String, Object?> validBookExtendedJson;
   late Book validBook;
+  late Book validBookExtended;
 
   setUp(() {
     validBook = Book(
@@ -22,6 +24,19 @@ void main() {
         amountInStudentOwnership: 50,
         nowAvailable: 10,
         totalAvailable: 60);
+    validBookExtended = Book(bookId: "54321",
+        name: "Lambacher Schweizer",
+        subject: "Mathe",
+        classLevel: 8,
+        trainingDirection: ["BASIC-8", "BASIC-9"],
+        amountInStudentOwnership: 20,
+        nowAvailable: 30,
+        totalAvailable: 50,
+        isbnNumber: "2834679238bf",
+        publisher: "Cornelsen",
+        price: "34,99",
+        admissionNumber: "216498fh284",
+        followingBook: validBook);
 
     validBookJson = {
       TextRes.idJson: validBook.id,
@@ -33,6 +48,27 @@ void main() {
       TextRes.bookNowAvailableJson: validBook.nowAvailable,
       TextRes.bookTotalAvailableJson: validBook.totalAvailable,
       TextRes.bookIsbnNumberJson:null,
+      TextRes.bookPublisherJson:null,
+      TextRes.bookPriceJson:null,
+      TextRes.bookAdmissionNumberJson:null,
+      TextRes.bookFollowingBookJson:null,
+      TextRes.typeJson:TextRes.bookTypeJson
+    };
+
+    validBookExtendedJson = {
+      TextRes.idJson: validBookExtended.id,
+      TextRes.bookNameJson: validBookExtended.name,
+      TextRes.bookSubjectJson: validBookExtended.subject,
+      TextRes.bookClassLevelJson: validBookExtended.classLevel,
+      TextRes.bookTrainingDirectionJson: validBookExtended.trainingDirection,
+      TextRes.bookAmountInStudentOwnershipJson: validBookExtended.amountInStudentOwnership,
+      TextRes.bookNowAvailableJson: validBookExtended.nowAvailable,
+      TextRes.bookTotalAvailableJson: validBookExtended.totalAvailable,
+      TextRes.bookIsbnNumberJson:validBookExtended.isbnNumber,
+      TextRes.bookPublisherJson:validBookExtended.publisher,
+      TextRes.bookPriceJson:validBookExtended.price,
+      TextRes.bookAdmissionNumberJson:validBookExtended.admissionNumber,
+      TextRes.bookFollowingBookJson:validBookExtended.followingBook!.toJson(),
       TextRes.typeJson:TextRes.bookTypeJson
     };
 
@@ -51,6 +87,11 @@ void main() {
     test("Valid JSON to Book object", () {
       final bookFromJson = Book.fromJson(validBookJson);
       expect(bookFromJson, validBook);  // assuming you have equality operator implemented in Book class
+    });
+    
+    test("Valid JSON Extended to Book object", () {
+      final bookExtendedFromJson = Book.fromJson(validBookExtendedJson);
+      expect(bookExtendedFromJson, validBookExtended);
     });
 
     test("Class Level as String but convertible", () {
