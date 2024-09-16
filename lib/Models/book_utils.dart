@@ -33,7 +33,7 @@ class BookUtils {
     //update amount if enough books are available else quit by returning false
     if (dbBook.updateBookAmountOnAdds(amount, allowNegativeBookAmount)) {
       database.updateDocFromEntity(dbBook, doc);
-      database.saveDocument(doc);
+      await database.saveDocument(doc);
       return true;
     } else {
       return false;

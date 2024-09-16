@@ -54,14 +54,14 @@ class DB {
   }
 
   Future<void> saveDocument(MutableDocument document) async {
-    _database.saveDocument(document);
+    await _database.saveDocument(document);
   }
   /*
   save multiple Documents
    */
 
   Future<void> saveDocuments(List<MutableDocument> documents) async {
-    _database.inBatch(() async{
+    await _database.inBatch(() async{
       for (MutableDocument document in documents) {
        await _database.saveDocument(document);
       }
@@ -113,7 +113,7 @@ class DB {
   Delete a single document that is provided
    */
   Future<void> deleteDoc(Document document) async {
-    _database.deleteDocument(document);
+    await _database.deleteDocument(document);
   }
 
   /*
@@ -121,7 +121,7 @@ class DB {
    */
 
   Future<void> deleteDocs(List<Document> documents) async {
-    _database.inBatch(() async {
+    await _database.inBatch(() async {
       for (Document document in documents) {
         await _database.deleteDocument(document);
       }
@@ -138,7 +138,7 @@ class DB {
       throw ArgumentError(
           "Document List has a different length to the belonging entities");
     }
-    _database.inBatch(() async {
+    await _database.inBatch(() async {
       for (int i = 0; i < documents.length; i++) {
         final doc = documents[i].toMutable();
         final entity = entities[i];
