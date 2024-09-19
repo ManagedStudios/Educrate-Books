@@ -4,6 +4,7 @@ import 'package:buecherteam_2023_desktop/Data/class_data.dart';
 import 'package:buecherteam_2023_desktop/Data/shared_preferences.dart';
 import 'package:buecherteam_2023_desktop/Resources/text.dart';
 import 'package:buecherteam_2023_desktop/UI/student_view.dart';
+import 'package:cbl/cbl.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -19,6 +20,7 @@ class AppIntroductionState extends ChangeNotifier {
   int currIntroIndex = 0;
   String? currError = TextRes.selectPathError;
   List<ClassData>? classesToImport;
+  bool dbInitialized = false;
 
   Future<void> getAndSavePath() async{
     String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
@@ -31,19 +33,28 @@ class AppIntroductionState extends ChangeNotifier {
 
   Future<void> goToNextPage (BuildContext context) async{
     if (currError != null) return;
+    if (currIntroIndex == 1 && classesToImport != null) {
+      for (ClassData classData in classesToImport!) {
+        MutableDocument doc = MutableDocument();
+        database.updateDocFromEntity(classData, doc);
+        database.saveDocument(doc);
+      }
+
+    }
     if (currIntroIndex < TextRes.introPaths.length-1) {
       currIntroIndex++;
       context.go(TextRes.introPaths[currIntroIndex]);
     } else {
       context.go(StudentView.routeName);
     }
-    if (currIntroIndex == 1 || TextRes.introPaths.length == 1) {
+    if (currIntroIndex == 1 && !dbInitialized) {
+      dbInitialized = true;
       await database.initializeDatabase(selectedPath!);
     }
+
   }
 
   void setClassData(Map<TextEditingController, List<ClassData>?> controllerToData) {
-
     bool hasError = false;
     for (MapEntry<TextEditingController, List<ClassData>?> entry in controllerToData.entries) {
       print(entry.value?.map((e) => "${e.classLevel} ${e.classChar}"));
@@ -54,7 +65,6 @@ class AppIntroductionState extends ChangeNotifier {
         classesToImport ??=[];
         classesToImport?.addAll(entry.value!);
       }
-
     }
     if (hasError) {
       currError = TextRes.correctClassData;
