@@ -39,7 +39,6 @@ class AppIntroductionState extends ChangeNotifier {
         database.updateDocFromEntity(classData, doc);
         database.saveDocument(doc);
       }
-
     }
     if (currIntroIndex < TextRes.introPaths.length-1) {
       currIntroIndex++;
@@ -56,13 +55,12 @@ class AppIntroductionState extends ChangeNotifier {
 
   void setClassData(Map<TextEditingController, List<ClassData>?> controllerToData) {
     bool hasError = false;
+    classesToImport = [];
     for (MapEntry<TextEditingController, List<ClassData>?> entry in controllerToData.entries) {
-      print(entry.value?.map((e) => "${e.classLevel} ${e.classChar}"));
       if (entry.value == null) {
         classesToImport = null;
         hasError = true;
       } else {
-        classesToImport ??=[];
         classesToImport?.addAll(entry.value!);
       }
     }
