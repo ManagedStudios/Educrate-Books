@@ -1,5 +1,6 @@
 
 
+import 'package:buecherteam_2023_desktop/Data/class_data.dart';
 import 'package:buecherteam_2023_desktop/Data/shared_preferences.dart';
 import 'package:buecherteam_2023_desktop/Resources/text.dart';
 import 'package:buecherteam_2023_desktop/UI/student_view.dart';
@@ -17,6 +18,7 @@ class AppIntroductionState extends ChangeNotifier {
   String? selectedPath;
   int currIntroIndex = 0;
   String? currError = TextRes.selectPathError;
+  List<ClassData>? classesToImport;
 
   Future<void> getAndSavePath() async{
     String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
@@ -38,6 +40,28 @@ class AppIntroductionState extends ChangeNotifier {
     if (currIntroIndex == 1 || TextRes.introPaths.length == 1) {
       await database.initializeDatabase(selectedPath!);
     }
+  }
+
+  void setClassData(Map<TextEditingController, List<ClassData>?> controllerToData) {
+
+    bool hasError = false;
+    for (MapEntry<TextEditingController, List<ClassData>?> entry in controllerToData.entries) {
+      print(entry.value?.map((e) => "${e.classLevel} ${e.classChar}"));
+      if (entry.value == null) {
+        classesToImport = null;
+        hasError = true;
+      } else {
+        classesToImport ??=[];
+        classesToImport?.addAll(entry.value!);
+      }
+
+    }
+    if (hasError) {
+      currError = TextRes.correctClassData;
+    } else {
+      currError = null;
+    }
+    notifyListeners();
   }
 
 

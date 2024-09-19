@@ -23,10 +23,7 @@ class IntroductionScaffold extends StatelessWidget {
                   borderRadius: BorderRadius.circular(Dimensions.cornerRadiusBetweenSmallAndMedium),
                   border: Border.all(width: Dimensions.borderWidthMedium)
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.all(Dimensions.paddingMedium),
-                  child: child,
-                ),
+                child: child,
               ),
             ),
             const SizedBox(

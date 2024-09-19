@@ -3,13 +3,14 @@ import 'package:buecherteam_2023_desktop/Resources/text.dart';
 import 'package:buecherteam_2023_desktop/UI/input/dialog_text_field.dart';
 import 'package:flutter/material.dart';
 
-class ClassCreationRow extends StatefulWidget {
-  const ClassCreationRow({super.key, required this.levelToLettersController, required this.onClassesUpdated});
+import '../../../Util/stringUtil.dart';
 
-  static String routeName = '/classCreationRow';
+class ClassCreationRow extends StatefulWidget {
+  const ClassCreationRow({super.key, required this.levelToLettersController, required this.onClassesUpdated, required this.onDeleted});
 
   final MapEntry<TextEditingController, TextEditingController> levelToLettersController;
-  final Function(List<ClassData>? classData) onClassesUpdated;
+  final Function(List<ClassData>? classData, TextEditingController controller) onClassesUpdated;
+  final Function(TextEditingController controller) onDeleted;
 
   @override
   State<ClassCreationRow> createState() => _ClassCreationRowState();
@@ -18,7 +19,15 @@ class ClassCreationRow extends StatefulWidget {
 class _ClassCreationRowState extends State<ClassCreationRow> {
 
   String? levelError = TextRes.classLevelError;
-  String? lettersError = TextRes.classLettersError;
+  String? lettersError;
+
+  @override
+  void didUpdateWidget(oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    updateClassLevelError();
+    updateClassLettersError();
+
+  }
 
 
   @override
@@ -29,7 +38,14 @@ class _ClassCreationRowState extends State<ClassCreationRow> {
           flex: 1,
           child: DialogTextField(
               controller: widget.levelToLettersController.key,
-              onTextChanged: (text){},
+              onTextChanged: (text){
+                updateClassLevelError();
+                if (lettersError != null || levelError != null) {
+                  widget.onClassesUpdated(null, widget.levelToLettersController.key);
+                } else {
+                  widget.onClassesUpdated(parseClasses(), widget.levelToLettersController.key);
+                }
+              },
               hint: TextRes.classLevelHint,
               errorText: levelError,
               enabled: true),
@@ -38,13 +54,70 @@ class _ClassCreationRowState extends State<ClassCreationRow> {
             flex: 3,
             child: DialogTextField(
                 controller: widget.levelToLettersController.value,
-                onTextChanged: (text){},
+                onTextChanged: (text){
+                  updateClassLettersError();
+                  if (lettersError != null || levelError != null) {
+                    widget.onClassesUpdated(null, widget.levelToLettersController.key);
+                  } else {
+                    widget.onClassesUpdated(parseClasses(), widget.levelToLettersController.key);
+                  }
+                },
                 hint: TextRes.classLettersHint,
-                errorText: levelError,
+                errorText: lettersError,
                 enabled: true),
-        )
+        ),
+
+        IconButton(onPressed: () {
+          widget.onDeleted(widget.levelToLettersController.key);
+        }, icon: const Icon(Icons.close))
 
       ],
     );
+  }
+
+  void updateClassLevelError() {
+    setState(() {
+      if (isNumeric(widget.levelToLettersController.key.text)) {
+        levelError = null;
+      } else {
+        levelError = TextRes.classLevelError;
+      }
+    });
+
+  }
+
+  void updateClassLettersError() {
+    setState(() {
+      String text = widget.levelToLettersController.value.text;
+      if (text.isEmpty) return;
+      List<String> classLetters = text.split(TextRes.comma);
+      classLetters = classLetters.map((e) => e.trim().toUpperCase()).toList();
+      String? error;
+      for (String str in classLetters) {
+        if (!containsOnlyLetters(str)) {
+          error = TextRes.classLettersError;
+        }
+      }
+      lettersError = error;
+    });
+
+  }
+
+  List<ClassData> parseClasses() {
+    List<ClassData> res = [];
+    int level = int.parse(widget.levelToLettersController.key.text);
+    String lettersText = widget.levelToLettersController.value.text;
+    Set<String> classLetters = lettersText.split(TextRes.comma).toSet();
+    classLetters = classLetters.map((e) => e.trim().toUpperCase()).toSet();
+
+    if (lettersText.isEmpty) {
+      res.add(ClassData(level, ""));
+    } else {
+      for (String str in classLetters) {
+        res.add(ClassData(level, str));
+      }
+    }
+
+    return res;
   }
 }

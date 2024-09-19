@@ -23,6 +23,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import 'Data/shared_preferences.dart';
+import 'UI/app_introduction/add_class_data.dart';
 import 'UI/navigation/navigationbar.dart';
 import 'Util/settings/import/io_util.dart';
 
@@ -71,6 +72,16 @@ final _router = GoRouter(initialLocation: initialLocation, routes: [
           path: TextRes.introPaths[0],
           pageBuilder: (context, state) => CustomTransitionPage(
               child: const SelectDbPath(),
+              transitionsBuilder: (context, animation, _, child) {
+                return FadeTransition(
+                    opacity: CurveTween(curve: Curves.easeInCirc)
+                        .animate(animation),
+                    child: child);
+              })),
+      GoRoute(
+          path: TextRes.introPaths[1],
+          pageBuilder: (context, state) => CustomTransitionPage(
+              child: const AddClassData(),
               transitionsBuilder: (context, animation, _, child) {
                 return FadeTransition(
                     opacity: CurveTween(curve: Curves.easeInCirc)

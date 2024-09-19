@@ -10,6 +10,11 @@ bool isOnlyWhitespace(String str) {
   return regex.hasMatch(str);
 }
 
+bool containsOnlyLetters(String input) {
+  final RegExp regex = RegExp(r'^[a-zA-Z]+$');
+  return regex.hasMatch(input);
+}
+
 bool containsNonAlphabetical(String input) {
   final regex = RegExp(r"[0-9,;.:?=)(/&%$§!*+#><]");
 
