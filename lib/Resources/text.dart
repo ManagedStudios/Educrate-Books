@@ -317,6 +317,18 @@ class TextRes {
 
   static const String importSuccess = "Import erfolgreich!";
 
+  static const String classLettersError = "Bsp.: A, B, C - aktuelles Format ungültig!";
+
+  static const String classLettersHint = "Buchstaben";
+
+  static const String selectPath = "Pfad für die Datenbank auswählen";
+
+  static const String dbPath = "dbPath";
+
+  static const List<String> introPaths = ["/selectDbPath"];
+
+  static const String selectPathError = "Pfad für die Datenbank auswählen";
+
 
 
 

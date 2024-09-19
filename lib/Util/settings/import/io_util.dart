@@ -25,3 +25,9 @@ Excel getExcelFileOf(FilePickerResult res) {
   return excel;
 }
 
+Future<bool> pathExists(String path) async{
+  Directory directory = Directory(path);
+  bool directoryExists = await directory.exists();
+  return directoryExists;
+}
+

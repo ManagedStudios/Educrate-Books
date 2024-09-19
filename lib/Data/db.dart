@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:buecherteam_2023_desktop/Resources/text.dart';
 import 'package:cbl/cbl.dart';
 
@@ -14,8 +13,11 @@ class DB {
 
   DB._internal();
 
-  Future<void> initializeDatabase() async {
-    _database = await Database.openAsync(TextRes.dbName);
+  Future<void> initializeDatabase(String dbPath) async {
+    _database = await Database.openAsync(
+        TextRes.dbName,
+        DatabaseConfiguration(directory: dbPath)
+    );
     final typeIndex = ValueIndexConfiguration(['type']);
     final bookClassLevelIndex =
         ValueIndexConfiguration([TextRes.bookClassLevelJson]);
@@ -51,6 +53,8 @@ class DB {
         searchBooksOfTrainingDirectionsIndex);
     await _database.createIndex(
         TextRes.studentsOfBookIdIndex, studentsOfBookIdIndex);
+
+    //await startReplication();
   }
 
   Future<void> saveDocument(MutableDocument document) async {
