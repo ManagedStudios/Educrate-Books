@@ -48,7 +48,7 @@ class AppIntroductionState extends ChangeNotifier {
     }
     if (currIntroIndex == 1 && !dbInitialized) {
       dbInitialized = true;
-      await database.initializeDatabase(selectedPath!);
+      await database.initializeDatabase();
     }
 
   }

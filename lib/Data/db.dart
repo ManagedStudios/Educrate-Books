@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:buecherteam_2023_desktop/Resources/text.dart';
 import 'package:cbl/cbl.dart';
+import 'package:path_provider/path_provider.dart';
 
 class DB {
   static final DB _instance = DB._internal();
@@ -13,11 +15,11 @@ class DB {
 
   DB._internal();
 
-  Future<void> initializeDatabase(String dbPath) async {
+  Future<void> initializeDatabase() async {
     _database = await Database.openAsync(
-        TextRes.dbName,
-        DatabaseConfiguration(directory: dbPath)
+        TextRes.dbName
     );
+
     final typeIndex = ValueIndexConfiguration(['type']);
     final bookClassLevelIndex =
         ValueIndexConfiguration([TextRes.bookClassLevelJson]);

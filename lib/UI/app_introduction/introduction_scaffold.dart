@@ -3,9 +3,13 @@ import 'package:buecherteam_2023_desktop/Resources/dimensions.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class IntroductionScaffold extends StatelessWidget {
-  const IntroductionScaffold({super.key, required this.child});
-  final Widget child;
+abstract class IntroductionScaffold extends StatelessWidget {
+  const IntroductionScaffold({super.key});
+
+
+  void onNext(BuildContext context);
+
+  Widget buildContent(BuildContext context);
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +27,7 @@ class IntroductionScaffold extends StatelessWidget {
                   borderRadius: BorderRadius.circular(Dimensions.cornerRadiusBetweenSmallAndMedium),
                   border: Border.all(width: Dimensions.borderWidthMedium)
                 ),
-                child: child,
+                child: buildContent(context),
               ),
             ),
             const SizedBox(
@@ -31,8 +35,7 @@ class IntroductionScaffold extends StatelessWidget {
             ),
             OutlinedButton(
                 onPressed: (){
-                  Provider.of<AppIntroductionState>(context, listen: false)
-                      .goToNextPage(context);
+                  onNext(context);
                 },
                 child: const SizedBox(
                   width: Dimensions.boxWidthSmall,

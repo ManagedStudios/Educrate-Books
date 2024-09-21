@@ -33,13 +33,16 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await CouchbaseLiteFlutter.init();
 
-  String? dbPath = await getPreference(TextRes.dbPath);
-  if (dbPath != null && await pathExists(dbPath)) {
+  String dbPath = await getDatabasePath();
+  if (await pathExists(dbPath)) {
     initialLocation = StudentView.routeName;
-    await DB().initializeDatabase(dbPath);
   } else {
     initialLocation = TextRes.introPaths[0];
   }
+
+  await DB().initializeDatabase();
+
+
 
   runApp(MultiProvider(
     providers: [
@@ -59,15 +62,7 @@ void main() async {
 }
 
 
-
-
-
 final _router = GoRouter(initialLocation: initialLocation, routes: [
-  ShellRoute(
-    builder: (BuildContext context, GoRouterState state, Widget child) {
-      return IntroductionScaffold(child: child);
-    },
-    routes: [
       GoRoute(
           path: TextRes.introPaths[0],
           pageBuilder: (context, state) => CustomTransitionPage(
@@ -88,8 +83,6 @@ final _router = GoRouter(initialLocation: initialLocation, routes: [
                         .animate(animation),
                     child: child);
               })),
-    ]
-  ),
   ShellRoute(
       builder: (BuildContext context, GoRouterState state, Widget child) {
         return Homepage(child: child);
