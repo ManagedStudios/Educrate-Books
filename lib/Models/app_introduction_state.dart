@@ -18,7 +18,7 @@ class AppIntroductionState extends ChangeNotifier {
 
   String? selectedPath;
   int currIntroIndex = 0;
-  String? currError = TextRes.selectPathError;
+  String? currError;
   List<ClassData>? classesToImport;
   bool dbInitialized = false;
 
@@ -32,29 +32,17 @@ class AppIntroductionState extends ChangeNotifier {
   }
 
   Future<void> goToNextPage (BuildContext context) async{
-    if (currError != null) return;
-    if (currIntroIndex == 1 && classesToImport != null) {
-      for (ClassData classData in classesToImport!) {
-        MutableDocument doc = MutableDocument();
-        database.updateDocFromEntity(classData, doc);
-        database.saveDocument(doc);
-      }
-    }
-    if (currIntroIndex < TextRes.introPaths.length-1) {
-      currIntroIndex++;
+    currIntroIndex++;
+    if (currIntroIndex < TextRes.introPaths.length) {
       context.go(TextRes.introPaths[currIntroIndex]);
     } else {
       context.go(StudentView.routeName);
     }
-    if (currIntroIndex == 1 && !dbInitialized) {
-      dbInitialized = true;
-      await database.initializeDatabase();
-    }
-
   }
 
   void setClassData(Map<TextEditingController, List<ClassData>?> controllerToData) {
     bool hasError = false;
+    if (controllerToData.isEmpty) return;
     classesToImport = [];
     for (MapEntry<TextEditingController, List<ClassData>?> entry in controllerToData.entries) {
       if (entry.value == null) {
@@ -70,6 +58,20 @@ class AppIntroductionState extends ChangeNotifier {
       currError = null;
     }
     notifyListeners();
+  }
+
+  Future<void> saveClasses() async{
+    if (classesToImport == null) {
+      currError = TextRes.correctClassData;
+      notifyListeners();
+    } else {
+      for (ClassData classData in classesToImport!) {
+          MutableDocument doc = MutableDocument();
+          database.updateDocFromEntity(classData, doc);
+          database.saveDocument(doc);
+      }
+    }
+
   }
 
 

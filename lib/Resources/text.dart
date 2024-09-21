@@ -325,7 +325,7 @@ class TextRes {
 
   static const String dbPath = "dbPath";
 
-  static const List<String> introPaths = ["/selectDbPath", "/addClassData"];
+  static const List<String> introPaths = ["/addClassData"];
 
   static const String selectPathError = "Pfad für die Datenbank auswählen";
 

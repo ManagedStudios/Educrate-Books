@@ -12,8 +12,6 @@ import 'package:buecherteam_2023_desktop/Models/student_detail_state.dart';
 import 'package:buecherteam_2023_desktop/Resources/text.dart';
 import 'package:buecherteam_2023_desktop/Theme/color_scheme.dart';
 import 'package:buecherteam_2023_desktop/Theme/text_theme.dart';
-import 'package:buecherteam_2023_desktop/UI/app_introduction/introduction_scaffold.dart';
-import 'package:buecherteam_2023_desktop/UI/app_introduction/select_db_path.dart';
 import 'package:buecherteam_2023_desktop/UI/book_depot_view.dart';
 import 'package:buecherteam_2023_desktop/UI/book_stack_view.dart';
 import 'package:buecherteam_2023_desktop/UI/student_view.dart';
@@ -22,7 +20,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import 'Data/shared_preferences.dart';
 import 'UI/app_introduction/add_class_data.dart';
 import 'UI/navigation/navigationbar.dart';
 import 'Util/settings/import/io_util.dart';
@@ -65,16 +62,6 @@ void main() async {
 final _router = GoRouter(initialLocation: initialLocation, routes: [
       GoRoute(
           path: TextRes.introPaths[0],
-          pageBuilder: (context, state) => CustomTransitionPage(
-              child: const SelectDbPath(),
-              transitionsBuilder: (context, animation, _, child) {
-                return FadeTransition(
-                    opacity: CurveTween(curve: Curves.easeInCirc)
-                        .animate(animation),
-                    child: child);
-              })),
-      GoRoute(
-          path: TextRes.introPaths[1],
           pageBuilder: (context, state) => CustomTransitionPage(
               child: const AddClassData(),
               transitionsBuilder: (context, animation, _, child) {
