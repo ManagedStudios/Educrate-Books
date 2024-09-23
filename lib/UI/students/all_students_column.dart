@@ -189,11 +189,12 @@ class _AllStudentsColumnState extends State<AllStudentsColumn> {
                                         {}, //dead code
                                     onDeleteStudent: (student) {
                                       clearanceNeeded = true;
-
+                                    StudentListState studentListState =
                                       Provider.of<StudentListState>(
                                               //delete the student
                                               context,
-                                              listen: false)
+                                              listen: false);
+                                    studentListState
                                           .deleteStudent(student);
                                       showRevertStudentDeleteSnackBar(
                                           student, //make action reversible
@@ -202,7 +203,7 @@ class _AllStudentsColumnState extends State<AllStudentsColumn> {
                                           Provider.of<StudentDetailState>(
                                               context,
                                               listen: false),
-                                          context);
+                                          context, studentListState.database);
                                     },
                                     openEditDialog: (student) {
                                       updateStudent(student, context);
