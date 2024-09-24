@@ -68,7 +68,7 @@ class AppIntroductionState extends ChangeNotifier {
       for (ClassData classData in classesToImport!) {
           MutableDocument doc = MutableDocument();
           database.updateDocFromEntity(classData, doc);
-          database.saveDocument(doc);
+          await database.saveDocument(doc);
       }
     }
 

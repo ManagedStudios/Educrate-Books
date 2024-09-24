@@ -1,8 +1,6 @@
 import 'dart:async';
-import 'dart:io';
 import 'package:buecherteam_2023_desktop/Resources/text.dart';
 import 'package:cbl/cbl.dart';
-import 'package:path_provider/path_provider.dart';
 
 class DB {
   static final DB _instance = DB._internal();
@@ -56,7 +54,7 @@ class DB {
     await _database.createIndex(
         TextRes.studentsOfBookIdIndex, studentsOfBookIdIndex);
 
-    //await startReplication();
+    await startReplication();
   }
 
   Future<void> saveDocument(MutableDocument document) async {
@@ -163,11 +161,11 @@ class DB {
     final replicator = await Replicator.create(ReplicatorConfiguration(
       database: _database,
       target: UrlEndpoint(Uri.parse(
-          'ws://localhost:4984/buecherteam/')), //The URI your reverse proxy server or your sync gateway is located - ws is websocket
+          'wss://lfg.dibbomrinmoysaha.engineer/buecherteam/')), //The URI your reverse proxy server or your sync gateway is located - ws is websocket
       continuous: true,
       replicatorType: ReplicatorType.pushAndPull,
       authenticator:
-          BasicAuthenticator(username: "dibbo", password: "dibboMrinmoy"),
+          BasicAuthenticator(username: "dibbo", password: "LFGDibbo-MriNm0Y!"),
     ));
 
     await replicator.start();
