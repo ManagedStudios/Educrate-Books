@@ -1,4 +1,6 @@
 
+import 'package:buecherteam_2023_desktop/Data/class_data.dart';
+
 import '../../Data/book.dart';
 import '../../Data/bookLite.dart';
 import '../../Data/buildQuery.dart';
@@ -40,4 +42,14 @@ Future<List<BookLite>?> getBooksFromTrainingDirectionsUtil(
       .map((res) => database.toEntity(Book.fromJson, res).toBookLite())
       .toList();
   return books;
+}
+
+Future<List<ClassData>?> getAllClasses(DB database) async{
+  final query = BuildQuery.getAllClassesQuery();
+  final classesDocs = await database.getDocs(query);
+  List<ClassData> classes = await classesDocs
+      .asStream()
+      .map((res) => database.toEntity(ClassData.fromJson, res))
+      .toList();
+  return classes;
 }
