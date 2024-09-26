@@ -53,3 +53,4 @@ Future<List<ClassData>?> getAllClasses(DB database) async{
       .toList();
   return classes;
 }
+

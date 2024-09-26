@@ -21,6 +21,7 @@ import '../../Data/settings/student_excel_mapper_attributes.dart';
 
 import '../../Util/database/update.dart';
 import '../../Util/settings/import/import_add_books.dart';
+import '../../Util/settings/import/import_add_missing_classes.dart';
 import '../../Util/settings/import/import_errors_util.dart';
 import '../../Util/settings/import/students_from_excel.dart';
 
@@ -143,7 +144,8 @@ class ImportState extends ChangeNotifier {
 
     uniqueTrainingDirections = getUniqueTrainingDirectionsOf(sheet, currStudentAttributeToHeaders);
     uniqueClasses = getUniqueClassesOf(sheet, currStudentAttributeToHeaders);
-    //TODO update class data in database
+    List<ClassData>? availableClasses = await getAllClasses(database);
+    await addMissingClasses(uniqueClasses, availableClasses, database);
     await getAndStructureTrainingDirections();
 
     if (excelFormatErrors != null) {
@@ -245,9 +247,9 @@ class ImportState extends ChangeNotifier {
       studentFirstLastNameExistingStudents = {};
       for (Student student in existingStudents) {
         studentFirstLastNameExistingStudents["${student.firstName}${student.lastName}"] = student.books;
-
       }
     }
+
     //1. build a List of Student objects without their books
     List<MutableDocument> studentsToBeImported = getStudentsFromExcel(excelFile!,
         currTrainingDirectionMap,
@@ -305,6 +307,8 @@ class ImportState extends ChangeNotifier {
   }
 
 }
+
+
 
 
 
