@@ -65,11 +65,13 @@ class AppIntroductionState extends ChangeNotifier {
       currError = TextRes.correctClassData;
       notifyListeners();
     } else {
+      List<MutableDocument> docs = [];
       for (ClassData classData in classesToImport!) {
           MutableDocument doc = MutableDocument();
           database.updateDocFromEntity(classData, doc);
-          await database.saveDocument(doc);
+          docs.add(doc);
       }
+      await database.saveDocuments(docs);
     }
 
   }
