@@ -7,13 +7,15 @@ Books are stored in a dictionary of the student and can then be easily transform
 import '../Resources/text.dart';
 
 class BookLite implements Comparable {
-  BookLite(this._bookId, this.name, this.subject, this.classLevel);
+  BookLite(this._bookId, this.name, this.subject, this.classLevel,
+      {this.satzNummer});
 
   final String
       _bookId; //bookId is retrieved from the book-class collection saved in db
   final String name;
   final String subject;
   final int classLevel;
+  final int? satzNummer; //indicates how often one student owns one book of the same type
 
   String get bookId => _bookId;
 
@@ -29,6 +31,13 @@ class BookLite implements Comparable {
     }
 
     try {
+      int? satz;
+      if (data[TextRes.bookSatzNummerJson] != null) {
+        satz = data[TextRes.bookSatzNummerJson] is int
+            ? data[TextRes.bookSatzNummerJson] as int
+            : int.parse(data[
+              TextRes.bookSatzNummerJson]);
+      }
       result = BookLite(
           data[TextRes.bookIdJson] as String,
           data[TextRes.bookNameJson] as String,
@@ -36,7 +45,8 @@ class BookLite implements Comparable {
           data[TextRes.studentClassLevelJson] is int
               ? data[TextRes.studentClassLevelJson] as int
               : int.parse(data[
-                  TextRes.studentClassLevelJson])); //handle stringified ints
+                  TextRes.studentClassLevelJson]),//handle stringified ints
+          satzNummer: satz);
     } on TypeError catch (e) {
       throw Exception(e.toString()); //handle wrong types
     }
@@ -50,6 +60,9 @@ class BookLite implements Comparable {
       TextRes.bookSubjectJson: subject,
       TextRes.studentClassLevelJson: classLevel
     };
+    if (satzNummer != null) {
+      data[TextRes.bookSatzNummerJson] = satzNummer!;
+    }
     return data;
   }
 

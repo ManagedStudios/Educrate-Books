@@ -117,6 +117,7 @@ class Book implements LfgChip, BookLite, SelectableItem {
     );
   }
 
+  @override
   Map<String, Object?> toJson() {
     final data = {
       TextRes.idJson: id,
@@ -212,4 +213,8 @@ class Book implements LfgChip, BookLite, SelectableItem {
   bool isDeletable() {
     return true;
   }
+
+  @override
+  // TODO: implement satzNummer
+  int? get satzNummer => throw UnsupportedError("Satz Nummer not supported for book!");
 }

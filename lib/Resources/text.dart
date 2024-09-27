@@ -28,6 +28,7 @@ class TextRes {
   static const String bookPriceJson = 'bookPrice';
   static const String bookAdmissionNumberJson = 'admissionNumber';
   static const String bookFollowingBookJson = 'followingBook';
+  static const String bookSatzNummerJson = 'bookSatzNummer';
 
 
   static const String studentSearchHint =
@@ -332,6 +333,8 @@ class TextRes {
   static const String comma = ",";
 
   static const String correctClassData = "Klassen korrigieren!";
+
+
 
 
 

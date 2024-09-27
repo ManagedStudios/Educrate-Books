@@ -1,4 +1,7 @@
 
+
+
+
 import 'package:buecherteam_2023_desktop/Data/bookLite.dart';
 import 'package:buecherteam_2023_desktop/Resources/text.dart';
 import 'package:buecherteam_2023_desktop/Util/comparison.dart';
@@ -11,6 +14,7 @@ class MockBookLite extends Mock implements BookLite {}
 void main () {
   late BookLite book1;
   late BookLite book2;
+  late BookLite bookWithSatz;
   
   late Object validJson1;
   late Object missingIdJson;
@@ -20,6 +24,7 @@ void main () {
   late Object wrongTypeName;
   late Object StringClassLevelType;
   late Object validJson2;
+  late Object validBookWithSatzJson;
 
   setUpAll(() async{
     await CouchbaseLiteDart.init(edition: Edition.community);
@@ -28,6 +33,7 @@ void main () {
   setUp(() async{
       book1 = BookLite("1234-bookLite", "Green Line New 5", "Englisch", 10);
       book2 = BookLite("-H7oR-QBBOkFWAmRhvZUbYZ", "Lambacher Schweizer", "Mathe", 9);
+      bookWithSatz = BookLite("21863492846", "Campus", "Latein", 8, satzNummer: 2);
       validJson1 = {TextRes.bookIdJson: book1.bookId, TextRes.bookNameJson: book1.name, TextRes.bookSubjectJson: book1.subject, TextRes.studentClassLevelJson: book1.classLevel};
       missingIdJson = {TextRes.bookNameJson: book1.name, TextRes.bookSubjectJson: book1.subject, TextRes.studentClassLevelJson: book1.classLevel};
       emptyJson = {};
@@ -36,13 +42,22 @@ void main () {
       wrongTypeName = {TextRes.bookIdJson: book1.bookId, TextRes.bookNameJson: 22, TextRes.bookSubjectJson: book1.subject, TextRes.studentClassLevelJson: book1.classLevel};
       StringClassLevelType = {TextRes.bookIdJson: book1.bookId, TextRes.bookNameJson: book1.name, TextRes.bookSubjectJson: book1.subject, TextRes.studentClassLevelJson: "${book1.classLevel}"};
       validJson2 = {TextRes.bookIdJson: book2.bookId, TextRes.bookSubjectJson: book2.subject, TextRes.bookNameJson: book2.name, TextRes.studentClassLevelJson: book2.classLevel};
+      validBookWithSatzJson = {TextRes.bookIdJson: bookWithSatz.bookId, TextRes.bookSubjectJson: bookWithSatz.subject, TextRes.bookNameJson: bookWithSatz.name, TextRes.studentClassLevelJson: bookWithSatz.classLevel, TextRes.bookSatzNummerJson: bookWithSatz.satzNummer};
   });
 
+  //TODO update the tests to really check if all attributes are same (.equals only compares the id)
   group("Test the JSON serialization", () {
     test("test valid JSON to Book object", () {
       final BookLite bookObject = BookLite.fromJson(validJson1);
       expect(bookObject.equals(book1), true);
     });
+
+    test("Test valid JSON with Satz number to Book object", () {
+      final BookLite bookObject = BookLite.fromJson(validBookWithSatzJson);
+      expect(bookObject.equals(bookWithSatz), true);
+      expect(bookObject.satzNummer, bookWithSatz.satzNummer);
+    });
+
 
     test("is able to detect incomplete JSON - missing id", () {
         expect(() => BookLite.fromJson(missingIdJson), throwsA((exception) => exception.toString()=="Exception: Incomplete JSON"));
@@ -89,6 +104,18 @@ void main () {
       final json = book2.toJson();
       final expectedJson = validJson2 as Map<String, Object?>;
       expect(areMapsEqual(json, expectedJson), true);
+    });
+
+    test("Test book with Satz to Json", () {
+      final json = bookWithSatz.toJson();
+      final expectedJson = validBookWithSatzJson as Map<String, Object?>;
+      expect(areMapsEqual(json, expectedJson), true);
+    });
+
+    test("Satz nummer is not part of json if no satz nummer given", () {
+      final json = book1.toJson();
+      final expectedJson = validJson1 as Map<String, Object?>;
+      expect(json.entries.length, expectedJson.entries.length);
     });
   });
 
