@@ -15,7 +15,7 @@ class BookLite implements Comparable {
   final String name;
   final String subject;
   final int classLevel;
-  final int? satzNummer; //indicates how often one student owns one book of the same type
+  int? satzNummer; //indicates how often one student owns one book of the same type
 
   String get bookId => _bookId;
 
@@ -82,10 +82,34 @@ class BookLite implements Comparable {
 
   @override
   int compareTo(other) {
-    if (subject == other.subject && bookId != other.bookId) {
+    // First, compare by classLevel
+    int classLevelComparison = classLevel.compareTo(other.classLevel);
+    if (classLevelComparison != 0) {
+      return classLevelComparison;
+    }
+
+    // If classLevels are equal, compare by subject
+    int subjectComparison = subject.compareTo(other.subject);
+    if (subjectComparison != 0) {
+      return subjectComparison;
+    }
+
+    // If subjects are equal, compare by name
+    int nameComparison = name.compareTo(other.name);
+    if (nameComparison != 0) {
+      return nameComparison;
+    }
+
+    // If names are also equal, compare by satzNummer
+    // Treat null as lower than any integer
+    if (satzNummer == null && other.satzNummer == null) {
+      return 0;
+    } else if (satzNummer == null) {
+      return -1;
+    } else if (other.satzNummer == null) {
       return 1;
     } else {
-      return subject.compareTo(other.subject);
+      return satzNummer!.compareTo(other.satzNummer!);
     }
   }
 }

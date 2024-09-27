@@ -75,7 +75,7 @@ class StudentDetailColumn extends StatelessWidget {
 
   List<BookLite> getBooks(List<Student> currStudents) {
     List<BookLite> result = [];
-    HashMap<String, BookLite> booksByName =
+    HashMap<String, BookLite> booksByIdAndSatz =
         HashMap(); //track the amount of books that should be added to the result
 
     /*
@@ -92,12 +92,12 @@ class StudentDetailColumn extends StatelessWidget {
     //create a map that has for every bookName of all books of the students one entry
     for (Student student in currStudents) {
       for (BookLite bookLite in student.books) {
-        booksByName[bookLite.name] = bookLite;
+        booksByIdAndSatz["${bookLite.bookId}${bookLite.satzNummer}"] = bookLite;
       }
     }
 
     //add all the bookLite values of the names to the result
-    result.addAll(booksByName.values.toList());
+    result.addAll(booksByIdAndSatz.values.toList());
 
     result.sort();
 

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:buecherteam_2023_desktop/Data/selectableItem.dart';
 
 import '../Resources/text.dart';
@@ -77,21 +79,15 @@ class Student implements SelectableItem {
     int uniqueBooks = books.toSet().length;
     for (BookLite book in this.books) {
       //count already owned book types
-      countMap[book] = (countMap[book] ?? 0) + 1;
+      countMap[book] = max((countMap[book] ?? 1), book.satzNummer ?? 1);
     }
     for (BookLite book in books) {
+      book.satzNummer = null; //ensure satzNummer is null by default
       if (countMap[book] != null) {
-        //book to be added already owned by student -> Update name of book
-        final updatedBook = BookLite(
-            book.bookId,
-            "${book.name} ${countMap[book]! + 1}${TextRes.bookSet}",
-            book.subject,
-            book.classLevel);
-        this.books.add(updatedBook);
-      } else {
-        //if book is newly added, just go ahead
-        this.books.add(book);
+        //book to be added already owned by student -> Update satzNummer
+        book.satzNummer = countMap[book]! + 1;
       }
+      this.books.add(book);
       //update the map along the adds if books of the same type are added multiple times
       if (uniqueBooks != books.length) countMap[book] = (countMap[book] ?? 0) + 1;
     }
@@ -118,39 +114,55 @@ class Student implements SelectableItem {
   multiple students)
    */
   void removeBooks(List<BookLite> books, Function(BookLite) onRemoveBook) {
-    Map<String, int> highestNumberBooks = {};
-    List<String> bookIds = books.map((book) => book.bookId).toList();
-    Map<String, int> bookIdByAmount = {};
-    //create a map bookId and the corresponding amount
-    for (String id in bookIds) {
-      bookIdByAmount[id] = (bookIdByAmount[id] ?? 0) + 1;
-    }
-    //create a map of bookIds that are matched with the highest "satz" number the student owns
-    for (BookLite book in this.books) {
-      if (bookIds.contains(book.bookId)) {
-        final number = extractNumberBeforeDot(book.name);
-        if (!highestNumberBooks.containsKey(book.bookId) ||
-            number > highestNumberBooks[book.bookId]!) {
-          highestNumberBooks[book.bookId] = number;
-        }
-      }
-    }
 
-    //remove the books
+    Map<BookLite, int> bookOfStudentCountMap = getHighestBookSatzMap(this.books);
+    Map<BookLite, int> booksToDeleteLowestSatz = getLowestBookSatzMap(books);
+    Map<BookLite, int> booksToDeleteAmountMap = {};
+    for (BookLite bookLite in books) {
+      booksToDeleteAmountMap[bookLite] = (booksToDeleteAmountMap[bookLite] ?? 0) + 1;
+    }
+    /*
+    remove books beginning from highest satz nummer
+    check if book should be deleted using .contains and
+    limit range of satz nummers that can be deleted
+     For example: student has 4 Books of type A. Book of type A should be deleted twice.
+     Highest Satz nummer of book type A is 4. So Books of Satz 3 and 4 should be deleted.
+     Therefore the counts of books are calculated for the the books to delete and the owned ones
+     */
     this.books.removeWhere((book) {
-      if (bookIds.contains(book
-              .bookId) //check first if bookId and "satz"-number is in correct range
-          &&
-          extractNumberBeforeDot(book.name) >
-              highestNumberBooks[book.bookId]! - bookIdByAmount[book.bookId]! &&
-          extractNumberBeforeDot(book.name) <=
-              highestNumberBooks[book.bookId]!) {
+
+      if (books.contains(book) &&
+          (book.satzNummer??1) >
+          bookOfStudentCountMap[book]! - booksToDeleteAmountMap[book]! &&
+          (book.satzNummer??1) <= bookOfStudentCountMap[book]! &&
+          (book.satzNummer??1) >= booksToDeleteLowestSatz[book]!
+      ) {
         onRemoveBook(book);
         return true;
       } else {
         return false;
       }
     });
+  }
+
+  Map<BookLite, int> getHighestBookSatzMap (List<BookLite> books) {
+    Map<BookLite, int> countMap = {};
+    for (BookLite book in books) {
+      //count already owned book types
+      countMap[book] = max((countMap[book] ?? 1), book.satzNummer ?? 1);
+    }
+    return countMap;
+  }
+  Map<BookLite, int> getLowestBookSatzMap (List<BookLite> books) {
+    Map<BookLite, int> countMap = {};
+    for (BookLite book in books) {
+      if (!countMap.containsKey(book)) {
+        countMap[book] = book.satzNummer??1;
+      } else {
+        countMap[book] = min((countMap[book]!), book.satzNummer ?? 1);
+      }
+    }
+    return countMap;
   }
 
   @override

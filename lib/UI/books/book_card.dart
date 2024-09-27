@@ -76,11 +76,21 @@ class _BookCardState extends State<BookCard> {
                         style: Theme.of(context).textTheme.bodyLarge),
                   ),
                   Flexible(
-                    //names can be very long - show ... when too long
-                    fit: FlexFit.loose,
-                    child: Text(widget.bookLite.name,
-                        style: Theme.of(context).textTheme.labelSmall,
-                        overflow: TextOverflow.ellipsis),
+                    child: Row(
+                      children: [
+                        Flexible(
+                          child: Text(widget.bookLite.name,
+                              style: Theme.of(context).textTheme.labelSmall,
+                              overflow: TextOverflow.ellipsis),
+                        ),
+                        const SizedBox(width: Dimensions.spaceSmall,),
+                        if (widget.bookLite.satzNummer != null)
+                          Text("${widget.bookLite.satzNummer}. Satz",
+                            style: Theme.of(context).textTheme.labelSmall
+                                ?.copyWith(fontStyle: FontStyle.italic),
+                          )
+                      ],
+                    ),
                   ),
                 ],
               ),

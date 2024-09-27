@@ -216,5 +216,11 @@ class Book implements LfgChip, BookLite, SelectableItem {
 
   @override
   // TODO: implement satzNummer
-  int? get satzNummer => throw UnsupportedError("Satz Nummer not supported for book!");
+  int? get satzNummer => null;
+
+  @override
+  set satzNummer(int? _satzNummer) {
+
+  }
+
 }
