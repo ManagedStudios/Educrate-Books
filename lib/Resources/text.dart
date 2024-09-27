@@ -334,6 +334,10 @@ class TextRes {
 
   static const String correctClassData = "Klassen korrigieren!";
 
+  static const String dot = ".";
+
+  static const String satz = "Satz";
+
 
 
 

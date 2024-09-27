@@ -2,6 +2,8 @@ import 'package:buecherteam_2023_desktop/Data/bookLite.dart';
 import 'package:buecherteam_2023_desktop/Resources/dimensions.dart';
 import 'package:flutter/material.dart';
 
+import '../../Resources/text.dart';
+
 class BookCard extends StatefulWidget {
   const BookCard(
       {super.key,
@@ -85,7 +87,7 @@ class _BookCardState extends State<BookCard> {
                         ),
                         const SizedBox(width: Dimensions.spaceSmall,),
                         if (widget.bookLite.satzNummer != null)
-                          Text("${widget.bookLite.satzNummer}. Satz",
+                          Text("${widget.bookLite.satzNummer}${TextRes.dot} ${TextRes.satz}",
                             style: Theme.of(context).textTheme.labelSmall
                                 ?.copyWith(fontStyle: FontStyle.italic),
                           )
