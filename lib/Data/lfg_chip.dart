@@ -1,5 +1,9 @@
+import 'package:flutter/material.dart';
+
 abstract class LfgChip implements Comparable {
   String getLabelText();
+
+  Color? getChipColor();
 
   @override
   bool operator ==(Object other) {

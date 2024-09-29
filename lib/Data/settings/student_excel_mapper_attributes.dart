@@ -1,4 +1,5 @@
 import 'package:buecherteam_2023_desktop/Data/lfg_chip.dart';
+import 'package:flutter/material.dart';
 
 import '../../Resources/text.dart';
 
@@ -20,6 +21,10 @@ enum StudentAttributes implements LfgChip {
   @override
   String getLabelText() {
     return value;
+  }
+  @override
+  Color? getChipColor() {
+    return null;
   }
 
   @override

@@ -59,8 +59,9 @@ class ChipWrap<T extends LfgChip> extends StatelessWidget {
                 chipIndex++) //render all chips
               ChipTag<T>(
                   chipContent: chips[chipIndex],
-                  color: color ??
-                      ChipColors
+                  color: chips[chipIndex].getChipColor()
+                        ?? color
+                        ?? ChipColors
                           .chipColors[chipIndex % ChipColors.chipColors.length],
                   deletable: false,
                   onDelete: (_) {})

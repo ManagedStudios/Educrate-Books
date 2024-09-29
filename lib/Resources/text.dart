@@ -30,6 +30,10 @@ class TextRes {
   static const String bookFollowingBookJson = 'followingBook';
   static const String bookSatzNummerJson = 'bookSatzNummer';
 
+  static const String tagDataLabelJson = 'tagDataLabel';
+  static const String tagDataColorJson = 'tagDataColorInt';
+  static const String tagDataTypeJson = 'tagData';
+
 
   static const String studentSearchHint =
       'Suche nach Schülernamen, Klassen und Ausbildungen';
@@ -337,6 +341,12 @@ class TextRes {
   static const String dot = ".";
 
   static const String satz = "Satz";
+
+
+
+
+
+
 
 
 

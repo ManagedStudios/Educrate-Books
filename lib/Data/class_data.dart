@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:buecherteam_2023_desktop/Data/lfg_chip.dart';
 import 'package:buecherteam_2023_desktop/Resources/text.dart';
 
@@ -49,4 +51,9 @@ class ClassData implements LfgChip {
 
   @override
   int get hashCode => classLevel.hashCode + classChar.hashCode;
+
+  @override
+  Color? getChipColor() {
+    return null;
+  }
 }

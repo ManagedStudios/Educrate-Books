@@ -106,7 +106,7 @@ class _ActionDropdownState<T extends LfgChip> extends State<ActionDropdown<T>> {
               });
             },
           ),
-          ActionDropdownAvailableContainer(
+          ActionDropdownAvailableContainer<T>(
             availableChips: filteredAvailableChips,
             onAddChip: widget.onAddChip,
             width: widget.width,

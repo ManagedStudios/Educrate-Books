@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:buecherteam_2023_desktop/Data/lfg_chip.dart';
 import 'package:buecherteam_2023_desktop/Resources/text.dart';
 
@@ -41,4 +43,9 @@ class TrainingDirectionsData implements LfgChip {
 
   @override
   int get hashCode => label.hashCode;
+
+  @override
+  Color? getChipColor() {
+    return null;
+  }
 }

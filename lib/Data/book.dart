@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:buecherteam_2023_desktop/Data/bookLite.dart';
 import 'package:buecherteam_2023_desktop/Data/lfg_chip.dart';
 import 'package:buecherteam_2023_desktop/Data/selectableItem.dart';
@@ -221,6 +223,11 @@ class Book implements LfgChip, BookLite, SelectableItem {
   @override
   set satzNummer(int? _satzNummer) {
 
+  }
+
+  @override
+  Color? getChipColor() {
+    return null;
   }
 
 }
