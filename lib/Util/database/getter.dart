@@ -6,6 +6,7 @@ import '../../Data/bookLite.dart';
 import '../../Data/buildQuery.dart';
 import '../../Data/db.dart';
 import '../../Data/student.dart';
+import '../../Data/tag_data.dart';
 import '../../Data/training_directions_data.dart';
 
 Future<List<TrainingDirectionsData>> getAllTrainingDirectionsUtil (DB database) async {
@@ -52,5 +53,30 @@ Future<List<ClassData>?> getAllClasses(DB database) async{
       .map((res) => database.toEntity(ClassData.fromJson, res))
       .toList();
   return classes;
+}
+
+
+Future<List<TagData>> getAllTagDataUtil(DB database) async{
+  final query = BuildQuery.getAllTagsQuery();
+  final tagsDocs = await database.getDocs(query);
+  List<TagData> tags = await tagsDocs
+      .asStream()
+      .map((res) => database.toEntity(TagData.fromJson, res))
+      .toList();
+  return tags;
+}
+
+Future<List<TagData>> getTagsOfUtil(DB database, List<String> tags) async{
+  final query = BuildQuery.getTagsOfQuery(tags);
+  if (tags.isEmpty) return [];
+
+  final tagsDocs = await database.getDocs(query);
+  List<TagData> tagObjects = await tagsDocs
+      .asStream()
+      .map((res) => database.toEntity(TagData.fromJson, res))
+      .toList();
+
+  return tagObjects;
+
 }
 

@@ -25,7 +25,7 @@ class Dropdown<T extends LfgChip> extends StatefulWidget {
       required this.multiSelect,
       required this.width,
       this.hintText,
-      required this.onCloseOverlay});
+      required this.onCloseOverlay, this.onCreateChip, this.offsetHeight, this.onFocusChanged});
 
   final List<T> selectedChips;
   final List<T> availableChips;
@@ -33,9 +33,12 @@ class Dropdown<T extends LfgChip> extends StatefulWidget {
   final Function(T chip) onDeleteChip;
   final Function(List<T> selectedChips)
       onCloseOverlay; //is not called on single Select!
+  final Function(T chip)? onCreateChip;
   final bool multiSelect;
   final double width;
+  final double? offsetHeight;
   final String? hintText;
+  final Function(bool focused)? onFocusChanged;
 
   @override
   State<Dropdown<T>> createState() => _DropdownState<T>();
@@ -67,6 +70,9 @@ class _DropdownState<T extends LfgChip> extends State<Dropdown<T>> {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.availableChips != widget.availableChips) {
       availableChips = widget.availableChips.toList();
+      if (oldWidget.selectedChips != widget.selectedChips) {
+        selectedChips = widget.selectedChips.toList();
+      }
       for (var selected in selectedChips) {
         availableChips
             .removeWhere((it) => it.getLabelText() == selected.getLabelText());
@@ -90,18 +96,18 @@ class _DropdownState<T extends LfgChip> extends State<Dropdown<T>> {
           key: wrapChipsField,
           chips: selectedChips,
           onClickChipRow: (_) {
-            showOverlay();
+            showOverlay(widget.offsetHeight);
           },
           width: widget.width),
     );
   }
 
-  void showOverlay() {
+  void showOverlay(double? offsetHeight) {
     final overlay = Overlay.of(context);
     RenderBox renderBox =
         wrapChipsField.currentContext?.findRenderObject() as RenderBox;
     final offset = renderBox
-        .localToGlobal(const Offset(0, 0)); //retrieve position of textField
+        .localToGlobal(Offset(0, offsetHeight??0)); //retrieve position of textField
     overlayEntry ??
         {
           //if overlayEntry is not initialized create a new one (case when you open the overlay)
@@ -122,7 +128,6 @@ class _DropdownState<T extends LfgChip> extends State<Dropdown<T>> {
           child: TapRegion(
             onTapOutside: (_) {
               closeOverlay();
-
             },
             child: ActionDropdown<T>(
                 width: widget.width,
@@ -136,7 +141,16 @@ class _DropdownState<T extends LfgChip> extends State<Dropdown<T>> {
                 onAddChip: (T chip) {
                   widget.onAddChip(chip);
                   addChip(chip);
-                }),
+                },
+              onCreateChip: widget.onCreateChip == null
+                            ? null
+                            : (chip) {
+                  widget.onCreateChip!(chip);
+                  widget.onAddChip(chip);
+                  addChip(chip);
+              },
+              onFocusChanged: widget.onFocusChanged,
+            ),
           )),
     );
   }
@@ -168,8 +182,10 @@ class _DropdownState<T extends LfgChip> extends State<Dropdown<T>> {
     if (widget.multiSelect) {
       setState(() {
         selectedChips.add(chip);
+        print(availableChips.map((e) => e.getLabelText()));
         availableChips.removeWhere(
             (element) => element.getLabelText() == chip.getLabelText());
+        print(availableChips.map((e) => e.getLabelText()));
       });
     } else {
       //single select

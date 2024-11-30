@@ -80,9 +80,13 @@ void main () {
         MockStudent([book1, book2, book3])
       ];
 
+      print(students[0].books.map((e) => e.satzNummer));
+
 
 
       final expectedResult = [book1, book1, book2, book3];
+      //print(widget.getBooks(students).map((e) => e.name));
+      //print(expectedResult.map((e) => e.name));
 
       expect(areListsEqualIgnoringOrder(widget.getBooks(students), expectedResult), isTrue);
     });
@@ -136,8 +140,9 @@ void main () {
       await tester.pumpWidget(createWidgetUnderTest());
 
       final widget = tester.widget<StudentDetailColumn>(find.byType(StudentDetailColumn));
+      final book1SecondSatz = BookLite(book1.bookId, book1.name, book1.subject, book1.classLevel, satzNummer: 2);
       final students = [
-        MockStudent([book1, book2, book1, book3, book3], booksAlreadyOwned: [book1, book3, book1]),
+        MockStudent([book1, book2, book1, book3, book3], booksAlreadyOwned: [book1, book3, book1SecondSatz]),
         MockStudent([book1, book1, book1], booksAlreadyOwned: [book2]),
         MockStudent([book1, book2, book3])
       ];

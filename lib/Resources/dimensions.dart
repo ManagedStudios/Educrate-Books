@@ -78,4 +78,6 @@ class Dimensions {
   static const double thickLineWidth = 1.5;
 
   static const int bookAvAmountThreshold = 15;
+
+  static double navBarHeight = 56;
 }

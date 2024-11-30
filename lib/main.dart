@@ -22,6 +22,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import 'Data/class_data.dart';
+import 'Resources/dimensions.dart';
 import 'UI/app_introduction/add_class_data.dart';
 import 'UI/navigation/navigationbar.dart';
 
@@ -135,9 +136,9 @@ class Homepage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       //TODO add background color manually and delete background in color scheme
-        appBar: const PreferredSize(
-          preferredSize: Size(364, 56),
-          child: LfgNavigationBar(),
+        appBar: PreferredSize(
+          preferredSize: Size(364, Dimensions.navBarHeight),
+          child: const LfgNavigationBar(),
         ),
         body: child);
   }

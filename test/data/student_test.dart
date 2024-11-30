@@ -248,7 +248,10 @@ void main () {
       studentWithoutBooks.addBooks([book1]);
       studentWithoutBooks.addBooks([book1]);
       expect(studentWithoutBooks.books.map((e) => e.name), [
-        book1.name, "${book1.name} 2. Satz"
+        book1.name, book1.name
+      ]);
+      expect(studentWithoutBooks.books.map((e) => e.satzNummer), [
+        null, 2
       ]);
     });
 
@@ -256,7 +259,10 @@ void main () {
       studentWithoutBooks.addBooks([book1, book2]);
       studentWithoutBooks.addBooks([book1, book3]);
       expect(studentWithoutBooks.books.map((e) => e.name), [
-        book1.name, book2.name, "${book1.name} 2. Satz", book3.name
+        book1.name, book2.name, book1.name, book3.name
+      ]);
+      expect(studentWithoutBooks.books.map((e) => e.satzNummer), [
+        null, null, 2, null
       ]);
     });
 
@@ -284,7 +290,9 @@ void main () {
       studentWithoutBooks.addBooks([book1, book2]);
       studentWithoutBooks.removeBooks([book1], (book) => mockFunction.onRemoveBook(book));
       expect(studentWithoutBooks.books.map((e) => e.name),
-          [book1.name, book2.name, "${book1.name} 2. Satz", "${book2.name} 2. Satz"]);
+          [book1.name, book2.name, book1.name, book2.name]);
+      expect(studentWithoutBooks.books.map((e) => e.satzNummer),
+          [null, null, 2, 2]);
     });
 
     test("Test removing multiple books when multiple of the same and different type are available", () {
@@ -293,7 +301,9 @@ void main () {
       studentWithoutBooks.addBooks([book1, book2]);
       studentWithoutBooks.removeBooks([book1, book2], (book) => mockFunction.onRemoveBook(book));
       expect(studentWithoutBooks.books.map((e) => e.name),
-          [book1.name, book2.name, "${book1.name} 2. Satz",]);
+          [book1.name, book2.name, book1.name]);
+      expect(studentWithoutBooks.books.map((e) => e.satzNummer),
+          [null, null, 2]);
       verify(() => mockFunction.onRemoveBook(book1)).called(1);
       verify(() => mockFunction.onRemoveBook(book2)).called(1);
     });
@@ -303,10 +313,12 @@ void main () {
       studentWithoutBooks.addBooks([book1]);
       studentWithoutBooks.addBooks([book1, book2]);
       studentWithoutBooks.removeBooks([
-        BookLite(book1.bookId, "${book1.name} 2. Satz", book1.subject, book1.classLevel),
+        BookLite(book1.bookId, book1.name, book1.subject, book1.classLevel, satzNummer: 2),
         book2], (book) => mockFunction.onRemoveBook(book));
       expect(studentWithoutBooks.books.map((e) => e.name),
-          [book1.name, book2.name, "${book1.name} 2. Satz",]);
+          [book1.name, book2.name, book1.name]);
+      expect(studentWithoutBooks.books.map((e) => e.satzNummer),
+          [null, null, 2]);
       verify(() => mockFunction.onRemoveBook(book1)).called(1);
       verify(() => mockFunction.onRemoveBook(book2)).called(1);
     });
@@ -316,10 +328,12 @@ void main () {
       studentWithoutBooks.addBooks([book1]);
       studentWithoutBooks.addBooks([book1, book2]);
       studentWithoutBooks.removeBooks([
-        BookLite(book1.bookId, "${book1.name} 2. Satz", book1.subject, book1.classLevel),
+        BookLite(book1.bookId, book1.name, book1.subject, book1.classLevel, satzNummer: 2),
         book1], (book) => mockFunction.onRemoveBook(book));
       expect(studentWithoutBooks.books.map((e) => e.name),
-          [book1.name, book2.name, "${book2.name} 2. Satz",]);
+          [book1.name, book2.name, book2.name]);
+      expect(studentWithoutBooks.books.map((e) => e.satzNummer),
+          [null, null, 2]);
       verify(() => mockFunction.onRemoveBook(book1)).called(2);
     });
 
@@ -328,10 +342,12 @@ void main () {
       studentWithoutBooks.addBooks([book1]);
       studentWithoutBooks.addBooks([book1, book2]);
       studentWithoutBooks.removeBooks([
-        BookLite(book1.bookId, "${book1.name} 2. Satz", book1.subject, book1.classLevel),
+        BookLite(book1.bookId, book1.name, book1.subject, book1.classLevel, satzNummer: 2),
         book1, book2], (book) => mockFunction.onRemoveBook(book));
       expect(studentWithoutBooks.books.map((e) => e.name),
           [book1.name, book2.name]);
+      expect(studentWithoutBooks.books.map((e) => e.satzNummer),
+          [null, null]);
       verify(() => mockFunction.onRemoveBook(book1)).called(2);
       verify(() => mockFunction.onRemoveBook(book2)).called(1);
     });
@@ -353,7 +369,7 @@ void main () {
       studentWithoutBooks.addBooks([book1]);
       studentWithoutBooks.addBooks([book1, book2]);
       studentWithoutBooks.removeBooks([
-        BookLite(book1.bookId, "${book1.name} 2. Satz", book1.subject, book1.classLevel),
+        BookLite(book1.bookId, book1.name, book1.subject, book1.classLevel, satzNummer: 2),
         book1, book2, book2, book1], (book) => mockFunction.onRemoveBook(book));
       expect(studentWithoutBooks.books.map((e) => e.name),
           []);
@@ -365,7 +381,7 @@ void main () {
       studentWithoutBooks.addBooks([book1]);
       studentWithoutBooks.addBooks([book1, book2]);
       studentWithoutBooks.removeBooks([
-        BookLite(book1.bookId, "${book1.name} 2. Satz", book1.subject, book1.classLevel),
+        BookLite(book1.bookId, book1.name, book1.subject, book1.classLevel, satzNummer: 2),
         book1], (book) => mockFunction.onRemoveBook(book));
       studentWithoutBooks.removeBooks([book2, book2, book1], (book) => mockFunction.onRemoveBook(book));
       expect(studentWithoutBooks.books.map((e) => e.name),

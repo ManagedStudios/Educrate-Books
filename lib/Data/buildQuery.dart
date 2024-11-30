@@ -191,4 +191,28 @@ class BuildQuery {
 
     return query;
   }
+
+  static String getAllTagsQuery() {
+    String query = """SELECT META().id, ${TextRes.tagDataLabelJson}, 
+    ${TextRes.tagDataColorJson} FROM _
+    WHERE ${TextRes.typeJson}='${TextRes.tagDataTypeJson}' """;
+
+    return query;
+  }
+
+  static String getTagsOfQuery(List<String> tags) {
+    String formattedTags =
+        "[${tags.map((tag) => """'$tag'""").join(", ")}]";
+
+    String whereClause = """AND 
+    ANY tagL IN $formattedTags 
+    SATISFIES ${TextRes.tagDataLabelJson}=tagL END;""";
+
+    String query = """SELECT META().id, ${TextRes.tagDataLabelJson}, 
+    ${TextRes.tagDataColorJson} FROM _
+    WHERE ${TextRes.typeJson}='${TextRes.tagDataTypeJson}' """;
+    query+=whereClause;
+
+    return query;
+  }
 }

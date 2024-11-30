@@ -7,6 +7,7 @@ import 'package:buecherteam_2023_desktop/UI/add_book_student_detail_dialog/add_b
 import 'package:buecherteam_2023_desktop/UI/books/student_detail_book_section.dart';
 import 'package:buecherteam_2023_desktop/UI/keyboard_listener/keyboard_listener.dart';
 import 'package:buecherteam_2023_desktop/UI/student_detail/student_detail_info.dart';
+import 'package:buecherteam_2023_desktop/UI/student_detail/student_detail_tag_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -42,14 +43,18 @@ class StudentDetailColumn extends StatelessWidget {
                       children: [
                         StudentDetailInfo(
                             students: currStudents, onAddWarning: addWarning),
-
-                        /*
-                Here comes the tag dropdown menu
-                 */
-
                         const SizedBox(
                           height: Dimensions.spaceMedium,
                         ),
+
+                        StudentDetailTagDropdown(
+                            tags: getTags(currStudents),
+                            onTagAdded: (tag) => studentDetailState.addTagToStudents(currStudents, tag),
+                            onTagDeleted: (tag) => studentDetailState.removeTagFromStudents(currStudents, tag),
+                            onFocusChanged: onFocusChanged,
+                        ),
+
+
                         Expanded(
                           child: StudentDetailBookSection(
                             pressedKey: pressedKey,
@@ -102,5 +107,17 @@ class StudentDetailColumn extends StatelessWidget {
     result.sort();
 
     return result;
+  }
+
+  List<String> getTags(List<Student> currStudents) {
+
+    Set<String> tags = {};
+
+    for (Student student in currStudents) {
+      tags.addAll(student.tags);
+    }
+
+    return tags.toList();
+
   }
 }

@@ -2,6 +2,7 @@ import 'dart:collection';
 
 import 'package:buecherteam_2023_desktop/Data/book.dart';
 import 'package:buecherteam_2023_desktop/Data/student.dart';
+import 'package:buecherteam_2023_desktop/Data/tag_data.dart';
 import 'package:buecherteam_2023_desktop/Models/book_utils.dart';
 import 'package:cbl/cbl.dart';
 import 'package:flutter/material.dart';
@@ -135,5 +136,27 @@ class StudentDetailState extends ChangeNotifier {
   Future<void> updateBookAmountOnStudentDelete(
       List<Student> selectedStudents) async {
     await updateBookAmountOnStudentsDeletedUtil(selectedStudents, database);
+  }
+
+  Future<void> addTagToStudents(List<Student> currStudents, TagData tag) async{
+      List<MutableDocument> docs = [];
+
+      for (Student student in currStudents) {
+        final studentDoc = (await database.getDoc(student.id))!.toMutable();
+        docs.add(studentDoc);
+        student.tags.add(tag.getLabelText());
+      }
+      await database.changeDocsFromEntities(docs, currStudents);
+  }
+
+  Future<void> removeTagFromStudents(List<Student> currStudents, TagData tag) async{
+    List<MutableDocument> docs = [];
+
+    for (Student student in currStudents) {
+      final studentDoc = (await database.getDoc(student.id))!.toMutable();
+      docs.add(studentDoc);
+      student.tags.remove(tag.getLabelText());
+    }
+    await database.changeDocsFromEntities(docs, currStudents);
   }
 }

@@ -38,7 +38,7 @@ void main () {
         ),
         home: ActionDropdownSelectedWrap(width: width, selectedChips: selectedChipsList,
             onDeleteChip: mockFunctions.onDeleteChip,
-            onFilterTextChange: mockFunctions.onFilterTextChange)
+            onFilterTextChange: mockFunctions.onFilterTextChange, onFocusChanged: (bool focused) {  },)
     );
   }
 

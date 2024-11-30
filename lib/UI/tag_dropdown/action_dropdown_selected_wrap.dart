@@ -20,12 +20,13 @@ class ActionDropdownSelectedWrap<T extends LfgChip> extends StatefulWidget {
       required this.width,
       required this.selectedChips,
       required this.onDeleteChip,
-      required this.onFilterTextChange});
+      required this.onFilterTextChange, required this.onFocusChanged});
 
   final double width;
   final List<T> selectedChips;
   final Function(T chip) onDeleteChip;
   final Function(String text) onFilterTextChange;
+  final Function(bool focused)? onFocusChanged;
 
   @override
   State<ActionDropdownSelectedWrap<T>> createState() =>
@@ -35,10 +36,19 @@ class ActionDropdownSelectedWrap<T extends LfgChip> extends StatefulWidget {
 class _ActionDropdownSelectedWrapState<T extends LfgChip>
     extends State<ActionDropdownSelectedWrap<T>> {
   late TextEditingController controller;
+  FocusNode? focusNode;
   @override
   void initState() {
     super.initState();
     controller = TextEditingController();
+    if (widget.onFocusChanged != null) {
+      focusNode = FocusNode();
+      focusNode!.attach(context);
+      focusNode!.addListener(() {
+        print("focus: ${focusNode!.hasFocus}");
+        widget.onFocusChanged!(focusNode!.hasFocus);
+      });
+    }
   }
 
   @override
@@ -64,8 +74,9 @@ class _ActionDropdownSelectedWrapState<T extends LfgChip>
               ChipTag(
                   key: Key(widget.selectedChips[chipIndex].getLabelText()),
                   chipContent: widget.selectedChips[chipIndex],
-                  color: ChipColors
-                      .chipColors[chipIndex % ChipColors.chipColors.length],
+                  color: widget.selectedChips[chipIndex].getChipColor()
+                      ?? ChipColors
+                          .chipColors[chipIndex % ChipColors.chipColors.length],
                   deletable: true,
                   onDelete: (chip) {
                     widget.onDeleteChip(
@@ -85,6 +96,7 @@ class _ActionDropdownSelectedWrapState<T extends LfgChip>
                     style: Theme.of(context).textTheme.labelSmall,
                     autofocus: true,
                     controller: controller,
+                    focusNode: focusNode,
                     onChanged: (text) {
                       controller.text = text.toUpperCase();
                       widget.onFilterTextChange(text.toUpperCase());

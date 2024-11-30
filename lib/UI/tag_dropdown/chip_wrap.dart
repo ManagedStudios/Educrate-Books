@@ -16,9 +16,10 @@ class ChipWrap<T extends LfgChip> extends StatelessWidget {
       required this.chips,
       required this.onClickChipRow,
       this.color,
-      required this.width});
+      required this.width, this.prefix});
 
   final List<T> chips;
+  final String? prefix;
   final void Function(List<T>) onClickChipRow; //delegate the onClickChipRow
   final Color? color;
   final double width;
@@ -37,6 +38,7 @@ class ChipWrap<T extends LfgChip> extends StatelessWidget {
                     BorderRadius.circular(Dimensions.cornerRadiusSmall))),
             alignment: Alignment.centerLeft),
         child: Wrap(
+          crossAxisAlignment: WrapCrossAlignment.center,
           children: [
             if (chips.isEmpty) ...[
               //when no chips show helper text
@@ -54,6 +56,11 @@ class ChipWrap<T extends LfgChip> extends StatelessWidget {
                 ],
               )
             ],
+            if (prefix != null)
+              Padding(
+                padding: const EdgeInsets.only(left: Dimensions.paddingMedium),
+                child: Text(prefix!, style: Theme.of(context).textTheme.bodySmall,),
+              ),
             for (int chipIndex = 0;
                 chipIndex < (chips.length);
                 chipIndex++) //render all chips

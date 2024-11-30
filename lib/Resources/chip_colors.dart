@@ -22,14 +22,6 @@ class ChipColors {
   static const Color powderBlue = Color(0xFFE2EDF7);
 
   static const List<Color> chipColors = [
-    gray,
-    orange,
-    yellow,
-    green,
-    blue,
-    purple,
-    pink,
-    red,
     mintGreen,
     lavender,
     peach,
@@ -39,6 +31,14 @@ class ChipColors {
     softTeal,
     butterCream,
     babyPink,
-    powderBlue
+    powderBlue,
+    gray,
+    orange,
+    yellow,
+    green,
+    blue,
+    purple,
+    pink,
+    red
   ];
 }

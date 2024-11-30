@@ -1,7 +1,9 @@
+
 import 'package:buecherteam_2023_desktop/Data/lfg_chip.dart';
+import 'package:buecherteam_2023_desktop/Resources/chip_colors.dart';
 import 'package:buecherteam_2023_desktop/UI/tag_dropdown/action_dropdown_available_container.dart';
+import 'package:buecherteam_2023_desktop/UI/tag_dropdown/action_dropdown_creation_row.dart';
 import 'package:buecherteam_2023_desktop/UI/tag_dropdown/action_dropdown_selected_wrap.dart';
-import 'package:flutter/foundation.dart';
 
 import 'package:flutter/material.dart';
 
@@ -19,7 +21,8 @@ class ActionDropdown<T extends LfgChip> extends StatefulWidget {
       required this.onDeleteChip,
       required this.availableChips,
       required this.onAddChip,
-      this.hintText});
+      this.hintText, this.onCreateChip, this.onFocusChanged,
+      });
 
   final double width;
   final List<T> selectedChips;
@@ -28,6 +31,10 @@ class ActionDropdown<T extends LfgChip> extends StatefulWidget {
   final List<T> availableChips;
   final Function(T chip) onAddChip;
   final String? hintText;
+
+  final Function(T chip)? onCreateChip;
+
+  final Function(bool focused)? onFocusChanged;
 
   /*
   filterList filters for numbers in elements and additionally for text matches
@@ -62,12 +69,16 @@ class ActionDropdown<T extends LfgChip> extends StatefulWidget {
 class _ActionDropdownState<T extends LfgChip> extends State<ActionDropdown<T>> {
   late List<T> filteredAvailableChips;
   String filterText = "";
+  Color? creationColor;
 
   @override
   void initState() {
     super.initState();
     filteredAvailableChips = widget.availableChips
         .toList(); //set initialState for the filteredChips - make a copy of the list
+    if (widget.onCreateChip != null) {
+      creationColor = getColor();
+    }
   }
 
   /*
@@ -77,12 +88,9 @@ class _ActionDropdownState<T extends LfgChip> extends State<ActionDropdown<T>> {
   @override
   void didUpdateWidget(oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (listEquals(oldWidget.availableChips, widget.availableChips)) {
-      setState(() {
         filteredAvailableChips =
             widget.filterList(widget.availableChips, filterText);
-      });
-    }
+
   }
 
   @override
@@ -105,15 +113,34 @@ class _ActionDropdownState<T extends LfgChip> extends State<ActionDropdown<T>> {
                     widget.filterList(widget.availableChips, filterText);
               });
             },
+            onFocusChanged: widget.onFocusChanged,
           ),
           ActionDropdownAvailableContainer<T>(
             availableChips: filteredAvailableChips,
             onAddChip: widget.onAddChip,
             width: widget.width,
             hintText: widget.hintText,
-          )
+          ),
+          if (widget.onCreateChip != null
+              && filterText.isNotEmpty
+              && !widget.selectedChips.map((e) => e.getLabelText()).contains(filterText)
+              && !widget.availableChips.map((e) => e.getLabelText()).contains(filterText))
+            ActionDropdownCreationRow<T>(
+                chipToBeCreated: LfgChip.createChipFrom(filterText, creationColor!),
+                onCreateChip: widget.onCreateChip!,
+                width: widget.width)
         ],
       ),
     );
   }
+
+  Color getColor() {
+    Set<Color?> currColors = {};
+    currColors.addAll(widget.selectedChips.map((e) => e.getChipColor()));
+    currColors.addAll(widget.availableChips.map((e) => e.getChipColor()));
+    List<Color> colors = ChipColors.chipColors.toList();
+    colors.removeWhere((color) => currColors.contains(color));
+    return colors.first;
+  }
+
 }

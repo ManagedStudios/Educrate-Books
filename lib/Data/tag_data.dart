@@ -34,6 +34,10 @@ class TagData extends LfgChip{
     return data;
   }
 
+  static TagData createFrom(String label, Color color) {
+    return TagData(label, color);
+  }
+
 
   @override
   int compareTo(other) {
@@ -60,6 +64,8 @@ class TagData extends LfgChip{
   Color? getChipColor() {
     return color;
   }
+
+
 
 
 }

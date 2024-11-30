@@ -82,15 +82,19 @@ class Student implements SelectableItem {
       countMap[book] = max((countMap[book] ?? 1), book.satzNummer ?? 1);
     }
     for (BookLite book in books) {
+      BookLite bookToBeAdded = BookLite(book.bookId, book.name, book.subject,
+          book.classLevel);
       book.satzNummer = null; //ensure satzNummer is null by default
       if (countMap[book] != null) {
         //book to be added already owned by student -> Update satzNummer
-        book.satzNummer = countMap[book]! + 1;
+        bookToBeAdded.satzNummer = countMap[book]! + 1;
       }
-      this.books.add(book);
+
+      this.books.add(bookToBeAdded);
       //update the map along the adds if books of the same type are added multiple times
       if (uniqueBooks != books.length) countMap[book] = (countMap[book] ?? 0) + 1;
     }
+
   }
 
   int extractNumberBeforeDot(String input) {

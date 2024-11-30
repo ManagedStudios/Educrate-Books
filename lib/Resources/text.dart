@@ -342,6 +342,10 @@ class TextRes {
 
   static const String satz = "Satz";
 
+  static const String create = "Erstelle";
+
+  static const String tagDropdownHintText = "Tags hinzufügen/entfernen";
+
 
 
 
