@@ -83,7 +83,7 @@ curl -vX POST "http://localhost:4985/$DATABASE_NAME/_user/" \
 curl -vX PUT "http://localhost:4985/$DATABASE_NAME/_user/$USERNAME" \
 -H "accept: application/json" \
 -H "Content-Type: application/json" \
--d '{"name": "dibbo", "admin_channels": ["*"]}'
+-d '{"name": "dibbo", "admin_channels": ["*"]}' #TODO compare username with above! Pull will else not work
 
 
 curl -vX PUT "http://localhost:4985/$DATABASE_NAME/_config" \
