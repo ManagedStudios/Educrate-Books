@@ -3,11 +3,13 @@ import 'dart:collection';
 import 'package:buecherteam_2023_desktop/Data/bookLite.dart';
 import 'package:buecherteam_2023_desktop/Models/student_detail_state.dart';
 import 'package:buecherteam_2023_desktop/Resources/dimensions.dart';
+import 'package:buecherteam_2023_desktop/Resources/text.dart';
 import 'package:buecherteam_2023_desktop/UI/add_book_student_detail_dialog/add_book_student_detail_dialog.dart';
 import 'package:buecherteam_2023_desktop/UI/books/student_detail_book_section.dart';
 import 'package:buecherteam_2023_desktop/UI/keyboard_listener/keyboard_listener.dart';
 import 'package:buecherteam_2023_desktop/UI/student_detail/student_detail_info.dart';
 import 'package:buecherteam_2023_desktop/UI/student_detail/student_detail_tag_dropdown.dart';
+import 'package:buecherteam_2023_desktop/Util/lfg_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -49,8 +51,15 @@ class StudentDetailColumn extends StatelessWidget {
 
                         StudentDetailTagDropdown(
                             tags: getTags(currStudents),
-                            onTagAdded: (tag) => studentDetailState.addTagToStudents(currStudents, tag),
-                            onTagDeleted: (tag) => studentDetailState.removeTagFromStudents(currStudents, tag),
+                            onTagAdded: (tag) {
+                              studentDetailState.addTagToStudents(currStudents, tag);
+                              showNotificationSnackbar(context, TextRes.tagAdded);
+                            } ,
+                            onTagDeleted: (tag) {
+                              studentDetailState.removeTagFromStudents(
+                                  currStudents, tag);
+                              showNotificationSnackbar(context, TextRes.tagRemoved);
+                            },
                             onFocusChanged: onFocusChanged,
                         ),
 

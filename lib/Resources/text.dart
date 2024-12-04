@@ -346,6 +346,10 @@ class TextRes {
 
   static const String tagDropdownHintText = "Tags hinzufügen/entfernen";
 
+  static const String tagAdded = "Tag hinzugefügt!";
+
+  static const String tagRemoved = "Tag entfernt!";
+
 
 
 

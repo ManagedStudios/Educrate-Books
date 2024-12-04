@@ -1,7 +1,7 @@
 import 'package:buecherteam_2023_desktop/Models/settings/import_state.dart';
 import 'package:buecherteam_2023_desktop/Models/settings/settings_nav_state.dart';
 import 'package:buecherteam_2023_desktop/Resources/dimensions.dart';
-import 'package:buecherteam_2023_desktop/UI/settings_dialog/import/check_preference.dart';
+import 'package:buecherteam_2023_desktop/UI/input/check_preference.dart';
 import 'package:buecherteam_2023_desktop/UI/settings_dialog/import/select_excel.dart';
 import 'package:buecherteam_2023_desktop/UI/settings_dialog/import_parent.dart';
 import 'package:buecherteam_2023_desktop/UI/settings_dialog/nav_bottom_bar.dart';

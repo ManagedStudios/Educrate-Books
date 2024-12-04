@@ -1,3 +1,9 @@
+
+
+/*
+class to represent a Excel cell in Dart
+ */
+
 class ExcelData {
   ExcelData({required this.row, required this.column, required this.content});
 

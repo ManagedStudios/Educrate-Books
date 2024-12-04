@@ -80,4 +80,6 @@ class Dimensions {
   static const int bookAvAmountThreshold = 15;
 
   static double navBarHeight = 56;
+
+  static double cornerRadiusBig = 32;
 }

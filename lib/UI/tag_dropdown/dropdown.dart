@@ -182,10 +182,8 @@ class _DropdownState<T extends LfgChip> extends State<Dropdown<T>> {
     if (widget.multiSelect) {
       setState(() {
         selectedChips.add(chip);
-        print(availableChips.map((e) => e.getLabelText()));
         availableChips.removeWhere(
             (element) => element.getLabelText() == chip.getLabelText());
-        print(availableChips.map((e) => e.getLabelText()));
       });
     } else {
       //single select

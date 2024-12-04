@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 
 import '../../../Resources/dimensions.dart';
 
-
+/*
+Used for navigation in the import start screen
+ */
 class BigButton extends StatelessWidget {
   const BigButton({super.key, required this.onPressed, required this.text});
 

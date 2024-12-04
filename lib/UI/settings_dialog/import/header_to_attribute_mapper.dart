@@ -13,6 +13,12 @@ import '../../../Resources/dimensions.dart';
 import '../nav_bottom_bar.dart';
 import 'attribute_mapper_list.dart';
 
+
+/*
+This is a Settings Screen:
+Specific implementation of attribute_mapper_list to map Attributes detected from
+a excel sheet to Student Attributes
+ */
 class HeaderToAttributeMapper extends StatelessWidget {
   const HeaderToAttributeMapper({super.key});
 
@@ -31,13 +37,16 @@ class HeaderToAttributeMapper extends StatelessWidget {
               child: Consumer<ImportState>(
                 builder: (context, state, _) => AttributeMapperList<StudentAttributes>(
                     availableDropdownItems: state.availableStudentAttributes,
-                    initialMap: state.currHeaderToAttributeMap,
+                    initialMap: state.currHeaderToAttributeMap, //assuming the currHeaderToAttributeMap has already been initialized
                     onUpdatedMap: (updatedMap) {
                       state.setCurrHeaderToAttributeMap(updatedMap);
                     },
                     width: availableWidth * 0.4),
               )),
         ),
+        /*
+        NAVIGATION:
+         */
         Consumer<ImportState>(
           builder: (context, state, _) =>
              Padding(

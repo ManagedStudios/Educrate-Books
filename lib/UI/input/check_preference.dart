@@ -1,6 +1,10 @@
 import 'package:buecherteam_2023_desktop/Resources/dimensions.dart';
 import 'package:flutter/material.dart';
 
+
+/*
+Checkbox with a text
+ */
 class CheckPreference extends StatefulWidget {
   const CheckPreference({super.key, required this.onChanged, required this.text});
 

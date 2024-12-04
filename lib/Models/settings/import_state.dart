@@ -128,6 +128,13 @@ class ImportState extends ChangeNotifier {
     return true;
   }
 
+  /*
+  preProcessing checks the Excel file for correct format in rows (checkAndCorrectExcelFile()),
+  removes rows that have the wrong format,
+  extracts the uniqueTrainingDirections for each class level to allow TrainingDirection Mapping,
+  sets up all available classes to decide which classes have to be added,
+
+   */
   Future<bool> preProcessExcel() async{
     currStudentAttributeToHeaders = getStudentAttributesToHeadersFrom(currHeaderToAttributeMap);
     Sheet sheet = excelFile!.sheets.values.first;
@@ -169,7 +176,10 @@ class ImportState extends ChangeNotifier {
         if (excelFormatErrors == null) {
            initializeExcelFormatErrorFile();
         }
+
+        //make copy of row that contains format error and add Error Column
         List<CellValue?> errorRow = sheet.row(i).map((e) => e?.value ?? TextCellValue('')).toList();
+
 
         errorRow.add(TextCellValue(accumulatedFormatError));
         excelFormatErrors!.sheets.values.first.appendRow(errorRow);
@@ -211,6 +221,10 @@ class ImportState extends ChangeNotifier {
     }
   }
 
+  /*
+  Create TrainingDirection-Strings of type: tr-classLevel from Map of TrainingDirection
+  and class levels that have this trainingDirection
+   */
   Future<void> getAndStructureTrainingDirections() async{
     availableTrainingDirections = await getAllTrainingDirectionsUtil(database);
     Map<TrainingDirectionsData, List<int>> uniqueTrainingDirectionsSorted = uniqueTrainingDirections
@@ -285,6 +299,7 @@ class ImportState extends ChangeNotifier {
     }
   }
 
+  //always reset after import so another import works smoothly
   void resetValues () {
     availableStudentAttributes = StudentAttributes.values;
     currHeaderToAttributeMap = {};

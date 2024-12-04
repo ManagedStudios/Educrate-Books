@@ -6,6 +6,12 @@ import 'package:buecherteam_2023_desktop/UI/tag_dropdown/dropdown.dart';
 
 import 'package:flutter/material.dart';
 
+/*
+Maps an Attribute detected in the imported excel sheet of a student
+(e.g. name, trainingDirection) with an attribute that represents a real attribute
+in Dart
+Can also be used to Map any string/excel cell to some LFGChip
+ */
 class AttributeMapper<T extends LfgChip> extends StatelessWidget {
   const AttributeMapper(
       {super.key,
