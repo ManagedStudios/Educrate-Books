@@ -34,12 +34,14 @@ void main() async {
 
   await DB().initializeDatabase();
 
+
   List<ClassData>? classes = await getAllClasses(DB());
   if (classes != null && classes.isNotEmpty) { //no classes available
     initialLocation = StudentView.routeName;
   } else {
     initialLocation = TextRes.introPaths[0];
   }
+
 
 
 

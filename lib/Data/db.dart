@@ -54,7 +54,7 @@ class DB {
     await _database.createIndex(
         TextRes.studentsOfBookIdIndex, studentsOfBookIdIndex);
 
-    //await startReplication();
+    await startReplication();
   }
 
   Future<void> saveDocument(MutableDocument document) async {
@@ -161,15 +161,32 @@ class DB {
     final replicator = await Replicator.create(ReplicatorConfiguration(
       database: _database,
       target: UrlEndpoint(Uri.parse(
-          'wss://lfg.dibbomrinmoysaha.engineer/buecherteam/')), //The URI your reverse proxy server or your sync gateway is located - ws is websocket
+          'wss://lfgsync.dibbomrinmoysaha.engineer/buecherteam/')), //The URI your reverse proxy server or your sync gateway is located - ws is websocket
       continuous: true,
       replicatorType: ReplicatorType.pushAndPull,
       authenticator:
-          BasicAuthenticator(username: "dibbo", password: "LFGDibbo-MriNm0Y!"),
+          BasicAuthenticator(username: "dibbo", password: "LFG.Dibb0.80807Gert06!"),
     ));
 
+    final completer = Completer<void>();
+
+    // Add a change listener to track replication status
+    final listenerToken = await replicator.addChangeListener((ReplicatorChange change) {
+      // Check for "idle" state, indicating the first replication cycle is complete
+      if (change.status.activity == ReplicatorActivityLevel.idle &&
+          !completer.isCompleted) {
+        completer.complete(); // Signal that replication is complete
+      }
+    });
+
     await replicator.start();
+
+    await completer.future;
+
+    replicator.removeChangeListener(listenerToken);
   }
+
+
 
   /*
   updateDocFromEntity updates a MutableDocument sothat its data matches the provided object
