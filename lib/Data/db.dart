@@ -173,10 +173,14 @@ class DB {
     // Add a change listener to track replication status
     final listenerToken = await replicator.addChangeListener((ReplicatorChange change) {
       // Check for "idle" state, indicating the first replication cycle is complete
-      if (change.status.activity == ReplicatorActivityLevel.idle &&
+      if (
+        (change.status.activity == ReplicatorActivityLevel.idle //synchronisation cycle finished
+        || change.status.activity == ReplicatorActivityLevel.offline //no internet -> proceed
+        || change.status.error != null) && //error -> proceed
           !completer.isCompleted) {
         completer.complete(); // Signal that replication is complete
       }
+
     });
 
     await replicator.start();
