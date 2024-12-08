@@ -1,5 +1,4 @@
 import 'package:buecherteam_2023_desktop/Data/training_directions_data.dart';
-import 'package:buecherteam_2023_desktop/UI/settings_dialog/import/header_to_attribute_mapper.dart';
 import 'package:buecherteam_2023_desktop/UI/settings_dialog/import/success_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -14,7 +13,9 @@ import 'import_error_screen.dart';
 import 'loading.dart';
 
 class TrainingDirectionMapper extends StatelessWidget {
-  const TrainingDirectionMapper({super.key});
+  const TrainingDirectionMapper({super.key, required this.previousWidget});
+
+  final MapEntry<SettingsNavButtons, Widget> previousWidget;
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +52,7 @@ class TrainingDirectionMapper extends StatelessWidget {
                   goToFallbackText: TextRes.goToImportError,
                 )
             ),
-            previousWidget: const MapEntry(SettingsNavButtons.IMPORT, HeaderToAttributeMapper()),
+            previousWidget: previousWidget,
           ),
         )
       ],

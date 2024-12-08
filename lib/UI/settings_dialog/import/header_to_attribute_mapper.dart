@@ -2,7 +2,6 @@ import 'package:buecherteam_2023_desktop/Models/settings/import_state.dart';
 import 'package:buecherteam_2023_desktop/Resources/text.dart';
 import 'package:buecherteam_2023_desktop/UI/settings_dialog/import/download_excel_format_error.dart';
 import 'package:buecherteam_2023_desktop/UI/settings_dialog/import/loading.dart';
-import 'package:buecherteam_2023_desktop/UI/settings_dialog/import/select_excel.dart';
 import 'package:buecherteam_2023_desktop/UI/settings_dialog/import/training_direction_mapper.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -20,7 +19,9 @@ Specific implementation of attribute_mapper_list to map Attributes detected from
 a excel sheet to Student Attributes
  */
 class HeaderToAttributeMapper extends StatelessWidget {
-  const HeaderToAttributeMapper({super.key});
+  const HeaderToAttributeMapper({super.key, required this.previousWidget});
+
+  final MapEntry<SettingsNavButtons, Widget> previousWidget;
 
   @override
   Widget build(BuildContext context) {
@@ -55,12 +56,14 @@ class HeaderToAttributeMapper extends StatelessWidget {
                   nextWidget: MapEntry(SettingsNavButtons.IMPORT,
                       Loading(
                           functionToBeExecuted: state.preProcessExcel,
-                          nextWidget: const MapEntry(SettingsNavButtons.IMPORT, TrainingDirectionMapper()),
-                          fallbackWidget: const MapEntry(SettingsNavButtons.IMPORT, DownloadExcelFormatError()),
+                          nextWidget: MapEntry(SettingsNavButtons.IMPORT,
+                              TrainingDirectionMapper(previousWidget: MapEntry(SettingsNavButtons.IMPORT, this),)),
+                          fallbackWidget: MapEntry(SettingsNavButtons.IMPORT,
+                              DownloadExcelFormatError(previousWidget: MapEntry(SettingsNavButtons.IMPORT, this),)),
                           goToFallbackText: TextRes.goToDownload,
                       )
                   ),
-                  previousWidget: const MapEntry(SettingsNavButtons.IMPORT, SelectExcel()),
+                  previousWidget: previousWidget,
                   error: state.currHeaderToAttributeError,
                            ),
              )

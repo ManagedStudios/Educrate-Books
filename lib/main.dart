@@ -42,9 +42,7 @@ void main() async {
     initialLocation = TextRes.introPaths[0];
   }
 
-
-
-
+  //TODO shift init methods down to the widget and show a startup screen while initializing
   runApp(MultiProvider(
     providers: [
       //initialize the Viewmodels

@@ -2,7 +2,6 @@ import 'package:buecherteam_2023_desktop/Models/settings/import_state.dart';
 import 'package:buecherteam_2023_desktop/Models/settings/settings_nav_state.dart';
 import 'package:buecherteam_2023_desktop/Resources/dimensions.dart';
 import 'package:buecherteam_2023_desktop/UI/settings_dialog/import/header_to_attribute_mapper.dart';
-import 'package:buecherteam_2023_desktop/UI/settings_dialog/import/import_preferences.dart';
 import 'package:buecherteam_2023_desktop/UI/settings_dialog/import/loading.dart';
 import 'package:buecherteam_2023_desktop/UI/settings_dialog/nav_bottom_bar.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +10,9 @@ import 'package:provider/provider.dart';
 import '../../../Resources/text.dart';
 
 class SelectExcel extends StatelessWidget {
-  const SelectExcel({super.key});
+  const SelectExcel({super.key, required this.previousWidget});
+
+  final MapEntry<SettingsNavButtons, Widget> previousWidget;
 
   @override
   Widget build(BuildContext context) {
@@ -42,10 +43,14 @@ class SelectExcel extends StatelessWidget {
                 nextWidget: MapEntry(SettingsNavButtons.IMPORT,
                     Loading(
                         functionToBeExecuted: state.getExcelHeaders,
-                        nextWidget: const MapEntry(SettingsNavButtons.IMPORT, HeaderToAttributeMapper()),
-                        fallbackWidget: const MapEntry(SettingsNavButtons.IMPORT, SelectExcel()))
+                        nextWidget: MapEntry(SettingsNavButtons.IMPORT,
+                            HeaderToAttributeMapper(previousWidget: MapEntry(SettingsNavButtons.IMPORT, this),)
+                        ),
+                        fallbackWidget: MapEntry(SettingsNavButtons.IMPORT, SelectExcel(previousWidget: previousWidget,)
+                        )
+                    )
                 ),
-                previousWidget: const MapEntry(SettingsNavButtons.IMPORT, ImportPreferences()),
+                previousWidget: previousWidget,
                 error: state.selectExcelFileError
             ),
           )

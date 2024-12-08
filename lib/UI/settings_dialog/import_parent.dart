@@ -1,6 +1,7 @@
 import 'package:buecherteam_2023_desktop/Models/settings/settings_nav_state.dart';
 import 'package:buecherteam_2023_desktop/UI/settings_dialog/import/big_button.dart';
 import 'package:buecherteam_2023_desktop/UI/settings_dialog/import/import_preferences.dart';
+import 'package:buecherteam_2023_desktop/UI/settings_dialog/import/select_excel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -21,7 +22,11 @@ class ImportParent extends StatelessWidget {
               .setCurrWidget(const ImportPreferences(), SettingsNavButtons.IMPORT);
         }, text: TextRes.importNewSchoolYearTitle),
         const SizedBox(height: Dimensions.spaceLarge,),
-        BigButton(onPressed: (){}, text: TextRes.importNewStudents),
+        BigButton(onPressed: (){
+          Provider.of<SettingsNavState>(context, listen: false)
+              .setCurrWidget(SelectExcel(previousWidget: MapEntry(SettingsNavButtons.IMPORT, this),
+          ), SettingsNavButtons.IMPORT);
+        }, text: TextRes.importNewStudents),
         const SizedBox(height: Dimensions.spaceLarge,),
         BigButton(onPressed: (){}, text: TextRes.importNewAttributes)
       ],

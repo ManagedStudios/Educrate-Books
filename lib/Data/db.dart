@@ -54,7 +54,7 @@ class DB {
     await _database.createIndex(
         TextRes.studentsOfBookIdIndex, studentsOfBookIdIndex);
 
-    await startReplication();
+    //await startReplication();
   }
 
   Future<void> saveDocument(MutableDocument document) async {

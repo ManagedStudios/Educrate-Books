@@ -32,9 +32,11 @@ class ImportPreferences extends StatelessWidget {
           },
               text: TextRes.importPreferencesExistingStudentsDescription),
           const Spacer(),
-          const NavBottomBar(
-              nextWidget: MapEntry(SettingsNavButtons.IMPORT, SelectExcel()),
-              previousWidget: MapEntry(SettingsNavButtons.IMPORT, ImportParent()))
+          NavBottomBar(
+              nextWidget: MapEntry(SettingsNavButtons.IMPORT,
+                  SelectExcel(previousWidget: MapEntry(SettingsNavButtons.IMPORT, this),)
+              ),
+              previousWidget: const MapEntry(SettingsNavButtons.IMPORT, ImportParent()))
         ],
       ),
     );
