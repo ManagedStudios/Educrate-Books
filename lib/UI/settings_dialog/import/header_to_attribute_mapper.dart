@@ -19,9 +19,10 @@ Specific implementation of attribute_mapper_list to map Attributes detected from
 a excel sheet to Student Attributes
  */
 class HeaderToAttributeMapper extends StatelessWidget {
-  const HeaderToAttributeMapper({super.key, required this.previousWidget});
+  const HeaderToAttributeMapper({super.key, required this.previousWidget, required this.importFunction});
 
   final MapEntry<SettingsNavButtons, Widget> previousWidget;
+  final Future<bool> Function() importFunction;
 
   @override
   Widget build(BuildContext context) {
@@ -57,9 +58,9 @@ class HeaderToAttributeMapper extends StatelessWidget {
                       Loading(
                           functionToBeExecuted: state.preProcessExcel,
                           nextWidget: MapEntry(SettingsNavButtons.IMPORT,
-                              TrainingDirectionMapper(previousWidget: MapEntry(SettingsNavButtons.IMPORT, this),)),
+                              TrainingDirectionMapper(previousWidget: MapEntry(SettingsNavButtons.IMPORT, this), importFunction: importFunction)),
                           fallbackWidget: MapEntry(SettingsNavButtons.IMPORT,
-                              DownloadExcelFormatError(previousWidget: MapEntry(SettingsNavButtons.IMPORT, this),)),
+                              DownloadExcelFormatError(previousWidget: MapEntry(SettingsNavButtons.IMPORT, this), importFunction: importFunction)),
                           goToFallbackText: TextRes.goToDownload,
                       )
                   ),

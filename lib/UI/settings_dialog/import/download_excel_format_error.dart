@@ -10,9 +10,10 @@ import '../nav_bottom_bar.dart';
 
 
 class DownloadExcelFormatError extends StatelessWidget {
-  const DownloadExcelFormatError({super.key, required this.previousWidget});
+  const DownloadExcelFormatError({super.key, required this.previousWidget, required this.importFunction});
 
   final MapEntry<SettingsNavButtons, Widget> previousWidget;
+  final Future<bool> Function() importFunction;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +37,8 @@ class DownloadExcelFormatError extends StatelessWidget {
         const Spacer(),
          NavBottomBar(
             nextWidget: MapEntry(SettingsNavButtons.IMPORT,
-                TrainingDirectionMapper(previousWidget: MapEntry(SettingsNavButtons.IMPORT, this),) ),
+                TrainingDirectionMapper(previousWidget: MapEntry(SettingsNavButtons.IMPORT, this),
+                  importFunction: importFunction,) ),
             previousWidget: previousWidget
         ),
       ],

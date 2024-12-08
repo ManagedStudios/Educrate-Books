@@ -13,14 +13,14 @@ import 'import_error_screen.dart';
 import 'loading.dart';
 
 class TrainingDirectionMapper extends StatelessWidget {
-  const TrainingDirectionMapper({super.key, required this.previousWidget});
+  const TrainingDirectionMapper({super.key, required this.previousWidget, required this.importFunction});
 
   final MapEntry<SettingsNavButtons, Widget> previousWidget;
+  final Future<bool> Function() importFunction;
 
   @override
   Widget build(BuildContext context) {
     double availableWidth = MediaQuery.of(context).size.width;
-    final stateListenFalse = Provider.of<ImportState>(context, listen: false);
     return Column(
       children: [
         Expanded(
@@ -45,8 +45,7 @@ class TrainingDirectionMapper extends StatelessWidget {
           child: NavBottomBar(
             nextWidget: MapEntry(SettingsNavButtons.IMPORT,
                 Loading(
-                  functionToBeExecuted: () => stateListenFalse
-                                                  .importStudents(),
+                  functionToBeExecuted: importFunction,
                   nextWidget: const MapEntry(SettingsNavButtons.IMPORT, SuccessScreen()),
                   fallbackWidget: const MapEntry(SettingsNavButtons.IMPORT, ImportErrorScreen()),
                   goToFallbackText: TextRes.goToImportError,

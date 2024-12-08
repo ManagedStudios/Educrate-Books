@@ -10,9 +10,10 @@ import 'package:provider/provider.dart';
 import '../../../Resources/text.dart';
 
 class SelectExcel extends StatelessWidget {
-  const SelectExcel({super.key, required this.previousWidget});
+  const SelectExcel({super.key, required this.previousWidget, required this.importFunction});
 
   final MapEntry<SettingsNavButtons, Widget> previousWidget;
+  final Future<bool> Function() importFunction;
 
   @override
   Widget build(BuildContext context) {
@@ -44,9 +45,9 @@ class SelectExcel extends StatelessWidget {
                     Loading(
                         functionToBeExecuted: state.getExcelHeaders,
                         nextWidget: MapEntry(SettingsNavButtons.IMPORT,
-                            HeaderToAttributeMapper(previousWidget: MapEntry(SettingsNavButtons.IMPORT, this),)
+                            HeaderToAttributeMapper(previousWidget: MapEntry(SettingsNavButtons.IMPORT, this), importFunction: importFunction)
                         ),
-                        fallbackWidget: MapEntry(SettingsNavButtons.IMPORT, SelectExcel(previousWidget: previousWidget,)
+                        fallbackWidget: MapEntry(SettingsNavButtons.IMPORT, this
                         )
                     )
                 ),

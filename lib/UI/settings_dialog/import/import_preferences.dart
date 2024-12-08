@@ -11,7 +11,9 @@ import 'package:provider/provider.dart';
 import '../../../Resources/text.dart';
 
 class ImportPreferences extends StatelessWidget {
-  const ImportPreferences({super.key});
+  const ImportPreferences({super.key, required this.importFunction});
+
+  final Future<bool> Function() importFunction;
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +36,8 @@ class ImportPreferences extends StatelessWidget {
           const Spacer(),
           NavBottomBar(
               nextWidget: MapEntry(SettingsNavButtons.IMPORT,
-                  SelectExcel(previousWidget: MapEntry(SettingsNavButtons.IMPORT, this),)
+                  SelectExcel(previousWidget: MapEntry(SettingsNavButtons.IMPORT, this),
+                    importFunction: importFunction)
               ),
               previousWidget: const MapEntry(SettingsNavButtons.IMPORT, ImportParent()))
         ],
