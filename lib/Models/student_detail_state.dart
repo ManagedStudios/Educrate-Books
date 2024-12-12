@@ -117,14 +117,16 @@ class StudentDetailState extends ChangeNotifier {
       }
     }
 
+    List<MutableDocument> updatedStudentDocs = [];
     //add the books to students that are in stock
     for (Student student in selectedStudents) {
       final doc = (await database.getDoc(student.id))!.toMutable();
       student.addBooks(booksThatCanBeAdded);
 
       database.updateDocFromEntity(student, doc);
-      await database.saveDocument(doc);
+      updatedStudentDocs.add(doc);
     }
+    await database.saveDocuments(updatedStudentDocs);
 
     //show the user which books were not available
     if (booksThatCannotBeAdded.isNotEmpty) {
