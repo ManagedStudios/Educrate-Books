@@ -118,3 +118,40 @@ Map<String, TrainingDirectionsData> getTrainingDirectionMapFrom
   return res;
 
 }
+
+List<MutableDocument> groupStudentsAccordingToName
+            (List<MutableDocument> studentRowsToBeImported, DB database) {
+
+  Map<String, MutableDocument> groupedRows = {};
+
+  for (MutableDocument row in studentRowsToBeImported) {
+
+    if (groupedRows["${row.string(TextRes.studentFirstNameJson)}"
+        "${row.string(TextRes.studentLastNameJson)}"] != null) {
+
+      final doc = groupedRows["${row.string(TextRes.studentFirstNameJson)}"
+          "${row.string(TextRes.studentLastNameJson)}"];
+      final newInformationOfStudent = database.toEntity(Student.fromJson, row);
+      final studentToBeUpdated = database.toEntity(Student.fromJson, doc!);
+      for (String tr in newInformationOfStudent.trainingDirections) {
+        if (!studentToBeUpdated.trainingDirections.contains(tr)) {
+            studentToBeUpdated.trainingDirections.add(tr);
+        }
+      }
+
+      database.updateDocFromEntity(studentToBeUpdated, doc);
+
+      groupedRows["${row.string(TextRes.studentFirstNameJson)}"
+          "${row.string(TextRes.studentLastNameJson)}"] = doc;
+
+    } else {
+
+      groupedRows["${row.string(TextRes.studentFirstNameJson)}"
+          "${row.string(TextRes.studentLastNameJson)}"] = row;
+
+    }
+  }
+
+  return groupedRows.values.toList();
+
+}

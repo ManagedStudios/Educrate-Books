@@ -282,6 +282,24 @@ class ImportState extends ChangeNotifier {
     return true;
   }
 
+  Future<bool> updateOrCreateStudents() async{
+
+    //1. Create a Set of Student Updates -> Concentrate all Updates to a student in one instance
+    //e.g.: [Student1 => tr1, Student1 => tr 2] => [Student1 => [tr1, tr2]]
+
+    List<MutableDocument> studentRowsToBeImported = getStudentsFromExcel(excelFile!,
+        currTrainingDirectionMap,
+        currStudentAttributeToHeaders, database);
+    List<MutableDocument> studentGroupedRowsToBeImported =
+                          groupStudentsAccordingToName(studentRowsToBeImported, database);
+
+    //2. query all students
+    //3. successively create list of documents with updated or new students
+
+    return true;
+  }
+
+
   void trimExcelFile(Excel excelFile) {
     Sheet sheet = excelFile.sheets.values.first;
     for (int i = 0; i<sheet.maxRows; i++) {
@@ -321,12 +339,11 @@ class ImportState extends ChangeNotifier {
 
   }
 
-  Future<bool> createAndUpdateStudents() async{
 
-    return true;
-  }
 
 }
+
+
 
 
 

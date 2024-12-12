@@ -33,7 +33,7 @@ class ImportParent extends StatelessWidget {
           Provider.of<SettingsNavState>(context, listen: false)
               .setCurrWidget(SelectExcel(previousWidget: MapEntry(SettingsNavButtons.IMPORT, this),
 
-              importFunction: () => importState.createAndUpdateStudents(),
+              importFunction: () => importState.updateOrCreateStudents(),
           ), SettingsNavButtons.IMPORT);
         }, text: TextRes.importNewStudents),
         const SizedBox(height: Dimensions.spaceLarge,),
