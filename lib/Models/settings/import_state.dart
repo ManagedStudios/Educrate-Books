@@ -5,6 +5,7 @@ import 'package:buecherteam_2023_desktop/Data/bookLite.dart';
 import 'package:buecherteam_2023_desktop/Data/class_data.dart';
 import 'package:buecherteam_2023_desktop/Data/student.dart';
 import 'package:buecherteam_2023_desktop/Data/training_directions_data.dart';
+import 'package:buecherteam_2023_desktop/Models/book_utils.dart';
 import 'package:buecherteam_2023_desktop/Resources/text.dart';
 import 'package:buecherteam_2023_desktop/Util/database/delete.dart';
 import 'package:buecherteam_2023_desktop/Util/database/getter.dart';
@@ -23,6 +24,7 @@ import '../../Util/database/update.dart';
 import '../../Util/settings/import/import_add_books.dart';
 import '../../Util/settings/import/import_add_missing_classes.dart';
 import '../../Util/settings/import/import_errors_util.dart';
+import '../../Util/settings/import/import_update_or_create_students_util.dart';
 import '../../Util/settings/import/students_from_excel.dart';
 
 class ImportState extends ChangeNotifier {
@@ -150,6 +152,7 @@ class ImportState extends ChangeNotifier {
 
 
     uniqueTrainingDirections = getUniqueTrainingDirectionsOf(sheet, currStudentAttributeToHeaders);
+
     uniqueClasses = getUniqueClassesOf(sheet, currStudentAttributeToHeaders);
     List<ClassData>? availableClasses = await getAllClasses(database);
     await addMissingClasses(uniqueClasses, availableClasses, database);
@@ -283,10 +286,8 @@ class ImportState extends ChangeNotifier {
   }
 
   Future<bool> updateOrCreateStudents() async{
-
     //1. Create a Set of Student Updates -> Concentrate all Updates to a student in one instance
     //e.g.: [Student1 => tr1, Student1 => tr 2] => [Student1 => [tr1, tr2]]
-
     List<MutableDocument> studentRowsToBeImported = getStudentsFromExcel(excelFile!,
         currTrainingDirectionMap,
         currStudentAttributeToHeaders, database);
@@ -294,8 +295,36 @@ class ImportState extends ChangeNotifier {
                           groupStudentsAccordingToName(studentRowsToBeImported, database);
 
     //2. query all students
+    List<Student> existingStudents;
+    //in order to compare the students with the imported ones we combine first and last Name and make a lookup
+    Map<String, Student> studentFirstLastNameExistingStudents;
+    existingStudents = await getAllStudentsUtil(database);
+    studentFirstLastNameExistingStudents = {};
+      for (Student student in existingStudents) {
+        studentFirstLastNameExistingStudents["${student.firstName}${student.lastName}"] = student;
+      }
+      
     //3. successively create list of documents with updated or new students
+   final finalStudentsToImport =
+        await getUpdatedOrCreatedStudents(
+            studentGroupedRowsToBeImported,
+            studentFirstLastNameExistingStudents,
+            database);
+      await database.saveDocuments(finalStudentsToImport);
+    //4. Update book amounts with studentGroupedRowsToBeImported
+    // (group the studentsAccordingToTrainingDirection and you know how many books will be added)
+    final trainingDirectionToStudents =
+      groupStudentsAccordingToTrainingDirection(studentGroupedRowsToBeImported, database);
+    for (MapEntry<String, List<MutableDocument>> entry in trainingDirectionToStudents.entries) {
+      List<BookLite>? books = await getBooksFromTrainingDirectionsUtil([entry.key], database);
+      if (books != null) {
+        for (BookLite book in books) {
+          BookUtils.updateAmountOnBookToStudentAdded(book.bookId, entry.value.length, database);
+        }
+      }
+    }
 
+    resetValues();
     return true;
   }
 
@@ -342,14 +371,5 @@ class ImportState extends ChangeNotifier {
 
 
 }
-
-
-
-
-
-
-
-
-
 
 

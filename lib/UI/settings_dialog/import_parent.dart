@@ -29,6 +29,7 @@ class ImportParent extends StatelessWidget {
         const SizedBox(height: Dimensions.spaceLarge,),
         BigButton(onPressed: (){
           final importState = Provider.of<ImportState>(context, listen: false);
+          importState.setIsClassWithoutCharAllowed(true);
 
           Provider.of<SettingsNavState>(context, listen: false)
               .setCurrWidget(SelectExcel(previousWidget: MapEntry(SettingsNavButtons.IMPORT, this),

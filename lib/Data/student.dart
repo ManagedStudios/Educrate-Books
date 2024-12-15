@@ -169,6 +169,22 @@ class Student implements SelectableItem {
     return countMap;
   }
 
+  void addTrainingDirections(List<String> trainingDirections) {
+    for (String trainingDirection in trainingDirections) {
+      if(!this.trainingDirections.contains(trainingDirection)) {
+        this.trainingDirections.add(trainingDirection);
+      }
+    }
+  }
+
+  void addTags(List<String> tags) {
+    for (String tag in tags) {
+      if(!this.tags.contains(tag)) {
+        this.tags.add(tag);
+      }
+    }
+  }
+
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true; // If both references are the same
@@ -214,4 +230,6 @@ class Student implements SelectableItem {
   bool isDeletable() {
     return true;
   }
+
+
 }

@@ -133,11 +133,7 @@ List<MutableDocument> groupStudentsAccordingToName
           "${row.string(TextRes.studentLastNameJson)}"];
       final newInformationOfStudent = database.toEntity(Student.fromJson, row);
       final studentToBeUpdated = database.toEntity(Student.fromJson, doc!);
-      for (String tr in newInformationOfStudent.trainingDirections) {
-        if (!studentToBeUpdated.trainingDirections.contains(tr)) {
-            studentToBeUpdated.trainingDirections.add(tr);
-        }
-      }
+      studentToBeUpdated.addTrainingDirections(newInformationOfStudent.trainingDirections);
 
       database.updateDocFromEntity(studentToBeUpdated, doc);
 

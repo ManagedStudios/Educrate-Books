@@ -197,6 +197,7 @@ class DB {
   the provided object needs to provide a toJson method in order to utilize updateDocFromEntity
   updateDocFromEntity can be used for completely blank docs or for filled document that need to be updated.
   Updates are basically just overwrites by the object.
+  IMPORTANT: This method will not update the Document Id!
    */
   void updateDocFromEntity(Object entity, MutableDictionaryInterface document) {
     final json = (entity as dynamic).toJson() as Map<String, Object?>;
