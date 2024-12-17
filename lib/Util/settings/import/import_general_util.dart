@@ -1,12 +1,16 @@
 
 import 'dart:collection';
+import 'dart:ui';
 
 import 'package:excel/excel.dart';
 
 import '../../../Data/class_data.dart';
+import '../../../Data/db.dart';
 import '../../../Data/settings/excel_data.dart';
 import '../../../Data/settings/student_excel_mapper_attributes.dart';
+import '../../../Data/tag_data.dart';
 import '../../../Data/training_directions_data.dart';
+import '../../database/getter.dart';
 import '../../parser.dart';
 
 List<StudentAttributes> getUpdatedAvailableAttributes (List<StudentAttributes?> currAvailableStudentAttributes) {
@@ -27,7 +31,7 @@ Map<StudentAttributes, List<ExcelData>> getStudentAttributesToHeadersFrom
     StudentAttributes.LASTNAME:<ExcelData>[],
     StudentAttributes.CLASS:<ExcelData>[],
     StudentAttributes.TRAININGDIRECTION:<ExcelData>[],
-    StudentAttributes.TAGS:<ExcelData>[],
+    StudentAttributes.TAG:<ExcelData>[],
   };
 
   for (MapEntry<ExcelData, StudentAttributes?> entry in headerToAttrb.entries) {
@@ -82,6 +86,33 @@ HashSet<ClassData> getUniqueClassesOf
   return res;
 
 }
+
+Future<HashSet<TagData>> getUniqueTagsOf(Sheet sheet,
+    Map<StudentAttributes, List<ExcelData>> currStudentAttributeToHeaders, DB database) async{
+
+  HashSet<TagData> res = HashSet();
+  Set<Color> usedColors = (await getAllTagDataUtil(database))
+                                      .map((e) => e.color).toSet();
+
+  for (int i=0;i<sheet.maxRows; i++) {
+    for (ExcelData data in
+        currStudentAttributeToHeaders[StudentAttributes.TAG]!) {
+      CellValue? cellValue = sheet.row(i)[data.column]?.value;
+      if (cellValue != null) {
+        Color tagColor = getTagColor(usedColors);
+        TagData tagData = TagData(cellValue.toString().toUpperCase(), tagColor);
+        usedColors.add(tagColor);
+        res.add(tagData);
+      }
+    }
+  }
+
+  return res;
+
+
+}
+
+
 
 List<int> getUniqueClassLevelsFrom(HashSet<ClassData> uniqueClasses) {
   Set<int> classLevels = {};

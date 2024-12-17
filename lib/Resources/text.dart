@@ -245,7 +245,7 @@ class TextRes {
 
   static const String studentAttrbMapperTrainingDirection = "Ausbildung";
 
-  static const String studentAttrbMapperTags = "Tags";
+  static const String studentAttrbMapperTag = "Tag";
 
 
 
@@ -349,6 +349,8 @@ class TextRes {
   static const String tagAdded = "Tag hinzugefügt!";
 
   static const String tagRemoved = "Tag entfernt!";
+
+  static String importTagInvalid = r'| Tags dürfen keine "-", "–", ",", ";" beinhalten! | ' "\n";
 
 
 

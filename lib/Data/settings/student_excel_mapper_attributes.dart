@@ -5,14 +5,14 @@ import '../../Resources/text.dart';
 
 /*
 This enum enables easy attribute mapping: You can behave according to the
-Enums without error pron String checks
+Enums without error prone String checks
  */
 enum StudentAttributes implements LfgChip {
   FIRSTNAME(TextRes.studentAttrbMapperFirstname),
   LASTNAME(TextRes.studentAttrbMapperLastname),
   CLASS(TextRes.studentAttrbMapperClass),
   TRAININGDIRECTION(TextRes.studentAttrbMapperTrainingDirection),
-  TAGS(TextRes.studentAttrbMapperTags);
+  TAG(TextRes.studentAttrbMapperTag);
 
   final String value;
 

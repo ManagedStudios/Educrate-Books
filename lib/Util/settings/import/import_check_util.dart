@@ -1,4 +1,5 @@
 
+import 'package:buecherteam_2023_desktop/Data/settings/student_excel_mapper_attributes.dart';
 import 'package:excel/excel.dart';
 
 import '../../../Data/settings/excel_data.dart';
@@ -75,13 +76,17 @@ String getClassError(List<ExcelData> columns, List<Data?> row, bool isClassWitho
 
 }
 
-String getTrainingDirectionError(List<ExcelData> columns, List<Data?> row) {
+String getTrainingDirectionOrTagError(List<ExcelData> columns, List<Data?> row, StudentAttributes attrb) {
   StringBuffer errorString = StringBuffer();
   List<Data> cells = getDataOf(columns, row);
 
   for (Data cell in cells) {
-    if (!isTrainingDirectionValid(cell.value.toString())) {
-      errorString.write(TextRes.importTrainingDirectionInvalid);
+    if (!isAlphaNumericalExtended(cell.value.toString())) {
+      if (attrb == StudentAttributes.TRAININGDIRECTION) {
+        errorString.write(TextRes.importTrainingDirectionInvalid);
+      } else {
+        errorString.write(TextRes.importTagInvalid);
+      }
     }
   }
 

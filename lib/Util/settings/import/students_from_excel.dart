@@ -10,6 +10,7 @@ import '../../../Data/settings/student_excel_mapper_attributes.dart';
 import '../../../Data/student.dart';
 import '../../../Data/training_directions_data.dart';
 import '../../parser.dart';
+import '../../stringUtil.dart';
 
 List<MutableDocument> getStudentsFromExcel(Excel excelFile,
     Map<ExcelData, TrainingDirectionsData?> currTrainingDirectionMap,
@@ -24,6 +25,9 @@ List<MutableDocument> getStudentsFromExcel(Excel excelFile,
   List<int> trainingDirectionColumns =
     currStudentAttributeToHeaders[StudentAttributes.TRAININGDIRECTION]!
           .map((e) => e.column).toList();
+  List<int> tagColumns =
+          currStudentAttributeToHeaders[StudentAttributes.TAG]!
+            .map((e) => e.column).toList();
   int classColumn =
       currStudentAttributeToHeaders[StudentAttributes.CLASS]!.first.column;
   int lastNameColumn =
@@ -39,6 +43,8 @@ List<MutableDocument> getStudentsFromExcel(Excel excelFile,
       Set<String> trainingDirections =
               getTrainingDirectionsFromRow
                 (sheet.row(i), trainingDirectionColumns, classColumn);
+      Set<String> tags =
+              getTagsFromRow(sheet.row(i), tagColumns);
 
       //the trainingDirection used in App
       Set<String> finalMappedTrainingDirections =
@@ -59,7 +65,7 @@ List<MutableDocument> getStudentsFromExcel(Excel excelFile,
         final student = Student(document.id, firstName: firstName, lastName: lastName,
             classLevel: classData.classLevel, classChar: classData.classChar,
             trainingDirections: finalMappedTrainingDirections.toList(), books: [],
-            amountOfBooks: 0, tags: []);
+            amountOfBooks: 0, tags: tags.toList());
 
         database.updateDocFromEntity(student, document);
         res.add(document);
@@ -68,6 +74,18 @@ List<MutableDocument> getStudentsFromExcel(Excel excelFile,
     }
 
 
+  return res;
+}
+
+Set<String> getTagsFromRow(List<Data?> row, List<int> tagColumns) {
+  Set<String> res = {};
+
+  for (int column in tagColumns) {
+    String? tag = row[column]?.value?.toString();
+    if (tag != null && !isOnlyWhitespace(tag)) {
+      res.add(tag.toUpperCase());
+    }
+  }
   return res;
 }
 

@@ -59,10 +59,20 @@ String accumulateFormatErrorsFor (List<Data?> row,
 
   //TrainingDirection Error
   bufferError.write(
-      getTrainingDirectionError(
+      getTrainingDirectionOrTagError(
           studentAttributeToHeaders[StudentAttributes.TRAININGDIRECTION]!,
-          row
+          row,
+          StudentAttributes.TRAININGDIRECTION
       )
+  );
+
+  //Tag Error
+  bufferError.write(
+    getTrainingDirectionOrTagError(
+        studentAttributeToHeaders[StudentAttributes.TAG]!,
+        row,
+        StudentAttributes.TAG
+    )
   );
   return bufferError.toString();
 }

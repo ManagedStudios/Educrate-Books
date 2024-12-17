@@ -28,7 +28,7 @@ void main () {
         StudentAttributes.TRAININGDIRECTION:[ExcelData(row: 1, column: 4, content: "content4"),
           ExcelData(row: 1, column: 5, content: "content5")
         ],
-        StudentAttributes.TAGS:[]
+        StudentAttributes.TAG:[]
       };
 
       expect(areImportMapsEqual(transformedMap, expectedTransformedMap), isTrue);
@@ -56,7 +56,7 @@ void main () {
         StudentAttributes.TRAININGDIRECTION:[ExcelData(row: 1, column: 4, content: "content4"),
           ExcelData(row: 1, column: 5, content: "content5")
         ],
-        StudentAttributes.TAGS:[]
+        StudentAttributes.TAG:[]
       };
 
       expect(areImportMapsEqual(transformedMap, expectedTransformedMap), isTrue);
@@ -72,7 +72,7 @@ void main () {
         ExcelData(row: 1, column: 4, content: "content4"):StudentAttributes.TRAININGDIRECTION,
         ExcelData(row: 1, column: 5, content: "content5"):StudentAttributes.TRAININGDIRECTION,
         ExcelData(row: 1, column: 7, content: "content7"):null,
-        ExcelData(row: 1, column: 8, content: "content7"):StudentAttributes.TAGS,
+        ExcelData(row: 1, column: 8, content: "content7"):StudentAttributes.TAG,
         ExcelData(row: 1, column: 9, content: "content7"):StudentAttributes.TRAININGDIRECTION,
       };
 
@@ -87,7 +87,7 @@ void main () {
           ExcelData(row: 1, column: 5, content: "content5"),
           ExcelData(row: 1, column: 9, content: "content7")
         ],
-        StudentAttributes.TAGS:[ExcelData(row: 1, column: 8, content: "content7")]
+        StudentAttributes.TAG:[ExcelData(row: 1, column: 8, content: "content7")]
       };
 
       expect(areImportMapsEqual(transformedMap, expectedTransformedMap), isTrue);

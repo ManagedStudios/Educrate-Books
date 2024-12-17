@@ -12,7 +12,6 @@ class TagData extends LfgChip{
   final String label;
   final Color color;
 
-
   factory TagData.fromJson(Object data) {
     var json = data as dynamic;
 

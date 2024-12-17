@@ -1,9 +1,10 @@
 
+
 import 'package:buecherteam_2023_desktop/Data/lfg_chip.dart';
-import 'package:buecherteam_2023_desktop/Resources/chip_colors.dart';
 import 'package:buecherteam_2023_desktop/UI/tag_dropdown/action_dropdown_available_container.dart';
 import 'package:buecherteam_2023_desktop/UI/tag_dropdown/action_dropdown_creation_row.dart';
 import 'package:buecherteam_2023_desktop/UI/tag_dropdown/action_dropdown_selected_wrap.dart';
+import 'package:buecherteam_2023_desktop/Util/database/getter.dart';
 
 import 'package:flutter/material.dart';
 
@@ -138,9 +139,6 @@ class _ActionDropdownState<T extends LfgChip> extends State<ActionDropdown<T>> {
     Set<Color?> currColors = {};
     currColors.addAll(widget.selectedChips.map((e) => e.getChipColor()));
     currColors.addAll(widget.availableChips.map((e) => e.getChipColor()));
-    List<Color> colors = ChipColors.chipColors.toList();
-    colors.removeWhere((color) => currColors.contains(color));
-    return colors.first;
+    return getTagColor(currColors);
   }
-
 }

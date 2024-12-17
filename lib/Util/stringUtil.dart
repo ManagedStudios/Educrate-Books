@@ -32,7 +32,7 @@ bool isClassValid(bool isClassWithoutCharAllowed, String input) {
   return regexWithLetters.hasMatch(input.trim());
 }
 
-bool isTrainingDirectionValid(String input) {
+bool isAlphaNumericalExtended(String input) {
   final regex = RegExp(r'[-–,;]'); // Add other characters inside the square brackets if needed
   return !regex.hasMatch(input);
 }

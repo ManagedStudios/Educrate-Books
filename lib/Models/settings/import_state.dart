@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:buecherteam_2023_desktop/Data/bookLite.dart';
 import 'package:buecherteam_2023_desktop/Data/class_data.dart';
 import 'package:buecherteam_2023_desktop/Data/student.dart';
+import 'package:buecherteam_2023_desktop/Data/tag_data.dart';
 import 'package:buecherteam_2023_desktop/Data/training_directions_data.dart';
 import 'package:buecherteam_2023_desktop/Models/book_utils.dart';
 import 'package:buecherteam_2023_desktop/Resources/text.dart';
@@ -50,6 +51,7 @@ class ImportState extends ChangeNotifier {
   List<int> rowsToRemove = [];
   Map<TrainingDirectionsData, Set<int>> uniqueTrainingDirections = {};
   HashSet<ClassData> uniqueClasses = HashSet();
+  HashSet<TagData> uniqueTags = HashSet();
 
   List<TrainingDirectionsData> availableTrainingDirections = [];
 
@@ -150,12 +152,9 @@ class ImportState extends ChangeNotifier {
       sheet.removeRow(rowsToRemove[i]-i);
     }
 
-
     uniqueTrainingDirections = getUniqueTrainingDirectionsOf(sheet, currStudentAttributeToHeaders);
-
     uniqueClasses = getUniqueClassesOf(sheet, currStudentAttributeToHeaders);
-    List<ClassData>? availableClasses = await getAllClasses(database);
-    await addMissingClasses(uniqueClasses, availableClasses, database);
+    uniqueTags = await getUniqueTagsOf(sheet, currStudentAttributeToHeaders, database);
     await getAndStructureTrainingDirections();
 
     if (excelFormatErrors != null) {
@@ -250,6 +249,9 @@ class ImportState extends ChangeNotifier {
   }
 
   Future<bool> importStudents() async{
+    //Before importing first add missing parent properties
+    addMissingProperties(uniqueClasses, uniqueTags, database);
+
     //0. get all existing students, delete them and update the book amounts accordingly
     // if updateExistingStudents is true create a NameToBooks Map to add their books to the imported successor
     List<Student>? existingStudents;
@@ -286,6 +288,10 @@ class ImportState extends ChangeNotifier {
   }
 
   Future<bool> updateOrCreateStudents() async{
+
+    //before importing first add missing properties (classes and tags)
+    addMissingProperties(uniqueClasses, uniqueTags, database);
+
     //1. Create a Set of Student Updates -> Concentrate all Updates to a student in one instance
     //e.g.: [Student1 => tr1, Student1 => tr 2] => [Student1 => [tr1, tr2]]
     List<MutableDocument> studentRowsToBeImported = getStudentsFromExcel(excelFile!,
@@ -371,5 +377,9 @@ class ImportState extends ChangeNotifier {
 
 
 }
+
+
+
+
 
 

@@ -85,7 +85,9 @@ class StudentDetailColumn extends StatelessWidget {
     );
   }
 
-  void addWarning(List<Student> students) {}
+  void addWarning(List<Student> students) {
+    print(students.first.tags);
+  }
 
   List<BookLite> getBooks(List<Student> currStudents) {
     List<BookLite> result = [];

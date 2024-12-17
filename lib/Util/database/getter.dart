@@ -1,5 +1,9 @@
 
+import 'dart:math';
+import 'dart:ui';
+
 import 'package:buecherteam_2023_desktop/Data/class_data.dart';
+import 'package:buecherteam_2023_desktop/Resources/chip_colors.dart';
 
 import '../../Data/book.dart';
 import '../../Data/bookLite.dart';
@@ -77,6 +81,23 @@ Future<List<TagData>> getTagsOfUtil(DB database, List<String> tags) async{
       .toList();
 
   return tagObjects;
+
+}
+
+Color getTagColor(Set<Color?> usedColors) {
+
+  List<Color> availableColors = ChipColors.chipColors.toList();
+
+  for (Color? color in usedColors) {
+    availableColors.remove(color);
+  }
+
+  if (availableColors.isEmpty) {
+    return ChipColors.chipColors[Random().nextInt(ChipColors.chipColors.length-1)];
+  }
+
+  return availableColors.first;
+
 
 }
 

@@ -67,22 +67,22 @@ void main () {
 
     test ("valid TrainingDirection", () {
       String cl = "ausbildung12#_hallo";
-      expect(isTrainingDirectionValid(cl), isTrue);
+      expect(isAlphaNumericalExtended(cl), isTrue);
     });
 
     test ("invalid TrainingDirection because of hyphen", () {
       String cl = "ausbildung12#_hallo–neu";
-      expect(isTrainingDirectionValid(cl), isFalse);
+      expect(isAlphaNumericalExtended(cl), isFalse);
     });
 
     test ("invalid TrainingDirection because of trHyphen", () {
       String cl = "ausbildung12#_hallo-neu";
-      expect(isTrainingDirectionValid(cl), isFalse);
+      expect(isAlphaNumericalExtended(cl), isFalse);
     });
 
     test ("invalid TrainingDirection because of multiple reasons", () {
       String cl = "ausbildung,–12#_hallo-neu";
-      expect(isTrainingDirectionValid(cl), isFalse);
+      expect(isAlphaNumericalExtended(cl), isFalse);
     });
 
   });

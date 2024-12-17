@@ -20,7 +20,6 @@ import 'package:cbl_flutter/cbl_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-
 import 'Data/class_data.dart';
 import 'Resources/dimensions.dart';
 import 'UI/app_introduction/add_class_data.dart';
@@ -33,6 +32,8 @@ void main() async {
   await CouchbaseLiteFlutter.init();
 
   await DB().initializeDatabase();
+
+
 
 
   List<ClassData>? classes = await getAllClasses(DB());

@@ -16,6 +16,19 @@ Future<void> addClasses (List<ClassData> classes, DB database) async{
   await database.saveDocuments(classDocs);
 }
 
+Future<void> addTags(List<TagData> tagsToAdd, DB database) async{
+
+  List<MutableDocument> tagDocs = [];
+  for (TagData tagData in tagsToAdd) {
+    MutableDocument doc = MutableDocument();
+    database.updateDocFromEntity(tagData, doc);
+    tagDocs.add(doc);
+  }
+
+  await database.saveDocuments(tagDocs);
+
+}
+
 Future<void> addChip(DB database, TagData createdChip) async{
   MutableDocument doc = MutableDocument();
   database.updateDocFromEntity(createdChip, doc);
