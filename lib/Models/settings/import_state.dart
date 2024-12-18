@@ -29,6 +29,8 @@ import '../../Util/settings/import/import_update_or_create_students_util.dart';
 import '../../Util/settings/import/students_from_excel.dart';
 
 class ImportState extends ChangeNotifier {
+
+
   ImportState(this.database);
 
   final DB database;
@@ -62,6 +64,8 @@ class ImportState extends ChangeNotifier {
    */
   bool isClassWithoutCharAllowed = false;
   bool updateExistingStudents = false;
+  bool importBasicBooks = true;
+  bool overwriteClasses = false;
   /*
   Select Excel file screen
    */
@@ -272,7 +276,7 @@ class ImportState extends ChangeNotifier {
     //1. build a List of Student objects without their books
     List<MutableDocument> studentsToBeImported = getStudentsFromExcel(excelFile!,
         currTrainingDirectionMap,
-        currStudentAttributeToHeaders, database);
+        currStudentAttributeToHeaders, importBasicBooks, database);
     //2. Import the students
     await database.saveDocuments(studentsToBeImported);
     await Future.delayed(const Duration(seconds: 1));
@@ -296,7 +300,7 @@ class ImportState extends ChangeNotifier {
     //e.g.: [Student1 => tr1, Student1 => tr 2] => [Student1 => [tr1, tr2]]
     List<MutableDocument> studentRowsToBeImported = getStudentsFromExcel(excelFile!,
         currTrainingDirectionMap,
-        currStudentAttributeToHeaders, database);
+        currStudentAttributeToHeaders, importBasicBooks, database);
     List<MutableDocument> studentGroupedRowsToBeImported =
                           groupStudentsAccordingToName(studentRowsToBeImported, database);
 
@@ -315,6 +319,7 @@ class ImportState extends ChangeNotifier {
         await getUpdatedOrCreatedStudents(
             studentGroupedRowsToBeImported,
             studentFirstLastNameExistingStudents,
+            overwriteClasses,
             database);
       await database.saveDocuments(finalStudentsToImport);
     //4. Update book amounts with studentGroupedRowsToBeImported
@@ -372,6 +377,14 @@ class ImportState extends ChangeNotifier {
     excelFile = null;
     selectExcelFileError = TextRes.selectExcelFileError;
 
+  }
+
+  void setImportBasicBooks(bool importBasicBooks) {
+    this.importBasicBooks = importBasicBooks;
+  }
+
+  void setOverwriteClasses(bool overwriteClasses) {
+    this.overwriteClasses = overwriteClasses;
   }
 
 

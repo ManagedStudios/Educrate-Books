@@ -9,6 +9,7 @@ import '../../../Data/student.dart';
 Future<List<MutableDocument>> getUpdatedOrCreatedStudents
     (List<MutableDocument> studentGroupedRowsToBeImported,
     Map<String, Student> studentFirstLastNameExistingStudents,
+    bool overwriteClass,
     DB database) async{
 
   List<MutableDocument> res = [];
@@ -38,7 +39,18 @@ Future<List<MutableDocument>> getUpdatedOrCreatedStudents
       existingStudent.addTags(newInfoStudent.tags);
 
       updatedDoc = MutableDocument.withId(existingStudent.id);
-      database.updateDocFromEntity(existingStudent, updatedDoc);
+      if (overwriteClass) { //class should be overwritten
+        Student updatedStudent = Student(existingStudent.id,
+            firstName: existingStudent.firstName, lastName: existingStudent.lastName,
+            classLevel: newInfoStudent.classLevel, classChar: newInfoStudent.classChar,
+            trainingDirections: existingStudent.trainingDirections,
+            books: existingStudent.books,
+            amountOfBooks: existingStudent.amountOfBooks, tags: existingStudent.tags);
+        database.updateDocFromEntity(updatedStudent, updatedDoc);
+      } else {
+        database.updateDocFromEntity(existingStudent, updatedDoc);
+      }
+
     } else { //student does not exist, so create new one with books added
       Student newStudent = database.toEntity(Student.fromJson, studentDoc);
       newStudent.addBooks(booksToAdd);

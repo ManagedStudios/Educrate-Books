@@ -1,4 +1,3 @@
-import 'package:buecherteam_2023_desktop/Models/settings/import_state.dart';
 import 'package:buecherteam_2023_desktop/Models/settings/settings_nav_state.dart';
 import 'package:buecherteam_2023_desktop/Resources/dimensions.dart';
 import 'package:buecherteam_2023_desktop/UI/input/check_preference.dart';
@@ -6,14 +5,12 @@ import 'package:buecherteam_2023_desktop/UI/settings_dialog/import/select_excel.
 import 'package:buecherteam_2023_desktop/UI/settings_dialog/import_parent.dart';
 import 'package:buecherteam_2023_desktop/UI/settings_dialog/nav_bottom_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
-import '../../../Resources/text.dart';
 
 class ImportPreferences extends StatelessWidget {
-  const ImportPreferences({super.key, required this.importFunction});
+  const ImportPreferences({super.key, required this.importFunction, required this.checkPreferences});
 
   final Future<bool> Function() importFunction;
+  final List<CheckPreference> checkPreferences;
 
   @override
   Widget build(BuildContext context) {
@@ -22,17 +19,12 @@ class ImportPreferences extends StatelessWidget {
       child: Column(
 
         children: [
-          CheckPreference(onChanged: (allowClassWithoutChar){
-            Provider.of<ImportState>(context, listen: false)
-                .setIsClassWithoutCharAllowed(allowClassWithoutChar);
-          },
-              text: TextRes.importPreferencesClassCharDescription),
-          const SizedBox(height: Dimensions.spaceMedium,),
-          CheckPreference(onChanged: (updateExistingStudents){
-            Provider.of<ImportState>(context, listen: false)
-                .setUpdateExistingStudent(updateExistingStudents);
-          },
-              text: TextRes.importPreferencesExistingStudentsDescription),
+          for (CheckPreference preference in checkPreferences)
+            ...[
+              preference,
+              const SizedBox(height: Dimensions.spaceMedium,)
+            ]
+          ,
           const Spacer(),
           NavBottomBar(
               nextWidget: MapEntry(SettingsNavButtons.IMPORT,

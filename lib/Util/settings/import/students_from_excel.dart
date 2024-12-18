@@ -15,6 +15,7 @@ import '../../stringUtil.dart';
 List<MutableDocument> getStudentsFromExcel(Excel excelFile,
     Map<ExcelData, TrainingDirectionsData?> currTrainingDirectionMap,
     Map<StudentAttributes, List<ExcelData>> currStudentAttributeToHeaders,
+    bool addBasicBooks,
     DB database) {
   //Map strings directly to TrainingDirectionsData
   Map<String, TrainingDirectionsData> finalTrainingDirectionMap =
@@ -58,8 +59,10 @@ List<MutableDocument> getStudentsFromExcel(Excel excelFile,
       if (firstName != null && lastName!=null && classDataString != null) {
         ClassData classData = parseStringToClass(classDataString);
         //every student has the BASIC-X trainingDirection:
-        finalMappedTrainingDirections
+        if (addBasicBooks) {
+          finalMappedTrainingDirections
             .add("${TextRes.basicTrainingDirection}${TextRes.trainingDirectionHyphen}${classData.classLevel}");
+        }
 
         final document = MutableDocument();
         final student = Student(document.id, firstName: firstName, lastName: lastName,

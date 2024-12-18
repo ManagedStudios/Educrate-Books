@@ -350,7 +350,11 @@ class TextRes {
 
   static const String tagRemoved = "Tag entfernt!";
 
-  static String importTagInvalid = r'| Tags dürfen keine "-", "–", ",", ";" beinhalten! | ' "\n";
+  static const String importTagInvalid = r'| Tags dürfen keine "-", "–", ",", ";" beinhalten! | ' "\n";
+
+  static const String importPreferencesBasicBooks = "BASIC Bücher (Bücher, die jeder Schüler einer Klassenstufe bekommen soll) importieren";
+
+  static const String importPreferencesOverwriteClasses = "Klassen vorhandener Schüler überschreiben, falls sie sich von der neuen Excel-Datentabelle unterscheidet";
 
 
 
