@@ -162,11 +162,11 @@ class DB {
   Future<void> startReplication() async {
 
     final config = ReplicatorConfiguration(
-      target: UrlEndpoint(Uri.parse('ws://qsfahmjkwwspwnxwkmjwfhdk.goip.de:4984/buecherteam/')),
+      target: UrlEndpoint(Uri.parse('wss://lfgsync.dibbomrinmoysaha.engineer/buecherteam/')),
       continuous: true
     )
       ..addCollection(defaultCollection)
-      ..authenticator = BasicAuthenticator(username: "dibbo", password: "SQf3M7D?3xq5");
+      ..authenticator = BasicAuthenticator(username: "dibbo", password: "LFG.Dibb0.80807Gert06!");
 
     final replicator = await Replicator.create(config);
 
