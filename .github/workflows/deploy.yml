@@ -1,0 +1,47 @@
+name: Build and Release Flutter App
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    name: Build for ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-latest, macos-latest, ubuntu-latest]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: stable
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build Windows executable
+        if: matrix.os == 'windows-latest'
+        run: flutter build windows
+
+      - name: Build macOS app
+        if: matrix.os == 'macos-latest'
+        run: flutter build macos
+
+      - name: Build Android APK
+        if: matrix.os == 'ubuntu-latest'
+        run: flutter build apk --release
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-${{ matrix.os }}
+          path: |
+            build/windows/runner/Release/*.exe
+            build/macos/Build/Products/Release/*.app
+            build/app/outputs/flutter-apk/*.apk
