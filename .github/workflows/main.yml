@@ -2,8 +2,7 @@ name: Build and Release Flutter App
 
 on:
   push:
-    branches:
-      - master
+      branches: [ "main" ]
 
 jobs:
   build:
