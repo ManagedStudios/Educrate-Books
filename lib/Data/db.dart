@@ -161,11 +161,11 @@ class DB {
     final replicator = await Replicator.create(ReplicatorConfiguration(
       database: _database,
       target: UrlEndpoint(Uri.parse(
-          'wss://lfgsync.dibbomrinmoysaha.engineer/buecherteam/')), //The URI your reverse proxy server or your sync gateway is located - ws is websocket
+          'ws://qsfahmjkwwspwnxwkmjwfhdk.goip.de:4984/buecherteam/')), //The URI your reverse proxy server or your sync gateway is located - ws is websocket
       continuous: true,
       replicatorType: ReplicatorType.pushAndPull,
       authenticator:
-          BasicAuthenticator(username: "dibbo", password: "LFG.Dibb0.80807Gert06!"),
+          BasicAuthenticator(username: "dibbo", password: "SQf3M7D?3xq5"),
     ));
 
     final completer = Completer<void>();
