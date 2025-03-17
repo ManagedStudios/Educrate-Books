@@ -6,14 +6,11 @@ on:
 
 jobs:
   build:
-    name: Build for ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [windows-latest, macos-latest, ubuntu-latest]
+    runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: checkout repo
+      - uses: actions/checkout@v3
 
       # Setup Flutter SDK version 3.22.0
       - name: Set up Flutter
@@ -24,23 +21,21 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Build Windows executable
-        if: matrix.os == 'windows-latest'
-        run: flutter build windows
+      - name: Decode Keystore File
+        run: echo "${{ secrets.ANDROID_KEYSTORE }}" | base64 --decode > android/app/keystore.jks
 
-      - name: Build macOS app
-        if: matrix.os == 'macos-latest'
-        run: flutter build macos
+      - name: Decode Keystore Credentials
+        run: |
+          echo "${{ secrets.KEYSTORE_ALIAS }}" | base64 --decode > keystore_alias.txt
+          echo "${{ secrets.KEYSTORE_PASSWORD }}" | base64 --decode > keystore_password.txt
+          echo "${{ secrets.KEY_PASSWORD }}" | base64 --decode > key_password.txt
 
-      - name: Build Android APK
-        if: matrix.os == 'ubuntu-latest'
-        run: flutter build apk --release
+      - name: Build Signed APK
+        run: |
+          flutter build apk --release \
+            --dart-define=KEYSTORE_PATH=android/app/keystore.jks \
+            --dart-define=KEYSTORE_ALIAS=$(cat keystore_alias.txt) \
+            --dart-define=KEYSTORE_PASSWORD=$(cat keystore_password.txt) \
+            --dart-define=KEY_PASSWORD=$(cat key_password.txt)
 
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-${{ matrix.os }}
-          path: |
-            build/windows/runner/Release/*.exe
-            build/macos/Build/Products/Release/*.app
-            build/app/outputs/flutter-apk/*.apk
+  
