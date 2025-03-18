@@ -1,40 +1,63 @@
 name: Build and Release Flutter App
-
 on:
   push:
-      branches: [ "main" ]
-
+    branches: [ "main" ]
 permissions: write-all
-
 jobs:
   build:
-    runs-on: macos-latest
+    strategy:
+      matrix:
+        os: [macos-latest, windows-latest]
+        include:
+          - os: macos-latest
+            output_path: build/macos/Build/Products/Release
+            artifact_name: buecherteam_macos.zip
+            build_command: flutter build macos
+            package_command: cd build/macos/Build/Products/Release && zip -r buecherteam_macos.zip buecherteam_2023_desktop.app
+          - os: windows-latest
+            output_path: build/windows/runner/Release
+            artifact_name: buecherteam_windows.zip
+            build_command: flutter build windows
+            package_command: powershell Compress-Archive -Path build/windows/runner/Release/* -DestinationPath build/windows/runner/Release/buecherteam_windows.zip
 
+    runs-on: ${{ matrix.os }}
     steps:
-      - name: checkout repo
+      - name: Checkout repo
         uses: actions/checkout@v3
-
-      # Setup Flutter SDK version 3.22.0
+        
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.22.0'
-
+          
       - name: Install dependencies
         run: flutter pub get
-
-      - name: Build macos
-        run: flutter build macos
-
+        
+      - name: Build application
+        run: ${{ matrix.build_command }}
+        
       - name: Package app
-        run: |
-            cd build/macos/Build/Products/Release
-            zip -r buecherteam_macos.zip buecherteam_2023_desktop.app
-
+        run: ${{ matrix.package_command }}
+        
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ matrix.artifact_name }}
+          path: ${{ matrix.output_path }}/${{ matrix.artifact_name }}
+          
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v3
+        
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
-          files: build/macos/Build/Products/Release/buecherteam_macos.zip
+          files: |
+            buecherteam_macos.zip/buecherteam_macos.zip
+            buecherteam_windows.zip/buecherteam_windows.zip
           tag_name: v${{ github.run_number }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
