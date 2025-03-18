@@ -8,18 +8,6 @@ jobs:
     strategy:
       matrix:
         os: [macos-latest, windows-latest]
-        include:
-          - os: macos-latest
-            output_path: build/macos/Build/Products/Release
-            artifact_name: buecherteam_macos.zip
-            build_command: flutter build macos
-            package_command: cd build/macos/Build/Products/Release && zip -r buecherteam_macos.zip buecherteam_2023_desktop.app
-          - os: windows-latest
-            output_path: build/windows/runner/Release
-            artifact_name: buecherteam_windows.zip
-            build_command: flutter build windows
-            package_command: powershell Compress-Archive -Path build/windows/runner/Release/* -DestinationPath build/windows/runner/Release/buecherteam_windows.zip
-
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout repo
@@ -33,31 +21,46 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
         
-      - name: Build application
-        run: ${{ matrix.build_command }}
+      # Build for macOS
+      - name: Build macOS
+        if: matrix.os == 'macos-latest'
+        run: flutter build macos
         
-      - name: Package app
-        run: ${{ matrix.package_command }}
-        
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ matrix.artifact_name }}
-          path: ${{ matrix.output_path }}/${{ matrix.artifact_name }}
+      - name: Package macOS app
+        if: matrix.os == 'macos-latest'
+        run: |
+          cd build/macos/Build/Products/Release
+          zip -r buecherteam_macos.zip buecherteam_2023_desktop.app
           
-  release:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download all artifacts
-        uses: actions/download-artifact@v3
+      # Build for Windows
+      - name: Build Windows
+        if: matrix.os == 'windows-latest'
+        run: flutter build windows
         
-      - name: Create Release
+      - name: Package Windows app
+        if: matrix.os == 'windows-latest'
+        run: |
+          cd build/windows/runner/Release
+          powershell Compress-Archive -Path * -DestinationPath buecherteam_windows.zip
+          
+      # Create Release for macOS
+      - name: Create Release for macOS
+        if: matrix.os == 'macos-latest'
         uses: softprops/action-gh-release@v1
         with:
-          files: |
-            buecherteam_macos.zip/buecherteam_macos.zip
-            buecherteam_windows.zip/buecherteam_windows.zip
+          files: build/macos/Build/Products/Release/buecherteam_macos.zip
           tag_name: v${{ github.run_number }}
+          fail_on_unmatched_files: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+      # Create Release for Windows
+      - name: Create Release for Windows
+        if: matrix.os == 'windows-latest'
+        uses: softprops/action-gh-release@v1
+        with:
+          files: build/windows/runner/Release/buecherteam_windows.zip
+          tag_name: v${{ github.run_number }}
+          fail_on_unmatched_files: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
