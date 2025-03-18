@@ -24,4 +24,15 @@ jobs:
       - name: Build macos
         run: flutter build macos
 
-  
+      - name: Package app
+        run: |
+            cd build/macos/Build/Products/Release
+            zip -r buecherteam_macos.zip buecherteam_2023_desktop.app
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: build/macos/Build/Products/Release/buecherteam_macos.zip
+          tag_name: v${{ github.run_number }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
