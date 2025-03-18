@@ -40,7 +40,7 @@ jobs:
       - name: Package Windows app
         if: matrix.os == 'windows-latest'
         run: |
-          cd build/windows/runner/Release
+          cd build/windows/x64/runner/Release
           powershell Compress-Archive -Path * -DestinationPath buecherteam_windows.zip
           
       # Create Release for macOS
@@ -59,7 +59,7 @@ jobs:
         if: matrix.os == 'windows-latest'
         uses: softprops/action-gh-release@v1
         with:
-          files: build/windows/runner/Release/buecherteam_windows.zip
+          files: build/windows/x64/runner/Release/buecherteam_windows.zip
           tag_name: v${{ github.run_number }}
           fail_on_unmatched_files: false
         env:
