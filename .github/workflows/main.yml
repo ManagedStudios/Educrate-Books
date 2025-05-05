@@ -1,27 +1,66 @@
 name: Build and Release Flutter App
-
 on:
   push:
-      branches: [ "main" ]
-
+    branches: [ "main" ]
+permissions: write-all
 jobs:
   build:
-    runs-on: macos-latest
-
+    strategy:
+      matrix:
+        os: [macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
     steps:
-      - name: checkout repo
+      - name: Checkout repo
         uses: actions/checkout@v3
-
-      # Setup Flutter SDK version 3.22.0
+        
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.22.0'
-
+          
       - name: Install dependencies
         run: flutter pub get
-
-      - name: Build macos
+        
+      # Build for macOS
+      - name: Build macOS
+        if: matrix.os == 'macos-latest'
         run: flutter build macos
-
-  
+        
+      - name: Package macOS app
+        if: matrix.os == 'macos-latest'
+        run: |
+          cd build/macos/Build/Products/Release
+          zip -r buecherteam_macos.zip buecherteam_2023_desktop.app
+          
+      # Build for Windows
+      - name: Build Windows
+        if: matrix.os == 'windows-latest'
+        run: flutter build windows
+        
+      - name: Package Windows app
+        if: matrix.os == 'windows-latest'
+        run: |
+          cd build/windows/x64/runner/Release
+          powershell Compress-Archive -Path * -DestinationPath buecherteam_windows.zip
+          
+      # Create Release for macOS
+      - name: Create Release for macOS
+        if: matrix.os == 'macos-latest'
+        uses: softprops/action-gh-release@v1
+        with:
+          files: build/macos/Build/Products/Release/buecherteam_macos.zip
+          tag_name: v${{ github.run_number }}
+          fail_on_unmatched_files: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+      # Create Release for Windows
+      - name: Create Release for Windows
+        if: matrix.os == 'windows-latest'
+        uses: softprops/action-gh-release@v1
+        with:
+          files: build/windows/x64/runner/Release/buecherteam_windows.zip
+          tag_name: v${{ github.run_number }}
+          fail_on_unmatched_files: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
