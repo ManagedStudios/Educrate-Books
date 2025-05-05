@@ -10,6 +10,7 @@ class DB {
   }
 
   late final Database _database;
+  late final Collection defaultCollection;
 
   DB._internal();
 
@@ -17,6 +18,7 @@ class DB {
     _database = await Database.openAsync(
         TextRes.dbName
     );
+    defaultCollection = await _database.defaultCollection;
 
     final typeIndex = ValueIndexConfiguration(['type']);
     final bookClassLevelIndex =
@@ -42,23 +44,23 @@ class DB {
       TextRes.bookClassLevelJson,
       TextRes.bookTrainingDirectionJson
     ]);
-    await _database.createIndex("Types", typeIndex);
-    await _database.createIndex(TextRes.ftsStudent, ftsIndex);
-    await _database.createIndex(TextRes.ftsBookStudentDetail, bookFtsIndex);
-    await _database.createIndex(
+    await defaultCollection.createIndex("Types", typeIndex);
+    await defaultCollection.createIndex(TextRes.ftsStudent, ftsIndex);
+    await defaultCollection.createIndex(TextRes.ftsBookStudentDetail, bookFtsIndex);
+    await defaultCollection.createIndex(
         TextRes.bookClassLevelJsonIndex, bookClassLevelIndex);
-    await _database.createIndex(
+    await defaultCollection.createIndex(
         TextRes.trainingDirectionsJsonIndex, trainingDirectionIndex);
-    await _database.createIndex(TextRes.booksOfTrainingDirectionsIndex,
+    await defaultCollection.createIndex(TextRes.booksOfTrainingDirectionsIndex,
         searchBooksOfTrainingDirectionsIndex);
-    await _database.createIndex(
+    await defaultCollection.createIndex(
         TextRes.studentsOfBookIdIndex, studentsOfBookIdIndex);
 
     //await startReplication();
   }
 
   Future<void> saveDocument(MutableDocument document) async {
-    await _database.saveDocument(document);
+    await defaultCollection.saveDocument(document);
   }
   /*
   save multiple Documents
@@ -67,7 +69,7 @@ class DB {
   Future<void> saveDocuments(List<MutableDocument> documents) async {
     await _database.inBatch(() async{
       for (MutableDocument document in documents) {
-       await _database.saveDocument(document);
+       await defaultCollection.saveDocument(document);
       }
     });
   }
@@ -82,7 +84,7 @@ class DB {
    */
   Stream<QueryChange<ResultSet>> streamLiveDocs(String query) async* {
     try {
-      final queryRes = await Query.fromN1ql(_database, query); //build query
+      final queryRes = await _database.createQuery(query); //build query
       yield* queryRes.changes(); //pass the generic stream of the build query
       /*
       handle db specific errors in order to prevent duplicate error handling further down the line
@@ -101,7 +103,7 @@ class DB {
    as every query is executed. Always provide hardcoded queries to this method!
    */
   Future<ResultSet> getDocs(String query) async {
-    final queryRes = await Query.fromN1ql(_database, query);
+    final queryRes = await _database.createQuery(query);
     return queryRes.execute();
   }
 
@@ -110,14 +112,14 @@ class DB {
    */
 
   Future<Document?> getDoc(String docId) async {
-    return _database.document(docId);
+    return defaultCollection.document(docId);
   }
 
   /*
   Delete a single document that is provided
    */
   Future<void> deleteDoc(Document document) async {
-    await _database.deleteDocument(document);
+    await defaultCollection.deleteDocument(document);
   }
 
   /*
@@ -127,7 +129,7 @@ class DB {
   Future<void> deleteDocs(List<Document> documents) async {
     await _database.inBatch(() async {
       for (Document document in documents) {
-        await _database.deleteDocument(document);
+        await defaultCollection.deleteDocument(document);
       }
     });
   }
@@ -158,29 +160,28 @@ class DB {
    */
 
   Future<void> startReplication() async {
-    final replicator = await Replicator.create(ReplicatorConfiguration(
-      database: _database,
-      target: UrlEndpoint(Uri.parse(
-          'ws://qsfahmjkwwspwnxwkmjwfhdk.goip.de:4984/buecherteam/')), //The URI your reverse proxy server or your sync gateway is located - ws is websocket
-      continuous: true,
-      replicatorType: ReplicatorType.pushAndPull,
-      authenticator:
-          BasicAuthenticator(username: "dibbo", password: "SQf3M7D?3xq5"),
-    ));
+
+    final config = ReplicatorConfiguration(
+      target: UrlEndpoint(Uri.parse('ws://qsfahmjkwwspwnxwkmjwfhdk.goip.de:4984/buecherteam/')),
+      continuous: true
+    )
+      ..addCollection(defaultCollection)
+      ..authenticator = BasicAuthenticator(username: "dibbo", password: "SQf3M7D?3xq5");
+
+    final replicator = await Replicator.create(config);
 
     final completer = Completer<void>();
 
-    // Add a change listener to track replication status
     final listenerToken = await replicator.addChangeListener((ReplicatorChange change) {
-      // Check for "idle" state, indicating the first replication cycle is complete
-      if (
-        (change.status.activity == ReplicatorActivityLevel.idle //synchronisation cycle finished
-        || change.status.activity == ReplicatorActivityLevel.offline //no internet -> proceed
-        || change.status.error != null) && //error -> proceed
-          !completer.isCompleted) {
-        completer.complete(); // Signal that replication is complete
-      }
+      final activity = change.status.activity;
+      final error = change.status.error;
 
+      if ((activity == ReplicatorActivityLevel.idle ||
+          activity == ReplicatorActivityLevel.offline ||
+          error != null) &&
+          !completer.isCompleted) {
+        completer.complete();
+      }
     });
 
     await replicator.start();
@@ -189,6 +190,7 @@ class DB {
 
     replicator.removeChangeListener(listenerToken);
   }
+
 
 
 
