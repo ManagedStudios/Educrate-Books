@@ -13,6 +13,9 @@ import '../../../Data/training_directions_data.dart';
 import '../../database/getter.dart';
 import '../../parser.dart';
 
+/*
+Make first name, last name and class only selectable once
+ */
 List<StudentAttributes> getUpdatedAvailableAttributes (List<StudentAttributes?> currAvailableStudentAttributes) {
   List<StudentAttributes> updatedAvailableStudentAttributes = StudentAttributes.values.toList();
   for (StudentAttributes? value in currAvailableStudentAttributes) {
@@ -23,6 +26,11 @@ List<StudentAttributes> getUpdatedAvailableAttributes (List<StudentAttributes?> 
   return updatedAvailableStudentAttributes;
 }
 
+/*
+sum up all excel cells that have the same StudentAttribute assigned
+Transform ExcelCells(ExcelData) mapped to one StudentAttribute to
+Studentattribute to a List of ExcelCells
+ */
 Map<StudentAttributes, List<ExcelData>> getStudentAttributesToHeadersFrom
     (Map<ExcelData, StudentAttributes?> headerToAttrb) {
 
@@ -40,6 +48,7 @@ Map<StudentAttributes, List<ExcelData>> getStudentAttributesToHeadersFrom
 
   return res;
 }
+
 
 Map<TrainingDirectionsData, Set<int>> getUniqueTrainingDirectionsOf
     (Sheet sheet,

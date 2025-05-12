@@ -1,11 +1,9 @@
 
 
 import 'package:buecherteam_2023_desktop/Data/class_data.dart';
-import 'package:buecherteam_2023_desktop/Data/shared_preferences.dart';
 import 'package:buecherteam_2023_desktop/Resources/text.dart';
 import 'package:buecherteam_2023_desktop/UI/student_view.dart';
 import 'package:cbl/cbl.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -22,14 +20,7 @@ class AppIntroductionState extends ChangeNotifier {
   List<ClassData>? classesToImport;
   bool dbInitialized = false;
 
-  Future<void> getAndSavePath() async{
-    String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
-    if (selectedDirectory == null) return;
-    selectedPath = selectedDirectory;
-    await savePreference(TextRes.dbPath, selectedPath!);
-    currError = null;
-    notifyListeners();
-  }
+
 
   Future<void> goToNextPage (BuildContext context) async{
     currIntroIndex++;

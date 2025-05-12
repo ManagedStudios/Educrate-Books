@@ -79,6 +79,9 @@ class ImportState extends ChangeNotifier {
     notifyListeners();
   }
 
+  /*
+  update the available attributes the user can map as well as the shown error
+   */
   void setCurrHeaderToAttributeMap(Map<ExcelData, StudentAttributes?> headerToAttribute) {
     currHeaderToAttributeMap = headerToAttribute;
     availableStudentAttributes = getUpdatedAvailableAttributes(currHeaderToAttributeMap.values.toList());
