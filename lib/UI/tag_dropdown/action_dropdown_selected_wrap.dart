@@ -98,8 +98,15 @@ class _ActionDropdownSelectedWrapState<T extends LfgChip>
                     controller: controller,
                     focusNode: focusNode,
                     onChanged: (text) {
-                      controller.text = text.toUpperCase();
-                      widget.onFilterTextChange(text.toUpperCase());
+                      final upperText = text.toUpperCase();
+                      if (controller.text != upperText) {
+                        final selection = controller.selection;
+                        controller.value = controller.value.copyWith(
+                          text: upperText,
+                          selection: selection,
+                        );
+                      }
+                      widget.onFilterTextChange(upperText);
                     },
                     decoration: const InputDecoration(
                       border: InputBorder
@@ -128,3 +135,4 @@ class _ActionDropdownSelectedWrapState<T extends LfgChip>
     );
   }
 }
+
