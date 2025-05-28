@@ -14,6 +14,7 @@ class AddFilterButton extends StatelessWidget {
     return TextButton(
         key: globalKey, //identify the button to position the add filter overlay
         style: ButtonStyle(
+            surfaceTintColor: const WidgetStatePropertyAll(Colors.transparent),
             shape: WidgetStatePropertyAll(RoundedRectangleBorder(
                 borderRadius:
                     BorderRadius.circular(Dimensions.cornerRadiusSmall))),

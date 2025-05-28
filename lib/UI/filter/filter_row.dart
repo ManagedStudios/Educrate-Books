@@ -15,7 +15,7 @@ class FilterRow extends StatelessWidget {
       child: Row(
         children: [
           StandardFilterButton(
-              onClick: (click) {}, active: true, standardText: "standardText"),
+              onClick: (click) {}, active: true, standardText: "hat Bücher"),
           const SizedBox(
             width: Dimensions.spaceVerySmall,
           ),

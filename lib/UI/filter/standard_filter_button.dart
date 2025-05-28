@@ -1,3 +1,4 @@
+import 'package:buecherteam_2023_desktop/Theme/color_scheme.dart';
 import 'package:flutter/material.dart';
 
 import '../../Resources/dimensions.dart';
@@ -28,6 +29,7 @@ class _StandardFilterButtonState extends State<StandardFilterButton> {
             ?.copyWith(color: theme.colorScheme.secondary),
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(Dimensions.cornerRadiusMedium)),
+        backgroundColor: lightColorScheme.background,
         side: BorderSide(
             color: theme.colorScheme.secondary, width: Dimensions.lineWidth),
         padding: const EdgeInsets.all(Dimensions

@@ -136,7 +136,7 @@ class Homepage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //TODO add background color manually and delete background in color scheme
+        backgroundColor: lightColorScheme.background,
         appBar: PreferredSize(
           preferredSize: Size(364, Dimensions.navBarHeight),
           child: const LfgNavigationBar(),
