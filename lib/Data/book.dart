@@ -176,9 +176,10 @@ class Book implements LfgChip, BookLite, SelectableItem {
 
   @override
   int compareTo(other) {
-    String first = "$classLevel$subject";
-    String second = "${other.classLevel}${other.subject}";
-    return first.compareTo(second);
+    if (classLevel != other.classLevel) {
+      return classLevel.compareTo(other.classLevel);
+    }
+    return subject.compareTo(other.subject);
   }
 
   @override

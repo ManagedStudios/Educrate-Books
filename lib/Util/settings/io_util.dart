@@ -47,3 +47,23 @@ Future<String> getDatabasePath () async {
   return dbPath;
 }
 
+Future<bool> downloadFile (List<int>? fileBytes, String fileName,
+    String savingDescription) async{
+  String? outputFile = await FilePicker.platform.saveFile(
+    dialogTitle: savingDescription,
+    fileName: fileName,
+  );
+
+  if (outputFile != null) {
+    final excelBytes = fileBytes;
+
+    File(outputFile)
+      ..createSync(recursive: true)
+      ..writeAsBytesSync(excelBytes!);
+
+    return true;
+  } else {
+    return false;
+  }
+}
+

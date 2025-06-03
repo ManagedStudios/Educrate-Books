@@ -358,6 +358,29 @@ class TextRes {
 
   static const String exportAllBooks = "Alle Bücher exportieren";
 
+  static const String exportExcelClassLevel = "Jahrgangsstufe";
+
+  static const String exportExcelSubject = "Fach";
+
+  static const String exportExcelBookName = "Buchname";
+
+  static const String exportExcelTotalAv = "Total Verfügbar";
+
+  static const String exportExcelAmountInStuOwn = "An Schüler entliehen";
+
+  static const String exportExcelNowAv = "Jetzt verfügbar";
+
+  static const String exportExcelIsbn = "ISBN";
+
+  static const String exportExcelAllBooksSheetName = "Alle Bücher";
+
+  static const String exportExcelClassLevelSheet = "Klasse-";
+
+  static const String exportAllBooksFileName = "Bücherliste";
+
+  static const String exportAllBooksDialogDescription = "Bücherliste speichern";
+
+
 
 
 

@@ -1,5 +1,4 @@
 import 'dart:collection';
-import 'dart:io';
 
 import 'package:buecherteam_2023_desktop/Data/bookLite.dart';
 import 'package:buecherteam_2023_desktop/Data/class_data.dart';
@@ -11,7 +10,7 @@ import 'package:buecherteam_2023_desktop/Resources/text.dart';
 import 'package:buecherteam_2023_desktop/Util/database/delete.dart';
 import 'package:buecherteam_2023_desktop/Util/database/getter.dart';
 import 'package:buecherteam_2023_desktop/Util/settings/import/import_general_util.dart';
-import 'package:buecherteam_2023_desktop/Util/settings/import/io_util.dart';
+import 'package:buecherteam_2023_desktop/Util/settings/io_util.dart';
 import 'package:cbl/cbl.dart';
 import 'package:excel/excel.dart';
 import 'package:file_picker/file_picker.dart';
@@ -212,22 +211,11 @@ class ImportState extends ChangeNotifier {
   }
 
   Future<bool> downloadExcelFormatErrorFile () async{
-    String? outputFile = await FilePicker.platform.saveFile(
-      dialogTitle: TextRes.saveExcelFormatErrorLabel,
-      fileName: TextRes.excelFormatErrorFileName,
-    );
-
-    if (outputFile != null) {
-      final excelBytes = excelFormatErrors!.encode();
-
-      File(outputFile)
-            ..createSync(recursive: true)
-            ..writeAsBytesSync(excelBytes!);
-
-      return true;
-    } else {
-      return false;
-    }
+    bool res = await
+            downloadFile(excelFormatErrors!.encode(),
+                TextRes.excelFormatErrorFileName,
+                TextRes.saveExcelFormatErrorLabel);
+    return res;
   }
 
   /*
