@@ -56,7 +56,7 @@ class DB {
     await defaultCollection.createIndex(
         TextRes.studentsOfBookIdIndex, studentsOfBookIdIndex);
 
-    //await startReplication();
+    await startReplication();
   }
 
   Future<void> saveDocument(MutableDocument document) async {
