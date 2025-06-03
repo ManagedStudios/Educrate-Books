@@ -101,3 +101,15 @@ Color getTagColor(Set<Color?> usedColors) {
 
 }
 
+Future<List<Book>> getAllBooks(DB database) async{
+  final query = BuildQuery.getAllBooks();
+  final bookDocs = await database.getDocs(query);
+
+  List<Book> books = await bookDocs
+      .asStream()
+      .map((res) => database.toEntity(Book.fromJson, res))
+      .toList();
+
+  return books;
+}
+

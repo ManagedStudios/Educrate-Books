@@ -10,7 +10,7 @@ import '../../../Resources/text.dart';
 import '../nav_bottom_bar.dart';
 import 'attribute_mapper_list.dart';
 import 'import_error_screen.dart';
-import 'loading.dart';
+import '../common/loading.dart';
 
 class TrainingDirectionMapper extends StatelessWidget {
   const TrainingDirectionMapper({super.key, required this.previousWidget, required this.importFunction});

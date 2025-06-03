@@ -215,4 +215,21 @@ class BuildQuery {
 
     return query;
   }
+
+  static String getAllBooks () {
+
+    String query = """SELECT META().id, ${TextRes.bookNameJson}, 
+      ${TextRes.bookSubjectJson}, ${TextRes.bookClassLevelJson}, 
+      ${TextRes.bookTrainingDirectionJson}, ${TextRes.bookAmountInStudentOwnershipJson},
+      ${TextRes.bookNowAvailableJson}, ${TextRes.bookTotalAvailableJson}, 
+      ${TextRes.bookIsbnNumberJson}, ${TextRes.bookPublisherJson},
+      ${TextRes.bookPriceJson}, ${TextRes.bookAdmissionNumberJson},
+      ${TextRes.bookFollowingBookJson} FROM _default 
+      WHERE ${TextRes.typeJson}='${TextRes.bookTypeJson}' """;
+
+
+    return query;
+  }
+
+
 }

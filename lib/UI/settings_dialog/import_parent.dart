@@ -1,6 +1,6 @@
 import 'package:buecherteam_2023_desktop/Models/settings/import_state.dart';
 import 'package:buecherteam_2023_desktop/Models/settings/settings_nav_state.dart';
-import 'package:buecherteam_2023_desktop/UI/settings_dialog/import/big_button.dart';
+import 'package:buecherteam_2023_desktop/UI/settings_dialog/common/big_button.dart';
 import 'package:buecherteam_2023_desktop/UI/settings_dialog/import/import_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

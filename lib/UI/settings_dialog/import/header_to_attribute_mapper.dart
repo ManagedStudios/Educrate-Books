@@ -1,7 +1,7 @@
 import 'package:buecherteam_2023_desktop/Models/settings/import_state.dart';
 import 'package:buecherteam_2023_desktop/Resources/text.dart';
 import 'package:buecherteam_2023_desktop/UI/settings_dialog/import/download_excel_format_error.dart';
-import 'package:buecherteam_2023_desktop/UI/settings_dialog/import/loading.dart';
+import 'package:buecherteam_2023_desktop/UI/settings_dialog/common/loading.dart';
 import 'package:buecherteam_2023_desktop/UI/settings_dialog/import/training_direction_mapper.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

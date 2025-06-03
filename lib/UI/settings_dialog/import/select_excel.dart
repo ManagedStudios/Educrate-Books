@@ -2,7 +2,7 @@ import 'package:buecherteam_2023_desktop/Models/settings/import_state.dart';
 import 'package:buecherteam_2023_desktop/Models/settings/settings_nav_state.dart';
 import 'package:buecherteam_2023_desktop/Resources/dimensions.dart';
 import 'package:buecherteam_2023_desktop/UI/settings_dialog/import/header_to_attribute_mapper.dart';
-import 'package:buecherteam_2023_desktop/UI/settings_dialog/import/loading.dart';
+import 'package:buecherteam_2023_desktop/UI/settings_dialog/common/loading.dart';
 import 'package:buecherteam_2023_desktop/UI/settings_dialog/nav_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

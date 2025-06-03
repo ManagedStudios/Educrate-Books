@@ -356,6 +356,8 @@ class TextRes {
 
   static const String importPreferencesOverwriteClasses = "Klassen vorhandener Schüler überschreiben, falls sie sich von der neuen Excel-Datentabelle unterscheidet";
 
+  static const String exportAllBooks = "Alle Bücher exportieren";
+
 
 
 
