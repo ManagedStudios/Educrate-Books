@@ -49,7 +49,7 @@ class SyncState extends ChangeNotifier {
           break;
       }
       if (cblStatus.error != null) {
-        _status = SyncStatus(SyncConnectionStatus.disconnected, error: cblStatus.error!.toString());
+        _status = SyncStatus(SyncConnectionStatus.disconnected, error: cblStatus.error!.message);
       }
     }
     notifyListeners();
