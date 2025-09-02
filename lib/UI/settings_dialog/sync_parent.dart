@@ -1,6 +1,7 @@
 import 'package:buecherteam_2023_desktop/Models/settings/sync_state.dart';
 import 'package:buecherteam_2023_desktop/Models/settings/sync_status.dart';
 import 'package:buecherteam_2023_desktop/UI/input/dialog_text_field.dart';
+import 'package:buecherteam_2023_desktop/UI/input/password_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -14,18 +15,21 @@ class SyncParent extends StatefulWidget {
 class _SyncParentState extends State<SyncParent> {
   late final TextEditingController _usernameController;
   late final TextEditingController _passwordController;
+  late final TextEditingController _uriController;
 
   @override
   void initState() {
     super.initState();
     _usernameController = TextEditingController();
     _passwordController = TextEditingController();
+    _uriController = TextEditingController();
   }
 
   @override
   void dispose() {
     _usernameController.dispose();
     _passwordController.dispose();
+    _uriController.dispose();
     super.dispose();
   }
 
@@ -68,22 +72,26 @@ class _SyncParentState extends State<SyncParent> {
             ),
             const SizedBox(height: 16),
             DialogTextField(
-              controller: _usernameController,
+              controller: _uriController,
               onTextChanged: (_) => setState(() {}),
               hint: 'Username',
               errorText: null,
               enabled: true,
             ),
             DialogTextField(
-              controller: _passwordController,
+              controller: _usernameController,
               onTextChanged: (_) => setState(() {}),
-              hint: 'Password',
+              hint: 'Username',
               errorText: null,
               enabled: true,
+            ),
+            PasswordField(
+              controller: _passwordController
             ),
             ElevatedButton(
               onPressed: () {
                 syncState.saveCredentials(
+                  _uriController.text,
                   _usernameController.text,
                   _passwordController.text,
                 );

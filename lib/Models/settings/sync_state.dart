@@ -4,6 +4,8 @@ import 'package:cbl/cbl.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+import '../../Resources/text.dart';
+
 class SyncState extends ChangeNotifier {
   final FlutterSecureStorage _storage;
   final DB _db;
@@ -49,7 +51,7 @@ class SyncState extends ChangeNotifier {
           break;
       }
       if (cblStatus.error != null) {
-        _status = SyncStatus(SyncConnectionStatus.disconnected, error: cblStatus.error!.message);
+        _status = SyncStatus(SyncConnectionStatus.disconnected, error: cblStatus.error!.toString());
       }
     }
     notifyListeners();
@@ -67,19 +69,20 @@ class SyncState extends ChangeNotifier {
   }
 
 
-  static const _usernameKey = 'sync_username';
-  static const _passwordKey = 'sync_password';
 
-  Future<void> saveCredentials(String username, String password) async {
-    await _storage.write(key: _usernameKey, value: username);
-    await _storage.write(key: _passwordKey, value: password);
-    await _db.startReplication(); // Restart replication with new credentials
+
+  Future<void> saveCredentials(String uri, String username, String password) async {
+    await _storage.write(key: TextRes.uriKey, value: uri);
+    await _storage.write(key: TextRes.usernameKey, value: username);
+    await _storage.write(key: TextRes.passwordKey, value: password);
+    await _db.startReplication(uri); // Restart replication with new credentials
     notifyListeners();
   }
 
   Future<Map<String, String?>> getCredentials() async {
-    final username = await _storage.read(key: _usernameKey);
-    final password = await _storage.read(key: _passwordKey);
-    return {'username': username, 'password': password};
+    final uri = await _storage.read(key: TextRes.uriKey);
+    final username = await _storage.read(key: TextRes.usernameKey);
+    final password = await _storage.read(key: TextRes.passwordKey);
+    return {TextRes.uriKey: uri, TextRes.usernameKey: username, TextRes.passwordKey: password};
   }
 }

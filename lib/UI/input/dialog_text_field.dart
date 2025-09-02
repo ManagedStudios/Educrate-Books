@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../Resources/dimensions.dart';
 
-class DialogTextField extends StatelessWidget {
+class DialogTextField extends StatefulWidget {
   const DialogTextField(
       {super.key,
       required this.controller,
@@ -19,22 +19,27 @@ class DialogTextField extends StatelessWidget {
   final bool? enabled;
 
   @override
+  State<DialogTextField> createState() => _DialogTextFieldState();
+}
+
+class _DialogTextFieldState extends State<DialogTextField> {
+  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(Dimensions.paddingSmall),
       child: TextField(
-        controller: controller,
-        onChanged: onTextChanged,
+        controller: widget.controller,
+        onChanged: widget.onTextChanged,
         autocorrect: false,
         decoration: InputDecoration(
-            labelText: hint,
+            labelText: widget.hint,
             labelStyle: Theme.of(context).textTheme.labelMedium,
             border: OutlineInputBorder(
                 borderRadius:
                     BorderRadius.circular(Dimensions.cornerRadiusSmall)),
-            errorText: errorText,
+            errorText: widget.errorText,
             isDense: true),
-        enabled: enabled,
+        enabled: widget.enabled,
       ),
     );
   }

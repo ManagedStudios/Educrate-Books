@@ -380,6 +380,11 @@ class TextRes {
 
   static const String exportAllBooksDialogDescription = "Bücherliste speichern";
 
+  static const usernameKey = 'sync_username';
+  static const passwordKey = 'sync_password';
+
+  static const String uriKey = 'sync_uri';
+
 
 
 

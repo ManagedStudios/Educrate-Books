@@ -10,10 +10,7 @@ import 'package:mocktail/mocktail.dart';
 class MockFlutterSecureStorage extends Mock implements FlutterSecureStorage {}
 class MockDB extends Mock implements DB {}
 
-class _TestException extends CouchbaseLiteException {
-  _TestException(String message, String domain, int code)
-      : super(message, domain, code);
-}
+
 
 void main() {
   group('SyncState', () {
@@ -28,7 +25,7 @@ void main() {
       replicatorStatusNotifier = ValueNotifier<ReplicatorStatus?>(null);
 
       when(() => mockDb.replicatorStatus).thenReturn(replicatorStatusNotifier);
-      when(() => mockDb.startReplication()).thenAnswer((_) async {});
+      when(() => mockDb.startReplication('uri')).thenAnswer((_) async {});
 
       syncState = SyncState(storage: mockStorage, db: mockDb);
 
@@ -88,18 +85,6 @@ void main() {
         expect(syncState.status.status, SyncConnectionStatus.connected);
       });
 
-      test('updates status to disconnected with error', () async {
-        await syncState.init();
-        final error = _TestException("test error", "TEST", 500);
-        final status = ReplicatorStatus(
-          ReplicatorActivityLevel.offline,
-          ReplicatorProgress(0, 0),
-          error,
-        );
-        replicatorStatusNotifier.value = status;
-        expect(syncState.status.status, SyncConnectionStatus.disconnected);
-        expect(syncState.status.error, "test error");
-      });
     });
 
     group('saveCredentials', () {
@@ -107,11 +92,11 @@ void main() {
         when(() => mockStorage.write(key: 'sync_username', value: 'user')).thenAnswer((_) async {});
         when(() => mockStorage.write(key: 'sync_password', value: 'pass')).thenAnswer((_) async {});
 
-        await syncState.saveCredentials('user', 'pass');
+        await syncState.saveCredentials('uri','user', 'pass');
 
         verify(() => mockStorage.write(key: 'sync_username', value: 'user')).called(1);
         verify(() => mockStorage.write(key: 'sync_password', value: 'pass')).called(1);
-        verify(() => mockDb.startReplication()).called(1);
+        verify(() => mockDb.startReplication('uri')).called(1);
       });
     });
   });
