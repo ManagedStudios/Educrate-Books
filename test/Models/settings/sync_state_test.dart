@@ -10,6 +10,11 @@ import 'package:mocktail/mocktail.dart';
 class MockFlutterSecureStorage extends Mock implements FlutterSecureStorage {}
 class MockDB extends Mock implements DB {}
 
+class _TestException extends CouchbaseLiteException {
+  _TestException(String message, String domain, int code)
+      : super(message, domain, code);
+}
+
 void main() {
   group('SyncState', () {
     late SyncState syncState;
@@ -85,7 +90,7 @@ void main() {
 
       test('updates status to disconnected with error', () async {
         await syncState.init();
-        final error = CouchbaseLiteDartException("test error", "TEST", 500);
+        final error = _TestException("test error", "TEST", 500);
         final status = ReplicatorStatus(
           ReplicatorActivityLevel.offline,
           ReplicatorProgress(0, 0),
