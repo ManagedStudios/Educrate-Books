@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:teacher_organizer/UI/input/dialog_text_field.dart';
+
+
+import '../input/dialog_text_field.dart';
 
 class SyncParent extends StatefulWidget {
-  final Function(String username, String password) onSave;
 
-  const SyncParent({super.key, required this.onSave});
+  const SyncParent({super.key});
 
   @override
   State<SyncParent> createState() => _SyncParentState();
@@ -47,10 +48,7 @@ class _SyncParentState extends State<SyncParent> {
           enabled: true,
         ),
         ElevatedButton(
-          onPressed: () => widget.onSave(
-            _usernameController.text,
-            _passwordController.text,
-          ),
+          onPressed: () => {},
           child: const Text('Save'),
         ),
       ],
