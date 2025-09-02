@@ -12,9 +12,11 @@ class BookDepotBookList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     int length = 0;
+    //Consumer =>
     return Consumer<BookDepotState>(
+
       builder: (context, state, _) => StreamBuilder<List<Book>>(
-          stream: state.streamBooks(state.currClassLevel),
+          stream: state.streamBooks(state.currClassLevel), //get live books from model
           builder: (context, books) {
             length = books.data?.length ?? 0;
 

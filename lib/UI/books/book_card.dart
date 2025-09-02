@@ -16,14 +16,14 @@ class BookCard extends StatefulWidget {
       required this.bookAvailableAmount,
       this.error});
 
-  final bool clicked; //state
+  final bool clicked; //state to determine the border
   final BookLite bookLite; //content
   final Widget? leadingWidget; //conditional content
   final Function(BookLite bookLite) onClick; //callback
   final Function(BookLite bookLite) onDeleteBook; //callback
   final bool isDeletable; //conditional content
   final int? bookAvailableAmount; //conditional content
-  final bool? error;
+  final bool? error; //state to determine border color
 
   @override
   State<BookCard> createState() => _BookCardState();
