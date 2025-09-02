@@ -4,8 +4,6 @@ import 'package:cbl/cbl.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-import '../../Resources/text.dart';
-
 class SyncState extends ChangeNotifier {
   final FlutterSecureStorage _storage;
   final DB _db;
@@ -51,15 +49,15 @@ class SyncState extends ChangeNotifier {
           break;
       }
       if (cblStatus.error != null) {
-        _status = SyncStatus(SyncConnectionStatus.disconnected, error: cblStatus.error!.toString());
+        _status = SyncStatus(SyncConnectionStatus.disconnected, error: cblStatus.error!.message);
       }
     }
     notifyListeners();
   }
 
   Future<void> _checkInitialStatus() async {
-    final credentials = await getCredentials();
-    if (credentials['username'] == null || credentials['password'] == null) {
+    final details = await getSyncDetails();
+    if (details['username'] == null || details['password'] == null || details['url'] == null) {
       _status = SyncStatus(SyncConnectionStatus.noCredentials);
       notifyListeners();
     } else {
@@ -69,20 +67,22 @@ class SyncState extends ChangeNotifier {
   }
 
 
+  static const _usernameKey = 'sync_username';
+  static const _passwordKey = 'sync_password';
+  static const _urlKey = 'sync_url';
 
-
-  Future<void> saveCredentials(String uri, String username, String password) async {
-    await _storage.write(key: TextRes.uriKey, value: uri);
-    await _storage.write(key: TextRes.usernameKey, value: username);
-    await _storage.write(key: TextRes.passwordKey, value: password);
-    await _db.startReplication(uri); // Restart replication with new credentials
+  Future<void> saveCredentials(String username, String password, String url) async {
+    await _storage.write(key: _usernameKey, value: username);
+    await _storage.write(key: _passwordKey, value: password);
+    await _storage.write(key: _urlKey, value: url);
+    await _db.startReplication(); // Restart replication with new credentials
     notifyListeners();
   }
 
-  Future<Map<String, String?>> getCredentials() async {
-    final uri = await _storage.read(key: TextRes.uriKey);
-    final username = await _storage.read(key: TextRes.usernameKey);
-    final password = await _storage.read(key: TextRes.passwordKey);
-    return {TextRes.uriKey: uri, TextRes.usernameKey: username, TextRes.passwordKey: password};
+  Future<Map<String, String?>> getSyncDetails() async {
+    final username = await _storage.read(key: _usernameKey);
+    final password = await _storage.read(key: _passwordKey);
+    final url = await _storage.read(key: _urlKey);
+    return {'username': username, 'password': password, 'url': url};
   }
 }
