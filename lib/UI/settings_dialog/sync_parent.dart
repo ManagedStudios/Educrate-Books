@@ -1,7 +1,6 @@
 import 'package:buecherteam_2023_desktop/Models/settings/sync_state.dart';
 import 'package:buecherteam_2023_desktop/Models/settings/sync_status.dart';
 import 'package:buecherteam_2023_desktop/UI/input/dialog_text_field.dart';
-import 'package:buecherteam_2023_desktop/UI/input/password_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -15,21 +14,29 @@ class SyncParent extends StatefulWidget {
 class _SyncParentState extends State<SyncParent> {
   late final TextEditingController _usernameController;
   late final TextEditingController _passwordController;
-  late final TextEditingController _uriController;
+  late final TextEditingController _urlController;
 
   @override
   void initState() {
     super.initState();
     _usernameController = TextEditingController();
     _passwordController = TextEditingController();
-    _uriController = TextEditingController();
+    _urlController = TextEditingController();
+
+    // Load the current details into the text fields
+    final syncState = Provider.of<SyncState>(context, listen: false);
+    syncState.getSyncDetails().then((details) {
+      _usernameController.text = details['username'] ?? '';
+      _passwordController.text = details['password'] ?? '';
+      _urlController.text = details['url'] ?? '';
+    });
   }
 
   @override
   void dispose() {
     _usernameController.dispose();
     _passwordController.dispose();
-    _uriController.dispose();
+    _urlController.dispose();
     super.dispose();
   }
 
@@ -72,9 +79,9 @@ class _SyncParentState extends State<SyncParent> {
             ),
             const SizedBox(height: 16),
             DialogTextField(
-              controller: _uriController,
+              controller: _urlController,
               onTextChanged: (_) => setState(() {}),
-              hint: 'URI',
+              hint: 'Sync URL',
               errorText: null,
               enabled: true,
             ),
@@ -85,15 +92,19 @@ class _SyncParentState extends State<SyncParent> {
               errorText: null,
               enabled: true,
             ),
-            PasswordField(
-              controller: _passwordController
+            DialogTextField(
+              controller: _passwordController,
+              onTextChanged: (_) => setState(() {}),
+              hint: 'Password',
+              errorText: null,
+              enabled: true,
             ),
             ElevatedButton(
               onPressed: () {
                 syncState.saveCredentials(
-                  _uriController.text,
                   _usernameController.text,
                   _passwordController.text,
+                  _urlController.text,
                 );
               },
               child: const Text('Save'),
