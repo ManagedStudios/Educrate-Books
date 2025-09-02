@@ -62,11 +62,7 @@ class DB {
     await defaultCollection.createIndex(
         TextRes.studentsOfBookIdIndex, studentsOfBookIdIndex);
 
-    const storage = FlutterSecureStorage();
-    final uri = await storage.read(key: TextRes.uriKey);
-    if (uri != null) {
-      await startReplication(uri);
-    }
+      await startReplication();
   }
 
   Future<void> saveDocument(MutableDocument document) async {
@@ -181,13 +177,14 @@ class DB {
     replicatorStatus.value = null;
   }
 
-  Future<void> startReplication(String uri) async {
+  Future<void> startReplication() async {
     await stopReplication();
     const storage = FlutterSecureStorage();
+    final uri = await storage.read(key: TextRes.uriKey);
     final username = await storage.read(key: TextRes.usernameKey);
     final password = await storage.read(key: TextRes.passwordKey);
 
-    if (username == null || password == null) {
+    if (username == null || password == null || uri == null) {
       replicatorStatus.value = null;
       return;
     }

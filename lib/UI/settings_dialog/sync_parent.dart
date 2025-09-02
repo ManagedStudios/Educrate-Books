@@ -74,7 +74,7 @@ class _SyncParentState extends State<SyncParent> {
             DialogTextField(
               controller: _uriController,
               onTextChanged: (_) => setState(() {}),
-              hint: 'Username',
+              hint: 'URI',
               errorText: null,
               enabled: true,
             ),

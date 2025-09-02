@@ -75,7 +75,7 @@ class SyncState extends ChangeNotifier {
     await _storage.write(key: TextRes.uriKey, value: uri);
     await _storage.write(key: TextRes.usernameKey, value: username);
     await _storage.write(key: TextRes.passwordKey, value: password);
-    await _db.startReplication(uri); // Restart replication with new credentials
+    await _db.startReplication(); // Restart replication with new credentials
     notifyListeners();
   }
 
