@@ -184,6 +184,7 @@ class DB {
     final username = await storage.read(key: TextRes.usernameKey);
     final password = await storage.read(key: TextRes.passwordKey);
 
+
     if (username == null || password == null || uri == null) {
       replicatorStatus.value = null;
       return;

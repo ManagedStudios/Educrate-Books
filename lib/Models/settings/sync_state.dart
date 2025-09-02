@@ -59,7 +59,9 @@ class SyncState extends ChangeNotifier {
 
   Future<void> _checkInitialStatus() async {
     final credentials = await getCredentials();
-    if (credentials['username'] == null || credentials['password'] == null) {
+    if (credentials[TextRes.usernameKey] == null
+        || credentials[TextRes.passwordKey] == null
+        || credentials[TextRes.uriKey] == null) {
       _status = SyncStatus(SyncConnectionStatus.noCredentials);
       notifyListeners();
     } else {

@@ -1,6 +1,7 @@
 import 'package:buecherteam_2023_desktop/Models/settings/sync_state.dart';
 import 'package:buecherteam_2023_desktop/Models/settings/sync_status.dart';
 import 'package:buecherteam_2023_desktop/UI/input/dialog_text_field.dart';
+import 'package:buecherteam_2023_desktop/UI/input/password_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -23,13 +24,7 @@ class _SyncParentState extends State<SyncParent> {
     _passwordController = TextEditingController();
     _urlController = TextEditingController();
 
-    // Load the current details into the text fields
-    final syncState = Provider.of<SyncState>(context, listen: false);
-    syncState.getSyncDetails().then((details) {
-      _usernameController.text = details['username'] ?? '';
-      _passwordController.text = details['password'] ?? '';
-      _urlController.text = details['url'] ?? '';
-    });
+
   }
 
   @override
@@ -92,19 +87,13 @@ class _SyncParentState extends State<SyncParent> {
               errorText: null,
               enabled: true,
             ),
-            DialogTextField(
-              controller: _passwordController,
-              onTextChanged: (_) => setState(() {}),
-              hint: 'Password',
-              errorText: null,
-              enabled: true,
-            ),
+            PasswordField(controller: _passwordController),
             ElevatedButton(
               onPressed: () {
                 syncState.saveCredentials(
+                  _urlController.text,
                   _usernameController.text,
                   _passwordController.text,
-                  _urlController.text,
                 );
               },
               child: const Text('Save'),
