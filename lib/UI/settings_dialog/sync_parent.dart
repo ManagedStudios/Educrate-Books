@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-
-
-import '../input/dialog_text_field.dart';
+import 'package:provider/provider.dart';
+import 'package:buecherteam_2023_desktop/Models/settings/sync_state.dart';
+import 'package:buecherteam_2023_desktop/UI/input/dialog_text_field.dart';
 
 class SyncParent extends StatefulWidget {
-
   const SyncParent({super.key});
 
   @override
@@ -48,7 +47,13 @@ class _SyncParentState extends State<SyncParent> {
           enabled: true,
         ),
         ElevatedButton(
-          onPressed: () => {},
+          onPressed: () {
+            final syncState = Provider.of<SyncState>(context, listen: false);
+            syncState.saveCredentials(
+              _usernameController.text,
+              _passwordController.text,
+            );
+          },
           child: const Text('Save'),
         ),
       ],

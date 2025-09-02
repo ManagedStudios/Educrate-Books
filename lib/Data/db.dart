@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:buecherteam_2023_desktop/Resources/text.dart';
 import 'package:cbl/cbl.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class DB {
   static final DB _instance = DB._internal();
@@ -160,13 +161,21 @@ class DB {
    */
 
   Future<void> startReplication() async {
+    const storage = FlutterSecureStorage();
+    final username = await storage.read(key: 'sync_username');
+    final password = await storage.read(key: 'sync_password');
+
+    if (username == null || password == null) {
+      // Handle case where credentials are not stored
+      return;
+    }
 
     final config = ReplicatorConfiguration(
-      target: UrlEndpoint(Uri.parse('wss://lfgsync.dibbomrinmoysaha.engineer/buecherteam/')),
-      continuous: true
+        target: UrlEndpoint(Uri.parse('wss://lfgsync.dibbomrinmoysaha.engineer/buecherteam/')),
+        continuous: true
     )
       ..addCollection(defaultCollection)
-      ..authenticator = BasicAuthenticator(username: "dibbo", password: "LFG.Dibb0.80807Gert06!");
+      ..authenticator = BasicAuthenticator(username: username, password: password);
 
     final replicator = await Replicator.create(config);
 
