@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../Resources/text.dart';
+import '../../Theme/color_scheme.dart';
 
 class SettingsDialog extends StatelessWidget {
   const SettingsDialog({super.key});
@@ -15,6 +16,7 @@ class SettingsDialog extends StatelessWidget {
         : 700;
     double dialogHeight = MediaQuery.of(context).size.height * 0.7;
     return Dialog(
+      backgroundColor: lightColorScheme.background,
       child: SizedBox(
         width: dialogWidth,
         height: dialogHeight,

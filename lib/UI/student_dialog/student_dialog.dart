@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../Resources/text.dart';
+import '../../Theme/color_scheme.dart';
 
 class StudentDialog extends StatefulWidget {
   const StudentDialog(
@@ -58,6 +59,7 @@ class _StudentDialogState extends State<StudentDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      backgroundColor: lightColorScheme.background,
       title: Text(
         widget.title,
         style: Theme.of(context).textTheme.labelMedium,

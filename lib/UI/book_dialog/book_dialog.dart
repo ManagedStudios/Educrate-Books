@@ -1,4 +1,5 @@
 import 'package:buecherteam_2023_desktop/Data/training_directions_data.dart';
+import 'package:buecherteam_2023_desktop/Theme/color_scheme.dart';
 import 'package:buecherteam_2023_desktop/UI/book_dialog/book_dialog_content.dart';
 import 'package:buecherteam_2023_desktop/Util/stringUtil.dart';
 import 'package:flutter/material.dart';
@@ -63,6 +64,7 @@ class _BookDialogState extends State<BookDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      backgroundColor: lightColorScheme.background,
       title: Text(
         widget.title,
         style: Theme.of(context).textTheme.labelMedium,
