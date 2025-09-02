@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:buecherteam_2023_desktop/Resources/text.dart';
 import 'package:cbl/cbl.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class DB {
@@ -12,6 +13,10 @@ class DB {
 
   late final Database _database;
   late final Collection defaultCollection;
+
+  Replicator? _replicator;
+  ListenerToken? _replicatorListenerToken;
+  final replicatorStatus = ValueNotifier<ReplicatorStatus?>(null);
 
   DB._internal();
 
@@ -160,13 +165,27 @@ class DB {
   db and couchbase server
    */
 
+  Future<void> stopReplication() async {
+    if (_replicatorListenerToken != null) {
+      _replicator?.removeChangeListener(_replicatorListenerToken!);
+      _replicatorListenerToken = null;
+    }
+    if (_replicator != null) {
+      await _replicator!.stop();
+      _replicator = null;
+    }
+    replicatorStatus.value = null;
+  }
+
   Future<void> startReplication() async {
+    await stopReplication();
+
     const storage = FlutterSecureStorage();
     final username = await storage.read(key: 'sync_username');
     final password = await storage.read(key: 'sync_password');
 
     if (username == null || password == null) {
-      // Handle case where credentials are not stored
+      replicatorStatus.value = null;
       return;
     }
 
@@ -177,27 +196,12 @@ class DB {
       ..addCollection(defaultCollection)
       ..authenticator = BasicAuthenticator(username: username, password: password);
 
-    final replicator = await Replicator.create(config);
-
-    final completer = Completer<void>();
-
-    final listenerToken = await replicator.addChangeListener((ReplicatorChange change) {
-      final activity = change.status.activity;
-      final error = change.status.error;
-
-      if ((activity == ReplicatorActivityLevel.idle ||
-          activity == ReplicatorActivityLevel.offline ||
-          error != null) &&
-          !completer.isCompleted) {
-        completer.complete();
-      }
+    _replicator = await Replicator.create(config);
+    _replicatorListenerToken = await _replicator!.addChangeListener((change) {
+      replicatorStatus.value = change.status;
     });
 
-    await replicator.start();
-
-    await completer.future;
-
-    replicator.removeChangeListener(listenerToken);
+    await _replicator!.start();
   }
 
 

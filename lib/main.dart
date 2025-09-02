@@ -59,7 +59,7 @@ void main() async {
       ChangeNotifierProvider(create: (context) => ImportState(DB())),
       ChangeNotifierProvider(create: (context) => AppIntroductionState(DB())),
       ChangeNotifierProvider(create: (context) => ExportState(DB())),
-      ChangeNotifierProvider(create: (context) => SyncState())
+      ChangeNotifierProvider(create: (context) => SyncState()..init())
     ],
     child: const MyApp(),
   ));
