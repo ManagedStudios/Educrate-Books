@@ -8,6 +8,7 @@ import 'package:buecherteam_2023_desktop/Models/right_click_state.dart';
 import 'package:buecherteam_2023_desktop/Models/settings/export_state.dart';
 import 'package:buecherteam_2023_desktop/Models/settings/import_state.dart';
 import 'package:buecherteam_2023_desktop/Models/settings/settings_nav_state.dart';
+import 'package:buecherteam_2023_desktop/Models/settings/sync_state.dart';
 import 'package:buecherteam_2023_desktop/Models/studentListState.dart';
 import 'package:buecherteam_2023_desktop/Models/student_detail_state.dart';
 import 'package:buecherteam_2023_desktop/Resources/text.dart';
@@ -57,7 +58,8 @@ void main() async {
       ChangeNotifierProvider(create: (context) => SettingsNavState()),
       ChangeNotifierProvider(create: (context) => ImportState(DB())),
       ChangeNotifierProvider(create: (context) => AppIntroductionState(DB())),
-      ChangeNotifierProvider(create: (context) => ExportState(DB()))
+      ChangeNotifierProvider(create: (context) => ExportState(DB())),
+      ChangeNotifierProvider(create: (context) => SyncState()..init())
     ],
     child: const MyApp(),
   ));

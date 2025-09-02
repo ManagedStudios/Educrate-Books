@@ -1,6 +1,7 @@
 import 'package:buecherteam_2023_desktop/UI/settings_dialog/filter_parent.dart';
 import 'package:buecherteam_2023_desktop/UI/settings_dialog/import_parent.dart';
 import 'package:buecherteam_2023_desktop/UI/settings_dialog/export_parent.dart';
+import 'package:buecherteam_2023_desktop/UI/settings_dialog/sync_parent.dart';
 import 'package:buecherteam_2023_desktop/UI/settings_dialog/warning_parent.dart';
 import 'package:flutter/material.dart';
 
@@ -19,6 +20,8 @@ class SettingsNavState extends ChangeNotifier {
         currWidget = const FilterParent();
       case SettingsNavButtons.EXPORT:
         currWidget = const ExportParent();
+      case SettingsNavButtons.SYNC:
+        currWidget = const SyncParent();
     }
     notifyListeners();
   }
@@ -34,7 +37,8 @@ enum SettingsNavButtons {
   IMPORT("Import"),
   MAHNUNG("Mahnung"),
   FILTER("Filter"),
-  EXPORT("Export");
+  EXPORT("Export"),
+  SYNC("Sync");
 
   final String value;
 

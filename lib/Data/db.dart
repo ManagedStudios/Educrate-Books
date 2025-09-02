@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:buecherteam_2023_desktop/Resources/text.dart';
 import 'package:cbl/cbl.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class DB {
   static final DB _instance = DB._internal();
@@ -11,6 +13,10 @@ class DB {
 
   late final Database _database;
   late final Collection defaultCollection;
+
+  Replicator? _replicator;
+  ListenerToken? _replicatorListenerToken;
+  final replicatorStatus = ValueNotifier<ReplicatorStatus?>(null);
 
   DB._internal();
 
@@ -56,7 +62,7 @@ class DB {
     await defaultCollection.createIndex(
         TextRes.studentsOfBookIdIndex, studentsOfBookIdIndex);
 
-    await startReplication();
+      await startReplication();
   }
 
   Future<void> saveDocument(MutableDocument document) async {
@@ -159,36 +165,44 @@ class DB {
   db and couchbase server
    */
 
+  Future<void> stopReplication() async {
+    if (_replicatorListenerToken != null) {
+      _replicator?.removeChangeListener(_replicatorListenerToken!);
+      _replicatorListenerToken = null;
+    }
+    if (_replicator != null) {
+      await _replicator!.stop();
+      _replicator = null;
+    }
+    replicatorStatus.value = null;
+  }
+
   Future<void> startReplication() async {
+    await stopReplication();
+    const storage = FlutterSecureStorage();
+    final uri = await storage.read(key: TextRes.uriKey);
+    final username = await storage.read(key: TextRes.usernameKey);
+    final password = await storage.read(key: TextRes.passwordKey);
+
+
+    if (username == null || password == null || uri == null) {
+      replicatorStatus.value = null;
+      return;
+    }
 
     final config = ReplicatorConfiguration(
-      target: UrlEndpoint(Uri.parse('wss://lfgsync.dibbomrinmoysaha.engineer/buecherteam/')),
-      continuous: true
+        target: UrlEndpoint(Uri.parse(uri)),
+        continuous: true
     )
       ..addCollection(defaultCollection)
-      ..authenticator = BasicAuthenticator(username: "dibbo", password: "LFG.Dibb0.80807Gert06!");
+      ..authenticator = BasicAuthenticator(username: username, password: password);
 
-    final replicator = await Replicator.create(config);
-
-    final completer = Completer<void>();
-
-    final listenerToken = await replicator.addChangeListener((ReplicatorChange change) {
-      final activity = change.status.activity;
-      final error = change.status.error;
-
-      if ((activity == ReplicatorActivityLevel.idle ||
-          activity == ReplicatorActivityLevel.offline ||
-          error != null) &&
-          !completer.isCompleted) {
-        completer.complete();
-      }
+    _replicator = await Replicator.create(config);
+    _replicatorListenerToken = await _replicator!.addChangeListener((change) {
+      replicatorStatus.value = change.status;
     });
 
-    await replicator.start();
-
-    await completer.future;
-
-    replicator.removeChangeListener(listenerToken);
+    await _replicator!.start();
   }
 
 
