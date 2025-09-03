@@ -101,7 +101,7 @@ class BuildQuery {
     return query;
   }
 
-  static String buildBookListQuery(int? currClassLevel) {
+  static String getBooksOfClassLevel(int? currClassLevel) {
     if (currClassLevel == null) return noResultQuery;
 
     String whereClause =

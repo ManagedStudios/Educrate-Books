@@ -34,5 +34,13 @@ class ExportState extends ChangeNotifier {
 
     return res;
   }
+
+  Future<bool> downloadAllBasicBookLists() async {
+    List<int> allClassLevels = await getAllClassLevels(database);
+
+
+
+    return true;
+  }
 }
 

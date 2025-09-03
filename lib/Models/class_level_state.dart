@@ -1,9 +1,9 @@
 import 'package:buecherteam_2023_desktop/Resources/dimensions.dart';
+import 'package:buecherteam_2023_desktop/Util/database/getter.dart';
 import 'package:flutter/material.dart';
 
 import '../Data/buildQuery.dart';
 import '../Data/db.dart';
-import '../Resources/text.dart';
 
 class ClassLevelState extends ChangeNotifier {
   ClassLevelState(this.database);
@@ -12,13 +12,7 @@ class ClassLevelState extends ChangeNotifier {
   int? selectedClassLevel;
 
   Future<List<int>> getClassLevels() async {
-    String query = BuildQuery.getAllClassLevels();
-    final res = await database.getDocs(query);
-    return res
-        .asStream()
-        .map((result) =>
-            result.toPlainMap()[TextRes.classDataClassLevelJson] as int)
-        .toList();
+    return getAllClassLevels(database);
   }
 
   void setSelectedClassLevel(int selectedLevel) {

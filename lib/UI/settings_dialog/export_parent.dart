@@ -36,6 +36,27 @@ class ExportParent extends StatelessWidget {
                     SettingsNavButtons.EXPORT);
               },
               text: TextRes.exportAllBooks),
+        ),
+        const SizedBox(height: Dimensions.spaceLarge,),
+        Align(
+          child: BigButton(
+              onPressed: () {
+                final exportState = Provider.of<ExportState>(context,
+                    listen: false);
+                Provider.of<SettingsNavState>(context, listen: false)
+                    .setCurrWidget(
+                    Loading(
+                      functionToBeExecuted: exportState.downloadAllBasicBookLists,
+                      nextWidget: const MapEntry(
+                          SettingsNavButtons.EXPORT,
+                          ExportParent()),
+                      fallbackWidget: const MapEntry(
+                          SettingsNavButtons.EXPORT,
+                          ExportParent()),
+                    ),
+                    SettingsNavButtons.EXPORT);
+              },
+              text: TextRes.exportBasicBooksToPdf),
         )
 
       ],

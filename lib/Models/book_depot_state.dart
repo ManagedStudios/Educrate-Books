@@ -20,7 +20,7 @@ class BookDepotState extends ChangeNotifier {
 
    */
   Stream<List<Book>> streamBooks(int? currClassLevel) async* {
-    String query = BuildQuery.buildBookListQuery(currClassLevel);
+    String query = BuildQuery.getBooksOfClassLevel(currClassLevel);
 
     yield* database.streamLiveDocs(query).asyncMap((change) {
       return change.results.asStream().map((result) {

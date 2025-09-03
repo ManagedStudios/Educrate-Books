@@ -386,6 +386,8 @@ class TextRes {
 
   static const passwordKey = "sync_password";
 
+  static const exportBasicBooksToPdf = "Bücherausgabe-Listen exportieren";
+
 
 
 

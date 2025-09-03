@@ -12,6 +12,7 @@ import '../../Data/db.dart';
 import '../../Data/student.dart';
 import '../../Data/tag_data.dart';
 import '../../Data/training_directions_data.dart';
+import '../../Resources/text.dart';
 
 Future<List<TrainingDirectionsData>> getAllTrainingDirectionsUtil (DB database) async {
   String query = BuildQuery.getAllTrainingDirections();
@@ -112,4 +113,16 @@ Future<List<Book>> getAllBooks(DB database) async{
 
   return books;
 }
+
+Future<List<int>> getAllClassLevels (DB database) async{
+  String query = BuildQuery.getAllClassLevels();
+  final res = await database.getDocs(query);
+  return res
+      .asStream()
+      .map((result) =>
+  result.toPlainMap()[TextRes.classDataClassLevelJson] as int)
+      .toList();
+}
+
+
 
