@@ -1,10 +1,94 @@
 import 'dart:typed_data';
 
 import 'package:buecherteam_2023_desktop/Data/book.dart';
+import 'package:buecherteam_2023_desktop/Data/bookLite.dart';
+import 'package:buecherteam_2023_desktop/Data/class_data.dart';
+import 'package:buecherteam_2023_desktop/Data/student.dart';
 import 'package:buecherteam_2023_desktop/Resources/text.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
+
+Future<Uint8List> createClassListPdf(ClassData classData, List<Student> students) async {
+  final doc = pw.Document();
+  final Map<BookLite, int> bookNumbers = {};
+  int bookCounter = 1;
+
+  // First, collect all unique books and assign them a number
+  for (final student in students) {
+    for (final book in student.books) {
+      if (!bookNumbers.containsKey(book)) {
+        bookNumbers[book] = bookCounter++;
+      }
+    }
+  }
+
+  final latoRegular = await PdfGoogleFonts.latoRegular();
+  final latoBold = await PdfGoogleFonts.latoBold();
+
+  doc.addPage(
+    pw.MultiPage(
+      pageFormat: PdfPageFormat.a4,
+      header: (pw.Context context) {
+        return pw.Text(
+          '${TextRes.classText} ${classData.getLabelText()}',
+          style: pw.TextStyle(font: latoBold, fontSize: 20),
+        );
+      },
+      footer: (pw.Context context) {
+        final footnotes = bookNumbers.entries
+            .map((entry) => '${entry.value}: ${entry.key.name}')
+            .join('\n');
+        return pw.Column(
+          crossAxisAlignment: pw.CrossAxisAlignment.start,
+          children: [
+            pw.SizedBox(height: 20),
+            pw.Text(TextRes.footnotes, style: pw.TextStyle(font: latoBold)),
+            pw.Text(footnotes, style: pw.TextStyle(font: latoRegular)),
+          ],
+        );
+      },
+      build: (pw.Context context) {
+        return [
+          pw.Table.fromTextArray(
+            border: pw.TableBorder.all(),
+            headerStyle: pw.TextStyle(font: latoBold),
+            cellStyle: pw.TextStyle(font: latoRegular),
+            columnWidths: {
+              0: const pw.FlexColumnWidth(2),
+              1: const pw.FlexColumnWidth(1),
+              2: const pw.FlexColumnWidth(3),
+              3: const pw.FlexColumnWidth(3),
+            },
+            headerDecoration: const pw.BoxDecoration(
+              color: PdfColors.grey300,
+            ),
+            headers: [
+              TextRes.studentName,
+              TextRes.booksReceived,
+              TextRes.signature,
+              TextRes.notes
+            ],
+            data: students.map((student) {
+              final bookIds = student.books
+                  .map((book) => bookNumbers[book])
+                  .toSet() // Use a Set to remove duplicate book numbers for a student
+                  .join(', ');
+              return [
+                '${student.firstName} ${student.lastName}',
+                bookIds,
+                '',
+                ''
+              ];
+            }).toList(),
+          ),
+        ];
+      },
+    ),
+  );
+
+  return doc.save();
+}
 
 Future<Uint8List> createBasicBookListPdf(int classLevel, List<Book> books) async {
   final doc = pw.Document();

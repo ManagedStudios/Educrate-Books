@@ -114,6 +114,18 @@ Future<List<Book>> getAllBooks(DB database) async{
   return books;
 }
 
+Future<List<Student>> getStudentsOfClass(DB database, int classLevel, String classChar) async {
+  final query = BuildQuery.getStudentsOfClass(classLevel, classChar);
+  final studentDocs = await database.getDocs(query);
+
+  List<Student> students = await studentDocs
+      .asStream()
+      .map((res) => database.toEntity(Student.fromJson, res))
+      .toList();
+
+  return students;
+}
+
 Future<List<int>> getAllClassLevels (DB database) async{
   String query = BuildQuery.getAllClassLevels();
   final res = await database.getDocs(query);

@@ -58,10 +58,21 @@ class ExportState extends ChangeNotifier {
 
   Future<bool> downloadClassLists() async{
     List<ClassData>? allClasses = await getAllClasses(database);
-
-
+    if(allClasses == null || allClasses.isEmpty) {
+      return false;
+    }
+    Map<String, List<int>> pdfs = {};
+    for (var c in allClasses) {
+      final students = await getStudentsOfClass(database, c.classLevel, c.classChar);
+      if(students.isNotEmpty) {
+        final pdfBytes = await createClassListPdf(c, students);
+        pdfs['${c.getLabelText()}.pdf'] = pdfBytes;
+      }
+    }
+    if(pdfs.isNotEmpty) {
+      return await saveFilesInDirectory(pdfs, TextRes.exportClassList);
+    }
     return true;
-
   }
 }
 
