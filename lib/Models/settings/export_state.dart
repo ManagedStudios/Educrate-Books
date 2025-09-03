@@ -3,6 +3,7 @@
 
 import 'package:buecherteam_2023_desktop/Data/book.dart';
 import 'package:buecherteam_2023_desktop/Util/database/getter.dart';
+import 'package:buecherteam_2023_desktop/Util/pdf_util.dart';
 import 'package:buecherteam_2023_desktop/Util/settings/io_util.dart';
 import 'package:excel/excel.dart';
 
@@ -37,8 +38,19 @@ class ExportState extends ChangeNotifier {
 
   Future<bool> downloadAllBasicBookLists() async {
     List<int> allClassLevels = await getAllClassLevels(database);
+    Map<String, List<int>> pdfs = {};
 
+    for (var classLevel in allClassLevels) {
+      final books = await getBooksOfBasicTrainingDirection(database, classLevel);
+      if (books.isNotEmpty) {
+        final pdfBytes = await createBasicBookListPdf(classLevel, books);
+        pdfs['$classLevel.pdf'] = pdfBytes;
+      }
+    }
 
+    if (pdfs.isNotEmpty) {
+      return await saveFilesInDirectory(pdfs, TextRes.exportBasicBooksToPdf);
+    }
 
     return true;
   }
