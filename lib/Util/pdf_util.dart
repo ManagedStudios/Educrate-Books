@@ -1,6 +1,5 @@
 import 'dart:typed_data';
 
-import 'package:buecherteam_2023_desktop/Data/book.dart';
 import 'package:buecherteam_2023_desktop/Data/bookLite.dart';
 import 'package:buecherteam_2023_desktop/Data/class_data.dart';
 import 'package:buecherteam_2023_desktop/Data/student.dart';
@@ -8,6 +7,8 @@ import 'package:buecherteam_2023_desktop/Resources/text.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
+
+import '../Data/book.dart';
 
 Future<Uint8List> createClassListPdf(ClassData classData, List<Student> students) async {
   final doc = pw.Document();
@@ -38,7 +39,7 @@ Future<Uint8List> createClassListPdf(ClassData classData, List<Student> students
       footer: (pw.Context context) {
         final footnotes = bookNumbers.entries
             .map((entry) => '${entry.value}: ${entry.key.name}')
-            .join('\n');
+            .join(' | ');
         return pw.Column(
           crossAxisAlignment: pw.CrossAxisAlignment.start,
           children: [
@@ -49,39 +50,66 @@ Future<Uint8List> createClassListPdf(ClassData classData, List<Student> students
         );
       },
       build: (pw.Context context) {
+        // Define headers and styles for clarity
+        final headers = [
+          TextRes.studentName,
+          TextRes.booksReceived,
+          TextRes.signature,
+          TextRes.notes
+        ];
+        final headerStyle = pw.TextStyle(font: latoBold);
+        final cellStyle = pw.TextStyle(font: latoRegular);
+
         return [
-          pw.Table.fromTextArray(
+          // ---- START: UPDATED CODE ----
+          pw.Table(
             border: pw.TableBorder.all(),
-            headerStyle: pw.TextStyle(font: latoBold),
-            cellStyle: pw.TextStyle(font: latoRegular),
             columnWidths: {
               0: const pw.FlexColumnWidth(2),
               1: const pw.FlexColumnWidth(1),
               2: const pw.FlexColumnWidth(3),
               3: const pw.FlexColumnWidth(3),
             },
-            headerDecoration: const pw.BoxDecoration(
-              color: PdfColors.grey300,
-            ),
-            headers: [
-              TextRes.studentName,
-              TextRes.booksReceived,
-              TextRes.signature,
-              TextRes.notes
+            children: [
+              // Header Row
+              pw.TableRow(
+                decoration: const pw.BoxDecoration(
+                  color: PdfColors.grey300,
+                ),
+                children: headers.map((header) {
+                  return pw.Padding( // Optional: Add padding for better looks
+                    padding: const pw.EdgeInsets.all(4),
+                    child: pw.Text(header, style: headerStyle, textAlign: pw.TextAlign.center),
+                  );
+                }).toList(),
+              ),
+              // Data Rows
+              ...students.map((student) {
+                final bookIds = student.books
+                    .map((book) => bookNumbers[book])
+                    .toSet() // Use a Set to remove duplicate book numbers
+                    .toList() // Convert to list to sort
+                      .join(', ');
+
+                final rowData = [
+                  '${student.firstName} ${student.lastName}',
+                  bookIds,
+                  '', // Signature
+                  ''  // Notes
+                ];
+
+                return pw.TableRow(
+                  children: rowData.map((cell) {
+                    return pw.Padding( // Optional: Add padding
+                      padding: const pw.EdgeInsets.all(4),
+                      child: pw.Text(cell, style: cellStyle),
+                    );
+                  }).toList(),
+                );
+              }).toList(),
             ],
-            data: students.map((student) {
-              final bookIds = student.books
-                  .map((book) => bookNumbers[book])
-                  .toSet() // Use a Set to remove duplicate book numbers for a student
-                  .join(', ');
-              return [
-                '${student.firstName} ${student.lastName}',
-                bookIds,
-                '',
-                ''
-              ];
-            }).toList(),
           ),
+          // ---- END: UPDATED CODE ----
         ];
       },
     ),

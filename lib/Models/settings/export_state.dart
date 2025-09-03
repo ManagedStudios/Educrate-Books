@@ -70,7 +70,7 @@ class ExportState extends ChangeNotifier {
       }
     }
     if(pdfs.isNotEmpty) {
-      return await saveFilesInDirectory(pdfs, TextRes.exportClassList);
+      return await saveFilesInDirectory(pdfs, TextRes.exportClassLists);
     }
     return true;
   }
