@@ -124,5 +124,16 @@ Future<List<int>> getAllClassLevels (DB database) async{
       .toList();
 }
 
+Future<List<Book>> getBooksOfBasicTrainingDirection(DB database, int classLevel) async {
+  final query = BuildQuery.getBooksOfBasicTrainingDirectionQuery(classLevel);
+  final bookDocs = await database.getDocs(query);
+
+  List<Book> books = await bookDocs
+      .asStream()
+      .map((res) => database.toEntity(Book.fromJson, res))
+      .toList();
+
+  return books;
+}
 
 

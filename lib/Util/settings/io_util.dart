@@ -67,3 +67,20 @@ Future<bool> downloadFile (List<int>? fileBytes, String fileName,
   }
 }
 
+Future<bool> saveFilesInDirectory(Map<String, List<int>> files, String dialogTitle) async {
+  String? outputDirectory = await FilePicker.platform.getDirectoryPath(
+    dialogTitle: dialogTitle,
+  );
+
+  if (outputDirectory != null) {
+    for (var entry in files.entries) {
+      final filePath = '$outputDirectory/${entry.key}';
+      File(filePath)
+        ..createSync(recursive: true)
+        ..writeAsBytesSync(entry.value);
+    }
+    return true;
+  } else {
+    return false;
+  }
+}

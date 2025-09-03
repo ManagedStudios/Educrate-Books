@@ -46,6 +46,8 @@ dependencies:
   loading_animation_widget: ^1.2.1
   path_provider: ^2.1.5
   flutter_secure_storage: ^9.0.0
+  printing: ^5.14.2
+  pdf: ^3.11.3
 
 dev_dependencies:
   flutter_test:

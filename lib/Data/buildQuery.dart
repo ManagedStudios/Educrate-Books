@@ -231,5 +231,22 @@ class BuildQuery {
     return query;
   }
 
+  static String getBooksOfBasicTrainingDirectionQuery(int classLevel) {
+    final trainingDirection = "${TextRes.basicTrainingDirection}${TextRes.trainingDirectionHyphen}$classLevel";
+    String whereClause = """AND
+    ANY td IN ${TextRes.bookTrainingDirectionJson}
+    SATISFIES (td = '$trainingDirection') END;""";
+
+    String query = """SELECT META().id, ${TextRes.bookNameJson},
+      ${TextRes.bookSubjectJson}, ${TextRes.bookClassLevelJson},
+      ${TextRes.bookTrainingDirectionJson}, ${TextRes.bookAmountInStudentOwnershipJson},
+      ${TextRes.bookNowAvailableJson}, ${TextRes.bookTotalAvailableJson},
+      ${TextRes.bookIsbnNumberJson} FROM _default
+      WHERE ${TextRes.typeJson}='${TextRes.bookTypeJson}' """;
+    query += whereClause;
+
+    return query;
+  }
+
 
 }
