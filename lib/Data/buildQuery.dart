@@ -248,5 +248,20 @@ class BuildQuery {
     return query;
   }
 
+  static String getStudentsOfClass(int classLevel, String classChar) {
+    String whereClause = """AND ${TextRes.studentClassLevelJson} = $classLevel
+      AND ${TextRes.studentClassCharJson} = '$classChar'""";
+
+    String query = """SELECT META().id, ${TextRes.studentFirstNameJson},
+      ${TextRes.studentLastNameJson}, ${TextRes.studentClassLevelJson},
+      ${TextRes.studentClassCharJson}, ${TextRes.studentTrainingDirectionsJson},
+      ${TextRes.studentBooksJson}, ${TextRes.studentAmountOfBooksJson}, ${TextRes.studentTagsJson} FROM _default
+      WHERE ${TextRes.typeJson}='${TextRes.studentTypeJson}' """;
+
+    query += whereClause;
+
+    return query;
+  }
+
 
 }

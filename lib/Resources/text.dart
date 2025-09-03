@@ -392,6 +392,18 @@ class TextRes {
 
   static const exportClassLists = "Klassenlisten exportieren";
 
+  static var classText = "Klasse";
+
+  static String footnotes = "Fußnote";
+
+  static var studentName = "Name";
+
+  static var booksReceived = "Bücher";
+
+  static var signature = "Unterschrift";
+
+  static var notes = "Notizen";
+
 
 
 
