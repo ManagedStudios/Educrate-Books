@@ -1,9 +1,0 @@
-FROM couchbase:community-7.2.0
-
-COPY CloudronManifest.json /CloudronManifest.json
-
-RUN ln -s /app/data /opt/couchbase/var
-
-EXPOSE 8091-8096 11210-11211
-
-CMD ["couchbase-server"]
