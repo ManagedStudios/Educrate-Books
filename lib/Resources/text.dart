@@ -388,6 +388,8 @@ class TextRes {
 
   static const exportBasicBooksToPdf = "Bücherausgabe-Listen exportieren";
 
+  static const amount = "Anzahl: ";
+
 
 
 
