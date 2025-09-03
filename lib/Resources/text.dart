@@ -390,6 +390,8 @@ class TextRes {
 
   static const amount = "Anzahl: ";
 
+  static const exportClassLists = "Klassenlisten exportieren";
+
 
 
 

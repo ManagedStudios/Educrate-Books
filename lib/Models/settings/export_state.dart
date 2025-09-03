@@ -2,6 +2,7 @@
 
 
 import 'package:buecherteam_2023_desktop/Data/book.dart';
+import 'package:buecherteam_2023_desktop/Data/class_data.dart';
 import 'package:buecherteam_2023_desktop/Util/database/getter.dart';
 import 'package:buecherteam_2023_desktop/Util/pdf_util.dart';
 import 'package:buecherteam_2023_desktop/Util/settings/io_util.dart';
@@ -53,6 +54,14 @@ class ExportState extends ChangeNotifier {
     }
 
     return true;
+  }
+
+  Future<bool> downloadClassLists() async{
+    List<ClassData>? allClasses = await getAllClasses(database);
+
+
+    return true;
+
   }
 }
 
