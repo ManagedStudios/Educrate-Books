@@ -3,8 +3,6 @@ name: Flutter CI/CD Release Workflow
 # This workflow is triggered on pushes to the repository that include a tag matching 'v*.*.*'
 on:
   push:
-    tags:
-      - 'v*.*.*'
 
 # Sets the permissions for the GITHUB_TOKEN to allow creating releases.
 permissions:
