@@ -189,20 +189,24 @@ class DB {
       replicatorStatus.value = null;
       return;
     }
-
+  try {
     final config = ReplicatorConfiguration(
-        target: UrlEndpoint(Uri.parse(uri)),
-        continuous: true
-    )
-      ..addCollection(defaultCollection)
-      ..authenticator = BasicAuthenticator(username: username, password: password);
+      target: UrlEndpoint(Uri.parse(uri)),
+      continuous: true
+  )
+    ..addCollection(defaultCollection)
+    ..authenticator = BasicAuthenticator(username: username, password: password);
 
-    _replicator = await Replicator.create(config);
-    _replicatorListenerToken = await _replicator!.addChangeListener((change) {
-      replicatorStatus.value = change.status;
-    });
+  _replicator = await Replicator.create(config);
+  _replicatorListenerToken = await _replicator!.addChangeListener((change) {
+    replicatorStatus.value = change.status;
+  });
 
-    await _replicator!.start();
+  await _replicator!.start();
+  } catch(e) {
+      replicatorStatus.value = null;
+  }
+
   }
 
 
