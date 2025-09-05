@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:buecherteam_2023_desktop/Data/db.dart';
 import 'package:buecherteam_2023_desktop/Models/settings/sync_status.dart';
 import 'package:cbl/cbl.dart';
@@ -70,6 +72,48 @@ class SyncState extends ChangeNotifier {
     }
   }
 
+  Future<void> awaitOneSyncCycle() {
+    // 1. Immediately return if not currently syncing.
+    if (_db.replicatorStatus.value?.activity != ReplicatorActivityLevel.busy) {
+      return Future.value();
+    }
+
+    // 2. Create a Completer to manually control the Future's lifecycle.
+    final completer = Completer<void>();
+
+    // Use `late` to allow the listener to reference itself for removal.
+    late final void Function() listener;
+
+    // 3. Define the listener logic.
+    listener = () {
+      final status = _db.replicatorStatus.value;
+      const endStates = [
+        ReplicatorActivityLevel.idle,
+        ReplicatorActivityLevel.stopped,
+        ReplicatorActivityLevel.offline,
+      ];
+
+      // 4. Check if the replicator has entered a state that ends the cycle.
+      if (endStates.contains(status?.activity)) {
+        // 5. Clean up by removing the listener to prevent memory leaks.
+        _db.replicatorStatus.removeListener(listener);
+
+        // 6. Complete the Future (only if it hasn't been completed already).
+        if (!completer.isCompleted) {
+          if (status?.error != null) {
+            completer.completeError(status!.error!);
+          } else {
+            completer.complete();
+          }
+        }
+      }
+    };
+
+    // 7. Attach the listener and return the Future for the caller to await.
+    _db.replicatorStatus.addListener(listener);
+    return completer.future;
+  }
+
 
 
 
@@ -87,4 +131,6 @@ class SyncState extends ChangeNotifier {
     final password = await _storage.read(key: TextRes.passwordKey);
     return {TextRes.uriKey: uri, TextRes.usernameKey: username, TextRes.passwordKey: password};
   }
+
+
 }
