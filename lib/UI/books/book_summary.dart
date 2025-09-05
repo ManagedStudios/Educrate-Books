@@ -1,4 +1,5 @@
 import 'package:buecherteam_2023_desktop/Models/book_stack_view_state.dart';
+import 'package:buecherteam_2023_desktop/Resources/text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -7,8 +8,9 @@ class BookSummary extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<BookStateViewState>(
+    return Consumer<BookStackViewState>(
       builder: (context, provider, child) {
+
         if (provider.selectedClass == null) {
           return Container(); // Show nothing if no class is selected
         } else {
@@ -20,7 +22,7 @@ class BookSummary extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Book Summary for ${provider.selectedClass!.getLabelText()}',
+                    '${TextRes.bookStackSummary} ${provider.selectedClass!.getLabelText()}',
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                   const SizedBox(height: 16.0),
@@ -30,7 +32,33 @@ class BookSummary extends StatelessWidget {
                       itemBuilder: (context, index) {
                         final book = provider.bookToAmount.keys.elementAt(index);
                         final amount = provider.bookToAmount.values.elementAt(index);
-                        return Text('${book.name}: $amount');
+                        return RichText(
+                          text: TextSpan(
+                            // This is the default style that other TextSpans will inherit.
+                            // It's good practice to start with the default style of your app's theme.
+                            style: DefaultTextStyle.of(context).style,
+                            children: <TextSpan>[
+                              // 1. The book subject (bold)
+                              TextSpan(
+                                text: book.subject,
+                                style: Theme.of(context).textTheme.bodyLarge,
+                              ),
+
+                              // A simple TextSpan for the space
+                              const TextSpan(text: ' '),
+
+                              // 2. The book name (smaller font size)
+                              TextSpan(
+                                text: book.name,
+                                // Adjust the fontSize to what looks best for you.
+                                style: Theme.of(context).textTheme.bodyMedium,
+                              ),
+
+                              // 3. The rest of the text, which will use the default style
+                              TextSpan(text: ': $amount'),
+                            ],
+                          ),
+                        );
                       },
                     ),
                   ),

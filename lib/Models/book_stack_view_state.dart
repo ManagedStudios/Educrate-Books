@@ -7,9 +7,9 @@ import 'package:flutter/material.dart';
 import '../Data/db.dart';
 import '../Data/student.dart';
 
-class BookStateViewState extends ChangeNotifier {
+class BookStackViewState extends ChangeNotifier {
 
-  BookStateViewState(this.database);
+  BookStackViewState(this.database);
 
   final DB database;
 
