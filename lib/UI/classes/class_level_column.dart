@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 
 import '../../Models/class_level_state.dart';
 import '../../Resources/dimensions.dart';
-import '../../Resources/text.dart';
+import '../books/switch_book.dart';
 
 class ClassLevelColumn extends StatefulWidget {
   const ClassLevelColumn({super.key, required this.onSwitchBookView});
@@ -51,27 +51,7 @@ class _ClassLevelColumnState extends State<ClassLevelColumn> {
             padding: const EdgeInsets.only(top: Dimensions.paddingMedium),
             child: Column(
               children: [
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: Text(
-                          TextRes.classLevels,
-                          style: Theme.of(context).textTheme.displayLarge,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      Tooltip(
-                        message: TextRes.switchStackBookView,
-                        child: IconButton(
-                            onPressed: widget.onSwitchBookView,
-                            icon: const Icon(Icons.compare_arrows,
-                                size: Dimensions.iconButtonSizeMedium)),
-                      )
-                    ]),
-                const SizedBox(
-                  height: Dimensions.spaceMedium,
-                ),
+                SwitchBook(onSwitchBookView: widget.onSwitchBookView),
                 Expanded(
                   child: ListView(
                     //use listView to tacle even exceptional high load of classes

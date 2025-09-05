@@ -1,4 +1,12 @@
+
+import 'package:buecherteam_2023_desktop/Resources/dimensions.dart';
+import 'package:buecherteam_2023_desktop/UI/books/book_summary.dart';
+import 'package:buecherteam_2023_desktop/UI/classes/class_selector.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+
+import 'book_depot_view.dart';
+
 
 class BookStackView extends StatelessWidget {
   static String routeName = '/bookStackView';
@@ -6,6 +14,20 @@ class BookStackView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Padding(
+      padding: const EdgeInsets.all(Dimensions.paddingMedium),
+      child: Row(
+          children: [
+            Expanded(
+
+              child: ClassSelector(onSwitchBookView: () => context.go(BookDepotView.routeName),),
+            ),
+            const Expanded(
+
+              child: BookSummary(),
+            ),
+          ],
+        ),
+    );
   }
 }

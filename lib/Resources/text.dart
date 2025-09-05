@@ -404,6 +404,8 @@ class TextRes {
 
   static var notes = "Notizen";
 
+  static var bookStackSummary = "Übersicht benötigter Bücher";
+
 
 
 
