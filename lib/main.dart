@@ -1,4 +1,4 @@
-import 'package:buecherteam_2023_desktop/Data/book.dart';
+
 import 'package:buecherteam_2023_desktop/Data/db.dart';
 import 'package:buecherteam_2023_desktop/Models/app_introduction_state.dart';
 import 'package:buecherteam_2023_desktop/Models/book_depot_state.dart';
@@ -11,20 +11,14 @@ import 'package:buecherteam_2023_desktop/Models/settings/settings_nav_state.dart
 import 'package:buecherteam_2023_desktop/Models/settings/sync_state.dart';
 import 'package:buecherteam_2023_desktop/Models/studentListState.dart';
 import 'package:buecherteam_2023_desktop/Models/student_detail_state.dart';
-import 'package:buecherteam_2023_desktop/Resources/text.dart';
 import 'package:buecherteam_2023_desktop/Theme/color_scheme.dart';
 import 'package:buecherteam_2023_desktop/Theme/text_theme.dart';
-import 'package:buecherteam_2023_desktop/UI/book_depot_view.dart';
-import 'package:buecherteam_2023_desktop/UI/book_stack_view.dart';
-import 'package:buecherteam_2023_desktop/UI/student_view.dart';
-import 'package:buecherteam_2023_desktop/Util/database/getter.dart';
+import 'package:buecherteam_2023_desktop/Util/navigation/desktop_router.dart';
+import 'package:buecherteam_2023_desktop/Util/navigation/nav_logic.dart';
 import 'package:cbl_flutter/cbl_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'Data/class_data.dart';
 import 'Resources/dimensions.dart';
-import 'UI/app_introduction/add_class_data.dart';
 import 'UI/navigation/navigationbar.dart';
 
 late String initialLocation;
@@ -36,15 +30,7 @@ void main() async {
   await DB().initializeDatabase();
 
 
-
-
-  List<ClassData>? classes = await getAllClasses(DB());
-  if (classes != null && classes.isNotEmpty) { //no classes available
-    initialLocation = StudentView.routeName;
-
-  } else {
-    initialLocation = TextRes.introPaths[0];
-  }
+  initialLocation = await getInitialPath();
 
   //TODO shift init methods down to the widget and show a startup screen while initializing
   runApp(MultiProvider(
@@ -67,54 +53,7 @@ void main() async {
 }
 
 
-final _router = GoRouter(initialLocation: initialLocation, routes: [
-      GoRoute(
-          path: TextRes.introPaths[0],
-          pageBuilder: (context, state) => CustomTransitionPage(
-              child: const AddClassData(),
-              transitionsBuilder: (context, animation, _, child) {
-                return FadeTransition(
-                    opacity: CurveTween(curve: Curves.easeInCirc)
-                        .animate(animation),
-                    child: child);
-              })),
-  ShellRoute(
-      builder: (BuildContext context, GoRouterState state, Widget child) {
-        return Homepage(child: child);
-      },
-      routes: [
-        GoRoute(
-            path: StudentView.routeName,
-            pageBuilder: (context, state) => CustomTransitionPage(
-                child: StudentView(filterBook: state.extra as Book?),
-                transitionsBuilder: (context, animation, _, child) {
-                  return FadeTransition(
-                      opacity: CurveTween(curve: Curves.easeInCirc)
-                          .animate(animation),
-                      child: child);
-                })),
-        GoRoute(
-            path: BookDepotView.routeName,
-            pageBuilder: (context, state) => CustomTransitionPage(
-                child: const BookDepotView(),
-                transitionsBuilder: (context, animation, _, child) {
-                  return FadeTransition(
-                      opacity: CurveTween(curve: Curves.easeInCirc)
-                          .animate(animation),
-                      child: child);
-                })),
-        GoRoute(
-            path: BookStackView.routeName,
-            pageBuilder: (context, state) => CustomTransitionPage(
-                child: const BookStackView(),
-                transitionsBuilder: (context, animation, _, child) {
-                  return FadeTransition(
-                      opacity: CurveTween(curve: Curves.easeInCirc)
-                          .animate(animation),
-                      child: child);
-                }))
-      ])
-]);
+final _router = getDesktopRouter();
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
