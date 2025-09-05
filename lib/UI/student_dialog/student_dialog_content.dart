@@ -107,9 +107,11 @@ class _StudentDialogContentState extends State<StudentDialogContent> {
                   controller: firstNameController,
                   onTextChanged: (text) {
                     if (text.isNotEmpty) {
-                      firstNameController.text =
-                          firstNameController.text[0].toUpperCase() +
-                              firstNameController.text.substring(1);
+                      final capitalizedText = text[0].toUpperCase() + text.substring(1);
+                      firstNameController.value = TextEditingValue(
+                        text: capitalizedText,
+                        selection: TextSelection.collapsed(offset: capitalizedText.length),
+                      );
                     }
                     widget.onFirstNameChanged(firstNameController.text);
                   },
@@ -125,9 +127,11 @@ class _StudentDialogContentState extends State<StudentDialogContent> {
                   controller: lastNameController,
                   onTextChanged: (text) {
                     if (text.isNotEmpty) {
-                      lastNameController.text =
-                          lastNameController.text[0].toUpperCase() +
-                              lastNameController.text.substring(1);
+                      final capitalizedText = text[0].toUpperCase() + text.substring(1);
+                      firstNameController.value = TextEditingValue(
+                        text: capitalizedText,
+                        selection: TextSelection.collapsed(offset: capitalizedText.length),
+                      );
                     }
                     widget.onLastNameChanged(lastNameController.text);
                   },
