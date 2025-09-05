@@ -1,10 +1,10 @@
 name: Flutter CI/CD Release Workflow
 
-# This workflow is triggered on pushes to the repository that include a tag matching 'v*.*.*'
+# This workflow is triggered on pushes to the repository that include a tag starting with 'v'
 on:
   push:
-    branches:
-      - main
+    tags:
+      - 'v*' # Triggers on tags like v01, v23, v1.0.0, etc.
 
 # Sets the permissions for the GITHUB_TOKEN to allow creating releases.
 permissions:
@@ -76,6 +76,8 @@ jobs:
     # This job depends on the successful completion of the build jobs
     needs: [build-windows, build-linux]
     runs-on: ubuntu-latest
+    # This condition ensures the release job only runs for tag pushes
+    if: startsWith(github.ref, 'refs/tags/')
     steps:
       - name: Download all build artifacts
         uses: actions/download-artifact@v4
