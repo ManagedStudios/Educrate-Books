@@ -259,22 +259,41 @@ class _AllStudentsColumnState extends State<AllStudentsColumn> {
   }
 
   void searchForStudents(String text) {
-    if (text == "") {
+    final searchText = text.trim().replaceAll("*", "");
+
+    if (searchText.isEmpty) {
       setState(() {
         ftsQuery = null;
       });
-    } else {
-      List<String> parts = text
-          .replaceAll("*",
-              "") //"*" can lead to crashes of couchbase lite since it is a command
-          .trim() //delete all whitespace to avoid "word AND  *" queries leading to crashes
-          .split(RegExp(
-              r'(?<=[0-9])(?=[A-Za-z])|\s+')); //use a regex to split up words and classLevel from classChar
-      final query = '${parts.join(' AND ')}*';
-      setState(() {
-        ftsQuery = query;
-      });
+      return;
     }
+
+    // Regex to find class patterns like "5A", "10B", etc.
+    // It captures the number part (\d+) and the character part ([A-Za-z]).
+    final classRegex = RegExp(r'^(\d+)([A-Za-z])$');
+
+    List<String> parts = searchText.split(RegExp(r'\s+')).where((p) => p.isNotEmpty).toList();
+    List<String> queryConditions = [];
+
+    for (final part in parts) {
+      final classMatch = classRegex.firstMatch(part);
+      if (classMatch != null) {
+        // This part is a class identifier like "5A"
+        final String level = classMatch.group(1)!; // The number part, e.g., "5"
+        final String char = classMatch.group(2)!;  // The char part, e.g., "A"
+
+        // Create a specific, grouped condition for the class
+        queryConditions.add('(${TextRes.studentClassLevelJson}:${level} AND ${TextRes.studentClassCharJson}:${char})');
+      } else {
+        // This part is a name, tag, etc. Use a prefix search.
+        queryConditions.add('${part}*');
+      }
+    }
+
+    final query = queryConditions.join(' AND ');
+    setState(() {
+      ftsQuery = query;
+    });
   }
 
   void updateStudent(Student student, BuildContext context) {

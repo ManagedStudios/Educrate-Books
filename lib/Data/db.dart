@@ -41,7 +41,8 @@ class DB {
       TextRes.studentLastNameJson,
       TextRes.studentClassLevelJson,
       TextRes.studentClassCharJson,
-      TextRes.studentTrainingDirectionsJson
+      TextRes.studentTrainingDirectionsJson,
+      TextRes.studentTagsJson
     ]);
 
     final bookFtsIndex = FullTextIndexConfiguration([
