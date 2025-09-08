@@ -2,7 +2,7 @@
 
 import 'package:buecherteam_2023_desktop/Data/class_data.dart';
 import 'package:buecherteam_2023_desktop/Resources/text.dart';
-import 'package:buecherteam_2023_desktop/UI/student_view.dart';
+import 'package:buecherteam_2023_desktop/UI/desktop/student_view.dart';
 import 'package:cbl/cbl.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';

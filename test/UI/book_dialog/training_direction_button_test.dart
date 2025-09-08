@@ -1,6 +1,6 @@
 import 'package:buecherteam_2023_desktop/Theme/color_scheme.dart';
 import 'package:buecherteam_2023_desktop/Theme/text_theme.dart';
-import 'package:buecherteam_2023_desktop/UI/book_dialog/training_direction_button.dart';
+import 'package:buecherteam_2023_desktop/UI/desktop/book_dialog/training_direction_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';

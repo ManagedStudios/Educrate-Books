@@ -3,7 +3,7 @@ import 'package:buecherteam_2023_desktop/Data/training_directions_data.dart';
 import 'package:buecherteam_2023_desktop/Resources/text.dart';
 import 'package:buecherteam_2023_desktop/Theme/color_scheme.dart';
 import 'package:buecherteam_2023_desktop/Theme/text_theme.dart';
-import 'package:buecherteam_2023_desktop/UI/book_dialog/training_direction_add_section.dart';
+import 'package:buecherteam_2023_desktop/UI/desktop/book_dialog/training_direction_add_section.dart';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';

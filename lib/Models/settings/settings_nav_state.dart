@@ -1,8 +1,8 @@
-import 'package:buecherteam_2023_desktop/UI/settings_dialog/filter_parent.dart';
-import 'package:buecherteam_2023_desktop/UI/settings_dialog/import_parent.dart';
-import 'package:buecherteam_2023_desktop/UI/settings_dialog/export_parent.dart';
-import 'package:buecherteam_2023_desktop/UI/settings_dialog/sync_parent.dart';
-import 'package:buecherteam_2023_desktop/UI/settings_dialog/warning_parent.dart';
+import 'package:buecherteam_2023_desktop/UI/desktop/settings_dialog/filter_parent.dart';
+import 'package:buecherteam_2023_desktop/UI/desktop/settings_dialog/import_parent.dart';
+import 'package:buecherteam_2023_desktop/UI/desktop/settings_dialog/export_parent.dart';
+import 'package:buecherteam_2023_desktop/UI/desktop/settings_dialog/sync_parent.dart';
+import 'package:buecherteam_2023_desktop/UI/desktop/settings_dialog/warning_parent.dart';
 import 'package:flutter/material.dart';
 
 class SettingsNavState extends ChangeNotifier {

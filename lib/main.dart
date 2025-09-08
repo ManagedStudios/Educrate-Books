@@ -14,13 +14,14 @@ import 'package:buecherteam_2023_desktop/Models/studentListState.dart';
 import 'package:buecherteam_2023_desktop/Models/student_detail_state.dart';
 import 'package:buecherteam_2023_desktop/Theme/color_scheme.dart';
 import 'package:buecherteam_2023_desktop/Theme/text_theme.dart';
-import 'package:buecherteam_2023_desktop/Util/navigation/desktop_router.dart';
-import 'package:buecherteam_2023_desktop/Util/navigation/nav_logic.dart';
+import 'package:buecherteam_2023_desktop/Util/navigation/desktop/desktop_router.dart';
+import 'package:buecherteam_2023_desktop/Util/navigation/desktop/nav_logic.dart';
 import 'package:cbl_flutter/cbl_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'Resources/dimensions.dart';
-import 'UI/navigation/navigationbar.dart';
+import 'UI/desktop/navigation/navigationbar.dart';
+
 
 late String initialLocation;
 

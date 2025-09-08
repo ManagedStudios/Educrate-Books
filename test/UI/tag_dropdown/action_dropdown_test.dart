@@ -8,7 +8,7 @@ import 'package:buecherteam_2023_desktop/Data/lfg_chip.dart';
 import 'package:buecherteam_2023_desktop/Data/training_directions_data.dart';
 import 'package:buecherteam_2023_desktop/Theme/color_scheme.dart';
 import 'package:buecherteam_2023_desktop/Theme/text_theme.dart';
-import 'package:buecherteam_2023_desktop/UI/tag_dropdown/action_dropdown.dart';
+import 'package:buecherteam_2023_desktop/UI/desktop/tag_dropdown/action_dropdown.dart';
 import 'package:buecherteam_2023_desktop/Util/comparison.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
