@@ -63,11 +63,8 @@ class DB {
     await defaultCollection.createIndex(
         TextRes.studentsOfBookIdIndex, studentsOfBookIdIndex);
 
-    try {
       await startReplication();
-    }catch(e) {
-      //do Nothing
-    }
+
 
   }
 
@@ -210,9 +207,69 @@ class DB {
   await _replicator!.start();
   } catch(e) {
       replicatorStatus.value = null;
-      rethrow;
   }
 
+  }
+
+  Future<Object?> checkConnection() async {
+    // A Completer lets us wait for an async operation to finish.
+    final completer = Completer<Object?>();
+    Replicator? tempReplicator;
+    ListenerToken? listenerToken;
+
+    // Read the most recently saved credentials.
+    const storage = FlutterSecureStorage();
+    final uri = await storage.read(key: TextRes.uriKey);
+    final username = await storage.read(key: TextRes.usernameKey);
+    final password = await storage.read(key: TextRes.passwordKey);
+
+    if (username == null || password == null || uri == null) {
+      return 'Credentials not found.';
+    }
+
+    try {
+      // 1. Configure a TEMPORARY, NON-continuous replicator.
+      final config = ReplicatorConfiguration(
+        target: UrlEndpoint(Uri.parse(uri)),
+        continuous: false, // This is the key! It will try once and stop.
+      )
+        ..addCollection(defaultCollection) // Use the same collection
+        ..authenticator = BasicAuthenticator(username: username, password: password);
+
+      tempReplicator = await Replicator.create(config);
+
+      // 2. Listen for changes.
+      listenerToken = await tempReplicator.addChangeListener((change) {
+        final status = change.status;
+
+        // 3. On failure, complete with the error.
+        if (status.error != null && !completer.isCompleted) {
+          completer.complete(status.error);
+        }
+
+        // 4. On success (stopped with no error), complete with null.
+        if (status.activity == ReplicatorActivityLevel.stopped && status.error == null) {
+          if (!completer.isCompleted) {
+            completer.complete(null);
+          }
+        }
+      });
+
+      await tempReplicator.start();
+
+      // 5. Wait for the completer to be finished by the listener.
+      return await completer.future;
+
+    } catch (e) {
+      return e; // Return synchronous errors immediately.
+    } finally {
+      // 6. IMPORTANT: Always clean up the temporary replicator.
+      if (listenerToken != null) {
+        await tempReplicator?.removeChangeListener(listenerToken);
+      }
+      await tempReplicator?.stop();
+
+    }
   }
 
 

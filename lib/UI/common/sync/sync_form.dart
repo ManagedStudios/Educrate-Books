@@ -9,7 +9,8 @@ import '../input/password_text_field.dart';
 
 class SyncForm extends StatefulWidget {
 
-  const SyncForm({super.key});
+  const SyncForm({super.key, this.onSave});
+  final Function()? onSave;
 
   @override
   State<SyncForm> createState() => _SyncFormState();
@@ -92,12 +93,17 @@ class _SyncFormState extends State<SyncForm> {
             ),
             PasswordField(controller: _passwordController),
             ElevatedButton(
-              onPressed: () {
-                syncState.saveCredentials(
+              onPressed: () async{
+                await syncState.saveCredentials(
                   _urlController.text,
                   _usernameController.text,
                   _passwordController.text,
                 );
+                if (syncState.urlError == null
+                    && syncState.credentialsError == null
+                    && widget.onSave != null) {
+                  widget.onSave!();
+                }
               },
               child: const Text('Save'),
             ),

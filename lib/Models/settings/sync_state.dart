@@ -57,7 +57,7 @@ class SyncState extends ChangeNotifier {
       }
       if (cblStatus.error != null) {
         _status = SyncStatus(SyncConnectionStatus.disconnected, error: cblStatus.error!.toString());
-        updateError(cblStatus.error!);
+
       }
     }
     notifyListeners();
@@ -126,11 +126,10 @@ class SyncState extends ChangeNotifier {
     await _storage.write(key: TextRes.usernameKey, value: username);
     await _storage.write(key: TextRes.passwordKey, value: password);
     clearError();
-    try {
-      await _db.startReplication(); // Restart replication with new credentials
-    }catch(e) {
-      updateError(e);
-    }
+    Object? error = await _db.checkConnection();
+    updateError(error);
+    await _db.startReplication(); // Restart replication with new credentials
+
     notifyListeners();
   }
 
@@ -141,7 +140,7 @@ class SyncState extends ChangeNotifier {
     return {TextRes.uriKey: uri, TextRes.usernameKey: username, TextRes.passwordKey: password};
   }
 
-  void updateError(Object error) {
+  void updateError(Object? error) {
     if (error is DatabaseException) {
       urlError = TextRes.urlError;
       credentialsError = null;

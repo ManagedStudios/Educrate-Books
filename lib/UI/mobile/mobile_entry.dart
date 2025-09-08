@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../Models/settings/sync_state.dart';
+import '../../Resources/dimensions.dart';
 import '../../Theme/color_scheme.dart';
 import '../../Theme/text_theme.dart';
 
@@ -43,6 +44,9 @@ class Homepage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: lightColorScheme.background,
-        body: child);
+        body: Padding(
+          padding: const EdgeInsets.only(top: Dimensions.paddingVeryBig),
+          child: child,
+        ));
   }
 }

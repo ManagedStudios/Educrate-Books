@@ -1,6 +1,9 @@
 
 
+import 'package:buecherteam_2023_desktop/UI/common/sync/sync_form.dart';
+import 'package:buecherteam_2023_desktop/UI/mobile/class_view.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class LoginFlow extends StatelessWidget {
   static String routeName = '/loginView';
@@ -8,8 +11,6 @@ class LoginFlow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder(
-      child: Text("login"),
-    );
+    return SyncForm(onSave: () => context.go(ClassView.routeName),);
   }
 }

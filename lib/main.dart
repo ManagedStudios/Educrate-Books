@@ -24,7 +24,7 @@ void main() async {
     initialLocation = await getInitialPathDesktop();
     runApp(desktopEntry);
   } else { //mobile
-    initialLocation = await getInitialPathMobile();
+    initialLocation = await getInitialPathMobile(DB());
     runApp(mobileEntry);
   }
 
