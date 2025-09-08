@@ -3,13 +3,14 @@ import 'package:buecherteam_2023_desktop/Util/navigation/mobile/mobile_router.da
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../Models/settings/sync_state.dart';
 import '../../Theme/color_scheme.dart';
 import '../../Theme/text_theme.dart';
 
 MultiProvider mobileEntry = MultiProvider(
   providers: [
     //initialize the Viewmodels
-
+    ChangeNotifierProvider(create: (context) => SyncState()..init()),
   ],
   child: const MyApp(),
 );
