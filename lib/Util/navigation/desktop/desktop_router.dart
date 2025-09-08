@@ -10,6 +10,7 @@ import '../../../UI/desktop/app_introduction/add_sync.dart';
 import '../../../UI/desktop/book_depot_view.dart';
 
 import '../../../UI/desktop/book_stack_view.dart';
+import '../../../UI/desktop/desktop_entry.dart';
 import '../../../UI/desktop/student_view.dart';
 import '../../../main.dart';
 
