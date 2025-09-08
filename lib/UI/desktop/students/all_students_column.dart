@@ -9,6 +9,7 @@ import 'package:buecherteam_2023_desktop/UI/desktop/right_click_actions/actions_
 import 'package:buecherteam_2023_desktop/UI/desktop/right_click_actions/delete_dialog.dart';
 import 'package:buecherteam_2023_desktop/UI/desktop/searchbar.dart';
 import 'package:buecherteam_2023_desktop/UI/desktop/students/student_card.dart';
+import 'package:buecherteam_2023_desktop/Util/stringUtil.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -259,40 +260,8 @@ class _AllStudentsColumnState extends State<AllStudentsColumn> {
   }
 
   void searchForStudents(String text) {
-    final searchText = text.trim().replaceAll("*", "");
-
-    if (searchText.isEmpty) {
-      setState(() {
-        ftsQuery = null;
-      });
-      return;
-    }
-
-    // Regex to find class patterns like "5A", "10B", etc.
-    // It captures the number part (\d+) and the character part ([A-Za-z]).
-    final classRegex = RegExp(r'^(\d+)([A-Za-z])$');
-
-    List<String> parts = searchText.split(RegExp(r'\s+')).where((p) => p.isNotEmpty).toList();
-    List<String> queryConditions = [];
-
-    for (final part in parts) {
-      final classMatch = classRegex.firstMatch(part);
-      if (classMatch != null) {
-        // This part is a class identifier like "5A"
-        final String level = classMatch.group(1)!; // The number part, e.g., "5"
-        final String char = classMatch.group(2)!;  // The char part, e.g., "A"
-
-        // Create a specific, grouped condition for the class
-        queryConditions.add('(${TextRes.studentClassLevelJson}:${level} AND ${TextRes.studentClassCharJson}:${char})');
-      } else {
-        // This part is a name, tag, etc. Use a prefix search.
-        queryConditions.add('${part}*');
-      }
-    }
-
-    final query = queryConditions.join(' AND ');
     setState(() {
-      ftsQuery = query;
+      ftsQuery = getQueryFromSearchText(text);
     });
   }
 
