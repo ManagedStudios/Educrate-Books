@@ -1,4 +1,6 @@
 
+import 'package:buecherteam_2023_desktop/Data/db.dart';
+import 'package:buecherteam_2023_desktop/Models/studentListState.dart';
 import 'package:buecherteam_2023_desktop/Util/navigation/mobile/mobile_router.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -12,6 +14,7 @@ MultiProvider mobileEntry = MultiProvider(
   providers: [
     //initialize the Viewmodels
     ChangeNotifierProvider(create: (context) => SyncState()..init()),
+    ChangeNotifierProvider(create: (context) => StudentListState(DB()))
   ],
   child: const MyApp(),
 );

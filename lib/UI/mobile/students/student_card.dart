@@ -11,16 +11,19 @@ class StudentCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextButton(
+    return ElevatedButton(
       style: ButtonStyle(
     shape: WidgetStatePropertyAll(RoundedRectangleBorder(
     borderRadius:
         BorderRadius.circular(Dimensions.cornerRadiusSmall)))),
-        onPressed: onClick(student),
-        child: Text(
-          "${student.firstName} ${student.lastName}",
-          style: Theme.of(context).textTheme.bodyLarge,
-          overflow: TextOverflow.ellipsis,
+        onPressed: () => onClick(student),
+        child: Align(
+          alignment: Alignment.topLeft,
+          child: Text(
+            "${student.firstName} ${student.lastName}",
+            style: Theme.of(context).textTheme.bodyLarge,
+            overflow: TextOverflow.ellipsis,
+          ),
         ));
   }
 }

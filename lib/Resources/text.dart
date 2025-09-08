@@ -410,6 +410,8 @@ class TextRes {
 
   static const String credentialsError = "Nutzername oder Passwort falsch!";
 
+  static const String classes = "Klassen";
+
 
 
 

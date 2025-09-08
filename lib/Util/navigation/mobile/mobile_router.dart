@@ -1,7 +1,9 @@
 
 
+import 'package:buecherteam_2023_desktop/Data/class_data.dart';
 import 'package:buecherteam_2023_desktop/UI/mobile/class_view.dart';
 import 'package:buecherteam_2023_desktop/UI/mobile/login_flow.dart';
+import 'package:buecherteam_2023_desktop/UI/mobile/student_list_view.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../UI/mobile/mobile_entry.dart';
@@ -34,6 +36,22 @@ GoRouter getMobileRouter () {
                             .animate(animation),
                         child: child);
                   })),
+          GoRoute(
+              path: StudentListView.routeName,
+              pageBuilder: (context, state) {
+                final args = state.extra as ClassData;
+                return CustomTransitionPage(
+                  child: StudentListView(
+                      classLevel: args.classLevel,
+                      classChar: args.classChar),
+                  transitionsBuilder: (context, animation, _, child) {
+                    return FadeTransition(
+                        opacity: CurveTween(curve: Curves.easeInCirc)
+                            .animate(animation),
+                        child: child);
+                  });
+              }
+          )
         ])
   ]);
 }

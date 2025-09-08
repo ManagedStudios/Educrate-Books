@@ -2,9 +2,11 @@
 import 'package:buecherteam_2023_desktop/Data/class_data.dart';
 import 'package:buecherteam_2023_desktop/Data/db.dart';
 import 'package:buecherteam_2023_desktop/UI/mobile/classes/classes_row.dart';
+import 'package:buecherteam_2023_desktop/UI/mobile/student_list_view.dart';
 import 'package:buecherteam_2023_desktop/Util/database/getter.dart';
 import 'package:buecherteam_2023_desktop/Util/transformer/grouper.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 
 
@@ -24,7 +26,9 @@ class ClassView extends StatelessWidget {
             children: [
               for (MapEntry<int, List<ClassData>> classRow in classRows.entries)
                 ClassesRow(classRow: classRow,
-                    onClassClicked: (clickedClass) => {})
+                    onClassClicked: (clickedClass) => {
+                    context.go(StudentListView.routeName, extra: clickedClass)
+                    })
             ],
           );
         });
