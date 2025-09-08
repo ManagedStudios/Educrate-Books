@@ -26,7 +26,7 @@ class AddSync extends IntroductionScaffold {
     final router = GoRouter.of(context);
     await state.awaitOneSyncCycle();
     if (!context.mounted) return;
-    String location = await getInitialPath();
+    String location = await getInitialPathDesktop();
     router.go(location);
 
   }

@@ -7,7 +7,7 @@ import '../../../Resources/text.dart';
 import '../../../UI/desktop/student_view.dart';
 import '../../database/getter.dart';
 
-Future<String> getInitialPath() async{
+Future<String> getInitialPathDesktop() async{
   const storage = FlutterSecureStorage();
   final uri = await storage.read(key: TextRes.uriKey);
   final username = await storage.read(key: TextRes.usernameKey);
