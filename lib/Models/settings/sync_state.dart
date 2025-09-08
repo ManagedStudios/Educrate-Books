@@ -12,6 +12,9 @@ class SyncState extends ChangeNotifier {
   final FlutterSecureStorage _storage;
   final DB _db;
 
+  String? urlError;
+  String? credentialsError;
+
   SyncStatus _status = SyncStatus(SyncConnectionStatus.stopped);
   SyncStatus get status => _status;
 
@@ -54,6 +57,7 @@ class SyncState extends ChangeNotifier {
       }
       if (cblStatus.error != null) {
         _status = SyncStatus(SyncConnectionStatus.disconnected, error: cblStatus.error!.toString());
+        updateError(cblStatus.error!);
       }
     }
     notifyListeners();
@@ -121,7 +125,12 @@ class SyncState extends ChangeNotifier {
     await _storage.write(key: TextRes.uriKey, value: uri);
     await _storage.write(key: TextRes.usernameKey, value: username);
     await _storage.write(key: TextRes.passwordKey, value: password);
-    await _db.startReplication(); // Restart replication with new credentials
+    clearError();
+    try {
+      await _db.startReplication(); // Restart replication with new credentials
+    }catch(e) {
+      updateError(e);
+    }
     notifyListeners();
   }
 
@@ -130,6 +139,21 @@ class SyncState extends ChangeNotifier {
     final username = await _storage.read(key: TextRes.usernameKey);
     final password = await _storage.read(key: TextRes.passwordKey);
     return {TextRes.uriKey: uri, TextRes.usernameKey: username, TextRes.passwordKey: password};
+  }
+
+  void updateError(Object error) {
+    if (error is DatabaseException) {
+      urlError = TextRes.urlError;
+      credentialsError = null;
+    } else if (error is HttpException){
+      urlError = null;
+      credentialsError = TextRes.credentialsError;
+    }
+  }
+
+  void clearError() {
+    urlError = null;
+    credentialsError = null;
   }
 
 

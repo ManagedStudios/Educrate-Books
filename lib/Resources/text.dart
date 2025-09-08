@@ -406,6 +406,10 @@ class TextRes {
 
   static var bookStackSummary = "Übersicht benötigter Bücher";
 
+  static const String urlError = "URL falsch. Muss wss://.../ entsprechen.";
+
+  static const String credentialsError = "Nutzername oder Passwort falsch!";
+
 
 
 

@@ -63,7 +63,12 @@ class DB {
     await defaultCollection.createIndex(
         TextRes.studentsOfBookIdIndex, studentsOfBookIdIndex);
 
+    try {
       await startReplication();
+    }catch(e) {
+      //do Nothing
+    }
+
   }
 
   Future<void> saveDocument(MutableDocument document) async {
@@ -185,7 +190,6 @@ class DB {
     final username = await storage.read(key: TextRes.usernameKey);
     final password = await storage.read(key: TextRes.passwordKey);
 
-
     if (username == null || password == null || uri == null) {
       replicatorStatus.value = null;
       return;
@@ -206,10 +210,10 @@ class DB {
   await _replicator!.start();
   } catch(e) {
       replicatorStatus.value = null;
+      rethrow;
   }
 
   }
-
 
 
 
