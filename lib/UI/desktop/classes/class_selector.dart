@@ -1,6 +1,7 @@
 import 'package:buecherteam_2023_desktop/Data/class_data.dart';
 import 'package:buecherteam_2023_desktop/Models/book_stack_view_state.dart';
 import 'package:buecherteam_2023_desktop/UI/desktop/books/switch_book.dart';
+import 'package:buecherteam_2023_desktop/Util/transformer/grouper.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -45,14 +46,7 @@ class ClassSelector extends StatelessWidget {
   }
 
   Map<int, List<ClassData>> _groupClassesByLevel(List<ClassData> classes) {
-    final Map<int, List<ClassData>> groupedClasses = {};
-    for (var classData in classes) {
-      if (!groupedClasses.containsKey(classData.classLevel)) {
-        groupedClasses[classData.classLevel] = [];
-      }
-      groupedClasses[classData.classLevel]!.add(classData);
-    }
-    return groupedClasses;
+    return groupClassesByLevel(classes);
   }
 
   Widget _buildClassRow(BuildContext context,
