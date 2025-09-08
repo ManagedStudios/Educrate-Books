@@ -22,6 +22,11 @@ class StudentListState extends ChangeNotifier {
   SplayTreeSet<int> selectedStudentIds =
       SplayTreeSet(); //always ordered hashset
 
+  List<Student> _students = [];
+
+  // Expose the current list of students
+  List<Student> get students => _students;
+
   String? ftsQuery;
   Filter? filterOptions;
 
@@ -85,13 +90,28 @@ class StudentListState extends ChangeNotifier {
       String? ftsQuery, Filter? filterOptions) async* {
     String query = BuildQuery.buildStudentListQuery(ftsQuery, filterOptions);
 
-    yield* database.streamLiveDocs(query).asyncMap((change) {
-      //asyncMap required as the data is asynchronously fetched from the Web
+    // The stream from your database
+    final sourceStream = database.streamLiveDocs(query);
 
-      return change.results.asStream().map((result) {
+    // We yield a modified stream
+    yield* sourceStream.asyncMap((change) async { // Make this closure async
+
+      // await the Future<List<Student>> from toList()
+      final List<Student> studentList = await change.results.asStream().map((result) {
         return database.toEntity(Student.fromJson, result);
-      }) //build Student objects from JSON
-          .toList();
+      }).toList();
+
+
+      // 3. CAPTURE the result before returning it.
+      _students = studentList;
+
+      // 4. NOTIFY any listening widgets that the data has changed.
+      // This is crucial for the DetailPage to get updates.
+      notifyListeners();
+
+
+      // Finally, return the list to the original consumer (your StreamBuilder)
+      return studentList;
     });
   }
 
