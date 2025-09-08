@@ -1,6 +1,6 @@
 import 'package:buecherteam_2023_desktop/Data/class_data.dart';
 import 'package:buecherteam_2023_desktop/Resources/text.dart';
-import 'package:buecherteam_2023_desktop/UI/desktop/input/dialog_text_field.dart';
+import 'package:buecherteam_2023_desktop/UI/common/input/dialog_text_field.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../Util/stringUtil.dart';

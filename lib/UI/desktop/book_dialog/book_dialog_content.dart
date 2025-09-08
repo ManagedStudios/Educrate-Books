@@ -1,5 +1,5 @@
 import 'package:buecherteam_2023_desktop/UI/desktop/book_dialog/training_direction_add_section.dart';
-import 'package:buecherteam_2023_desktop/UI/desktop/input/dialog_text_field.dart';
+import 'package:buecherteam_2023_desktop/UI/common/input/dialog_text_field.dart';
 import 'package:flutter/material.dart';
 
 import '../../../Data/book.dart';

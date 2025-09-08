@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../Resources/dimensions.dart';
 import '../../../Resources/text.dart';
-import '../input/check_preference.dart';
+import '../../common/input/check_preference.dart';
 
 class ImportParent extends StatelessWidget {
   const ImportParent({super.key});

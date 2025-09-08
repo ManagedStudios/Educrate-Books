@@ -1,8 +1,8 @@
 
 
 import 'package:buecherteam_2023_desktop/Models/settings/sync_state.dart';
+import 'package:buecherteam_2023_desktop/UI/common/sync/sync_form.dart';
 import 'package:buecherteam_2023_desktop/UI/desktop/app_introduction/introduction_scaffold.dart';
-import 'package:buecherteam_2023_desktop/UI/desktop/settings_dialog/sync_parent.dart';
 import 'package:buecherteam_2023_desktop/Util/navigation/desktop/nav_logic.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -17,7 +17,7 @@ class AddSync extends IntroductionScaffold {
 
   @override
   Widget buildContent(BuildContext context) {
-    return const SyncParent();
+    return const SyncForm();
   }
 
   @override

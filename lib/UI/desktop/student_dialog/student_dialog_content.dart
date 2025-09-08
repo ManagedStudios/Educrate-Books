@@ -4,7 +4,7 @@ import 'package:buecherteam_2023_desktop/Data/student.dart';
 import 'package:buecherteam_2023_desktop/Data/training_directions_data.dart';
 import 'package:buecherteam_2023_desktop/Resources/dimensions.dart';
 import 'package:buecherteam_2023_desktop/Resources/text.dart';
-import 'package:buecherteam_2023_desktop/UI/desktop/input/dialog_text_field.dart';
+import 'package:buecherteam_2023_desktop/UI/common/input/dialog_text_field.dart';
 import 'package:buecherteam_2023_desktop/UI/desktop/tag_dropdown/dropdown.dart';
 import 'package:flutter/material.dart';
 
