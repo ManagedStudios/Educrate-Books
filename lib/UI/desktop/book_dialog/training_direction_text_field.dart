@@ -25,7 +25,13 @@ class TrainingDirectionTextField extends StatelessWidget {
     return TextField(
       controller: controller,
       onChanged: (text) {
-        controller.text = text.toUpperCase();
+        if (text.isNotEmpty) {
+          final capitalizedText = text[0].toUpperCase() + text.substring(1);
+          controller.value = TextEditingValue(
+            text: capitalizedText,
+            selection: TextSelection.collapsed(offset: capitalizedText.length),
+          );
+        }
         onTextChanged(controller.text);
       },
       autocorrect: false,
