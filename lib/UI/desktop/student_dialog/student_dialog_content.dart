@@ -128,7 +128,7 @@ class _StudentDialogContentState extends State<StudentDialogContent> {
                   onTextChanged: (text) {
                     if (text.isNotEmpty) {
                       final capitalizedText = text[0].toUpperCase() + text.substring(1);
-                      firstNameController.value = TextEditingValue(
+                      lastNameController.value = TextEditingValue(
                         text: capitalizedText,
                         selection: TextSelection.collapsed(offset: capitalizedText.length),
                       );

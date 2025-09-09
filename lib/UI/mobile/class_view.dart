@@ -11,7 +11,7 @@ import 'package:go_router/go_router.dart';
 
 
 class ClassView extends StatelessWidget {
-  static String routeName = '/classView';
+  static String routeName = '/';
   const ClassView({super.key});
 
   @override
@@ -27,7 +27,7 @@ class ClassView extends StatelessWidget {
               for (MapEntry<int, List<ClassData>> classRow in classRows.entries)
                 ClassesRow(classRow: classRow,
                     onClassClicked: (clickedClass) => {
-                    context.go(StudentListView.routeName, extra: clickedClass)
+                    context.push(StudentListView.routeName, extra: clickedClass)
                     })
             ],
           );
