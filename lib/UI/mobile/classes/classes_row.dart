@@ -15,6 +15,7 @@ class ClassesRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context).size;
     final double lineWidth = mediaQuery.width * 0.1;
+    classRow.value.sort();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

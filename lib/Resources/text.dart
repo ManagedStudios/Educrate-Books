@@ -412,6 +412,13 @@ class TextRes {
 
   static const String classes = "Klassen";
 
+  static const String studentDetailPathParam = "studentId";
+
+  static const String classLevelPathParam = 'classLevel';
+
+  static const String classCharPathParam = 'classChar';
+
+
 
 
 

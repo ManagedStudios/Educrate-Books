@@ -68,7 +68,9 @@ class StudentListView extends StatelessWidget {
                       itemBuilder: (context, index) {
                         return StudentCard(
                             student: change.data![index],
-                            onClick: (student) => {});
+                            onClick: (student) => {
+                              context.go("${StudentListView.routeName}/$classLevel/$classChar/${student.id}")
+                            });
                       }),
                 ),
               ),
