@@ -129,8 +129,37 @@ class StudentDetail extends StatelessWidget {
                             Provider.of<StudentDetailState>(context, listen: false);
                             state.deleteBooksOfStudents([currStudent], books);
                           }),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(Dimensions.paddingMedium),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Card(
+                              child: IconButton(
+                                  onPressed: () {
+                                    StudentListState studentListState =
+                                    Provider.of<StudentListState>(
+                                      //delete the student
+                                        context,
+                                        listen: false);
+                                    studentListState
+                                        .deleteStudent(currStudent);
+                                    if (currStudentIndex < state.students.length-1) {
+                                      context.go("${StudentListView.routeName}/${currStudent.classLevel.toString()}/${currStudent.classChar}/${state.students[currStudentIndex+1].id}");
+                                    } else {
+                                      context.pop();
+                                    }
+                                  },
+                                  icon: const Icon(Icons.delete),
+                                  iconSize: Dimensions.iconSizeVeryBig,
+                              )
+                          )
+                        ],
+                      ),
                     )
                   ],
+
 
                 ),
              );
