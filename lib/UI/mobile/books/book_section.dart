@@ -15,6 +15,7 @@ class BookSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    student.books.sort();
     return Column(
       children: [
         Padding(
