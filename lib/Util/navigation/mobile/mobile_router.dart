@@ -40,6 +40,26 @@ GoRouter getMobileRouter () {
                         child: child);
                   })),
           GoRoute(
+            // Route WITHOUT classChar
+            path: "${StudentListView.routeName}/:${TextRes.classLevelPathParam}",
+            pageBuilder: (context, state) {
+              final int classLevel = int.parse(state.pathParameters[TextRes.classLevelPathParam]!);
+              // Use the null-aware operator '??' to provide a default empty string
+              final String classChar = state.pathParameters[TextRes.classCharPathParam] ?? '';
+
+              return CustomTransitionPage(
+                  child: StudentListView(
+                      classLevel: classLevel,
+                      classChar: classChar),
+                  transitionsBuilder: (context, animation, _, child) {
+                    return FadeTransition(
+                        opacity: CurveTween(curve: Curves.easeInCirc)
+                            .animate(animation),
+                        child: child);
+                  });
+            },
+          ),
+          GoRoute(
               path: "${StudentListView.routeName}/:${TextRes.classLevelPathParam}/:${TextRes.classCharPathParam}",
               pageBuilder: (context, state) {
                 final int classLevel = int.parse(state.pathParameters[TextRes.classLevelPathParam]!);
