@@ -31,7 +31,7 @@ class ClassView extends StatelessWidget {
                     if(clickedClass.classChar.isNotEmpty) {
                       context.push("${StudentListView.routeName}/${clickedClass.classLevel.toString()}/${clickedClass.classChar}")
                     } else {
-                      context.push("${StudentListView.routeName}/${clickedClass.classLevel.toString()}")
+                      context.push("${StudentListView.routeName}/${clickedClass.classLevel.toString()}/${null}")
                     }
 
                     })

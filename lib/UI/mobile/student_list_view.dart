@@ -72,7 +72,7 @@ class StudentListView extends StatelessWidget {
                               if(classChar.isNotEmpty) {
                                 context.go("${StudentListView.routeName}/$classLevel/$classChar/${student.id}")
                               } else {
-                                context.go("${StudentListView.routeName}/$classLevel/${student.id}")
+                                context.go("${StudentListView.routeName}/$classLevel/${null}/${student.id}")
                               }
 
                             });

@@ -60,7 +60,7 @@ class StudentDetail extends StatelessWidget {
                                       if (currStudent.classChar.isNotEmpty) {
                                         context.go("${StudentListView.routeName}/${currStudent.classLevel.toString()}/${currStudent.classChar}/${state.students[currStudentIndex+1].id}");
                                       } else {
-                                        context.go("${StudentListView.routeName}/${currStudent.classLevel.toString()}/${state.students[currStudentIndex+1].id}");
+                                        context.go("${StudentListView.routeName}/${currStudent.classLevel.toString()}/${null}/${state.students[currStudentIndex+1].id}");
                                       }
                                     } else {
                                       context.pop();
@@ -153,7 +153,7 @@ class StudentDetail extends StatelessWidget {
                                       if (currStudent.classChar.isNotEmpty) {
                                         context.go("${StudentListView.routeName}/${currStudent.classLevel.toString()}/${currStudent.classChar}/${state.students[currStudentIndex+1].id}");
                                       } else {
-                                        context.go("${StudentListView.routeName}/${currStudent.classLevel.toString()}/${state.students[currStudentIndex+1].id}");
+                                        context.go("${StudentListView.routeName}/${currStudent.classLevel.toString()}/${null}/${state.students[currStudentIndex+1].id}");
                                       }
                                     } else {
                                       context.pop();
