@@ -1,12 +1,14 @@
 
 
 import 'package:buecherteam_2023_desktop/Resources/text.dart';
+import 'package:buecherteam_2023_desktop/UI/mobile/books/add_books_view.dart';
 import 'package:buecherteam_2023_desktop/UI/mobile/class_view.dart';
 import 'package:buecherteam_2023_desktop/UI/mobile/login_flow.dart';
 import 'package:buecherteam_2023_desktop/UI/mobile/student_detail.dart';
 import 'package:buecherteam_2023_desktop/UI/mobile/student_list_view.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import '../../../Data/student.dart';
 import '../../../UI/mobile/mobile_entry.dart';
 import '../../../main.dart';
 
@@ -68,10 +70,24 @@ GoRouter getMobileRouter () {
                       });
                 },
 
-              )
+              ),
             ]
-
           ),
+          GoRoute(
+            path: AddBooksView.routeName,
+            pageBuilder: (context, state) {
+              final Student student = state.extra as Student;
+              return CustomTransitionPage(
+                  child: AddBooksView(student: student),
+                  transitionsBuilder: (context, animation, _, child) {
+                    return FadeTransition(
+                        opacity: CurveTween(curve: Curves.easeInCirc)
+                            .animate(animation),
+                        child: child);
+                  });
+            },
+
+          )
 
 
         ])

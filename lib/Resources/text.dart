@@ -418,6 +418,8 @@ class TextRes {
 
   static const String classCharPathParam = 'classChar';
 
+  static const String deleteAllBooks = 'Alle Bücher löschen';
+
 
 
 

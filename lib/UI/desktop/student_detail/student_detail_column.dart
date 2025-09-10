@@ -61,6 +61,7 @@ class StudentDetailColumn extends StatelessWidget {
                               showNotificationSnackbar(context, TextRes.tagRemoved);
                             },
                             onFocusChanged: onFocusChanged,
+                            offset: -Dimensions.navBarHeight,
                         ),
 
 

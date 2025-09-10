@@ -2,7 +2,6 @@
 
 import 'package:buecherteam_2023_desktop/Data/tag_data.dart';
 import 'package:buecherteam_2023_desktop/Models/student_detail_state.dart';
-import 'package:buecherteam_2023_desktop/Resources/dimensions.dart';
 import 'package:buecherteam_2023_desktop/Resources/text.dart';
 import 'package:buecherteam_2023_desktop/UI/desktop/tag_dropdown/dropdown.dart';
 import 'package:flutter/material.dart';
@@ -13,12 +12,14 @@ import '../../../Util/database/adder.dart';
 import '../../../Util/database/getter.dart';
 
 class StudentDetailTagDropdown extends StatefulWidget {
-  const StudentDetailTagDropdown({super.key, required this.tags, required this.onTagAdded, required this.onTagDeleted, required this.onFocusChanged});
+  const StudentDetailTagDropdown({super.key, required this.tags, required this.onTagAdded, required this.onTagDeleted, required this.onFocusChanged, this.width, required this.offset});
 
   final List<String> tags;
   final Function(TagData tag) onTagAdded;
   final Function(TagData tag) onTagDeleted;
   final Function(bool focused) onFocusChanged;
+  final double? width;
+  final double offset;
 
   @override
   State<StudentDetailTagDropdown> createState() => _StudentDetailTagDropdownState();
@@ -52,7 +53,13 @@ class _StudentDetailTagDropdownState extends State<StudentDetailTagDropdown> {
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width*0.4;
+    late final double width;
+    if (widget.width == null) {
+      width = MediaQuery.of(context).size.width*0.4;
+    } else {
+      width = widget.width!;
+    }
+
     return FutureBuilder(
         future: future,
         initialData: const [
@@ -65,7 +72,7 @@ class _StudentDetailTagDropdownState extends State<StudentDetailTagDropdown> {
               selectedChips: snapshot.data![1],
               onAddChip: widget.onTagAdded,
               onDeleteChip: widget.onTagDeleted,
-              offsetHeight: -Dimensions.navBarHeight,
+              offsetHeight: widget.offset,
               multiSelect: true,
               onFocusChanged: widget.onFocusChanged,
               hintText: TextRes.tagDropdownHintText,
