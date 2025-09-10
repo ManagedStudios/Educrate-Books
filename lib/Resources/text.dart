@@ -420,6 +420,8 @@ class TextRes {
 
   static const String deleteAllBooks = 'Alle Bücher löschen';
 
+  static const String confirmBooksReceived = "Mit der Unterschrift bestätige ich den Erhalt der oben aufgeführten Bücher!";
+
 
 
 

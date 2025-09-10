@@ -44,7 +44,7 @@ Future<Uint8List> createClassListPdf(ClassData classData, List<Student> students
           crossAxisAlignment: pw.CrossAxisAlignment.start,
           children: [
             pw.SizedBox(height: 20),
-            pw.Text(TextRes.footnotes, style: pw.TextStyle(font: latoBold)),
+            pw.Text("${TextRes.footnotes}: ${TextRes.confirmBooksReceived}", style: pw.TextStyle(font: latoBold)),
             pw.Text(footnotes, style: pw.TextStyle(font: latoRegular)),
           ],
         );
