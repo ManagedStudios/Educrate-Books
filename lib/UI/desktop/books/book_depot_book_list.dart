@@ -20,22 +20,25 @@ class BookDepotBookList extends StatelessWidget {
           builder: (context, books) {
             length = books.data?.length ?? 0;
 
-            return ListView.builder(
-                itemCount: length,
-                itemBuilder: (context, index) {
-                  return BookCard(
-                      clicked: state.currBookId == books.data![index].id,
-                      onClick: (_) {
-                        state.setCurrBookId(books.data![index].id);
-                      },
-                      onDeleteBook: (_) {},
-                      bookLite: books.data![index],
-                      leadingWidget: null,
-                      isDeletable: false,
-                      bookAvailableAmount: books.data![index].nowAvailable,
-                      error: books.data![index].nowAvailable <
-                          Dimensions.bookAvAmountThreshold);
-                });
+            return Padding(
+              padding: const EdgeInsets.only(bottom: Dimensions.paddingVeryBig),
+              child: ListView.builder(
+                  itemCount: length,
+                  itemBuilder: (context, index) {
+                    return BookCard(
+                        clicked: state.currBookId == books.data![index].id,
+                        onClick: (_) {
+                          state.setCurrBookId(books.data![index].id);
+                        },
+                        onDeleteBook: (_) {},
+                        bookLite: books.data![index],
+                        leadingWidget: null,
+                        isDeletable: false,
+                        bookAvailableAmount: books.data![index].nowAvailable,
+                        error: books.data![index].nowAvailable <
+                            Dimensions.bookAvAmountThreshold);
+                  }),
+            );
           }),
     );
   }
