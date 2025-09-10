@@ -57,7 +57,11 @@ class StudentDetail extends StatelessWidget {
                               IconButton(
                                   onPressed: () {
                                     if (currStudentIndex < state.students.length-1) {
-                                      context.go("${StudentListView.routeName}/${currStudent.classLevel.toString()}/${currStudent.classChar}/${state.students[currStudentIndex+1].id}");
+                                      if (currStudent.classChar.isNotEmpty) {
+                                        context.go("${StudentListView.routeName}/${currStudent.classLevel.toString()}/${currStudent.classChar}/${state.students[currStudentIndex+1].id}");
+                                      } else {
+                                        context.go("${StudentListView.routeName}/${currStudent.classLevel.toString()}/${state.students[currStudentIndex+1].id}");
+                                      }
                                     } else {
                                       context.pop();
                                     }
@@ -146,7 +150,11 @@ class StudentDetail extends StatelessWidget {
                                     studentListState
                                         .deleteStudent(currStudent);
                                     if (currStudentIndex < state.students.length-1) {
-                                      context.go("${StudentListView.routeName}/${currStudent.classLevel.toString()}/${currStudent.classChar}/${state.students[currStudentIndex+1].id}");
+                                      if (currStudent.classChar.isNotEmpty) {
+                                        context.go("${StudentListView.routeName}/${currStudent.classLevel.toString()}/${currStudent.classChar}/${state.students[currStudentIndex+1].id}");
+                                      } else {
+                                        context.go("${StudentListView.routeName}/${currStudent.classLevel.toString()}/${state.students[currStudentIndex+1].id}");
+                                      }
                                     } else {
                                       context.pop();
                                     }

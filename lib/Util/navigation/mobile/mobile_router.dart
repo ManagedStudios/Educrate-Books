@@ -58,6 +58,23 @@ GoRouter getMobileRouter () {
                         child: child);
                   });
             },
+            routes: [
+              GoRoute(
+                path: ":${TextRes.studentDetailPathParam}",
+                pageBuilder: (context, state) {
+                  final String studentId = state.pathParameters[TextRes.studentDetailPathParam]!;
+                  return CustomTransitionPage(
+                      child: StudentDetail(currStudentId: studentId),
+                      transitionsBuilder: (context, animation, _, child) {
+                        return FadeTransition(
+                            opacity: CurveTween(curve: Curves.easeInCirc)
+                                .animate(animation),
+                            child: child);
+                      });
+                },
+
+              ),
+            ]
           ),
           GoRoute(
               path: "${StudentListView.routeName}/:${TextRes.classLevelPathParam}/:${TextRes.classCharPathParam}",

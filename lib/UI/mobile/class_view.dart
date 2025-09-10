@@ -28,7 +28,12 @@ class ClassView extends StatelessWidget {
               for (MapEntry<int, List<ClassData>> classRow in classRows.entries)
                 ClassesRow(classRow: classRow,
                     onClassClicked: (clickedClass) => {
-                    context.push("${StudentListView.routeName}/${clickedClass.classLevel.toString()}/${clickedClass.classChar}")
+                    if(clickedClass.classChar.isNotEmpty) {
+                      context.push("${StudentListView.routeName}/${clickedClass.classLevel.toString()}/${clickedClass.classChar}")
+                    } else {
+                      context.push("${StudentListView.routeName}/${clickedClass.classLevel.toString()}")
+                    }
+
                     })
             ],
           );

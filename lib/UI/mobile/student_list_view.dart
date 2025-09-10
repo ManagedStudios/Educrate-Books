@@ -69,7 +69,12 @@ class StudentListView extends StatelessWidget {
                         return StudentCard(
                             student: change.data![index],
                             onClick: (student) => {
-                              context.go("${StudentListView.routeName}/$classLevel/$classChar/${student.id}")
+                              if(classChar.isNotEmpty) {
+                                context.go("${StudentListView.routeName}/$classLevel/$classChar/${student.id}")
+                              } else {
+                                context.go("${StudentListView.routeName}/$classLevel/${student.id}")
+                              }
+
                             });
                       }),
                 ),
